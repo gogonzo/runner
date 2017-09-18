@@ -12,7 +12,6 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 NumericVector whichtrue_run(LogicalVector vec) {
   int n = vec.size();
-  double max  = -INFINITY;
   NumericVector idx(n);
 
   if (vec[0] == TRUE){
