@@ -2,15 +2,15 @@
 % Please edit documentation in R/RcppExports.R
 \name{whichtrue_run}
 \alias{whichtrue_run}
-\title{Streak length of vector elements}
+\title{Running index of last TRUE element}
 \usage{
 whichtrue_run(vec)
 }
 \arguments{
-\item{x}{A single integer.}
+\item{x}{An logical vector}
 }
 \description{
-Calculates series of consecutive elements
+Running index of last TRUE element
 }
 \examples{
 x <- c(NA,F,F,T, F, T,F,NA)

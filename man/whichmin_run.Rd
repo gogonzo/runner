@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{whichmin_run}
 \alias{whichmin_run}
-\title{Streak length of vector elements}
+\title{Running length of consecutive occurence}
 \usage{
 whichmin_run(vec)
 }
@@ -10,7 +10,7 @@ whichmin_run(vec)
 \item{x}{A single integer.}
 }
 \description{
-Calculates series of consecutive elements
+Running length of consecutive occurence
 }
 \examples{
 x <- c(NA,NA,99999999999,3.01, 3, 4,-6,-7)

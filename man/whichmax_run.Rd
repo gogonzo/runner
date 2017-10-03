@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{whichmax_run}
 \alias{whichmax_run}
-\title{Streak length of vector elements}
+\title{Running index of maximum prior to i-th element}
 \usage{
 whichmax_run(vec)
 }
@@ -10,7 +10,7 @@ whichmax_run(vec)
 \item{x}{A single integer.}
 }
 \description{
-Calculates series of consecutive elements
+Running index of maximum prior to i-th element
 }
 \examples{
 x <- c(NA,NA,0,NA, 1, 2,-6,4)

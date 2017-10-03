@@ -6,25 +6,18 @@ using namespace Rcpp;
 //'
 //' @param x A single integer.
 //' @examples
-//' x <- c(1,1,0,0,1,0,3,3,1,1)
+//' x <- c(1,3,4,3,5,7,8,2,4,9)
 //' mean_run(x)
 //' @export
 // [[Rcpp::export]]
-#include <Rcpp.h>
-using namespace Rcpp;
-//' Streak length of vector elements
-//'
-//' Calculates series of consecutive elements
-//'
-//' @param x A single integer.
-//' @examples
-//' x <- c(1,1,0,0,1,0,3,3,1,1)
-//' mean_run(x)
-//' @export
-// [[Rcpp::export]]
-NumericVector mean_run(NumericVector x, int n) {
+NumericVector mean_run(
+    NumericVector x,
+    int n  = 0
+) {
+
 
   int sz = x.size();
+  if(n == 0) n = sz;
   NumericVector res(sz);
 
   // sum the values from the beginning of the vector to n

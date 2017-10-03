@@ -4,16 +4,20 @@
 \alias{streak_run}
 \title{Streak length of vector elements}
 \usage{
-streak_run(vec, k = NA_integer_)
+streak_run(x, k = as.integer(c(0)), na_pad = FALSE)
 }
 \arguments{
-\item{x}{A single integer.}
+\item{x}{Vector of any type on which consecutive streak is calculated}
+
+\item{k}{Running window size. By default window size equals the length of x vector argument.}
+
+\item{na_pad}{logical - if TRUE first k-results will be filled by NA's. If k is not specified na_pad=F by default.}
 }
 \description{
 Calculates series of consecutive elements
 }
 \examples{
 x <- c(1,1,0,0,1,0,3,3,1,1)
-streak_run(x)
+streak_run(x, k=2, na_pad=FALSE)
 }
 
