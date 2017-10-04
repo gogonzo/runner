@@ -57,7 +57,7 @@ namespace impl {
 
       for(int j = i1; j <= i ; ++j){
         if(!na_rm and NumericVector::is_na(x(j)) ){
-          res(i) = NumericVector::get_na();
+          cur_max = NumericVector::get_na();
           break;
         }
         cur_max = calc_max( x( j ), cur_max);
@@ -83,7 +83,7 @@ namespace impl {
       i1 = impl::window_index( i, k );
       for(int j = i1; j <= i ; ++j){
         if(!na_rm and NumericVector::is_na(x(j)) ){
-          res(i) = NumericVector::get_na();
+          cur_max = NumericVector::get_na();
           break;
         }
         cur_max = calc_max( x( j ), cur_max);
@@ -145,7 +145,7 @@ namespace impl {
       i1 = impl::window_index( i, k( i ) );
       for(int j = i1; j <= i ; ++j){
         if(!na_rm and NumericVector::is_na(x(j)) ){
-          res(i) = NumericVector::get_na();
+          cur_min = NumericVector::get_na();
           break;
         }
 
