@@ -1,32 +1,74 @@
 context("Running max")
-x1 <- c(-1,-1,0,2,0,-2,1,0)
-x2 <- c(NA,NA,-1,-1,NA,NA,2,0,-1.1,0,0,NA,1)
+set.seed(11)
+x1 <- sample(c(1,2,3), 15, replace=T)
+x2 <- sample(c(NA,1,2,3), 15, replace=T)
 
-test_that("max_run handles zeros", {
-  expect_identical(max_run(x1), c(-1,-1,0,2,2,2,2,2))
-  expect_identical(max_run( x1 )[4], max(x1[1:4]))
 
+test_that("max_run basic",{
+  for(i in 1:15)
+    expect_equal(
+      max_run(x1)[i] ,
+      max(x1[1:i])
+    )
 })
 
-test_that("max_run windowing", {
-  expect_identical( max_run(x2,k=4), c(NA,NA,-1,-1,-1,-1,2,2,2,2,0,0,1) )
+test_that("max_run with na_rm=T", {
+  for(i in 1:15)
+    expect_equal(
+      max_run(x2, na_rm = T)[i] ,
+      max(x2[1:i], na.rm=T)
+    )
+})
+
+test_that("max_run with na_rm=F na_fill=T", {
+  for(i in 1:15)
+    expect_equal(
+      max_run(x2, na_rm = F )[i] ,
+      max(x2[1:i], na.rm = F)
+    )
+})
+
+test_that("max_run with na_rm=T na_fill=F", {
+  for(i in 1:15)
+    expect_equal(
+      max_run(x2, na_rm = T, na_fill = F )[i] ,
+      as.numeric( ifelse( !is.na(x2[i]) , max(x2[1:i] , na.rm = T) , NA ) )
+    )
+})
+
+
+test_that("max_run with na_rm=T k=4", {
+  for(i in 1:15)
+    expect_equal(
+      max_run(x2, na_rm = T, k=4)[i] ,
+      max(x2[pmax(i-4+1,1):i], na.rm=T)
+    )
+})
+
+test_that("max_run with na_rm=F na_fill=T k=4", {
+  for(i in 1:15)
+    expect_equal(
+      max_run(x2, na_rm = F,na_fill = T, k=4 )[i] ,
+      max(x2[pmax(i-4+1,1):i], na.rm = F)
+    )
+})
+
+test_that("max_run with na_rm=T na_fill=F k=4", {
+  for(i in 1:15)
+    expect_equal(
+      max_run(x2, na_rm = T, na_fill = F,k=3 )[i] ,
+      as.numeric( ifelse( !is.na(x2[i]) , max(x2[pmax(i-3+1,1):i] , na.rm = T) , NA ) )
+    )
+})
+
+test_that("max_run pads NA's", {
   expect_identical(
-    min_run( x2,k=4 )[7],
-    min(x2[4:7], na.rm=T)
+    max_run( x2, na_pad=T,k=3 ),
+    c( NA,NA,2,1,1,1,2,2,2,1,1,1,1,1,1)
   )
-
-})
-
-
-test_that("max_run handles NA's", {
-  expect_identical(max_run(x2), c(NA,NA,-1,-1,-1,-1,2,2,2,2,2,2,2))
-  expect_identical(max_run(x2,na_rm=F), c(NA,NA,-1,-1,NA,NA,2,2,2,2,2,NA,2))
-
-  expect_identical( max_run(x2,na_rm=F,k=4), c(NA,NA,-1,-1,NA,NA,2,2,2,2,0,NA,1))
-  expect_identical( max_run(x2,na_pad=T,na_rm=F,4), c(NA,NA,NA,-1,NA,NA,2,2,2,2,0,NA,1))
 })
 
 test_that("Error handling in max_run",{
-  expect_error(max_run(x1, k=c(2,2,2,2,NA)))
-  expect_error(max_run(x1, k=c(2,2,2,2,2,2)))
+  expect_error(max_run(x2, k=c(2,2,2,2,NA)))
+  expect_error(max_run(x2, k=c(2,2,2,2,2,2)))
 })
