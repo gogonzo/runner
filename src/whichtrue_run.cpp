@@ -6,7 +6,7 @@ using namespace Rcpp;
 //'
 //' @param x An logical vector
 //' @examples
-//' x <- c(NA,F,F,T, F, T,F,NA)
+//' x <- c(NA,FALSE,FALSE,TRUE, FALSE, TRUE,FALSE,NA)
 //' whichtrue_run(x)
 //' @export
 // [[Rcpp::export]]

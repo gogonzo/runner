@@ -1,32 +1,75 @@
-context("Running max")
-x1 <- c( -1, -1, -2, 0.1, 2 )
-x2 <- c( NA, -1.0, -1.0,NA, NA, 0.0, -2.1, NA, 2.0 )
+context("Running min")
+set.seed(11)
+x1 <- sample(c(1,2,3), 15, replace=T)
+x2 <- sample(c(NA,1,2,3), 15, replace=T)
+
 k1 <- c(3,2,2,2,2)
 
-test_that("min_run handles zeros", {
-  expect_identical(min_run( x1 ), c( -1, -1, -2, -2, -2))
+test_that("min_run basic",{
+  for(i in 1:15)
+    expect_equal(
+      min_run(x1)[i] ,
+      min(x1[1:i])
+    )
 })
 
-test_that("min_run handles windowing", {
-  expect_identical(min_run( x1 , k = 2), c( -1, -1, -2, -2, 0.1) )
+test_that("min_run with na_rm=T", {
+  for(i in 1:15)
+    expect_equal(
+      min_run(x2, na_rm = T)[i] ,
+      min(x2[1:i], na.rm=T)
+    )
 })
 
-test_that("max_run handles windowing", {
-  expect_identical( min_run( x1 , k = 3), c(-1,-1,-2,-2,-2))
+test_that("min_run with na_rm=F na_fill=T", {
+  for(i in 1:15)
+    expect_equal(
+      min_run(x2, na_rm = F )[i] ,
+      min(x2[1:i], na.rm = F)
+    )
 })
 
-test_that("min_run handles varying windowing", {
-  expect_identical( min_run( x1 , k = k1), c(-1,-1,-2,-2,0.1))
+test_that("min_run with na_rm=T na_fill=F", {
+  for(i in 1:15)
+    expect_equal(
+      min_run(x2, na_rm = T, na_fill = F )[i] ,
+      as.numeric( ifelse( !is.na(x2[i]) , min(x2[1:i] , na.rm = T) , NA ) )
+    )
 })
 
-test_that("min_run handles NA's default", {
-  expect_identical(min_run( x2 ), c( NA, -1, -1, -1, -1,-1,-2.1,-2.1,-2.1))
+
+test_that("min_run with na_rm=T k=4", {
+  for(i in 1:15)
+    expect_equal(
+      min_run(x2, na_rm = T, k=4)[i] ,
+      min(x2[pmax(i-4+1,1):i], na.rm=T)
+    )
 })
 
-test_that("min_run handles NA's na_rm=F", {
-  expect_identical(min_run( x2, na_rm=F ), c( NA, -1, -1, NA, NA,-1,-2.1,NA,-2.1))
+test_that("min_run with na_rm=F na_fill=T k=4", {
+  for(i in 1:15)
+    expect_equal(
+      min_run(x2, na_rm = F,na_fill = T, k=4 )[i] ,
+      min(x2[pmax(i-4+1,1):i], na.rm = F)
+    )
+})
+
+test_that("min_run with na_rm=T na_fill=F k=4", {
+  for(i in 1:15)
+    expect_equal(
+      min_run(x2, na_rm = T, na_fill = F,k=3 )[i] ,
+      as.numeric( ifelse( !is.na(x2[i]) , min(x2[pmax(i-3+1,1):i] , na.rm = T) , NA ) )
+    )
 })
 
 test_that("min_run pads NA's", {
-  expect_identical(min_run( x2, na_pad=T,k=3 ), c( NA,NA,-1,-1,-1,0,-2.1,-2.1,-2.1))
+  expect_identical(
+    min_run( x2, na_pad=T,k=3 ),
+    c( NA,NA,1,1,1,1,1,1,1,1,1,1,1,1,1)
+  )
+})
+
+test_that("Error handling in min_run",{
+  expect_error(min_run(x2, k=c(2,2,2,2,NA)))
+  expect_error(min_run(x2, k=c(2,2,2,2,2,2)))
 })

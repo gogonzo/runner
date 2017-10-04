@@ -13,7 +13,7 @@ whichtrue_run(vec)
 Running index of last TRUE element
 }
 \examples{
-x <- c(NA,F,F,T, F, T,F,NA)
+x <- c(NA,FALSE,FALSE,TRUE, FALSE, TRUE,FALSE,NA)
 whichtrue_run(x)
 }
 

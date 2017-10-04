@@ -2,18 +2,25 @@
 % Please edit documentation in R/RcppExports.R
 \name{sum_run}
 \alias{sum_run}
-\title{Streak length of vector elements}
+\title{Running window sum}
 \usage{
-sum_run(x, n)
+sum_run(x, k = integer::get_na(), na_pad = FALSE, na_rm = TRUE)
 }
 \arguments{
-\item{x}{A single integer.}
+\item{x}{Vector of any type on which running sum is calculated}
+
+\item{k}{Running window size. By default window size equals the length of \code{x}.}
+
+\item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
+}
+\value{
+numeric vector of length equals length of \code{x} containing running window sum in \code{k}-long window.
 }
 \description{
-Calculates series of consecutive elements
+Running window sum
 }
 \examples{
 x <- c(1,1,0,0,1,0,3,3,1,1)
-mean_run(x)
+sum_run(x,n=2)
 }
 

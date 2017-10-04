@@ -4,14 +4,17 @@
 \alias{streak_run}
 \title{Streak length of vector elements}
 \usage{
-streak_run(x, k = as.integer(c(0)), na_pad = FALSE)
+streak_run(x, k = 0L, na_pad = FALSE)
 }
 \arguments{
 \item{x}{Vector of any type on which consecutive streak is calculated}
 
-\item{k}{Running window size. By default window size equals the length of x vector argument.}
+\item{k}{Running window size. By default window size equals the length of \code{x}.}
 
-\item{na_pad}{logical - if TRUE first k-results will be filled by NA's. If k is not specified na_pad=F by default.}
+\item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
+}
+\value{
+numeric vector of length equals length of \code{x} containing running streak length in \code{k}-long window.
 }
 \description{
 Calculates series of consecutive elements

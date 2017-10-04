@@ -3,80 +3,82 @@ using namespace Rcpp;
 
 namespace impl {
 
+  LogicalVector isNA_int(IntegerVector x) {
+    int n = x.size();
+    LogicalVector out(n);
+
+    for (int i = 0; i < n; ++i)
+      out( i ) = IntegerVector::is_na(x( i ));
+
+    return out;
+  }
+  LogicalVector isNA_num(NumericVector x) {
+    int n = x.size();
+    LogicalVector out(n);
+
+    for (int i = 0; i < n; ++i) {
+      out[i] = NumericVector::is_na(x[i]);
+    }
+    return out;
+  }
+
+  bool any_NA(NumericVector x){
+    // Note the use of is_true to return a bool type
+    return is_true(any(is_na(x)));
+  }
+
+  template <int RTYPE>
+  int run_for_first_na(const Vector<RTYPE>& x){
+    int first_non_na = -1;
+    int n = x.size();
+
+    for(int j=0; j < n; j++){
+      if( !Vector<RTYPE>::is_na(x(j)) ){
+        first_non_na = j;
+        break;
+      }
+    }
+    return first_non_na;
+  }
+
+  NumericVector na_when_na(NumericVector x, NumericVector res ){
+    int n = x.size();
+    int first_na = run_for_first_na( x );
+
+    if( first_na > -1 )
+      for(int i=first_na; i < n; i++)
+        if( NumericVector::is_na(x(i)))
+          res( i ) = NumericVector::get_na();
+
+    return res;
+  }
+
+  void check_for_valid_k(SEXP x, IntegerVector k){
+    int n = Rf_length(x);
+
+    if( k(0) == 0 ){
+      k(0) = n;
+    } else if(k.size() != n and k.size() > 1){
+      stop("length of k and length x differs. k=0 and k=length(x) only allowed");
+    } else if( Rcpp::all(Rcpp::is_na(k)) ){
+      stop("Function doesn't accept NA values in k vector");
+    }
+  }
+  void check_for_valid_k2(int n, IntegerVector k){
+
+    if( k(0) == 0 ){
+      k(0) = n;
+    } else if( k.size() != n and k.size() > 1 ){
+      stop("length of k and length x differs. k=0 and k=length(x) only allowed");
+    } else if( Rcpp::all(Rcpp::is_na(k)) ){
+      stop("Function doesn't accept NA values in k vector");
+    }
+  }
+
   int window_index(int i, int k){
     int begin;
     if( (i - k + 1) < 0) begin = 0; else begin = i - k + 1;
     return begin;
   }
 
-  // function comparing values
-  double calc_min(double x, double cur_min){
-    if (x < cur_min){
-      return x;
-    } else if (NumericVector::is_na(cur_min)){
-      return x;
-    } else {
-      return cur_min;
-    }
-  }
-
-  double calc_max(double x, double cur_max){
-    if (x < cur_max){
-      return x;
-    } else if (NumericVector::is_na(cur_max)){
-      return x;
-    } else {
-      return cur_max;
-    }
-  }
-
-  template <int RTYPE>
-  IntegerVector streak_run_impl(const Vector<RTYPE>& x, IntegerVector k, bool na_pad)
-  {
-
-    int i2;
-    int cur_streak = 0;
-    int n = x.size();
-    IntegerVector res(n);
-    if( k(0) == 0 ) k(0) = n;
-
-    if ( Vector<RTYPE>::is_na( x(0) ) ){
-      res(0) = NumericVector::get_na();
-    } else {
-      res(0) = 1;
-    }
-
-    for(int i = 1; i < n; ++i) {
-
-      if( k.size() == 1 ){
-        i2 = window_index(i, k(0) );
-      } else {
-        i2 = window_index(i, k(i) );
-      }
-
-
-      for(int j = i; j >= i2 ; --j) {
-        if( j == i ){
-          // first iteration gives i=1 or na
-          if(Vector<RTYPE>::is_na( x( j ) )){
-            cur_streak = NumericVector::get_na();
-            break;
-          } else {
-            cur_streak = 1;
-          }
-
-        } else if( x( j ) == x( j + 1 ) ){
-          cur_streak += 1;
-        } else {
-          break;
-        }
-      }
-      res( i ) = cur_streak;
-    }
-
-    if(na_pad)
-      std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_REAL);
-
-    return res;
-  }
 }

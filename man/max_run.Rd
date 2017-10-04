@@ -9,14 +9,17 @@ max_run(x, k = as.integer(c(0)), na_pad = FALSE, na_rm = TRUE)
 \arguments{
 \item{x}{input numeric vector where running maximum is calculated.}
 
-\item{k}{Running window size. By default window size equals the length of x vector argument.}
+\item{k}{Running window size. By default window size equals the length of \code{x}.}
 
-\item{na_pad}{logical (default=FALSE) - if TRUE first k-results will be filled by NA's. If k is not specified na_pad=F by default.}
+\item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
 
-\item{na_rm}{logical (default=TRUE) - if TRUE NA's is replaced by last observed maximum.}
+\item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed maximum prior to element.}
+}
+\value{
+numeric vector of length equals length of \code{x} containing running max in \code{k}-long window.
 }
 \description{
-Running maximum window
+\code{min_run} calculates window-running min on given \code{x} numeric vector, specified \code{k} window size and additional options (\code{na_pad},\code{na_rm}) to handle missing values.
 }
 \examples{
 x <- c(NA,1,-1,NA, -1, -2,-6,4)

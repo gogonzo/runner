@@ -2,15 +2,22 @@
 % Please edit documentation in R/RcppExports.R
 \name{mean_run}
 \alias{mean_run}
-\title{Streak length of vector elements}
+\title{Running window mean}
 \usage{
-mean_run(x, n = 0L)
+mean_run(x, k = 0L, na_pad = FALSE, na_rm = TRUE)
 }
 \arguments{
-\item{x}{A single integer.}
+\item{x}{Vector of any type on which window mean is calculated}
+
+\item{k}{Running window size. By default window size equals the length of \code{x}.}
+
+\item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
+}
+\value{
+numeric vector of length equals length of \code{x} containing running mean in \code{k}-long window.
 }
 \description{
-Calculates series of consecutive elements
+Running window mean
 }
 \examples{
 x <- c(1,3,4,3,5,7,8,2,4,9)
