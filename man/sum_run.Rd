@@ -4,12 +4,12 @@
 \alias{sum_run}
 \title{Running window sum}
 \usage{
-sum_run(x, k = integer::get_na(), na_pad = FALSE, na_rm = TRUE)
+sum_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 }
 \arguments{
 \item{x}{Vector of any type on which running sum is calculated}
 
-\item{k}{Running window size. By default window size equals the length of \code{x}.}
+\item{k}{Running window size. By default window size equals \code{length(x)}.}
 
 \item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
 }
@@ -20,7 +20,7 @@ numeric vector of length equals length of \code{x} containing running window sum
 Running window sum
 }
 \examples{
-x <- c(1,1,0,0,1,0,3,3,1,1)
-sum_run(x,n=2)
+x <- c(NA,3,4,3,5,7,NA,2,4,9)
+sum_run(x , k = 3, na_rm = T, na_pad = F)
 }
 

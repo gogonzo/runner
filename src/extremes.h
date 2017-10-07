@@ -15,7 +15,7 @@ namespace impl {
     }
   }
 
-  NumericVector cum_max(NumericVector x, bool na_rm, bool na_fill ){
+  NumericVector cum_max(NumericVector x, bool na_rm){
     int n = x.size();
     double cur_max = NumericVector::get_na();
     NumericVector res(n);
@@ -27,10 +27,6 @@ namespace impl {
         std::fill(res.begin() + i, res.end(), NumericVector::get_na() );
         break;
       }
-      if( !na_fill and NumericVector::is_na( x(i) ) ){
-        res( i ) = NumericVector::get_na( );
-        continue;
-      }
 
       cur_max = calc_max( x( i ) , cur_max );
       res(i) = cur_max;
@@ -39,7 +35,7 @@ namespace impl {
     return res;
   }
 
-  NumericVector window_max2( NumericVector x, IntegerVector k, bool na_rm, bool na_fill ){
+  NumericVector window_max2( NumericVector x, IntegerVector k, bool na_rm ){
 
     int n = x.size();
     int i1;
@@ -48,10 +44,6 @@ namespace impl {
 
     for(int i = 0; i < n; i++){
 
-      if(!na_fill and NumericVector::is_na(x(i)) ) {
-        res(i) = NumericVector::get_na();
-        continue;
-      }
       cur_max = NumericVector::get_na();
       i1 = impl::window_index( i, k( i ) );
 
@@ -67,17 +59,13 @@ namespace impl {
     return res;
   }
 
-  NumericVector window_max(NumericVector x, int k, bool na_rm, bool na_fill){
+  NumericVector window_max(NumericVector x, int k, bool na_rm){
     int n = x.size();
     int i1;
     double cur_max;
     NumericVector res(n);
 
     for(int i = 0; i < n; i++){
-      if(!na_fill and NumericVector::is_na(x(i)) ){
-        res(i) = NumericVector::get_na();
-        continue;
-      }
 
       cur_max = NumericVector::get_na();
       i1 = impl::window_index( i, k );
@@ -107,7 +95,7 @@ namespace impl {
     }
   }
 
-  NumericVector cum_min(NumericVector x, bool na_rm, bool na_fill ){
+  NumericVector cum_min(NumericVector x, bool na_rm ){
     int n = x.size();
     double cur_min = NumericVector::get_na();
     NumericVector res(n);
@@ -118,10 +106,6 @@ namespace impl {
         std::fill(res.begin() + i, res.end(), NumericVector::get_na() );
         break;
       }
-      if( !na_fill and NumericVector::is_na( x(i) ) ){
-        res( i ) = NumericVector::get_na( );
-        continue;
-      }
 
       cur_min = calc_min( x( i ) , cur_min );
       res(i) = cur_min;
@@ -129,17 +113,13 @@ namespace impl {
     return res;
   }
 
-  NumericVector window_min2(NumericVector x, IntegerVector k, bool na_rm, bool na_fill){
+  NumericVector window_min2(NumericVector x, IntegerVector k, bool na_rm){
     int n = x.size();
     int i1;
     double cur_min;
     NumericVector res(n);
 
     for(int i = 0; i < n; i++){
-      if(!na_fill and NumericVector::is_na(x(i)) ){
-        res(i) = NumericVector::get_na();
-        continue;
-      }
 
       cur_min = NumericVector::get_na();
       i1 = impl::window_index( i, k( i ) );
@@ -158,17 +138,13 @@ namespace impl {
     return res;
   }
 
-  NumericVector window_min(NumericVector x, int k, bool na_rm, bool na_fill){
+  NumericVector window_min(NumericVector x, int k, bool na_rm){
     int n = x.size();
     int i1;
     double cur_min;
     NumericVector res(n);
 
     for(int i = 0; i < n; i++){
-      if(!na_fill and NumericVector::is_na(x(i)) ){
-        res(i) = NumericVector::get_na();
-        continue;
-      }
 
       cur_min = NumericVector::get_na( );
       i1 = impl::window_index( i, k );

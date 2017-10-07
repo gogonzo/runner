@@ -29,11 +29,11 @@ test_that("min_run with na_rm=F na_fill=T", {
     )
 })
 
-test_that("min_run with na_rm=T na_fill=F", {
+test_that("min_run with na_rm=T", {
   for(i in 1:15)
     expect_equal(
-      min_run(x2, na_rm = T, na_fill = F )[i] ,
-      as.numeric( ifelse( !is.na(x2[i]) , min(x2[1:i] , na.rm = T) , NA ) )
+      min_run(x2, na_rm = T )[i] ,
+      min(x2[1:i] , na.rm = T)
     )
 })
 
@@ -46,21 +46,7 @@ test_that("min_run with na_rm=T k=4", {
     )
 })
 
-test_that("min_run with na_rm=F na_fill=T k=4", {
-  for(i in 1:15)
-    expect_equal(
-      min_run(x2, na_rm = F,na_fill = T, k=4 )[i] ,
-      min(x2[pmax(i-4+1,1):i], na.rm = F)
-    )
-})
 
-test_that("min_run with na_rm=T na_fill=F k=4", {
-  for(i in 1:15)
-    expect_equal(
-      min_run(x2, na_rm = T, na_fill = F,k=3 )[i] ,
-      as.numeric( ifelse( !is.na(x2[i]) , min(x2[pmax(i-3+1,1):i] , na.rm = T) , NA ) )
-    )
-})
 
 test_that("min_run pads NA's", {
   expect_identical(

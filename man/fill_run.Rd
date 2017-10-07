@@ -4,7 +4,7 @@
 \alias{fill_run}
 \title{Fill NA with previous non-NA element}
 \usage{
-fill_run(x, run_for_first = FALSE)
+fill_run(x, run_for_first = FALSE, only_within = FALSE)
 }
 \arguments{
 \item{x}{A single integer.}

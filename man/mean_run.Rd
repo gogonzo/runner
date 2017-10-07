@@ -4,12 +4,12 @@
 \alias{mean_run}
 \title{Running window mean}
 \usage{
-mean_run(x, k = 0L, na_pad = FALSE, na_rm = TRUE)
+mean_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 }
 \arguments{
 \item{x}{Vector of any type on which window mean is calculated}
 
-\item{k}{Running window size. By default window size equals the length of \code{x}.}
+\item{k}{Running window size. By default window size equals the \code{length(x)}.}
 
 \item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
 }
@@ -20,7 +20,7 @@ numeric vector of length equals length of \code{x} containing running mean in \c
 Running window mean
 }
 \examples{
-x <- c(1,3,4,3,5,7,8,2,4,9)
-mean_run(x)
+x <- c(NA,3,4,3,5,7,NA,2,4,9)
+mean_run(x , k = 3, na_rm = T, na_pad = F)
 }
 

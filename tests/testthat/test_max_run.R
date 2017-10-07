@@ -20,21 +20,14 @@ test_that("max_run with na_rm=T", {
     )
 })
 
-test_that("max_run with na_rm=F na_fill=T", {
+test_that("max_run with na_rm=F", {
   for(i in 1:15)
     expect_equal(
       max_run(x2, na_rm = F )[i] ,
-      max(x2[1:i], na.rm = F)
+      max(x2[1:i])
     )
 })
 
-test_that("max_run with na_rm=T na_fill=F", {
-  for(i in 1:15)
-    expect_equal(
-      max_run(x2, na_rm = T, na_fill = F )[i] ,
-      as.numeric( ifelse( !is.na(x2[i]) , max(x2[1:i] , na.rm = T) , NA ) )
-    )
-})
 
 
 test_that("max_run with na_rm=T k=4", {
@@ -45,19 +38,11 @@ test_that("max_run with na_rm=T k=4", {
     )
 })
 
-test_that("max_run with na_rm=F na_fill=T k=4", {
+test_that("max_run with na_rm=F k=4", {
   for(i in 1:15)
     expect_equal(
-      max_run(x2, na_rm = F,na_fill = T, k=4 )[i] ,
+      max_run(x2, k=4, na_rm = F )[i] ,
       max(x2[pmax(i-4+1,1):i], na.rm = F)
-    )
-})
-
-test_that("max_run with na_rm=T na_fill=F k=4", {
-  for(i in 1:15)
-    expect_equal(
-      max_run(x2, na_rm = T, na_fill = F,k=3 )[i] ,
-      as.numeric( ifelse( !is.na(x2[i]) , max(x2[pmax(i-3+1,1):i] , na.rm = T) , NA ) )
     )
 })
 

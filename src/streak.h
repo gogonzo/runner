@@ -10,25 +10,50 @@ namespace impl {
 
     for(int j = i; j >= i2 ; --j) {
       if( j == i ){
-        // first iteration gives i=1 or na
-        if(Vector<RTYPE>::is_na( x( j ) )){
-          cur_streak = NumericVector::get_na();
-          break;
-        } else {
+        if(!Vector<RTYPE>::is_na( x( j ) )){
           cur_streak = 1;
+        } else {
+          return IntegerVector::get_na();
         }
-
-      } else if( x( j ) == x( j + 1 ) ){
-        cur_streak += 1;
       } else {
-        break;
+        if( x( j ) == x( j + 1 ) ){
+          cur_streak += 1;
+        } else if( Vector<RTYPE>::is_na( x( j )) ) {
+          return IntegerVector::get_na();
+        } else {
+           return cur_streak;
+        }
       }
     }
     return cur_streak;
   }
 
   template <int RTYPE>
-  IntegerVector streak_run_(const Vector<RTYPE>& x, IntegerVector k, bool na_pad)
+  int  calc_actual_streak_narm(const Vector<RTYPE>& x, int i, int i2)
+  {
+    int cur_streak = 0;
+
+    for(int j = i; j >= i2 ; --j) {
+      if( j == i ){
+        if(!Vector<RTYPE>::is_na( x( j ) )){
+          cur_streak = 1;
+        } else {
+          continue;
+        }
+      } else {
+        if( x( j ) == x( j + 1 ) ){
+          cur_streak += 1;
+        } else {
+          return cur_streak;
+        }
+      }
+    }
+    if(cur_streak == 0 ) return IntegerVector::get_na();
+    return cur_streak;
+  }
+
+  template <int RTYPE>
+  IntegerVector streak_run_(const Vector<RTYPE>& x, IntegerVector k, bool na_rm, bool na_pad)
   {
 
     int i2;
@@ -43,7 +68,6 @@ namespace impl {
       res(0) = 1;
     }
 
-
     /* streak_run */
     for(int i = 1; i < n; ++i) {
       if( nk == 1 ){
@@ -51,7 +75,13 @@ namespace impl {
       } else {
         i2 = window_index(i, k(i) );
       }
-      res( i ) = calc_actual_streak(x, i, i2);
+
+      if(na_rm){
+        res( i ) = calc_actual_streak_narm(x, i, i2);
+      } else {
+        res( i ) = calc_actual_streak(x, i, i2);
+      }
+
     }
 
     /* if padding with NA */

@@ -3,48 +3,22 @@ using namespace Rcpp;
 
 namespace impl {
 
-  LogicalVector isNA_int(IntegerVector x) {
-    int n = x.size();
-    LogicalVector out(n);
-
-    for (int i = 0; i < n; ++i)
-      out( i ) = IntegerVector::is_na(x( i ));
-
-    return out;
-  }
-  LogicalVector isNA_num(NumericVector x) {
-    int n = x.size();
-    LogicalVector out(n);
-
-    for (int i = 0; i < n; ++i) {
-      out[i] = NumericVector::is_na(x[i]);
-    }
-    return out;
-  }
-
-  bool any_NA(NumericVector x){
-    // Note the use of is_true to return a bool type
-    return is_true(any(is_na(x)));
-  }
 
   template <int RTYPE>
-  int run_for_first_na(const Vector<RTYPE>& x){
+  int run_for_non_na(const Vector<RTYPE>& x, int i){
     int first_non_na = -1;
     int n = x.size();
 
-    for(int j=0; j < n; j++){
-      if( !Vector<RTYPE>::is_na(x(j)) ){
-        first_non_na = j;
-        break;
-      }
-    }
+    for(int j=i; j < n; j++)
+      if( !Vector<RTYPE>::is_na(x(j)) )
+        return j;
+
     return first_non_na;
   }
 
   NumericVector na_when_na(NumericVector x, NumericVector res ){
     int n = x.size();
-    int first_na = run_for_first_na( x );
-
+    int first_na = run_for_non_na( x , 0);
     if( first_na > -1 )
       for(int i=first_na; i < n; i++)
         if( NumericVector::is_na(x(i)))
