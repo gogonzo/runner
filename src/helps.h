@@ -34,7 +34,7 @@ namespace impl {
       k(0) = n;
     } else if(k.size() != n and k.size() > 1){
       stop("length of k and length x differs. k=0 and k=length(x) only allowed");
-    } else if( Rcpp::all(Rcpp::is_na(k)) ){
+    } else if( Rcpp::any(Rcpp::is_na(k)) ){
       stop("Function doesn't accept NA values in k vector");
     }
   }
@@ -44,7 +44,7 @@ namespace impl {
       k(0) = n;
     } else if( k.size() != n and k.size() > 1 ){
       stop("length of k and length x differs. k=0 and k=length(x) only allowed");
-    } else if( Rcpp::all(Rcpp::is_na(k)) ){
+    } else if( Rcpp::any(Rcpp::is_na(k)) ){
       stop("Function doesn't accept NA values in k vector");
     }
   }

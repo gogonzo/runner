@@ -104,24 +104,32 @@ BEGIN_RCPP
 END_RCPP
 }
 // whichmax_run
-NumericVector whichmax_run(NumericVector vec);
-RcppExport SEXP _runner_whichmax_run(SEXP vecSEXP) {
+IntegerVector whichmax_run(NumericVector x, IntegerVector k, std::string which, bool na_rm, bool na_pad);
+RcppExport SEXP _runner_whichmax_run(SEXP xSEXP, SEXP kSEXP, SEXP whichSEXP, SEXP na_rmSEXP, SEXP na_padSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type vec(vecSEXP);
-    rcpp_result_gen = Rcpp::wrap(whichmax_run(vec));
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
+    Rcpp::traits::input_parameter< std::string >::type which(whichSEXP);
+    Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
+    Rcpp::traits::input_parameter< bool >::type na_pad(na_padSEXP);
+    rcpp_result_gen = Rcpp::wrap(whichmax_run(x, k, which, na_rm, na_pad));
     return rcpp_result_gen;
 END_RCPP
 }
 // whichmin_run
-NumericVector whichmin_run(NumericVector vec);
-RcppExport SEXP _runner_whichmin_run(SEXP vecSEXP) {
+IntegerVector whichmin_run(NumericVector x, IntegerVector k, std::string which, bool na_rm, bool na_pad);
+RcppExport SEXP _runner_whichmin_run(SEXP xSEXP, SEXP kSEXP, SEXP whichSEXP, SEXP na_rmSEXP, SEXP na_padSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type vec(vecSEXP);
-    rcpp_result_gen = Rcpp::wrap(whichmin_run(vec));
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
+    Rcpp::traits::input_parameter< std::string >::type which(whichSEXP);
+    Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
+    Rcpp::traits::input_parameter< bool >::type na_pad(na_padSEXP);
+    rcpp_result_gen = Rcpp::wrap(whichmin_run(x, k, which, na_rm, na_pad));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -134,8 +142,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_runner_mean_run", (DL_FUNC) &_runner_mean_run, 4},
     {"_runner_sum_run", (DL_FUNC) &_runner_sum_run, 4},
     {"_runner_whicht_run", (DL_FUNC) &_runner_whicht_run, 5},
-    {"_runner_whichmax_run", (DL_FUNC) &_runner_whichmax_run, 1},
-    {"_runner_whichmin_run", (DL_FUNC) &_runner_whichmin_run, 1},
+    {"_runner_whichmax_run", (DL_FUNC) &_runner_whichmax_run, 5},
+    {"_runner_whichmin_run", (DL_FUNC) &_runner_whichmin_run, 5},
     {NULL, NULL, 0}
 };
 

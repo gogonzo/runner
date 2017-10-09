@@ -4,16 +4,25 @@
 \alias{whichmin_run}
 \title{Running length of consecutive occurence}
 \usage{
-whichmin_run(vec)
+whichmin_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
 }
 \arguments{
-\item{x}{A single integer.}
+\item{x}{input logical vector where running whichrun is calculated.}
+
+\item{k}{Running window size. By default window size equals \code{length(x)}.}
+
+\item{which}{specifies whether first or last index is returned.}
+
+\item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.}
+
+\item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
+}
+\value{
+numeric vector of length equals length of \code{x} containing running index of maximum in \code{k}-long window.
+x <- c(NA,NA,99999999999,3.01, 3, 4,-6,-7)
+whichmin_run(x)
 }
 \description{
 Running length of consecutive occurence
-}
-\examples{
-x <- c(NA,NA,99999999999,3.01, 3, 4,-6,-7)
-whichmin_run(x)
 }
 

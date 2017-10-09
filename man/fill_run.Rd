@@ -7,13 +7,18 @@
 fill_run(x, run_for_first = FALSE, only_within = FALSE)
 }
 \arguments{
-\item{x}{A single integer.}
+\item{x}{Vector of any type where \code{NA} are replaced}
+
+\item{run_for_first}{If first elements are filled with \code{NA}, \code{run_for_first = TRUE } allows to fill all initial \code{NA} with nearest non-NA value. By befault \code{run_for_first = TRUE}}
+
+\item{only_within}{\code{NA} are replaced only if previous and next non-NA values are the same. By befault \code{only_within = TRUE}}
 }
-\description{
-Fill NA with previous non-NA element
-}
-\examples{
+\value{
+numeric vector of length equals length of \code{x} containing all \code{x} elements with \code{NA} replaced with previous non-NA element.
 x <- c(NA,1,-1,NA, 1, 2,6,4)
 max_run(x)
+}
+\description{
+Fill \code{NA} with last non-NA element.
 }
 

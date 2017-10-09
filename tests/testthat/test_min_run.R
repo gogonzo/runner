@@ -1,9 +1,8 @@
 context("Running min")
 set.seed(11)
-x1 <- sample(c(1,2,3), 15, replace=T)
-x2 <- sample(c(NA,1,2,3), 15, replace=T)
-
-k1 <- c(3,2,2,2,2)
+x1 <- sample(c(1,2,3), 15, replace=TRUE)
+x2 <- sample(c(NA,1,2,3), 15, replace=TRUE)
+k <- sample(1:15, 15, replace=TRUE)
 
 test_that("min_run basic",{
   for(i in 1:15)

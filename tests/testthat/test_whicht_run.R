@@ -36,22 +36,22 @@ test_that("max_run with na_rm=F", {
 
 
 test_that("max_run with na_rm=T k=4", {
-    expect_equal(
-      whicht_run(x2, na_rm = T,which = "first",k=4 ) ,
-      as.integer(c(1, 1, 1, 1, 2, 5, 5, 5, 8, 8, 8, 9, 11, 11, 12))
-    )
+  expect_equal(
+    whicht_run(x2, na_rm = T,which = "first",k=4 ) ,
+    as.integer(c(1, 1, 1, 1, 2, 5, 5, 5, 8, 8, 8, 9, 11, 11, 12))
+  )
 
-    expect_equal(
-      whicht_run(x2, na_rm = T,which = "last",k=4 ) ,
-      as.integer(c(1, 2, 2, 2, 5, 5, 5, 8, 9, 9, 11, 12, 12,12, 15))
-    )
+  expect_equal(
+    whicht_run(x2, na_rm = T,which = "last",k=4 ) ,
+    as.integer(c(1, 2, 2, 2, 5, 5, 5, 8, 9, 9, 11, 12, 12,12, 15))
+  )
 })
 
 test_that("max_run with na_rm=F k=4", {
-    expect_equal(
-      whicht_run(x2, k=k, na_rm = T,which="last" ) ,
-      as.integer(c( 1, 2, 2, NA, 5, 5, 5, 8, 9, NA, 11, 12, NA,NA, 15 ))
-    )
+  expect_equal(
+    whicht_run(x2, k=k, na_rm = T,which="last" ) ,
+    as.integer(c( 1, 2, 2, NA, 5, 5, 5, 8, 9, NA, 11, 12, NA,NA, 15 ))
+  )
 })
 
 test_that("max_run pads NA's", {

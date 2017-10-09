@@ -11,6 +11,8 @@ sum_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 
 \item{k}{Running window size. By default window size equals \code{length(x)}.}
 
+\item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.}
+
 \item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
 }
 \value{

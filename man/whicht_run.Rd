@@ -11,12 +11,14 @@ whicht_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
 
 \item{k}{Running window size. By default window size equals \code{length(x)}.}
 
+\item{which}{specifies whether first or last index is returned.}
+
 \item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.}
 
 \item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
 }
 \value{
-numeric vector of length equals length of \code{x} containing running min in \code{k}-long window.
+numeric vector of length equals length of \code{x} containing running index in \code{k}-long window.
 }
 \description{
 \code{whicht_run} Checking which element in running window has value TRUE, with specified \code{k} window size and additional options (\code{na_pad},\code{na_rm}) to handle missing values.

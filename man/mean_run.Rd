@@ -11,6 +11,8 @@ mean_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 
 \item{k}{Running window size. By default window size equals the \code{length(x)}.}
 
+\item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} mean is calulating excluding \code{NA}.}
+
 \item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
 }
 \value{
@@ -21,6 +23,6 @@ Running window mean
 }
 \examples{
 x <- c(NA,3,4,3,5,7,NA,2,4,9)
-mean_run(x , k = 3, na_rm = T, na_pad = F)
+mean_run(x , k = 3, na_rm = TRUE, na_pad = FALSE)
 }
 
