@@ -9,7 +9,7 @@ whichmax_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
 \arguments{
 \item{x}{input logical vector where running whichrun is calculated.}
 
-\item{k}{Running window size. By default window size equals \code{length(x)}.}
+\item{k}{Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
 
 \item{which}{specifies whether first or last index is returned.}
 

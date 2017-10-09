@@ -9,7 +9,7 @@ whicht_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
 \arguments{
 \item{x}{input logical vector where running which-true is calculated.}
 
-\item{k}{Running window size. By default window size equals \code{length(x)}.}
+\item{k}{Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
 
 \item{which}{specifies whether first or last index is returned.}
 
@@ -21,11 +21,10 @@ whicht_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
 numeric vector of length equals length of \code{x} containing running index in \code{k}-long window.
 }
 \description{
-\code{whicht_run} Checking which element in running window has value TRUE, with specified \code{k} window size and additional options (\code{na_pad},\code{na_rm}) to handle missing values.
+\code{whicht_run} checks which element has value TRUE within specified running window.
 }
 \examples{
-x <- c( NA, F, T, NA, T, F, T, T)
-
+x <- c( NA, FALSE, TRUE, NA, TRUE, FALSE, TRUE, TRUE)
 whicht_run( x, k=2, na_rm=TRUE, na_pad=FALSE )
 }
 

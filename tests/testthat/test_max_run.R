@@ -2,7 +2,7 @@ context("Running max")
 set.seed(11)
 x1 <- sample(c(1,2,3), 15, replace=T)
 x2 <- sample(c(NA,1,2,3), 15, replace=T)
-
+k  <- sample(1:15,15, replace=T)
 
 test_that("max_run basic",{
   for(i in 1:15)

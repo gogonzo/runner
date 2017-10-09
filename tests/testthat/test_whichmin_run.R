@@ -17,6 +17,7 @@ test_that("min_run basic",{
 
 })
 
+
 test_that("whichmin_run with missings", {
   expect_equal(
     whichmin_run( x2, na_rm = T , which="first" ) ,

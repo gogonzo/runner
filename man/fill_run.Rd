@@ -15,10 +15,12 @@ fill_run(x, run_for_first = FALSE, only_within = FALSE)
 }
 \value{
 numeric vector of length equals length of \code{x} containing all \code{x} elements with \code{NA} replaced with previous non-NA element.
-x <- c(NA,1,-1,NA, 1, 2,6,4)
-max_run(x)
 }
 \description{
 Fill \code{NA} with last non-NA element.
+}
+\examples{
+x <- c(NA,1,-1,NA, 1, 2,6,4)
+max_run(x)
 }
 

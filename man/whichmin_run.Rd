@@ -2,14 +2,14 @@
 % Please edit documentation in R/RcppExports.R
 \name{whichmin_run}
 \alias{whichmin_run}
-\title{Running length of consecutive occurence}
+\title{Running min index}
 \usage{
 whichmin_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
 }
 \arguments{
 \item{x}{input logical vector where running whichrun is calculated.}
 
-\item{k}{Running window size. By default window size equals \code{length(x)}.}
+\item{k}{Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
 
 \item{which}{specifies whether first or last index is returned.}
 
@@ -19,10 +19,19 @@ whichmin_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
 }
 \value{
 numeric vector of length equals length of \code{x} containing running index of maximum in \code{k}-long window.
-x <- c(NA,NA,99999999999,3.01, 3, 4,-6,-7)
-whichmin_run(x)
 }
 \description{
-Running length of consecutive occurence
+Running position of element containing minimum
+}
+\examples{
+set.seed(11)
+x1 <- c(1, 1, 2, 1, 1, 3, 1, 1, 3, 1, 1, 2, 3, 3, 3)
+x2 <- c(2, 1, 1, NA, 3, 2, 1, NA, 1, NA, NA, NA, 1, 2, 1)
+k  <- c(5, 1, 8, 1, 1, 15, 2, 5, 14, 2, 3, 7, 14, 13, 12)
+whichmin_run( x1 , which="first") # running index of minimum
+whichmin_run(x1, which="last")
+whichmin_run( x2, na_rm = TRUE , which="last" ) # running min-index ommiting NA
+whichmin_run(x2 , k=3, na_rm = TRUE, which="first") # running min-index in 3-element window
+whichmin_run( x2 , k = k , na_rm = TRUE, which = "last") # running min-index in varying window size
 }
 

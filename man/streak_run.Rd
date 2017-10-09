@@ -9,7 +9,7 @@ streak_run(x, k = 0L, na_rm = FALSE, na_pad = FALSE)
 \arguments{
 \item{x}{Vector of any type on which consecutive streak is calculated}
 
-\item{k}{Running window size. By default window size equals \code{length(x)}.}
+\item{k}{Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
 
 \item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed streak prior to element.}
 
@@ -22,7 +22,13 @@ numeric vector of length equals length of \code{x} containing running streak len
 Calculates series of consecutive elements
 }
 \examples{
-x <- c(1,1,0,0,1,0,3,3,1,1)
-streak_run(x, k=2, na_pad=FALSE)
+set.seed(11)
+x1 <- sample(c("a","b"),15,replace=TRUE)
+x2 <- sample(c(NA_character_,"a","b"),15,replace=TRUE)
+k <- sample(1:4,15,replace=TRUE)
+streak_run(x1) # simple streak run
+streak_run(x1, k=2) # streak run within 2-element window
+streak_run(x2, na_pad=TRUE, k=3) # streak run within k=3 with padding NA
+streak_run(x1, k=k) # streak run within varying window size specified by vector k
 }
 

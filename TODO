@@ -1,3 +1,4 @@
++ tests for mean_ and sum_
 + concat_run
 + implement window functions on POSIXct, or find solution using available functions
 + running devainces from y value (eg mean)

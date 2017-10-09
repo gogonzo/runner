@@ -9,7 +9,7 @@ min_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 \arguments{
 \item{x}{input numeric vector where running minimum is calculated.}
 
-\item{k}{Running window size. By default window size equals \code{length(x)}.}
+\item{k}{Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
 
 \item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.}
 
@@ -22,8 +22,13 @@ numeric vector of length equals length of \code{x} containing running min in \co
 \code{min_run} calculates window-running min on given \code{x} numeric vector, specified \code{k} window size and additional options (\code{na_pad},\code{na_rm}) to handle missing values.
 }
 \examples{
-x <- c( NA, 1, -1, NA, -1, -2, -6, 4)
-
-min_run( x, k=2, na_rm=TRUE, na_pad=FALSE )
+set.seed(11)
+x1 <- sample( c(1,2,3), 15, replace=TRUE)
+x2 <- sample( c(NA,1,2,3), 15, replace=TRUE)
+k  <- sample( 1:4, 15, replace=TRUE)
+min_run(x1) # simple cumulative minimum
+min_run(x2, na_rm = TRUE) # cumulative minimum with removing NA.
+min_run(x2, na_rm = TRUE, k=4) # minimum in 4-element window
+min_run(x2, na_rm = FALSE, k=k) # minimum in varying k window size
 }
 

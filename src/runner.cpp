@@ -10,17 +10,18 @@ using namespace Rcpp;
 
 //' Running minimum window
 //'
+//'
 //' \code{min_run} calculates window-running min on given \code{x} numeric vector, specified \code{k} window size and additional options (\code{na_pad},\code{na_rm}) to handle missing values.
 //' @param x input numeric vector where running minimum is calculated.
-//' @param k Running window size. By default window size equals \code{length(x)}.
+//' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
 //' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 //' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.
 //' @return numeric vector of length equals length of \code{x} containing running min in \code{k}-long window.
 //' @examples
 //' set.seed(11)
-//' x1 <- sample(c(1,2,3), 15, replace=TRUE)
-//' x2 <- sample(c(NA,1,2,3), 15, replace=TRUE)
-//' k1 <- sample(1:4,15,replace=TRUE)
+//' x1 <- sample( c(1,2,3), 15, replace=TRUE)
+//' x2 <- sample( c(NA,1,2,3), 15, replace=TRUE)
+//' k  <- sample( 1:4, 15, replace=TRUE)
 //' min_run(x1) # simple cumulative minimum
 //' min_run(x2, na_rm = TRUE) # cumulative minimum with removing NA.
 //' min_run(x2, na_rm = TRUE, k=4) # minimum in 4-element window
@@ -63,7 +64,7 @@ NumericVector min_run(
 //'
 //' \code{max_run} calculates window-running max on given \code{x} numeric vector, specified \code{k} window size and additional options (\code{na_pad},\code{na_rm}) to handle missing values.
 //' @param x input numeric vector where running maximum is calculated.
-//' @param k Running window size. By default window size equals \code{length(x)}.
+//' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
 //' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 //' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed maximum prior to element.
 //' @return numeric vector of length equals length of \code{x} containing running max in \code{k}-long window.
@@ -71,7 +72,7 @@ NumericVector min_run(
 //' set.seed(11)
 //' x1 <- sample(c(1,2,3), 15, replace=TRUE)
 //' x2 <- sample(c(NA,1,2,3), 15, replace=TRUE)
-//' k1 <- sample(1:4,15,replace=TRUE)
+//' k  <- sample(1:4, 15,replace=TRUE)
 //' max_run(x1) # simple cumulative minimum
 //' max_run(x2, na_rm = TRUE) # cumulative minimum with removing NA.
 //' max_run(x2, na_rm = TRUE, k=4) # minimum in 4-element window
@@ -113,7 +114,7 @@ NumericVector max_run(
 //'
 //' Calculates series of consecutive elements
 //' @param x Vector of any type on which consecutive streak is calculated
-//' @param k Running window size. By default window size equals \code{length(x)}.
+//' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
 //' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed streak prior to element.
 //' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 //' @return numeric vector of length equals length of \code{x} containing running streak length in \code{k}-long window.
@@ -124,7 +125,7 @@ NumericVector max_run(
 //' k <- sample(1:4,15,replace=TRUE)
 //' streak_run(x1) # simple streak run
 //' streak_run(x1, k=2) # streak run within 2-element window
-//' streak_run(x2, na_pad=TRUE, k=3) # streak run within \code{k=3} element window and filled with NA at initial \code{k-1} elements
+//' streak_run(x2, na_pad=TRUE, k=3) # streak run within k=3 with padding NA
 //' streak_run(x1, k=k) # streak run within varying window size specified by vector k
 //' @export
 // [[Rcpp::export]]
@@ -170,11 +171,11 @@ IntegerVector streak_run(
 //' @param run_for_first If first elements are filled with \code{NA}, \code{run_for_first = TRUE } allows to fill all initial \code{NA} with nearest non-NA value. By befault \code{run_for_first = TRUE}
 //' @param only_within \code{NA} are replaced only if previous and next non-NA values are the same. By befault \code{only_within = TRUE}
 //' @return numeric vector of length equals length of \code{x} containing all \code{x} elements with \code{NA} replaced with previous non-NA element.
+//' @examples
 //' x <- c(NA,1,-1,NA, 1, 2,6,4)
 //' max_run(x)
 //' @export
 // [[Rcpp::export]]
-
 SEXP fill_run(SEXP x, bool run_for_first = false, bool only_within=false) {
 
   switch (TYPEOF(x)) {
@@ -208,7 +209,7 @@ SEXP fill_run(SEXP x, bool run_for_first = false, bool only_within=false) {
 //' Running window mean
 //'
 //' @param x Vector of any type on which window mean is calculated
-//' @param k Running window size. By default window size equals the \code{length(x)}.
+//' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
 //' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} mean is calulating excluding \code{NA}.
 //' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 //' @return numeric vector of length equals length of \code{x} containing running mean in \code{k}-long window.
@@ -218,7 +219,6 @@ SEXP fill_run(SEXP x, bool run_for_first = false, bool only_within=false) {
 //' @export
 // [[Rcpp::export]]
 NumericVector mean_run(
-
     NumericVector x,
     IntegerVector k=0,
     bool na_rm = true,
@@ -263,13 +263,13 @@ NumericVector mean_run(
 //' Running window sum
 //'
 //' @param x Vector of any type on which running sum is calculated
-//' @param k Running window size. By default window size equals \code{length(x)}.
+//' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
 //' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.
 //' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 //' @return numeric vector of length equals length of \code{x} containing running window sum in \code{k}-long window.
 //' @examples
 //' x <- c(NA,3,4,3,5,7,NA,2,4,9)
-//' sum_run(x , k = 3, na_rm = T, na_pad = F)
+//' sum_run(x , k = 3, na_rm = TRUE, na_pad = FALSE)
 //' @export
 // [[Rcpp::export]]
 NumericVector sum_run(
@@ -304,16 +304,15 @@ NumericVector sum_run(
 
 //' Running which-true function
 //'
-//' \code{whicht_run} Checking which element in running window has value TRUE, with specified \code{k} window size and additional options (\code{na_pad},\code{na_rm}) to handle missing values.
+//' \code{whicht_run} checks which element has value TRUE within specified running window.
 //' @param x input logical vector where running which-true is calculated.
-//' @param k Running window size. By default window size equals \code{length(x)}.
+//' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
 //' @param which specifies whether first or last index is returned.
 //' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 //' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.
 //' @return numeric vector of length equals length of \code{x} containing running index in \code{k}-long window.
 //' @examples
-//' x <- c( NA, F, T, NA, T, F, T, T)
-//'
+//' x <- c( NA, FALSE, TRUE, NA, TRUE, FALSE, TRUE, TRUE)
 //' whicht_run( x, k=2, na_rm=TRUE, na_pad=FALSE )
 //' @export
 // [[Rcpp::export]]
@@ -365,7 +364,7 @@ IntegerVector whicht_run(
 //' Running position of max element prior to i-th element
 //'
 //' @param x input logical vector where running whichrun is calculated.
-//' @param k Running window size. By default window size equals \code{length(x)}.
+//' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
 //' @param which specifies whether first or last index is returned.
 //' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 //' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.
@@ -417,18 +416,25 @@ IntegerVector whichmax_run(
 }
 
 
-//' Running length of consecutive occurence
+//' Running min index
 //'
-//' Running length of consecutive occurence
+//' Running position of element containing minimum
 //' @param x input logical vector where running whichrun is calculated.
-//' @param k Running window size. By default window size equals \code{length(x)}.
+//' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
 //' @param which specifies whether first or last index is returned.
 //' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 //' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.
 //' @return numeric vector of length equals length of \code{x} containing running index of maximum in \code{k}-long window.
 //' @examples
-
-//'
+//' set.seed(11)
+//' x1 <- c(1, 1, 2, 1, 1, 3, 1, 1, 3, 1, 1, 2, 3, 3, 3)
+//' x2 <- c(2, 1, 1, NA, 3, 2, 1, NA, 1, NA, NA, NA, 1, 2, 1)
+//' k  <- c(5, 1, 8, 1, 1, 15, 2, 5, 14, 2, 3, 7, 14, 13, 12)
+//' whichmin_run( x1 , which="first") # running index of minimum
+//' whichmin_run(x1, which="last")
+//' whichmin_run( x2, na_rm = TRUE , which="last" ) # running min-index ommiting NA
+//' whichmin_run(x2 , k=3, na_rm = TRUE, which="first") # running min-index in 3-element window
+//' whichmin_run( x2 , k = k , na_rm = TRUE, which = "last") # running min-index in varying window size
 //' @export
 // [[Rcpp::export]]
 IntegerVector whichmin_run(

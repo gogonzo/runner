@@ -9,7 +9,7 @@ mean_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 \arguments{
 \item{x}{Vector of any type on which window mean is calculated}
 
-\item{k}{Running window size. By default window size equals the \code{length(x)}.}
+\item{k}{Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
 
 \item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} mean is calulating excluding \code{NA}.}
 
