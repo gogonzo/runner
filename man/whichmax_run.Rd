@@ -2,12 +2,12 @@
 % Please edit documentation in R/RcppExports.R
 \name{whichmax_run}
 \alias{whichmax_run}
-\title{Running index of maximum prior to i-th element}
+\title{Running which.max}
 \usage{
 whichmax_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
 }
 \arguments{
-\item{x}{input logical vector where running whichrun is calculated.}
+\item{x}{numeric (or integer) vector for which running whichrun is calculated.}
 
 \item{k}{Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
 
@@ -18,10 +18,10 @@ whichmax_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
 \item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
 }
 \value{
-numeric vector of length equals length of \code{x} containing running index of maximum in \code{k}-long window.
+Numeric vector of length equals length of \code{x} containing running index of maximum in \code{k}-long window.
 }
 \description{
-Running position of max element prior to i-th element
+Running index of the (first or last) maximum.
 }
 \examples{
 x <- c(NA,NA,0,NA, 1, 2,-6,4)

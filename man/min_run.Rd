@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{min_run}
 \alias{min_run}
-\title{Running minimum window}
+\title{Running minimum}
 \usage{
 min_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 }
@@ -19,7 +19,7 @@ min_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 numeric vector of length equals length of \code{x} containing running min in \code{k}-long window.
 }
 \description{
-\code{min_run} calculates window-running min on given \code{x} numeric vector, specified \code{k} window size and additional options (\code{na_pad},\code{na_rm}) to handle missing values.
+\code{min_run} calculates running min on given \code{x} numeric vector, specified \code{k} window size.
 }
 \examples{
 set.seed(11)

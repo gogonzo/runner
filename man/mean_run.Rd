@@ -2,14 +2,14 @@
 % Please edit documentation in R/RcppExports.R
 \name{mean_run}
 \alias{mean_run}
-\title{Running window mean}
+\title{Running mean}
 \usage{
 mean_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 }
 \arguments{
-\item{x}{Vector of any type on which window mean is calculated}
+\item{x}{vector of any type on which window mean is calculated}
 
-\item{k}{Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
+\item{k}{running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
 
 \item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} mean is calulating excluding \code{NA}.}
 
@@ -19,7 +19,7 @@ mean_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 numeric vector of length equals length of \code{x} containing running mean in \code{k}-long window.
 }
 \description{
-Running window mean
+Running mean
 }
 \examples{
 x <- c(NA,3,4,3,5,7,NA,2,4,9)

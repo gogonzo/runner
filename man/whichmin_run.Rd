@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{whichmin_run}
 \alias{whichmin_run}
-\title{Running min index}
+\title{Running which.min}
 \usage{
 whichmin_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
 }
@@ -21,7 +21,7 @@ whichmin_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
 numeric vector of length equals length of \code{x} containing running index of maximum in \code{k}-long window.
 }
 \description{
-Running position of element containing minimum
+Running index of the (first or last) maximum.
 }
 \examples{
 set.seed(11)

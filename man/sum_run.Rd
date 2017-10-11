@@ -2,12 +2,12 @@
 % Please edit documentation in R/RcppExports.R
 \name{sum_run}
 \alias{sum_run}
-\title{Running window sum}
+\title{Running sum}
 \usage{
 sum_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 }
 \arguments{
-\item{x}{Vector of any type on which running sum is calculated}
+\item{x}{vector of any type where running sum is calculated}
 
 \item{k}{Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
 
@@ -19,7 +19,7 @@ sum_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 numeric vector of length equals length of \code{x} containing running window sum in \code{k}-long window.
 }
 \description{
-Running window sum
+Running sum
 }
 \examples{
 x <- c(NA,3,4,3,5,7,NA,2,4,9)

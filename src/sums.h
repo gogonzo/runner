@@ -19,7 +19,7 @@ namespace impl {
 
     /* minus sum on window biginning*/
     if(k > 0 and k < n){
-      first_sum = NumericVector::get_na();
+      first_sum = 0;
       for(int i=0; i < n-k; i++){
         if( NumericVector::is_na( first_sum )){
           first_sum = x( i );
@@ -39,7 +39,7 @@ namespace impl {
     IntegerVector counts(n);
 
     for(int i = 0; i < n; i++ ){
-      if(NumericVector::is_na( x( i ) ))
+      if(ISNAN( x( i ) ))
         count += 1;
       counts( i ) = count;
     }
@@ -47,9 +47,10 @@ namespace impl {
     if(k > 0 and k < n){
       count = 0;
       for(int i = 0;  i < n-k; i++){
-        if( NumericVector::is_na( x(i) ) )
+        if( ISNAN( x(i) ) )
           count += 1;
         counts( i + k ) -= count;
+        Rcout << counts(i + k);
       }
     }
 
@@ -86,7 +87,7 @@ namespace impl {
       count = 0;
       i1 = impl::window_index( i, k( i ) );
       for(int j = i1; j <= i ; ++j){
-        if(NumericVector::is_na( x( j ) ))
+        if(ISNAN( x( j ) ))
           count += 1;
       }
       counts( i ) = count;

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{max_run}
 \alias{max_run}
-\title{Running maximum window}
+\title{Running maximum}
 \usage{
 max_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 }
@@ -19,7 +19,7 @@ max_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 numeric vector of length equals length of \code{x} containing running max in \code{k}-long window.
 }
 \description{
-\code{max_run} calculates window-running max on given \code{x} numeric vector, specified \code{k} window size and additional options (\code{na_pad},\code{na_rm}) to handle missing values.
+\code{max_run} calculates running max on given \code{x} numeric vector and specified \code{k} window size.
 }
 \examples{
 set.seed(11)

@@ -2,14 +2,14 @@
 % Please edit documentation in R/RcppExports.R
 \name{streak_run}
 \alias{streak_run}
-\title{Streak length of vector elements}
+\title{Running streak length}
 \usage{
 streak_run(x, k = 0L, na_rm = FALSE, na_pad = FALSE)
 }
 \arguments{
-\item{x}{Vector of any type on which consecutive streak is calculated}
+\item{x}{vector of any type where running streak is calculated}
 
-\item{k}{Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
+\item{k}{running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
 
 \item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed streak prior to element.}
 
@@ -19,7 +19,7 @@ streak_run(x, k = 0L, na_rm = FALSE, na_pad = FALSE)
 numeric vector of length equals length of \code{x} containing running streak length in \code{k}-long window.
 }
 \description{
-Calculates series of consecutive elements
+Calculates running series of consecutive elements
 }
 \examples{
 set.seed(11)

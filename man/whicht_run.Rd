@@ -11,7 +11,7 @@ whicht_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
 
 \item{k}{Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
 
-\item{which}{specifies whether first or last index is returned.}
+\item{which}{specifies whether \code{"first"} or \code{"last"} index is returned.}
 
 \item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.}
 
@@ -21,7 +21,7 @@ whicht_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
 numeric vector of length equals length of \code{x} containing running index in \code{k}-long window.
 }
 \description{
-\code{whicht_run} checks which element has value TRUE within specified running window.
+\code{whicht_run} checks \code{which} element has value TRUE within specified running window.
 }
 \examples{
 x <- c( NA, FALSE, TRUE, NA, TRUE, FALSE, TRUE, TRUE)

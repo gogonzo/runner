@@ -1,10 +1,46 @@
 context("Running mean")
-x1 <- c(6.34,8.15,1.88,8.06,5.23,4.67,5.22,1.25,5.23,5.54)
+set.seed(11)
+x1 <- rnorm(15)
+x2 <- sample(c(rep(NA,5),rnorm(15)), 15, replace=TRUE)
+k <- sample(1:15, 15, replace=TRUE)
 
-#test_that("mean_run calculates mean", {
-#  expect_identical(mean_run(x1),)
-#})
+test_that("mean_run basic",{
+  for(i in 1:15)
+    expect_equal(
+      mean_run(x1)[i] ,
+      mean(x1[1:i])
+    )
+})
 
-#test_that("mean_run handles NA's", {
-#  expect_identical(mean_run(c(NA,1,0,0,1,NA,3,3)), c(NA,1,1,2,1,NA,1,2))
-#})
+test_that("mean_run with na_rm=T", {
+  for(i in 1:15)
+    expect_equal(
+      mean_run(x2, na_rm = T)[i] ,
+      mean(x2[1:i], na.rm=T)
+    )
+})
+
+test_that("mean_run with na_rm=F na_fill=T", {
+  for(i in 1:15)
+    expect_equal(
+      mean_run(x2, na_rm = F )[i] ,
+      mean(x2[1:i], na.rm = F)
+    )
+})
+
+test_that("mean_run with na_rm=T", {
+  for(i in 1:15)
+    expect_equal(
+      mean_run(x2, na_rm = T )[i] ,
+      mean(x2[1:i] , na.rm = T)
+    )
+})
+
+
+test_that("mean_run with na_rm=T k=4", {
+  for(i in 1:15)
+    expect_equal(
+      mean_run(x2, na_rm = T, k=4)[i] ,
+      mean(x2[pmax(i-4+1,1):i], na.rm=T)
+    )
+})
