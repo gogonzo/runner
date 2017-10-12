@@ -20,6 +20,8 @@ numeric vector of length equals length of \code{x} containing all \code{x} eleme
 Fill \code{NA} with last non-NA element.
 }
 \examples{
-x <- c(NA,1,-1,NA, 1, 2,6,4)
-max_run(x)
+fill_run(c(NA,NA,1:10, NA, NA), run_for_first=TRUE)
+fill_run(c(NA,NA,1:10, NA, NA), run_for_first=TRUE)
+fill_run(c(NA,NA,1:10, NA, NA), run_for_first=FALSE)
+fill_run(c(NA,NA,1,2,NA,NA,2,2,NA,NA,1, NA, NA), run_for_first=TRUE,only_within = TRUE)
 }

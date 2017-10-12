@@ -9,7 +9,7 @@ sum_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 \arguments{
 \item{x}{vector of any type where running sum is calculated}
 
-\item{k}{Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
+\item{k}{Running window size.  Not yet implemented.}
 
 \item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.}
 
@@ -22,6 +22,12 @@ numeric vector of length equals length of \code{x} containing running sum in \co
 Running sum in specified window of numeric vector.
 }
 \examples{
-x <- c(NA,3,4,3,5,7,NA,2,4,9)
-sum_run(x , k = 3, na_rm = TRUE, na_pad = FALSE)
+set.seed(11)
+x1 <- rnorm(15)
+x2 <- sample(c(rep(NA,5),rnorm(15)), 15, replace=TRUE)
+k <- sample(1:15, 15, replace=TRUE)
+sum_run(x1)
+sum_run(x2, na_rm = TRUE)
+sum_run(x2, na_rm = FALSE )
+sum_run(x2, na_rm = TRUE, k=4)
 }

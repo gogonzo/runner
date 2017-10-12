@@ -43,7 +43,6 @@ namespace impl {
     /* only_within */
     } else {
       for( int i = next_non_na; i < n; ++i ) {
-        Rcout << i;
         if( !Vector<RTYPE>::is_na( x(i) ) ) {
           res( i ) = x( i );
         } else {

@@ -172,8 +172,10 @@ IntegerVector streak_run(
 //' @param only_within \code{NA} are replaced only if previous and next non-NA values are the same. By befault \code{only_within = TRUE}
 //' @return numeric vector of length equals length of \code{x} containing all \code{x} elements with \code{NA} replaced with previous non-NA element.
 //' @examples
-//' x <- c(NA,1,-1,NA, 1, 2,6,4)
-//' max_run(x)
+//' fill_run(c(NA,NA,1:10, NA, NA), run_for_first=TRUE)
+//' fill_run(c(NA,NA,1:10, NA, NA), run_for_first=TRUE)
+//' fill_run(c(NA,NA,1:10, NA, NA), run_for_first=FALSE)
+//' fill_run(c(NA,NA,1,2,NA,NA,2,2,NA,NA,1, NA, NA), run_for_first=TRUE,only_within = TRUE)
 //' @export
 // [[Rcpp::export]]
 SEXP fill_run(SEXP x, bool run_for_first = false, bool only_within=false) {
@@ -220,9 +222,9 @@ SEXP fill_run(SEXP x, bool run_for_first = false, bool only_within=false) {
 //' x2 <- sample(c(rep(NA,5),rnorm(15)), 15, replace=TRUE)
 //' k <- sample(1:15, 15, replace=TRUE)
 //' mean_run(x1)
-//' mean_run(x2, na_rm = T)
-//' mean_run(x2, na_rm = F )
-//' mean_run(x2, na_rm = T, k=4)
+//' mean_run(x2, na_rm = TRUE)
+//' mean_run(x2, na_rm = FALSE )
+//' mean_run(x2, na_rm = TRUE, k=4)
 //' @export
 // [[Rcpp::export]]
 NumericVector mean_run(
@@ -296,9 +298,9 @@ NumericVector mean_run(
 //' x2 <- sample(c(rep(NA,5),rnorm(15)), 15, replace=TRUE)
 //' k <- sample(1:15, 15, replace=TRUE)
 //' sum_run(x1)
-//' sum_run(x2, na_rm = T)
-//' sum_run(x2, na_rm = F )
-//' sum_run(x2, na_rm = T, k=4)
+//' sum_run(x2, na_rm = TRUE)
+//' sum_run(x2, na_rm = FALSE )
+//' sum_run(x2, na_rm = TRUE, k=4)
 //' @export
 // [[Rcpp::export]]
 NumericVector sum_run(
@@ -401,9 +403,9 @@ IntegerVector whicht_run(
 //' x2 <- c(2, 1, 1, NA, 3, 2, 1, NA, 1, NA, NA, NA, 1, 2, 1)
 //' k  <- c(5, 1, 8, 1, 1, 15, 2, 5, 14, 2, 3, 7, 14, 13, 12)
 //' whichmax_run(x1, which="first")
-//' whichmax_run(x2, na_rm = T, which="last")
-//' whichmax_run(x2, k=3, na_rm = T, which="last")
-//' whichmax_run(x2 , k=k, na_rm = F, which="first")
+//' whichmax_run(x2, na_rm = TRUE, which="last")
+//' whichmax_run(x2, k=3, na_rm = TRUE, which="last")
+//' whichmax_run(x2 , k=k, na_rm = FALSE, which="first")
 //' @export
 // [[Rcpp::export]]
 IntegerVector whichmax_run(

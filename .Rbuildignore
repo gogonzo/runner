@@ -2,3 +2,6 @@
 ^\.Rproj\.user$
 ^.*elo.R
 ^data-raw$
+^\.travis\.yml$
+^README\.Rmd$
+^README-.*\.png$

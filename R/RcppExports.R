@@ -76,8 +76,10 @@ streak_run <- function(x, k = 0L, na_rm = FALSE, na_pad = FALSE) {
 #' @param only_within \code{NA} are replaced only if previous and next non-NA values are the same. By befault \code{only_within = TRUE}
 #' @return numeric vector of length equals length of \code{x} containing all \code{x} elements with \code{NA} replaced with previous non-NA element.
 #' @examples
-#' x <- c(NA,1,-1,NA, 1, 2,6,4)
-#' max_run(x)
+#' fill_run(c(NA,NA,1:10, NA, NA), run_for_first=TRUE)
+#' fill_run(c(NA,NA,1:10, NA, NA), run_for_first=TRUE)
+#' fill_run(c(NA,NA,1:10, NA, NA), run_for_first=FALSE)
+#' fill_run(c(NA,NA,1,2,NA,NA,2,2,NA,NA,1, NA, NA), run_for_first=TRUE,only_within = TRUE)
 #' @export
 fill_run <- function(x, run_for_first = FALSE, only_within = FALSE) {
     .Call('_runner_fill_run', PACKAGE = 'runner', x, run_for_first, only_within)
@@ -87,13 +89,19 @@ fill_run <- function(x, run_for_first = FALSE, only_within = FALSE) {
 #'
 #'
 #' @param x vector of any type on which running mean is calculated
-#' @param k running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
+#' @param k running window size. Not yet implemented.
 #' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} mean is calulating excluding \code{NA}.
 #' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 #' @return numeric vector of length equals length of \code{x} containing running mean in \code{k}-long window.
 #' @examples
-#' x <- c(NA,3,4,3,5,7,NA,2,4,9)
-#' mean_run(x , k = 3, na_rm = TRUE, na_pad = FALSE)
+#' set.seed(11)
+#' x1 <- rnorm(15)
+#' x2 <- sample(c(rep(NA,5),rnorm(15)), 15, replace=TRUE)
+#' k <- sample(1:15, 15, replace=TRUE)
+#' mean_run(x1)
+#' mean_run(x2, na_rm = TRUE)
+#' mean_run(x2, na_rm = FALSE )
+#' mean_run(x2, na_rm = TRUE, k=4)
 #' @export
 mean_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE) {
     .Call('_runner_mean_run', PACKAGE = 'runner', x, k, na_rm, na_pad)
@@ -103,13 +111,19 @@ mean_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE) {
 #'
 #' Running sum in specified window of numeric vector.
 #' @param x vector of any type where running sum is calculated
-#' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
+#' @param k Running window size.  Not yet implemented.
 #' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.
 #' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 #' @return numeric vector of length equals length of \code{x} containing running sum in \code{k}-long window.
 #' @examples
-#' x <- c(NA,3,4,3,5,7,NA,2,4,9)
-#' sum_run(x , k = 3, na_rm = TRUE, na_pad = FALSE)
+#' set.seed(11)
+#' x1 <- rnorm(15)
+#' x2 <- sample(c(rep(NA,5),rnorm(15)), 15, replace=TRUE)
+#' k <- sample(1:15, 15, replace=TRUE)
+#' sum_run(x1)
+#' sum_run(x2, na_rm = TRUE)
+#' sum_run(x2, na_rm = FALSE )
+#' sum_run(x2, na_rm = TRUE, k=4)
 #' @export
 sum_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE) {
     .Call('_runner_sum_run', PACKAGE = 'runner', x, k, na_rm, na_pad)
@@ -146,9 +160,9 @@ whicht_run <- function(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE) 
 #' x2 <- c(2, 1, 1, NA, 3, 2, 1, NA, 1, NA, NA, NA, 1, 2, 1)
 #' k  <- c(5, 1, 8, 1, 1, 15, 2, 5, 14, 2, 3, 7, 14, 13, 12)
 #' whichmax_run(x1, which="first")
-#' whichmax_run(x2, na_rm = T, which="last")
-#' whichmax_run(x2, k=3, na_rm = T, which="last")
-#' whichmax_run(x2 , k=k, na_rm = F, which="first")
+#' whichmax_run(x2, na_rm = TRUE, which="last")
+#' whichmax_run(x2, k=3, na_rm = TRUE, which="last")
+#' whichmax_run(x2 , k=k, na_rm = FALSE, which="first")
 #' @export
 whichmax_run <- function(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE) {
     .Call('_runner_whichmax_run', PACKAGE = 'runner', x, k, which, na_rm, na_pad)

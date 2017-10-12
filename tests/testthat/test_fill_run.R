@@ -22,4 +22,9 @@ test_that("repeat run works for vectors on any type", {
     as.factor(c(NA,NA,1:10,10,10))
   )
 
+  expect_identical(
+    as.factor(fill_run(c(NA,NA,1,2,NA,NA,2,2,NA,NA,1, NA, NA), run_for_first=T,only_within = T)),
+    as.factor(c(1,1,1,2,2,2,2,2,NA,NA,1,NA,NA))
+  )
+
 })
