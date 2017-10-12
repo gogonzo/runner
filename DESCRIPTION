@@ -1,10 +1,10 @@
 Package: runner
 Type: Package
-Title: Running functions for vectors
+Title: Running functions
 Version: 0.1.0
 Author: Dawid 'Gonzo' Kałędkowski
 Maintainer: Dawid 'Gonzo' Kałędowski <dawid.kaledkowski@gmail.com>
-Description: Toolbox for calculating running-window functions. Package composed entirely in Rcpp.
+Description: Toolbox for calculating running functions. Package composed entirely in Rcpp.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

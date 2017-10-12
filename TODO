@@ -1,4 +1,5 @@
-+ tests for mean_ and sum_
++ travis CI i badge na git
++ mean_run and sum_run for varying k
 + concat_run
 + implement window functions on POSIXct, or find solution using available functions
 + running devainces from y value (eg mean)

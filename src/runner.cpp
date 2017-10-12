@@ -231,24 +231,41 @@ NumericVector mean_run(
   impl::check_for_valid_k2(n, k);
 
   if(k.size() == 1 ){
-    /* calculate window sum */
     res = impl::calc_sum_window(x, res, k(0) );
-    if(!na_rm){
-      /* calculate number of NA's in window */
-      nas = impl::count_na_window(x, k(0) );
+    nas = impl::count_na_window(x, k(0) );
 
+    if(!na_rm){
       for(int i =0; i < n; i++)
         if(nas ( i )>0 )
           res( i ) = NumericVector::get_na();
-
     }
 
     /* mean = sum/(k - number_of_nas) */
     for(int i = 0; i < n; i ++)
-      if(k(0)>i)
-        res( i ) = res( i )/( k(0) - nas(0));
+      if(k(0)<=i)
+        res( i ) = res( i )/( k(0) - nas(i) );
       else
-        res( i ) = res( i )/( i - nas(0));
+        res( i ) = res( i )/( i + 1 - nas(i) );
+
+  } else {
+    res = impl::calc_sum_window2(x, res, k );
+    nas = impl::count_na_window2(x, k );
+
+    if(!na_rm){
+      for(int i =0; i < n; i++)
+        if(nas ( i )>0 )
+          res( i ) = NumericVector::get_na();
+    }
+
+    /* mean = sum/(k - number_of_nas) */
+    for(int i = 0; i < n; i ++)
+      if(k(i)<=i)
+        res( i ) = res( i )/( k(i) - nas(i) );
+      else
+        res( i ) = res( i )/( i + 1 - nas(i) );
+
+
+
   }
 
   /* pad first-k elements with NA */
@@ -288,7 +305,6 @@ NumericVector sum_run(
   if(!na_rm){
     /* calculate number of NA's in window */
     nas = impl::count_na_window(x, k(0) );
-
     for(int i =0; i < n; i++)
       if(nas ( i )>0 )
         res( i ) = NumericVector::get_na();
