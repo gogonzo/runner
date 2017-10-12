@@ -3,13 +3,13 @@ set.seed(11)
 x1 <- rnorm(15)
 x2 <- sample(c(rep(NA,5),rnorm(15)), 15, replace=TRUE)
 k <- sample(1:15, 15, replace=TRUE)
-
 test_that("mean_run basic",{
   for(i in 1:15)
     expect_equal(
       mean_run(x1)[i] ,
       mean(x1[1:i])
     )
+
 })
 
 test_that("mean_run with na_rm=T", {
