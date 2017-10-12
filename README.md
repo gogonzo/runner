@@ -23,15 +23,29 @@ Example
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
-x1 <- sample( c(1,2,3), 15, replace=TRUE)
-x2 <- sample( c(NA,1,2,3), 15, replace=TRUE)
-k  <- sample( 1:4, 15, replace=TRUE)
-min_run(x1) # simple cumulative minimum
-#>  [1] 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1
-min_run(x2, na_rm = TRUE) # cumulative minimum with removing NA.
-#>  [1] NA  1  1  1  1  1  1  1  1  1  1  1  1  1  1
-min_run(x2, na_rm = TRUE, k=4) # minimum in 4-element window
-#>  [1] NA  1  1  1  1  1  1  1  1  1  1  1  1  1  1
-min_run(x2, na_rm = FALSE, k=k) # minimum in varying k window size
-#>  [1] NA NA NA NA  2  1  1 NA  3  2 NA  1  1 NA NA
+data.frame(
+  x1 = sample( c(1,2,3), 15, replace=TRUE),
+  x2 = sample( c(NA,1,2,3), 15, replace=TRUE),
+  k  = sample( 1:4, 15, replace=TRUE),
+  simple_min_run = min_run(x1), # simple cumulative minimum
+  narm_min_run = min_run(x2, na_rm = TRUE), # cumulative minimum with removing NA.
+  kconst_min_run = min_run(x2, na_rm = TRUE, k=4), # minimum in 4-element window
+  kvary_min_run = min_run(x2, na_rm = FALSE, k=k) # minimum in varying k window size
+)
+#>    x1 x2 k simple_min_run narm_min_run kconst_min_run kvary_min_run
+#> 1   2 NA 4              2           NA             NA            NA
+#> 2   2 NA 1              2            1              1            NA
+#> 3   3  2 4              1            1              1            NA
+#> 4   1  2 3              1            1              1            NA
+#> 5   2  1 3              1            1              1             2
+#> 6   2  1 1              1            1              1             1
+#> 7   1  2 4              1            1              1             1
+#> 8   3  1 1              1            1              1            NA
+#> 9   1  1 2              1            1              1             3
+#> 10  2  3 4              1            1              1             2
+#> 11  3 NA 1              1            1              1            NA
+#> 12  1 NA 1              1            1              1             1
+#> 13  3  3 2              1            1              1             1
+#> 14  3 NA 4              1            1              1            NA
+#> 15  2  1 2              1            1              1            NA
 ```

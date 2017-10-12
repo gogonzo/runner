@@ -32,12 +32,13 @@ devtools::install_github("elo2zero/runner")
 This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
-x1 <- sample( c(1,2,3), 15, replace=TRUE)
-x2 <- sample( c(NA,1,2,3), 15, replace=TRUE)
-k  <- sample( 1:4, 15, replace=TRUE)
-min_run(x1) # simple cumulative minimum
-min_run(x2, na_rm = TRUE) # cumulative minimum with removing NA.
-min_run(x2, na_rm = TRUE, k=4) # minimum in 4-element window
-min_run(x2, na_rm = FALSE, k=k) # minimum in varying k window size
-
+data.frame(
+  x1 = sample( c(1,2,3), 15, replace=TRUE),
+  x2 = sample( c(NA,1,2,3), 15, replace=TRUE),
+  k  = sample( 1:4, 15, replace=TRUE),
+  simple_min_run = min_run(x1), # simple cumulative minimum
+  narm_min_run = min_run(x2, na_rm = TRUE), # cumulative minimum with removing NA.
+  kconst_min_run = min_run(x2, na_rm = TRUE, k=4), # minimum in 4-element window
+  kvary_min_run = min_run(x2, na_rm = FALSE, k=k) # minimum in varying k window size
+)
 ```
