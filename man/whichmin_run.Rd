@@ -11,7 +11,7 @@ whichmin_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
 
 \item{k}{Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
 
-\item{which}{specifies whether first or last index is returned.}
+\item{which}{specifies whether \code{"first"} or \code{"last"} index is returned.}
 
 \item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.}
 
@@ -34,4 +34,3 @@ whichmin_run( x2, na_rm = TRUE , which="last" ) # running min-index ommiting NA
 whichmin_run(x2 , k=3, na_rm = TRUE, which="first") # running min-index in 3-element window
 whichmin_run( x2 , k = k , na_rm = TRUE, which = "last") # running min-index in varying window size
 }
-

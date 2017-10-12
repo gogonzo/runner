@@ -27,4 +27,3 @@ numeric vector of length equals length of \code{x} containing running index in \
 x <- c( NA, FALSE, TRUE, NA, TRUE, FALSE, TRUE, TRUE)
 whicht_run( x, k=2, na_rm=TRUE, na_pad=FALSE )
 }
-

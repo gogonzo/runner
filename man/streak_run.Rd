@@ -31,4 +31,3 @@ streak_run(x1, k=2) # streak run within 2-element window
 streak_run(x2, na_pad=TRUE, k=3) # streak run within k=3 with padding NA
 streak_run(x1, k=k) # streak run within varying window size specified by vector k
 }
-

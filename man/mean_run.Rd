@@ -7,7 +7,7 @@
 mean_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 }
 \arguments{
-\item{x}{vector of any type on which window mean is calculated}
+\item{x}{vector of any type on which running mean is calculated}
 
 \item{k}{running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
 
@@ -25,4 +25,3 @@ Running mean
 x <- c(NA,3,4,3,5,7,NA,2,4,9)
 mean_run(x , k = 3, na_rm = TRUE, na_pad = FALSE)
 }
-

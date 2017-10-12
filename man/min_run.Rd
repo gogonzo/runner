@@ -31,4 +31,3 @@ min_run(x2, na_rm = TRUE) # cumulative minimum with removing NA.
 min_run(x2, na_rm = TRUE, k=4) # minimum in 4-element window
 min_run(x2, na_rm = FALSE, k=k) # minimum in varying k window size
 }
-

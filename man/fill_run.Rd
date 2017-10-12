@@ -23,4 +23,3 @@ Fill \code{NA} with last non-NA element.
 x <- c(NA,1,-1,NA, 1, 2,6,4)
 max_run(x)
 }
-

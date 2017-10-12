@@ -11,7 +11,7 @@ whichmax_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
 
 \item{k}{Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
 
-\item{which}{specifies whether first or last index is returned.}
+\item{which}{specifies whether \code{"first"} or \code{"last"} index is returned.}
 
 \item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.}
 
@@ -24,7 +24,11 @@ Numeric vector of length equals length of \code{x} containing running index of m
 Running index of the (first or last) maximum.
 }
 \examples{
-x <- c(NA,NA,0,NA, 1, 2,-6,4)
-whichmax_run(x)
+x1 <- c(1, 1, 2, 1, 1, 3, 1, 1, 3, 1, 1, 2, 3, 3, 3)
+x2 <- c(2, 1, 1, NA, 3, 2, 1, NA, 1, NA, NA, NA, 1, 2, 1)
+k  <- c(5, 1, 8, 1, 1, 15, 2, 5, 14, 2, 3, 7, 14, 13, 12)
+whichmax_run(x1, which="first")
+whichmax_run(x2, na_rm = T, which="last")
+whichmax_run(x2, k=3, na_rm = T, which="last")
+whichmax_run(x2 , k=k, na_rm = F, which="first")
 }
-
