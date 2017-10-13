@@ -39,6 +39,7 @@ test_that("sum_run with na_rm=T k=4", {
 })
 
 
+
 test_that("Error handling in sum_run",{
   expect_error(sum_run(x2, k=c(1,k)))
   expect_error(sum_run(x2, k=c(k[-1],NA)))

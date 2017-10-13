@@ -55,26 +55,6 @@ namespace impl {
     return counts;
   }
 
-  IntegerVector count_nonna_window(NumericVector x, int k){
-    int n = x.size();
-    int count = 0 ;
-    IntegerVector counts(n);
-    for(int i = 0; i < n; i++ ){
-      if(!ISNAN( x( i ) ))
-        count += 1;
-      counts( i ) = count;
-    }
-
-    if(k > 0 and k < n){
-      count = 0;
-      for(int i = 0;  i < n-k; i++){
-        if( !ISNAN( x(i) ) )
-          count += 1;
-        counts( i + k ) = counts( i + k ) - count;
-      }
-    }
-    return counts;
-  }
 
   NumericVector calc_sum_window2( NumericVector x, NumericVector res, IntegerVector k){
     int n = x.size();

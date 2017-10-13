@@ -61,6 +61,14 @@ test_that("max_run pads NA's", {
   )
 })
 
+test_that("varying window", {
+  expect_equal(
+    whicht_run(x1,k=k, which="first"),
+    c(1,  1,  1,  4,  1,  4,  1,  5,  7, 10,  7, 10, NA, NA, 12)
+  )
+
+})
+
 test_that("Error handling in max_run",{
   expect_error(whicht_run(x2, k=c(2,2,2,2,NA)))
   expect_error(whicht_run(x2, k=c(2,2,2,2,2,2)))

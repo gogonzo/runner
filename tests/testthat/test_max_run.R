@@ -3,6 +3,8 @@ set.seed(11)
 x1 <- sample(c(1,2,3), 15, replace=T)
 x2 <- sample(c(NA,1,2,3), 15, replace=T)
 k  <- sample(1:15,15, replace=T)
+idx <- function(i,k)
+  ifelse( (i-k+1)<1,1,i-k+1)
 
 test_that("max_run basic",{
   for(i in 1:15)
@@ -29,7 +31,6 @@ test_that("max_run with na_rm=F", {
 })
 
 
-
 test_that("max_run with na_rm=T k=4", {
   for(i in 1:15)
     expect_equal(
@@ -51,6 +52,15 @@ test_that("max_run pads NA's", {
     max_run( x2, na_pad=T,k=3 ),
     c( NA,NA,2,1,1,1,2,2,2,1,1,1,1,1,1)
   )
+})
+
+test_that("varying window", {
+  for(i in 1:10)
+    expect_equal(
+      max_run(x1,k=k)[i],
+      max(x1[idx(i,k[i]):i], na.rm=T)
+    )
+
 })
 
 test_that("Error handling in max_run",{

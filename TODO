@@ -1,7 +1,7 @@
-+ running window lists (all window elements in list) window_run
 + countt_run (counting TRUE)
 + table_run (counting number of elements in window)
 + counting streaks in window
++ add tests for all functions
 
 + calculate if [idx] windowing (with set of NA's) is faster than current
 

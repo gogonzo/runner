@@ -3,6 +3,8 @@ set.seed(11)
 x1 <- sample(c(1,2,3), 15, replace=TRUE)
 x2 <- sample(c(NA,1,2,3), 15, replace=TRUE)
 k <- sample(1:15, 15, replace=TRUE)
+idx <- function(i,k)
+  ifelse( (i-k+1)<1,1,i-k+1)
 
 test_that("min_run basic",{
   for(i in 1:15)
@@ -52,6 +54,15 @@ test_that("min_run pads NA's", {
     min_run( x2, na_pad=T,k=3 ),
     c( NA,NA,1,1,1,1,1,1,1,1,1,1,1,1,1)
   )
+})
+
+test_that("varying window", {
+  for(i in 1:10)
+    expect_equal(
+      min_run(x1,k=k)[i],
+      min(x1[idx(i,k[i]):i], na.rm=T)
+    )
+
 })
 
 test_that("Error handling in min_run",{
