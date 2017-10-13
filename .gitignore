@@ -6,7 +6,8 @@ inst/doc
 man/.Rapp.history
 .DS_Store
 
-
+# remove
+README.Rmd
 
 # History files
 .Rhistory
