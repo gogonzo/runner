@@ -8,6 +8,45 @@ using namespace Rcpp;
 #include "whiches.h"
 #include "others.h"
 
+//' List of running windows
+//'
+//' Creates list of windows
+//' @param x Vector of any type
+//' @param k integer vector which specifies window length
+//' @examples
+//' window_run(1:10, k=3)
+//' window_run(letters[1:10],k=c(1,2,2,4,5,5,5,5,5,5))
+//' @export
+// [[Rcpp::export]]
+SEXP window_run(SEXP x, IntegerVector k = 0) {
+
+  switch (TYPEOF(x)) {
+  case INTSXP: {
+    return impl::window_to_list(as<IntegerVector>(x), k);
+  }
+  case REALSXP: {
+    return impl::window_to_list(as<NumericVector>(x), k);
+  }
+  case STRSXP: {
+    return impl::window_to_list(as<CharacterVector>(x), k);
+  }
+  case LGLSXP: {
+    return impl::window_to_list(as<LogicalVector>(x), k);
+  }
+  case CPLXSXP: {
+    return impl::window_to_list(as<ComplexVector>(x), k);
+  }
+  default: {
+    warning(
+      "Invalid SEXPTYPE %d (%s).\n",
+      TYPEOF(x), type2name(x)
+    );
+    return 0;
+  }
+  }
+}
+
+
 //' Running minimum
 //'
 //'

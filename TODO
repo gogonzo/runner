@@ -1,4 +1,10 @@
-+ travis CI i badge na git
++ running window lists (all window elements in list) window_run
++ countt_run (counting TRUE)
++ table_run (counting number of elements in window)
++ counting streaks in window
+
++ calculate if [idx] windowing (with set of NA's) is faster than current
+
 + mean_run and sum_run for varying k
 + concat_run
 + implement window functions on POSIXct, or find solution using available functions

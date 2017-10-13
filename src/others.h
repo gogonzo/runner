@@ -75,4 +75,32 @@ namespace impl {
     return res;
   }
 
+  template <int RTYPE>
+  Rcpp::List window_to_list(const Vector<RTYPE>& x, IntegerVector k)
+  {
+    int n = x.size();
+    IntegerVector idx;
+    List res(n);
+    Vector<RTYPE> elem;
+
+    impl::check_for_valid_k2(n, k);
+
+    if(k.size() > 1){
+      for(int i=0; i < n; i ++){
+        idx = impl::window_idx(i, k(i) );
+        res(i) = x[idx];
+      }
+
+    } else{
+      for(int i=0; i < n; i ++){
+        idx = impl::window_idx(i, k(0) );
+        res(i) = x[idx];
+      }
+    }
+
+
+
+    return res;
+  }
+
 }

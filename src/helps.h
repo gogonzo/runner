@@ -55,4 +55,10 @@ namespace impl {
     return begin;
   }
 
+  IntegerVector window_idx(int i, int k){
+    IntegerVector idx;
+    if( (i - k + 1) < 0) idx = seq_len(i+1)-1; else idx = i - k + seq_len(k);
+    return idx;
+  }
+
 }
