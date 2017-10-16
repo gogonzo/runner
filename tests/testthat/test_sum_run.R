@@ -38,6 +38,14 @@ test_that("sum_run with na_rm=T k=4", {
     )
 })
 
+test_that("sum_run with na_rm=T k=4", {
+  for(i in 1:15)
+    expect_equal(
+      sum_run(x2, na_rm = T, k=k)[i] ,
+      as.numeric( ifelse(all(is.na(x2[pmax(i-k[i]+1,1):i])),NA, sum(x2[pmax(i-k[i]+1,1):i], na.rm=T)))
+    )
+})
+
 
 
 test_that("Error handling in sum_run",{

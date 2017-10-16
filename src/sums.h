@@ -3,6 +3,19 @@ using namespace Rcpp;
 
 namespace impl {
 
+  double sum_vector(NumericVector x, int i1, int i){
+    double sum = NumericVector::get_na();
+
+    for(int j = i1; j <= i; j++){
+      if( ISNAN( sum ) ){
+        sum = x( j );
+      } else if( !ISNAN( x( j ) )) {
+        sum += x( j );
+      }
+    }
+    return sum;
+  }
+
   NumericVector calc_sum_window( NumericVector x, NumericVector res, int k){
     int n = x.size();
     double first_sum = NumericVector::get_na();
@@ -64,17 +77,31 @@ namespace impl {
     for(int i = 0; i < n; i++){
       cur_sum = NumericVector::get_na();
       i1 = impl::window_index( i, k( i ) );
-      for(int j = i1; j <= i ; ++j){
-        if( ISNAN( cur_sum ) ){
-          cur_sum = x( i );
-        } else if( !ISNAN( x( i ) )) {
-          cur_sum += x( i );
-        }
-      }
-      res( i ) = cur_sum;
+      res( i ) = sum_vector(x, i1, i);
     }
     return res;
   }
+
+NumericVector calc_sum_window3( NumericVector x, NumericVector res, IntegerVector k){
+  int n = x.size();
+  int i1;
+  int idx;
+  double cur_sum;
+
+  for(int i = 0; i < n; i++){
+    cur_sum = NumericVector::get_na();
+    i1 = impl::window_index( i, k( i ) );
+    for(int j = i1; j <= i ; ++j){
+      if( ISNAN( cur_sum ) ){
+        cur_sum = x( i );
+      } else if( !ISNAN( x( i ) )) {
+        cur_sum += x( i );
+      }
+    }
+    res( i ) = cur_sum;
+  }
+  return res;
+}
   IntegerVector count_na_window2( NumericVector x, IntegerVector k){
     int n = x.size();
     int i1;

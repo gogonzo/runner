@@ -354,14 +354,20 @@ NumericVector sum_run(
   impl::check_for_valid_k2(n, k);
 
   /* calculate window sum */
-  res = impl::calc_sum_window(x, res, k(0) );
-  if(!na_rm){
-    /* calculate number of NA's in window */
-    nas = impl::count_na_window(x, k(0) );
-    for(int i =0; i < n; i++)
-      if(nas ( i )>0 )
-        res( i ) = NumericVector::get_na();
+  if( k.size() == 1 ){
+    res = impl::calc_sum_window(x, res, k(0) );
+    if(!na_rm){
+      /* calculate number of NA's in window */
+      nas = impl::count_na_window(x, k(0) );
+      for(int i =0; i < n; i++)
+        if(nas ( i )>0 )
+          res( i ) = NumericVector::get_na();
+    }
+
+  } else {
+    res = impl::calc_sum_window2(x, res, k );
   }
+
 
   /* pad NA at from 0:(k-1) */
   if(na_pad)
