@@ -154,7 +154,6 @@ NumericVector max_run(
 //' Calculates running series of consecutive elements
 //' @param x vector of any type where running streak is calculated
 //' @param k running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
-//' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed streak prior to element.
 //' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 //' @return numeric vector of length equals length of \code{x} containing running streak length in \code{k}-long window.
 //' @examples
