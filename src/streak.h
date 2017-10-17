@@ -29,31 +29,7 @@ namespace impl {
   }
 
   template <int RTYPE>
-  int  calc_actual_streak_narm(const Vector<RTYPE>& x, int i, int i2)
-  {
-    int cur_streak = 0;
-
-    for(int j = i; j >= i2 ; --j) {
-      if( j == i ){
-        if(!Vector<RTYPE>::is_na( x( j ) )){
-          cur_streak = 1;
-        } else {
-          continue;
-        }
-      } else {
-        if( x( j ) == x( j + 1 ) ){
-          cur_streak += 1;
-        } else {
-          return cur_streak;
-        }
-      }
-    }
-    if(cur_streak == 0 ) return IntegerVector::get_na();
-    return cur_streak;
-  }
-
-  template <int RTYPE>
-  IntegerVector streak_run_(const Vector<RTYPE>& x, IntegerVector k, bool na_rm, bool na_pad)
+  IntegerVector streak_run_(const Vector<RTYPE>& x, IntegerVector k, bool na_pad)
   {
 
     int i2;
@@ -76,11 +52,7 @@ namespace impl {
         i2 = window_index(i, k(i) );
       }
 
-      if(na_rm){
-        res( i ) = calc_actual_streak_narm(x, i, i2);
-      } else {
-        res( i ) = calc_actual_streak(x, i, i2);
-      }
+      res( i ) = calc_actual_streak(x, i, i2);
 
     }
 

@@ -77,8 +77,8 @@ max_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE) {
 #' streak_run(x2, na_pad=TRUE, k=3) # streak run within k=3 with padding NA
 #' streak_run(x1, k=k) # streak run within varying window size specified by vector k
 #' @export
-streak_run <- function(x, k = 0L, na_rm = FALSE, na_pad = FALSE) {
-    .Call('_runner_streak_run', PACKAGE = 'runner', x, k, na_rm, na_pad)
+streak_run <- function(x, k = 0L, na_pad = FALSE) {
+    .Call('_runner_streak_run', PACKAGE = 'runner', x, k, na_pad)
 }
 
 #' Fill NA with previous non-NA element

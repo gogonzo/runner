@@ -171,26 +171,26 @@ NumericVector max_run(
 IntegerVector streak_run(
     SEXP x,
     IntegerVector k=0,
-    bool na_rm = false,
     bool na_pad = false) {
 
   impl::check_for_valid_k(x, k);
 
   switch (TYPEOF(x)) {
   case INTSXP: {
-    return impl::streak_run_(as<IntegerVector>(x), k, na_rm, na_pad);
+    return
+    impl::streak_run_(as<IntegerVector>(x), k, na_pad);
   }
   case REALSXP: {
-    return impl::streak_run_(as<NumericVector>(x), k, na_rm,na_pad);
+    return impl::streak_run_(as<NumericVector>(x), k,na_pad);
   }
   case STRSXP: {
-    return impl::streak_run_(as<CharacterVector>(x), k, na_rm, na_pad);
+    return impl::streak_run_(as<CharacterVector>(x), k, na_pad);
   }
   case LGLSXP: {
-    return impl::streak_run_(as<LogicalVector>(x), k, na_rm, na_pad);
+    return impl::streak_run_(as<LogicalVector>(x), k, na_pad);
   }
   case CPLXSXP: {
-    return impl::streak_run_(as<ComplexVector>(x), k, na_rm, na_pad);
+    return impl::streak_run_(as<ComplexVector>(x), k, na_pad);
   }
   default: {
     warning(
