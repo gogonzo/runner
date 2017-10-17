@@ -16,17 +16,6 @@ namespace impl {
     return first_non_na;
   }
 
-  NumericVector na_when_na(NumericVector x, NumericVector res ){
-    int n = x.size();
-    int first_na = run_for_non_na( x , 0);
-    if( first_na > -1 )
-      for(int i=first_na; i < n; i++)
-        if( NumericVector::is_na(x(i)))
-          res( i ) = NumericVector::get_na();
-
-    return res;
-  }
-
   void check_for_valid_k(SEXP x, IntegerVector k){
     int n = Rf_length(x);
 
