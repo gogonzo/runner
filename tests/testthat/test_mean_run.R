@@ -44,3 +44,12 @@ test_that("mean_run with na_rm=T k=4", {
       mean(x2[pmax(i-4+1,1):i], na.rm=T)
     )
 })
+
+
+test_that("sum_run with na_rm=T varying k", {
+  for(i in 1:15)
+    expect_equal(
+      mean_run(x2, na_rm = T, k=k)[i] ,
+      as.numeric( ifelse(all(is.na(x2[pmax(i-k[i]+1,1):i])),NA, mean(x2[pmax(i-k[i]+1,1):i], na.rm=T)))
+    )
+})

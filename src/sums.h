@@ -82,26 +82,6 @@ namespace impl {
     return res;
   }
 
-NumericVector calc_sum_window3( NumericVector x, NumericVector res, IntegerVector k){
-  int n = x.size();
-  int i1;
-  int idx;
-  double cur_sum;
-
-  for(int i = 0; i < n; i++){
-    cur_sum = NumericVector::get_na();
-    i1 = impl::window_index( i, k( i ) );
-    for(int j = i1; j <= i ; ++j){
-      if( ISNAN( cur_sum ) ){
-        cur_sum = x( i );
-      } else if( !ISNAN( x( i ) )) {
-        cur_sum += x( i );
-      }
-    }
-    res( i ) = cur_sum;
-  }
-  return res;
-}
   IntegerVector count_na_window2( NumericVector x, IntegerVector k){
     int n = x.size();
     int i1;
