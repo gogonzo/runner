@@ -4,13 +4,6 @@ output:
     toc: true
 ---
 
-
-# Runner
-
-[![Travis-CI Build Status](https://travis-ci.org/elo2zero/runner.svg?branch=master)](https://travis-ci.org/elo2zero/runner)
-[![MIT License](https://badges.frapsoft.com/os/mit/mit.svg)](https://opensource.org/licenses/mit-license.php)
-[![Coverage status](https://codecov.io/gh/elo2zero/runner/branch/master/graph/badge.svg)](https://codecov.io/github/elo2zero/runner?branch=master)
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, echo = FALSE}
@@ -22,30 +15,77 @@ knitr::opts_chunk$set(
 ```
 
 
+# Runner
+
+[![Travis-CI Build Status](https://travis-ci.org/elo2zero/runner.svg?branch=master)](https://travis-ci.org/elo2zero/runner)
+[![MIT License](https://badges.frapsoft.com/os/mit/mit.svg)](https://opensource.org/licenses/mit-license.php)
+[![Coverage status](https://codecov.io/gh/elo2zero/runner/branch/master/graph/badge.svg)](https://codecov.io/github/elo2zero/runner?branch=master)
+
+
 Running functions for R vector writen in Rcpp
 
 ## Installation
 
 You can install runner from github with:
 
-```{r gh-installation, eval = FALSE}
+```{r gh-installation, eval=FALSE, include=FALSE}
 # install.packages("devtools")
 devtools::install_github("elo2zero/runner")
 ```
 
-## Functionality
-The main idea of the package is to provide running operations on R vectors. Running functions are these which are applied to all elements up to actual one. Typical example implemented already in `base` are `cumsum`, `cummean`, `cummin` etc. Functions provided in this package works similar but with extended functionality such as handling `NA` and custom window size. 
+## Examples
+The main idea of the package is to provide running operations on R vectors. Running functions are these which are applied to all elements up to actual one. Typical example implemented already in `base` are `cumsum`, `cummean`, `cummin` etc. Functions provided in this package works similar but with extended functionality such as handling `NA` and custom window size. Most functions provided in package are basing on the same logic
+1. `k` window size denotes number of elements from i-th backwards, where functions are calculated.  
+(obrazek pokazujący ruchome okno)
+2. `na_rm` handling missing equivalent to `na.rm`. In case of running functions, `NA` is replaced with last finite value.
+3. `na_pad` if window size exceeds number of available elements, than first `k-1` are filled with `NA`.
+4. `which` In case of running index  
 
-```{r runner-min_run_example}
+### window_run
+Function creates list of windows. Because `runner` doesn't provide limited functionality, one can calculate own running-window-statistics oneself. 
+
+```{r run_window, echo=FALSE}
 library(runner)
+library(magrittr)
 set.seed(11)
-x1 <- sample( c(1,2,3), 15, replace=TRUE)
-x2 <- sample( c(NA,1,2,3), 15, replace=TRUE)
-k  <- sample( 1:4, 15, replace=TRUE)
+x1    <- 1:5
+k     <- c(1,2,3,3,2)
 
-simple_min_run <- min_run(x1) # simple cumulative minimum
-narm_min_run   <- min_run(x2, na_rm = TRUE) # cumulative minimum with removing NA.
-kconst_min_run <- min_run(x2, na_rm = TRUE, k=4) # minimum in 4-element window
-kvary_min_run  <- min_run(x2, na_rm = FALSE, k=k) # minimum in varying k window size
+window_run( x1, k = k )
+```
+
+Such windows can be used in further calculations, with any R function.
+
+```{r run_window2, echo=FALSE} 
+window_run( x1, k = k ) %>%
+  lapply(sum) %>%
+  unlist
+```
+
+### min_run and max_run
+
+```{r min_run_example}
+library(ggplot2)
+set.seed(11)
+x1 <- rnorm( 30 ) %>% cumsum
+x2 <- sample( c( rep(NA,10), rnorm(20)) ) %>% cumsum
+k  <- sample( 1:4, 30, replace=TRUE) %>% cumsum
+
+min1 <- min_run(x1)
+min2 <- min_run(x2, na_rm = TRUE)
+min3 <- min_run(x2, na_rm = TRUE, k=4)
+min4 <- min_run(x2, na_rm = FALSE, k=k)
+
+max1 <- max_run(x1)
+max2 <- max_run(x2, na_rm = TRUE)
+max3 <- max_run(x2, na_rm = TRUE, k=4)
+max4 <- max_run(x2, na_rm = FALSE, k=k)
+
+data.frame( x1, min1, i = 1:30) %>%
+  ggplot(aes(x=i, y=x1)) +
+  geom_line() +
+  geom_point(aes(y = min1), color="red") +
+  geom_point(aes(y = max1), color="blue") +
+  ggtitle("running minimum")
 
 ```
