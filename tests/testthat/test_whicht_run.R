@@ -69,7 +69,7 @@ test_that("varying window", {
 
   expect_equal(
     whicht_run(x1,k=k, which="last"),
-    c(1,  1,  1,  4,  1,  4,  1,  5,  7, 10,  7, 10, NA, NA, 12)
+    c(1,  2,  2,  4,  5,  5,  7,  8,  8, 10,  11, 12, NA, NA, 12)
   )
 
 })

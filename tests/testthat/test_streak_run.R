@@ -11,7 +11,7 @@ test_that("streak_run calculates consecutive streak of any input type", {
   )
 
   expect_equal(
-    streak_run(as.numeric(x1)),
+    streak_run(as.numeric(as.factor(x1))),
     as.integer(c(1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 3, 1, 2, 3))
   )
 
