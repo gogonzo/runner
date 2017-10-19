@@ -9,6 +9,27 @@ test_that("streak_run calculates consecutive streak of any input type", {
     streak_run(x1),
     as.integer(c(1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 3, 1, 2, 3))
   )
+
+  expect_equal(
+    streak_run(as.numeric(x1)),
+    as.integer(c(1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 3, 1, 2, 3))
+  )
+
+  expect_identical(
+    streak_run(as.character(x1)),
+    as.integer(c(1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 3, 1, 2, 3))
+  )
+
+  expect_identical(
+    streak_run(as.factor(x1)),
+    as.integer(c(1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 3, 1, 2, 3))
+  )
+
+  expect_identical(
+    streak_run(c(T,T,T,T,F,T)),
+    as.integer(c(1,2,3,4,1,1))
+  )
+
 })
 
 test_that("streak_run handles windowing", {
