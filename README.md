@@ -1,6 +1,10 @@
 
+-   [Runner](#runner)
+    -   [Installation](#installation)
+    -   [Examples](#examples)
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-runner
+Runner
 ======
 
 [![Travis-CI Build Status](https://travis-ci.org/elo2zero/runner.svg?branch=master)](https://travis-ci.org/elo2zero/runner) [![MIT License](https://badges.frapsoft.com/os/mit/mit.svg)](https://opensource.org/licenses/mit-license.php) [![Coverage status](https://codecov.io/gh/elo2zero/runner/branch/master/graph/badge.svg)](https://codecov.io/github/elo2zero/runner?branch=master)
@@ -17,8 +21,8 @@ You can install runner from github with:
 devtools::install_github("elo2zero/runner")
 ```
 
-Example
--------
+Examples
+--------
 
 This is a basic example which shows you how to solve a common problem:
 

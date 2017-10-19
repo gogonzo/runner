@@ -35,25 +35,39 @@ namespace impl {
     int i2;
     int n = x.size();
     int nk = k.size();
+    int cur_streak;
     IntegerVector res(n);
 
     /*  initial streak */
     if ( Vector<RTYPE>::is_na( x(0) ) ){
-      res(0) = NumericVector::get_na();
+      res(0) = cur_streak = NumericVector::get_na();
     } else {
-      res(0) = 1;
+      res(0) = cur_streak = 1;
     }
 
-    /* streak_run */
-    for(int i = 1; i < n; ++i) {
-      if( nk == 1 ){
-        i2 = window_index(i, k(0) );
-      } else {
-        i2 = window_index(i, k(i) );
+
+    if(nk==1 and ( k(0)==0 or k(0)==n ) ){
+      /* streak run full */
+      for(int i=1; i < n ; i++) {
+        if( Vector<RTYPE>::is_na( x( i ) )) {
+          cur_streak = IntegerVector::get_na();
+        } else if( x( i ) == x( i - 1 ) ){
+          cur_streak += 1;
+        } else {
+          cur_streak = 1;
+        }
+        res( i ) = cur_streak;
       }
-
-      res( i ) = calc_actual_streak(x, i, i2);
-
+    } else {
+    /* streak_run window */
+      for(int i = 1; i < n; ++i) {
+        if( nk == 1 ){
+          i2 = window_index(i, k(0) );
+        } else {
+          i2 = window_index(i, k(i) );
+        }
+        res( i ) = calc_actual_streak(x, i, i2);
+      }
     }
 
     /* if padding with NA */
