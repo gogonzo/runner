@@ -20,6 +20,21 @@ test_that("window_run k=constant",{
       x2[idx(i,2):i]
     )
 
+  for(i in 1:10)
+    expect_equal(
+      window_run(as.character(x2),k=2)[i][[1]],
+      as.character(x2[idx(i,2):i])
+    )
+
+
+  for(i in 1:10)
+    expect_equal(
+      window_run(as.numeric(x1),k=2)[i][[1]],
+      as.numeric(x1[idx(i,2):i])
+    )
+
+
+
 })
 
 test_that("window_run with k varying", {
