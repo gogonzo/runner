@@ -1,7 +1,7 @@
 
 -   [Runner](#runner)
     -   [Installation](#installation)
-    -   [Examples](#examples)
+    -   [Functionality](#functionality)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 Runner
@@ -21,10 +21,10 @@ You can install runner from github with:
 devtools::install_github("elo2zero/runner")
 ```
 
-Examples
---------
+Functionality
+-------------
 
-This is a basic example which shows you how to solve a common problem:
+The main idea of the package is to provide running operations on R vectors. Running functions are these which are applied to all elements up to actual one. Typical example implemented already in `base` are `cumsum`, `cummean`, `cummin` etc. Functions provided in this package works similar but with extended functionality such as handling `NA` and custom window size.
 
 ``` r
 library(runner)

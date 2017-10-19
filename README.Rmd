@@ -20,6 +20,7 @@ knitr::opts_chunk$set(
 [![MIT License](https://badges.frapsoft.com/os/mit/mit.svg)](https://opensource.org/licenses/mit-license.php)
 [![Coverage status](https://codecov.io/gh/elo2zero/runner/branch/master/graph/badge.svg)](https://codecov.io/github/elo2zero/runner?branch=master)
 
+\tableofcontents
 
 Running functions for R vector writen in Rcpp
 
@@ -32,8 +33,8 @@ You can install runner from github with:
 devtools::install_github("elo2zero/runner")
 ```
 
-## Examples
-This is a basic example which shows you how to solve a common problem:
+## Functionality
+The main idea of the package is to provide running operations on R vectors. Running functions are these which are applied to all elements up to actual one. Typical example implemented already in `base` are `cumsum`, `cummean`, `cummin` etc. Functions provided in this package works similar but with extended functionality such as handling `NA` and custom window size. 
 
 ```{r runner-min_run_example}
 library(runner)
