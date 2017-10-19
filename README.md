@@ -3,14 +3,12 @@
     -   [Installation](#installation)
     -   [Functionality](#functionality)
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 Runner
 ======
 
 [![Travis-CI Build Status](https://travis-ci.org/elo2zero/runner.svg?branch=master)](https://travis-ci.org/elo2zero/runner) [![MIT License](https://badges.frapsoft.com/os/mit/mit.svg)](https://opensource.org/licenses/mit-license.php) [![Coverage status](https://codecov.io/gh/elo2zero/runner/branch/master/graph/badge.svg)](https://codecov.io/github/elo2zero/runner?branch=master)
 
-!![toc]('toc.html')
-
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 Running functions for R vector writen in Rcpp
 
 Installation
