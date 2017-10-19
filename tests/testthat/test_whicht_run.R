@@ -13,8 +13,8 @@ test_that("whicht_run first and last",{
 
   for(i in 1:15)
     expect_equal(
-      whicht_run(x2,which = "last")[i] ,
-      max( which(x2[1:i]), na.rm=T )
+      whicht_run(x1,which = "last")[i] ,
+      max( which(x1[1:i]), na.rm=T )
     )
 })
 
@@ -64,6 +64,11 @@ test_that("max_run pads NA's", {
 test_that("varying window", {
   expect_equal(
     whicht_run(x1,k=k, which="first"),
+    c(1,  1,  1,  4,  1,  4,  1,  5,  7, 10,  7, 10, NA, NA, 12)
+  )
+
+  expect_equal(
+    whicht_run(x1,k=k, which="last"),
     c(1,  1,  1,  4,  1,  4,  1,  5,  7, 10,  7, 10, NA, NA, 12)
   )
 
