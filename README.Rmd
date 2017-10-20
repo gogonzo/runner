@@ -1,4 +1,4 @@
-<!-- rmarkdown v1 -->
+
 ---
 output: 
   github_document:
@@ -148,7 +148,7 @@ plot3 <-
   ggplot(aes(x=i)) +
   geom_line(aes( y = x)) +
   geom_point(aes(y = min3), color="red", shape=3) +
-  geom_label(aes(label=k, y=fill_run(x)+0.5)) + 
+  geom_label(aes(label=k, y=fill_run(x)+0.5), size=2) + 
   ggtitle("running minimum with varying k")
 
 
