@@ -1,3 +1,6 @@
++ window_var
++ window_run with additional POSIXct argument to specify time-window size. Results in list
++ quick kalman filter
 + streak_run for logical counting TRUE only - other are zeros
 + streak_run for k=n non-recursive
 + countt_run (counting TRUE)
@@ -9,7 +12,6 @@
 
 + mean_run and sum_run for varying k
 + concat_run
-+ implement window functions on POSIXct, or find solution using available functions
 + running devainces from y value (eg mean)
 + running non-na number
 
