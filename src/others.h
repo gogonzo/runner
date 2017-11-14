@@ -98,8 +98,6 @@ namespace impl {
       }
     }
 
-
-
     return res;
   }
 

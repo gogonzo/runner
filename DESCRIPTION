@@ -2,12 +2,13 @@ Package: runner
 Title: Running functions
 Type: Package
 Version: 0.1.0
-Author: Dawid 'Gonzo' Kałędkowski
-Maintainer: Dawid 'Gonzo' Kałędowski <dawid.kaledkowski@gmail.com>
-Description: Toolbox for calculating running functions. Package composed entirely in Rcpp.
+Authors@R: as.person("Dawid Kałędkowski <dawid.kaledkowski@gmail.com> [aut, cre]")
+Description: Toolbox for running calculations on vectors. Package provides function creating running windows, running aggregations, usable iterative functions. Algorythmes written entirely in Rcpp.
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
+Depends:
+    R (>= 3.1.0)
+BugReports: https://github.com/elo2zero/runner/issues
 LinkingTo: Rcpp
 Imports:
     Rcpp

@@ -78,3 +78,5 @@ test_that("Error handling in max_run",{
   expect_error(whicht_run(x2, k=c(2,2,2,2,NA)))
   expect_error(whicht_run(x2, k=c(2,2,2,2,2,2)))
 })
+
+
