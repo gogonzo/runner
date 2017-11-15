@@ -2,6 +2,7 @@ context("Running window")
 set.seed(11)
 x1 <- 1:10
 x2 <- letters[1:10]
+
 k <- sample(1:10, 10, replace=TRUE)
 idx <- function(i,k)
   ifelse( (i-k+1)<1,1,i-k+1)

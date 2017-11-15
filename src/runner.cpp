@@ -24,8 +24,6 @@ SEXP window_run(SEXP x, IntegerVector k = 0) {
   case INTSXP: return impl::window_to_list(as<IntegerVector>(x), k);
   case REALSXP: return impl::window_to_list(as<NumericVector>(x), k);
   case STRSXP: return impl::window_to_list(as<CharacterVector>(x), k);
-  case LGLSXP: return impl::window_to_list(as<LogicalVector>(x), k);
-  case CPLXSXP: return impl::window_to_list(as<ComplexVector>(x), k);
   default: {
     warning(
       "Invalid SEXPTYPE %d (%s).\n",
@@ -53,8 +51,6 @@ SEXP unique_run( SEXP x, IntegerVector k=0 ) {
   case INTSXP: return impl::unique_to_list<INTSXP>(x, k);
   case REALSXP: return impl::unique_to_list<REALSXP>(x, k);
   case STRSXP: return impl::unique_to_list<STRSXP>(x, k);
-  case LGLSXP: return impl::unique_to_list<STRSXP>(x, k);
-  case CPLXSXP: return impl::unique_to_list<STRSXP>(x, k);
   default: {
     warning(
       "Invalid SEXPTYPE %d (%s).\n",
@@ -194,22 +190,11 @@ IntegerVector streak_run(
   impl::check_for_valid_k(x, k);
 
   switch (TYPEOF(x)) {
-  case INTSXP: {
-    return
-    impl::streak_run_(as<IntegerVector>(x), k, na_pad);
-  }
-  case REALSXP: {
-    return impl::streak_run_(as<NumericVector>(x), k,na_pad);
-  }
-  case STRSXP: {
-    return impl::streak_run_(as<CharacterVector>(x), k, na_pad);
-  }
-  case LGLSXP: {
-    return impl::streak_run_(as<LogicalVector>(x), k, na_pad);
-  }
-  case CPLXSXP: {
-    return impl::streak_run_(as<ComplexVector>(x), k, na_pad);
-  }
+  case INTSXP: return impl::streak_run_(as<IntegerVector>(x), k, na_pad);
+  case REALSXP: return impl::streak_run_(as<NumericVector>(x), k,na_pad);
+  case STRSXP: return impl::streak_run_(as<CharacterVector>(x), k, na_pad);
+  case LGLSXP: return impl::streak_run_(as<LogicalVector>(x), k, na_pad);
+  case CPLXSXP: return impl::streak_run_(as<ComplexVector>(x), k, na_pad);
   default: {
     warning(
       "Invalid SEXPTYPE %d (%s).\n",
@@ -238,21 +223,11 @@ IntegerVector streak_run(
 SEXP fill_run(SEXP x, bool run_for_first = false, bool only_within=false) {
 
   switch (TYPEOF(x)) {
-  case INTSXP: {
-    return impl::fill_run_impl(as<IntegerVector>(x), run_for_first,only_within);
-  }
-  case REALSXP: {
-    return impl::fill_run_impl(as<NumericVector>(x), run_for_first,only_within);
-  }
-  case STRSXP: {
-    return impl::fill_run_impl(as<CharacterVector>(x), run_for_first,only_within);
-  }
-  case LGLSXP: {
-    return impl::fill_run_impl(as<LogicalVector>(x), run_for_first,only_within);
-  }
-  case CPLXSXP: {
-    return impl::fill_run_impl(as<ComplexVector>(x), run_for_first,only_within);
-  }
+  case INTSXP: return impl::fill_run_impl(as<IntegerVector>(x), run_for_first,only_within);
+  case REALSXP: return impl::fill_run_impl(as<NumericVector>(x), run_for_first,only_within);
+  case STRSXP: return impl::fill_run_impl(as<CharacterVector>(x), run_for_first,only_within);
+  case LGLSXP: return impl::fill_run_impl(as<LogicalVector>(x), run_for_first,only_within);
+  case CPLXSXP: return impl::fill_run_impl(as<ComplexVector>(x), run_for_first,only_within);
   default: {
     warning(
       "Invalid SEXPTYPE %d (%s).\n",
