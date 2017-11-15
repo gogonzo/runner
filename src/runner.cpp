@@ -1,7 +1,4 @@
-// [[Rcpp::plugins(cpp11)]]
 #include <Rcpp.h>
-#include <unordered_set>
-#include <algorithm>
 using namespace Rcpp;
 #include "helps.h"
 #include "extremes.h"
