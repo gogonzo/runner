@@ -81,7 +81,6 @@ namespace impl {
     int n = x.size();
     IntegerVector idx;
     List res(n);
-    Vector<RTYPE> elem;
 
     impl::check_for_valid_k2(n, k);
 
@@ -100,5 +99,33 @@ namespace impl {
 
     return res;
   }
+
+
+  template <int RTYPE>
+  SEXP unique_to_list( const Vector<RTYPE>& x, IntegerVector k ) {
+    int n = x.size();
+    IntegerVector idx;
+    List res(n);
+    Vector<RTYPE> levs;
+
+    impl::check_for_valid_k2(n, k);
+
+    if(k.size() > 1){
+      for(int i=0; i < n; i ++){
+        idx = impl::window_idx(i, k(i) );
+        levs = x[idx];
+        res(i) = unique(levs);
+      }
+
+    } else{
+      for(int i=0; i < n; i ++){
+        idx = impl::window_idx(i, k(0) );
+        levs = x[idx];
+        res(i) = unique(levs);
+      }
+    }
+    return res;
+  }
+
 
 }

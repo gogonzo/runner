@@ -14,6 +14,19 @@ window_run <- function(x, k = 0L) {
     .Call('_runner_window_run', PACKAGE = 'runner', x, k)
 }
 
+#' List of running windows
+#'
+#' Creates list of windows
+#' @param x Vector of any type
+#' @param k integer vector which specifies window length
+#' @examples
+#' unique_run(1:10, k=3)
+#' unique_run(letters[1:10],k=c(1,2,2,4,5,5,5,5,5,5))
+#' @export
+unique_run <- function(x, k = 0L) {
+    .Call('_runner_unique_run', PACKAGE = 'runner', x, k)
+}
+
 #' Running minimum
 #'
 #'

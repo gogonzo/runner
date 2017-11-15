@@ -15,5 +15,4 @@
 + concat_run
 + running devainces from y value (eg mean)
 + running non-na number
-
 + zamienić funkcje cum_min i cum_max na jedną cum_extreme - a przy wywoływaniu funkcji zmienić znak na +/-

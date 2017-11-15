@@ -46,6 +46,6 @@ test_that("window_run with k varying", {
 })
 
 test_that("Error handling in max_run",{
-  expect_error(max_run(x2, k=c(2,2,2,2,2,2,2,2,2,NA)))
-  expect_error(max_run(x2, k=c(2,2,2,2,2,2,2,2,2,2,2,2,2,2,2)))
+  expect_error(window_run(x2, k=c(2,2,2,2,2,2,2,2,2,NA)))
+  expect_error(window_run(x2, k=c(2,2,2,2,2,2,2,2,2,2,2,2,2,2,2)))
 })

@@ -1,4 +1,7 @@
+// [[Rcpp::plugins(cpp11)]]
 #include <Rcpp.h>
+#include <unordered_set>
+#include <algorithm>
 using namespace Rcpp;
 #include "helps.h"
 #include "extremes.h"
@@ -21,31 +24,50 @@ using namespace Rcpp;
 SEXP window_run(SEXP x, IntegerVector k = 0) {
 
   switch (TYPEOF(x)) {
-  case INTSXP: {
-    return impl::window_to_list(as<IntegerVector>(x), k);
-  }
-  case REALSXP: {
-    return impl::window_to_list(as<NumericVector>(x), k);
-  }
-  case STRSXP: {
-    return impl::window_to_list(as<CharacterVector>(x), k);
-  }
-  case LGLSXP: {
-    return impl::window_to_list(as<LogicalVector>(x), k);
-  }
-  case CPLXSXP: {
-    return impl::window_to_list(as<ComplexVector>(x), k);
-  }
+  case INTSXP: return impl::window_to_list(as<IntegerVector>(x), k);
+  case REALSXP: return impl::window_to_list(as<NumericVector>(x), k);
+  case STRSXP: return impl::window_to_list(as<CharacterVector>(x), k);
+  case LGLSXP: return impl::window_to_list(as<LogicalVector>(x), k);
+  case CPLXSXP: return impl::window_to_list(as<ComplexVector>(x), k);
   default: {
     warning(
       "Invalid SEXPTYPE %d (%s).\n",
       TYPEOF(x), type2name(x)
     );
-    return 0;
+    return R_NilValue;
   }
   }
+  return R_NilValue;
 }
 
+
+//' List of running windows
+//'
+//' Creates list of windows
+//' @param x Vector of any type
+//' @param k integer vector which specifies window length
+//' @examples
+//' unique_run(1:10, k=3)
+//' unique_run(letters[1:10],k=c(1,2,2,4,5,5,5,5,5,5))
+//' @export
+// [[Rcpp::export]]
+SEXP unique_run( SEXP x, IntegerVector k=0 ) {
+  switch( TYPEOF(x) ) {
+  case INTSXP: return impl::unique_to_list<INTSXP>(x, k);
+  case REALSXP: return impl::unique_to_list<REALSXP>(x, k);
+  case STRSXP: return impl::unique_to_list<STRSXP>(x, k);
+  case LGLSXP: return impl::unique_to_list<STRSXP>(x, k);
+  case CPLXSXP: return impl::unique_to_list<STRSXP>(x, k);
+  default: {
+    warning(
+      "Invalid SEXPTYPE %d (%s).\n",
+      TYPEOF(x), type2name(x)
+    );
+    return R_NilValue;
+    }
+  }
+  return R_NilValue;
+}
 
 //' Running minimum
 //'
