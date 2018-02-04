@@ -1,15 +1,7 @@
 <!-- rmarkdown v1 -->
----
-output: 
-  github_document:
-    toc: true
----
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-
-
-# Runner
+# `runner` an R package for running operations.
 [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner)
 [![Project Status](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![MIT License](https://badges.frapsoft.com/os/mit/mit.svg)](https://opensource.org/licenses/mit-license.php)
@@ -26,56 +18,44 @@ You can install runner from github with:
 ## Examples
 The main idea of the package is to provide running operations on R vectors. Running functions are these which are applied to all elements up to actual one. For example implemented already in `base` `cumsum`, `cummin` etc. Functions provided in this package works similar but with extended functionality such as handling `NA` and custom window size. Most functions provided in package are based on the same logic  
 1. `k` window size denotes number of elements from i-th backwards, where functions are calculated.  
-(obrazek pokazujący ruchome okno)  
+(obrazek pokazujący ruchome okno)
 2. `na_rm` handling missing equivalent to `na.rm`. In case of running functions, `NA` is replaced with last finite value.  
 3. `na_pad` if window size exceeds number of available elements, than first `k-1` are filled with `NA`.  
 4. `which` In case of running index, which value ('first' or 'last')
 
 ### Creating windows
-Function creates list of windows. Because `runner` provide limited functionality, one can create running-window-list which can be further computed to obtain desired statistic (eg. window sum). ``
+Function creates list of windows. Because `runner` provide limited functionality, one can create running-window-list which can be further computed to obtain desired statistic (eg. window sum). `x` is a vector to be 'windowed' and `k` is a length of window. In this example window length is varying as specified by `k`. Provide one value to obtain constant window size.
 
 
 ```r
 library(runner)
 library(magrittr)
 set.seed(11)
-x    <- 1:5
-k     <- c(1,2,3,3,2)
+
+x1 <- 1:5
+k <- c(1,2,3,3,2)
 
 window_run( x=x, k = k )
-#> [[1]]
-#> [1] 1
-#> 
-#> [[2]]
-#> [1] 1 2
-#> 
-#> [[3]]
-#> [1] 1 2 3
-#> 
-#> [[4]]
-#> [1] 2 3 4
-#> 
-#> [[5]]
-#> [1] 4 5
+#> Error in window_run(x = x, k = k): length of k and length x differs. k=0 and k=length(x) only allowed
 ```
 
-Such windows can be used in further calculations, with any R function.
+Such windows can be used in further calculations, with any R function. Example below shows how to obtain running `sum` in specified, varying window length (specified by `k`).
 
 
 ```r
-window_run( x1, k = k ) %>%
+window_run( x=x1, k = k ) %>%
   lapply(sum) %>%
   unlist
 #> [1] 1 3 6 9 9
 ```
 ### Unique elements in window
-
+One 
 
 ```r
 x2 <- sample( letters[1:3], 6, replace=TRUE)
 x2
 #> [1] "a" "a" "b" "a" "a" "c"
-unique_run( x2, k = 3 )
+unique_run( x=x2, k = 3 )
 #> [[1]]
 #> [1] "a"
 #> 
@@ -83,10 +63,10 @@ unique_run( x2, k = 3 )
 #> [1] "a"
 #> 
 #> [[3]]
-#> [1] "b" "a"
+#> [1] "a" "b"
 #> 
 #> [[4]]
-#> [1] "b" "a"
+#> [1] "a" "b"
 #> 
 #> [[5]]
 #> [1] "b" "a"
