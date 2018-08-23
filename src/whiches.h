@@ -164,3 +164,71 @@ namespace impl {
 
 }
 
+
+#include <Rcpp.h>
+using namespace Rcpp;
+
+namespace impl {
+
+template <int RTYPE>
+int calc_whichd(const Vector<RTYPE>& x, int i, int i2)
+{
+  int cur_whichd  = IntegerVector::get_na();
+
+  for(int j = i; j > i2 ; --j) {
+      if( x( j ) == x( j - 1 ) ){
+        ;
+
+      } else {
+        cur_whichd = j;
+      }
+  }
+  return cur_whichd;
+}
+
+template <int RTYPE>
+IntegerVector whichd_run_(const Vector<RTYPE>& x, IntegerVector k,bool na_pad)
+{
+
+  int i2;
+  int n = x.size();
+  int nk = k.size();
+  int cur_whichd;
+  IntegerVector res(n);
+
+  /*  initial whichd */
+  res(0) = cur_whichd = NumericVector::get_na();
+
+
+  if(nk==1 and ( k(0)==0 or k(0)==n ) ){
+    /* whichd run full */
+    for(int i=1; i < n ; i++) {
+      if( Vector<RTYPE>::is_na( x( i ) ) ) {
+        cur_whichd = IntegerVector::get_na();
+      } else if( x( i - 1 ) == x( i ) ){
+      } else {
+        cur_whichd = i;
+      }
+      res( i ) = cur_whichd;
+    }
+  } else {
+    /* whichd_run window */
+    for(int i = 1; i < n; ++i) {
+      if( nk == 1 ){
+        i2 = window_index(i, k(0) );
+      } else {
+        i2 = window_index(i, k(i) );
+      }
+      res( i ) = calc_whichd(x, i, i2);
+    }
+  }
+
+  /* if padding with NA */
+  if(na_pad)
+    std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_REAL);
+
+  return res;
+}
+
+}
+

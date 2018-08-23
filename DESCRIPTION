@@ -3,6 +3,7 @@ Title: Running functions
 Type: Package
 Version: 0.1.0
 Authors@R: as.person("Dawid Kałędkowski <dawid.kaledkowski@gmail.com> [aut, cre]")
+Maintainer: Dawid Kałędkowski <dawid.kaledkowski@gmail.com>
 Description: Toolbox for running calculations on vectors. Package provides function creating running windows, running aggregations, usable iterative functions. Algorythmes written entirely in Rcpp.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -13,6 +14,9 @@ LinkingTo: Rcpp
 Imports:
     Rcpp
 RoxygenNote: 6.0.1
-Suggests: 
+Suggests:
     testthat,
-    covr
+    covr,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

@@ -1,8 +1,12 @@
+\.o$
+\.so$
+\.dll$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^.*elo.R
 ^data-raw$
-^\.travis\.yml$
 ^README\.Rmd$
 ^README-.*\.png$
+^cran-comments\.md$
+^\.travis\.yml$
 ^codecov\.yml$
+\.gitignore

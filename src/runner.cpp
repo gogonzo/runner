@@ -48,9 +48,9 @@ SEXP window_run(SEXP x, IntegerVector k = 0) {
 // [[Rcpp::export]]
 SEXP unique_run( SEXP x, IntegerVector k=0 ) {
   switch( TYPEOF(x) ) {
-  case INTSXP: return impl::unique_to_list<INTSXP>(x, k);
-  case REALSXP: return impl::unique_to_list<REALSXP>(x, k);
-  case STRSXP: return impl::unique_to_list<STRSXP>(x, k);
+    case INTSXP:  return impl::unique_to_list<INTSXP>(x, k);
+    case REALSXP: return impl::unique_to_list<REALSXP>(x, k);
+    case STRSXP:  return impl::unique_to_list<STRSXP>(x, k);
   default: {
     warning(
       "Invalid SEXPTYPE %d (%s).\n",
@@ -190,11 +190,11 @@ IntegerVector streak_run(
   impl::check_for_valid_k(x, k);
 
   switch (TYPEOF(x)) {
-  case INTSXP: return impl::streak_run_(as<IntegerVector>(x), k, na_pad);
-  case REALSXP: return impl::streak_run_(as<NumericVector>(x), k,na_pad);
-  case STRSXP: return impl::streak_run_(as<CharacterVector>(x), k, na_pad);
-  case LGLSXP: return impl::streak_run_(as<LogicalVector>(x), k, na_pad);
-  case CPLXSXP: return impl::streak_run_(as<ComplexVector>(x), k, na_pad);
+    case INTSXP: return impl::streak_run_(as<IntegerVector>(x), k, na_pad);
+    case REALSXP: return impl::streak_run_(as<NumericVector>(x), k,na_pad);
+    case STRSXP: return impl::streak_run_(as<CharacterVector>(x), k, na_pad);
+    case LGLSXP: return impl::streak_run_(as<LogicalVector>(x), k, na_pad);
+    case CPLXSXP: return impl::streak_run_(as<ComplexVector>(x), k, na_pad);
   default: {
     warning(
       "Invalid SEXPTYPE %d (%s).\n",
@@ -223,11 +223,11 @@ IntegerVector streak_run(
 SEXP fill_run(SEXP x, bool run_for_first = false, bool only_within=false) {
 
   switch (TYPEOF(x)) {
-  case INTSXP: return impl::fill_run_impl(as<IntegerVector>(x), run_for_first,only_within);
-  case REALSXP: return impl::fill_run_impl(as<NumericVector>(x), run_for_first,only_within);
-  case STRSXP: return impl::fill_run_impl(as<CharacterVector>(x), run_for_first,only_within);
-  case LGLSXP: return impl::fill_run_impl(as<LogicalVector>(x), run_for_first,only_within);
-  case CPLXSXP: return impl::fill_run_impl(as<ComplexVector>(x), run_for_first,only_within);
+    case INTSXP: return impl::fill_run_impl(  as<IntegerVector>(x), run_for_first,only_within);
+    case REALSXP: return impl::fill_run_impl( as<NumericVector>(x), run_for_first,only_within);
+    case STRSXP: return impl::fill_run_impl(  as<CharacterVector>(x), run_for_first,only_within);
+    case LGLSXP: return impl::fill_run_impl(  as<LogicalVector>(x), run_for_first,only_within);
+    case CPLXSXP: return impl::fill_run_impl( as<ComplexVector>(x), run_for_first,only_within);
   default: {
     warning(
       "Invalid SEXPTYPE %d (%s).\n",
@@ -427,6 +427,48 @@ IntegerVector whicht_run(
   return res;
 }
 
+//' Index of previous, different element
+//'
+//' Index of previous element different than current
+//' @param x vector of any type where running index is calculated
+//' @param k running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
+//' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
+//' @return numeric vector of length equals length of \code{x} containing running index length in \code{k}-long window.
+//' @examples
+//' set.seed(11)
+//' x1 <- sample(c("a","b"),15,replace=TRUE)
+//' x2 <- sample(c(NA_character_,"a","b"),15,replace=TRUE)
+//' k  <- sample(1:4,15,replace=TRUE)
+//' whichd_run(x1)
+//' whichd_run(x1, k=2)
+//' whichd_run(x2, na_pad=TRUE, k=3)
+//' whichd_run(x1, k=k)
+//' @export
+// [[Rcpp::export]]
+IntegerVector whichd_run(
+    SEXP x,
+    IntegerVector k=0,
+    bool na_pad = false) {
+
+  impl::check_for_valid_k(x, k);
+
+  switch (TYPEOF(x)) {
+    case INTSXP: return impl::whichd_run_(as<IntegerVector>(x), k, na_pad);
+    case REALSXP: return impl::whichd_run_(as<NumericVector>(x), k, na_pad);
+    case STRSXP: return impl::whichd_run_(as<CharacterVector>(x), k, na_pad);
+    case LGLSXP: return impl::whichd_run_(as<LogicalVector>(x), k, na_pad);
+    case CPLXSXP: return impl::whichd_run_(as<ComplexVector>(x), k, na_pad);
+  default: {
+    warning(
+      "Invalid SEXPTYPE %d (%s).\n",
+      TYPEOF(x), type2name(x)
+    );
+    return 0;
+  }
+  }
+}
+
+
 //' Running which.max
 //'
 //' Running index of the (first or last) maximum.
@@ -549,3 +591,4 @@ IntegerVector whichmin_run(
 
   return res;
 }
+

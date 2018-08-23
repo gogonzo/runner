@@ -171,6 +171,27 @@ whicht_run <- function(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE) 
     .Call('_runner_whicht_run', PACKAGE = 'runner', x, k, which, na_rm, na_pad)
 }
 
+#' Index of previous, different element
+#'
+#' Index of previous element different than current
+#' @param x vector of any type where running index is calculated
+#' @param k running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
+#' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
+#' @return numeric vector of length equals length of \code{x} containing running index length in \code{k}-long window.
+#' @examples
+#' set.seed(11)
+#' x1 <- sample(c("a","b"),15,replace=TRUE)
+#' x2 <- sample(c(NA_character_,"a","b"),15,replace=TRUE)
+#' k  <- sample(1:4,15,replace=TRUE)
+#' whichd_run(x1)
+#' whichd_run(x1, k=2)
+#' whichd_run(x2, na_pad=TRUE, k=3)
+#' whichd_run(x1, k=k)
+#' @export
+whichd_run <- function(x, k = 0L, na_pad = FALSE) {
+    .Call('_runner_whichd_run', PACKAGE = 'runner', x, k, na_pad)
+}
+
 #' Running which.max
 #'
 #' Running index of the (first or last) maximum.

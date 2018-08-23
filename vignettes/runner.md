@@ -1,3 +1,16 @@
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "2018-08-23"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
 <!-- rmarkdown v1 -->
 ---
 output: 

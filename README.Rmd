@@ -10,7 +10,7 @@ output:
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "README-"
+  fig.path = "man/figures/README-"
 )
 ```
 
@@ -33,164 +33,93 @@ devtools::install_github("gogonzo/runner")
 ```
 
 ## Examples
-The main idea of the package is to provide running operations on R vectors. Running functions are these which are applied to all elements up to actual one. For example implemented already in `base` `cumsum`, `cummin` etc. Functions provided in this package works similar but with extended functionality such as handling `NA` and custom window size. Most functions provided in package are based on the same logic  
-1. `k` window size denotes number of elements from i-th backwards, where functions are calculated.  
-(obrazek pokazujący ruchome okno)
-2. `na_rm` handling missing equivalent to `na.rm`. In case of running functions, `NA` is replaced with last finite value.  
-3. `na_pad` if window size exceeds number of available elements, than first `k-1` are filled with `NA`.  
-4. `which` In case of running index, which value ('first' or 'last')
+The main idea of the package is to provide running operations on R vectors. Running functions are these which are applied to all elements up to actual one. For example implemented already in `base` `cumsum`, `cummin` etc. Functions provided in this package works similar but with extended functionality such as handling `NA` and custom window size. The most functions provided in package are based on the same logic:  
+
+- `k` window size denotes number of elements from i-th backwards, where functions are calculated.  
+
+![window size](man/figures/running_window.png)
+
+- `na_rm` argument handling missing and is equivalent to `na.rm`.
+
+![na_rm](man/figures/running_sum_narm.png)
+
+- `na_pad` if window size exceeds number of available elements, than first `k-1` are filled with `NA`.  
+
+![na_pad](man/figures/running_sum_napad.png)
+
+- `which` In case of running index, which value ('first' or 'last')
+
+![first or last](man/figures/running_max_firstlast.png)
 
 ### Creating windows
-Function creates list of windows. Because `runner` provide limited functionality, one can create running-window-list which can be further computed to obtain desired statistic (eg. window sum). `x` is a vector to be 'windowed' and `k` is a length of window. In this example window length is varying as specified by `k`. Provide one value to obtain constant window size.
+Function creates list of windows. Because `runner` provide limited functionality, one can create running-window-list which can be further processed by user to obtain desired statistic (eg. window sum). `x` is a vector to be 'runned on' and `k` is a length of window. In this example window length is varying as specified by `k`. Provide one value to obtain constant window size.
 
 ```{r run_window, echo=TRUE}
-library(runner)
-library(magrittr)
+library(runner); library(magrittr)
 set.seed(11)
-
-x1 <- 1:5
-k <- c(1,2,3,3,2)
-
-window_run( x=x, k = k )
+window_run( x = 1:5, k = c(1,2,3,3,2) )
 ```
 
 Such windows can be used in further calculations, with any R function. Example below shows how to obtain running `sum` in specified, varying window length (specified by `k`).
 
 ```{r run_window2, echo=TRUE}
-window_run( x=x1, k = k ) %>%
+window_run( x= 1:5, k = c(1,2,3,3,2) ) %>%
   lapply(sum) %>%
   unlist
 ```
 ### Unique elements in window
-One 
+User can use `unique_run` create list of unique elements within specified window size.
 ```{r unique_run, echo=TRUE}
 x2 <- sample( letters[1:3], 6, replace=TRUE)
-x2
+x2 
 unique_run( x=x2, k = 3 )
 ```
 
-### Running aggregations
+### Running aggregations `(mean|sum|min|max)_run`
 
-Runner provides basic aggregation method calculated within running windows. By default missing values are removed before calculations (`na_rm=TRUE`). 
+Runner provides basic aggregation methods calculated within running windows. Below example showing some functions behaviour for different arguments setup. Let's take a look at 8th element of a vector on which `min_run` is calculated. 
+First setup uses default values, so algorithm is looking for minimum value in all elements before actual (i=8). By default missing values are removed before calculations by argument `na_rm=TRUE`, and also window is not specified. The default is equivalent of `base::cummin` with additional option to ignore `NA` values. In second example within window k=5, the lowest value is -3. In the last example minimum is not available due to extistence of `NA`. Graphical example is reproduced below in the code.
 
-```{r generate example, echo=TRUE}
-set.seed(11)
-x <- rnorm( 30 ) %>% cumsum
-x[c(5,6,10,11)] <- NA
+![running minimum](man/figures/running_minimum.png)
 
-k  <- sample( 2:5, 30, replace=TRUE)
-```
-
-
-#### min_run
 ```{r min_run_example, echo=TRUE}
-min1 <- min_run(x)
-min2 <- min_run(x, k=4)
-min3 <- min_run(x, k=k, na_rm = FALSE)
-```
+x <- c(1,-5,1,-3,NA,NA,NA,1,-1,NA,-2,3)
+k <- c(4,5,2,5,4,4,2,2,4,4,3,1)
 
-```{r plot_min_run, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
-multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
-  require(grid)
+a0 <- cummin(x)
+a1 <- min_run(x, na_rm = TRUE)
+a2 <- min_run(x, k=5, na_rm = TRUE)
+a3 <- min_run(x, na_rm = FALSE)
+a4 <- min_run(x, k=k, na_rm = TRUE, na_pad = TRUE)
 
-  # Make a list from the ... arguments and plotlist
-  plots <- c(list(...), plotlist)
-
-  numPlots = length(plots)
-
-  # If layout is NULL, then use 'cols' to determine layout
-  if (is.null(layout)) {
-    # Make the panel
-    # ncol: Number of columns of plots
-    # nrow: Number of rows needed, calculated from # of cols
-    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
-                    ncol = cols, nrow = ceiling(numPlots/cols))
-  }
-
- if (numPlots==1) {
-    print(plots[[1]])
-
-  } else {
-    # Set up the page
-    grid.newpage()
-    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
-
-    # Make each plot, in the correct location
-    for (i in 1:numPlots) {
-      # Get the i,j matrix positions of the regions that contain this subplot
-      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
-
-      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
-                                      layout.pos.col = matchidx$col))
-    }
-  }
-}
-
-library(ggplot2);library(ggrepel); library(gridExtra)
-plot <- 
-  data.frame(i = 1:30) %>%
-  ggplot(aes(x=i)) +
-  geom_line(aes( y = fill_run(x)) ) +
-  geom_point(aes( y = fill_run(x)) ) +
-  geom_point(aes(y = min_run(x)), color="red", shape=3) +
-  ggtitle("running minimum")
-  
-
-plot1 <- 
-  data.frame(i = 1:30) %>%
-  ggplot(aes(x=i)) +
-  geom_line(aes( y = x)) +
-  geom_point(aes( y = x)) +
-  geom_point(aes(y = min1), color="red", shape=3) +
-  ggtitle("running minimum handling NA")
-  
-plot2 <- 
-  data.frame(i = 1:30) %>%
-  ggplot(aes(x=i)) +
-  geom_line(aes( y = x)) +
-  geom_point(aes( y = x)) +
-  geom_point(aes(y = min2), color="red", shape=3) +
-  ggtitle("running minimum with window k=4")
-  
-plot3 <- 
-  data.frame(i = 1:30) %>%
-  ggplot(aes(x=i)) +
-  geom_line(aes( y = x)) +
-  geom_point(aes(y = min3), color="red", shape=3) +
-  geom_label(aes(label=k, y=fill_run(x)+0.5), size=2) + 
-  ggtitle("running minimum with varying k")
-
-
-multiplot(plot, plot2,plot1,plot3, cols = 2)  
-  
-```
-
-```
-
-#### max_run
-```{r max_run_example, echo=TRUE}
-max1 <- max_run(x)
-max2 <- max_run(x, k=4)
-max3 <- max_run(x, k=k, na_rm = FALSE)
-```
-
-#### mean_run
-```{r mean_run_example, echo=TRUE}
-mean1 <- mean_run(x)
-mean2 <- mean_run(x, k=4)
-mean3 <- mean_run(x, k=k, na_rm = FALSE)
-```
-
-#### sum_run
-```{r sum_run_example, echo=TRUE}
-sum1 <- sum_run(x)
-sum2 <- sum_run(x, k=4)
-sum3 <- sum_run(x, k=k, na_rm = FALSE)
+data.frame(x, a0, a1, a2, a3, a4)
 ```
 
 
+### fill_run
+Function used to replace `NA` with previous non-NA element. To understand how `fill_run` works, take a look on ilustration. Row 'x' represents, and another rows represent replaced `NA` by fill_run with different options setup (run_for_first=TRUE and only_within=TRUE respectively). By default, `fill_run` replaces all `NA` if they were preceded by any value. If `NA` appeared in the beginning of the vector then it would not be replaced. But if user specify `run_for_firsty=TRUE` initial empty values values will be replaced by next non-empty value. Option `only_within=TRUE` means that `NA` values would be replaced if they were surrounded by pair of identiacl values. No windows provided in this functionality.
 
+![fill run](man/figures/fill_run.png)
 
+```{r}
+x <- c(NA, NA, "b","b","a",NA,NA,"a","b",NA,"a","b")
+data.frame(x, 
+           f1 = fill_run(x), 
+           f2 = fill_run(x,run_for_first = T), 
+           f3 = fill_run(x, only_within = T))
+```
+
+### Running streak
+
+To calculate number of consecutive elements one can use `streak_run`. In this case, function doesn't handle `NA` directly 
 
 ### Running indexes
+
+To return 
+
+
+
+## Benchmarks
+
+Benchmarks comparing base functions with provided in `runner` 
 
