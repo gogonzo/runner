@@ -1,7 +1,7 @@
 ---
 title: "Vignette Title"
 author: "Vignette Author"
-date: "2018-08-23"
+date: "2018-08-24"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
@@ -35,9 +35,13 @@ Running functions for R vector written in Rcpp
 You can install runner from github with:
 
 
+```r
+# install.packages("runner")
+# devtools::install_github("gogonzo/runner")
+```
 
-## Examples
-The main idea of the package is to provide running operations on R vectors. Running functions are these which are applied to all elements up to actual one. For example implemented already in `base` `cumsum`, `cummin` etc. Functions provided in this package works similar but with extended functionality such as handling `NA` and custom window size. The most functions provided in package are based on the same logic:  
+## Using runner package
+The main idea of the package is to provide running operations on R vectors. Running functions are these which are applied to all elements up to actual one, like implemented already in base R `cumsum`, `cummin` etc. Functions provided in this package works similar but with extended functionality such as handling `NA` and custom window size. The most functions provided in package are based on the same logic:  
 
 - `k` window size denotes number of elements from i-th backwards, where functions are calculated.  
 
@@ -51,9 +55,10 @@ The main idea of the package is to provide running operations on R vectors. Runn
 
 ![na_pad](man/figures/running_sum_napad.png)
 
-- `which` In case of running index, which value ('first' or 'last')
+- While using running indexing functions, user sometimes need to decide `which` index satisfies the condition 'first' or 'last'. This situation is depicted below, where running-which is calculated within k=4 window. If user specifies `which="first"` (default) function will return index of first `TRUE` occured within specified window, otherwise index of last `TRUE` will be returned.
+    
+![first last](man/figures/running_which.png)
 
-![first or last](man/figures/running_max_firstlast.png)
 
 ### Creating windows
 Function creates list of windows. Because `runner` provide limited functionality, one can create running-window-list which can be further processed by user to obtain desired statistic (eg. window sum). `x` is a vector to be 'runned on' and `k` is a length of window. In this example window length is varying as specified by `k`. Provide one value to obtain constant window size.
@@ -103,13 +108,13 @@ unique_run( x=x2, k = 3 )
 #> [1] "a"
 #> 
 #> [[3]]
-#> [1] "b" "a"
+#> [1] "a" "b"
 #> 
 #> [[4]]
-#> [1] "b" "a"
+#> [1] "a" "b"
 #> 
 #> [[5]]
-#> [1] "b" "a"
+#> [1] "a" "b"
 #> 
 #> [[6]]
 #> [1] "c" "a"

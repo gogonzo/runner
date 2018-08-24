@@ -27,27 +27,27 @@ Running functions for R vector written in Rcpp
 
 You can install runner from github with:
 
-```{r gh-installation, eval=FALSE, include=FALSE}
-# install.packages("devtools")
-devtools::install_github("gogonzo/runner")
+```{r gh-installation, echo=TRUE}
+# install.packages("runner")
+# devtools::install_github("gogonzo/runner")
 ```
 
 ## Examples
 The main idea of the package is to provide running operations on R vectors. Running functions are these which are applied to all elements up to actual one. For example implemented already in `base` `cumsum`, `cummin` etc. Functions provided in this package works similar but with extended functionality such as handling `NA` and custom window size. The most functions provided in package are based on the same logic:  
 
-- `k` window size denotes number of elements from i-th backwards, where functions are calculated.  
+- window size `k` denotes number of elements from i-th backwards, where functions are calculated.  
 
 ![window size](man/figures/running_window.png)
 
-- `na_rm` argument handling missing and is equivalent to `na.rm`.
+- argument `na_rm=T` handling missing and is equivalent to `na.rm`.
 
 ![na_rm](man/figures/running_sum_narm.png)
 
-- `na_pad` if window size exceeds number of available elements, than first `k-1` are filled with `NA`.  
+- `na_pad=T` if window size exceeds number of available elements, than first `k-1` elements are filled with `NA`.  
 
 ![na_pad](man/figures/running_sum_napad.png)
 
-- `which` In case of running index, which value ('first' or 'last')
+- `which` used with running index, which value ('first' or 'last')
 
 ![first or last](man/figures/running_max_firstlast.png)
 
