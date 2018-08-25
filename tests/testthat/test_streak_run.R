@@ -46,11 +46,11 @@ test_that("streak_run handles windowing", {
 test_that("streak_run handles NA's", {
   expect_identical(
     streak_run(x2),
-    as.integer(c(1,2,NA,NA,1,NA,1,1,2,NA,1,2,NA,NA,1))
+    as.integer(c(1,2,2,2,3,3,1,1,2,2,3,4,4,4,5))
   )
   expect_identical(
     streak_run(x2,na_pad=T,k=3),
-    as.integer(c(NA,NA,NA,NA,NA,NA,NA,1,2,NA,NA,NA,NA,NA,NA))
+    as.integer(c(NA,NA,2,1,1,1,1,1,2,2,2,2,2,1,1))
   )
 })
 
