@@ -169,6 +169,7 @@ NumericVector max_run(
 //' Calculates running series of consecutive elements
 //' @param x vector of any type where running streak is calculated
 //' @param k running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
+//' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed streak prior to element.
 //' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 //' @return numeric vector of length equals length of \code{x} containing running streak length in \code{k}-long window.
 //' @examples
@@ -185,16 +186,17 @@ NumericVector max_run(
 IntegerVector streak_run(
     SEXP x,
     IntegerVector k=0,
+    bool na_rm = true,
     bool na_pad = false) {
 
   impl::check_for_valid_k(x, k);
 
   switch (TYPEOF(x)) {
-    case INTSXP: return impl::streak_run_(as<IntegerVector>(x), k, na_pad);
-    case REALSXP: return impl::streak_run_(as<NumericVector>(x), k,na_pad);
-    case STRSXP: return impl::streak_run_(as<CharacterVector>(x), k, na_pad);
-    case LGLSXP: return impl::streak_run_(as<LogicalVector>(x), k, na_pad);
-    case CPLXSXP: return impl::streak_run_(as<ComplexVector>(x), k, na_pad);
+    case INTSXP: return impl::streak_run_(as<IntegerVector>(x), k, na_rm, na_pad);
+    case REALSXP: return impl::streak_run_(as<NumericVector>(x), k, na_rm, na_pad);
+    case STRSXP: return impl::streak_run_(as<CharacterVector>(x), k, na_rm, na_pad);
+    case LGLSXP: return impl::streak_run_(as<LogicalVector>(x), k, na_rm, na_pad);
+    case CPLXSXP: return impl::streak_run_(as<ComplexVector>(x), k, na_rm, na_pad);
   default: {
     warning(
       "Invalid SEXPTYPE %d (%s).\n",

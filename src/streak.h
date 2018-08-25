@@ -4,24 +4,35 @@ using namespace Rcpp;
 namespace impl {
 
   template <int RTYPE>
-  int  calc_actual_streak(const Vector<RTYPE>& x, int i, int i2)
+  int  calc_actual_streak(const Vector<RTYPE>& x, int i, int i2, bool na_rm)
   {
-    int cur_streak;
+    int j_f = IntegerVector::get_na();
+    int cur_streak=1;
 
-    for(int j = i; j >= i2 ; --j) {
-      if( j == i ){
-        if(!Vector<RTYPE>::is_na( x( j ) )){
-          cur_streak = 1;
-        } else {
-          return IntegerVector::get_na();
-        }
+    // run for first finite
+    for(int j = i; j >= i2 ; --j)
+      if( Vector<RTYPE>::is_na(x(j)) ){
+        if(!na_rm){
+          return IntegerVector::get_na();}
       } else {
-        if( x( j ) == x( j + 1 ) ){
+        j_f = j;
+        break;
+      }
+
+    if( IntegerVector::is_na(j_f))
+        return IntegerVector::get_na();
+
+
+    for(int j = j_f; j >= i2 ; --j) {
+      if( j < j_f ){
+        if( x( j ) == x( j_f ) ){
           cur_streak += 1;
-        } else if( Vector<RTYPE>::is_na( x( j )) ) {
-          return IntegerVector::get_na();
+          j_f = j;
+        } else if( !Vector<RTYPE>::is_na(x(j)) ){
+          return cur_streak;
         } else {
-           return cur_streak;
+          if(!na_rm)
+            return cur_streak;
         }
       }
     }
@@ -29,34 +40,45 @@ namespace impl {
   }
 
   template <int RTYPE>
-  IntegerVector streak_run_(const Vector<RTYPE>& x, IntegerVector k, bool na_pad)
+  IntegerVector streak_run_(const Vector<RTYPE>& x, IntegerVector k,  bool na_rm, bool na_pad)
   {
 
     int i2;
     int n = x.size();
     int nk = k.size();
     int cur_streak;
+    int j_f = IntegerVector::get_na();
     IntegerVector res(n);
 
     /*  initial streak */
-    if ( Vector<RTYPE>::is_na( x(0) ) ){
-      res(0) = cur_streak = NumericVector::get_na();
+    for(int i=0; i < n ; i++)
+    if ( Vector<RTYPE>::is_na( x(i) ) ){
+      res(i) = NumericVector::get_na();
     } else {
-      res(0) = cur_streak = 1;
+      j_f = i;
+      res(i) = cur_streak = 1;
+      break;
     }
 
 
     if(nk==1 and ( k(0)==0 or k(0)==n ) ){
       /* streak run full */
-      for(int i=1; i < n ; i++) {
-        if( Vector<RTYPE>::is_na( x( i ) )) {
-          cur_streak = IntegerVector::get_na();
-        } else if( x( i ) == x( i - 1 ) ){
-          cur_streak += 1;
-        } else {
-          cur_streak = 1;
+      for(int i=j_f; i < n ; i++) {
+        if( i > j_f){
+          if( x( i ) == x( j_f ) ){
+            cur_streak += 1;
+            j_f = i;
+          } else if( Vector<RTYPE>::is_na( x( i )  ) ) {
+            if(!na_rm){
+              cur_streak = 0;
+              res( i ) = IntegerVector::get_na();
+              continue;}
+          } else {
+            cur_streak = 1;
+            j_f = i;
+          }
         }
-        res( i ) = cur_streak;
+        res( i ) = cur_streak == 0 ? IntegerVector::get_na() : cur_streak;
       }
     } else {
     /* streak_run window */
@@ -66,7 +88,7 @@ namespace impl {
         } else {
           i2 = window_index(i, k(i) );
         }
-        res( i ) = calc_actual_streak(x, i, i2);
+        res( i ) = calc_actual_streak(x, i, i2, na_rm);
       }
     }
 
