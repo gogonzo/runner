@@ -49,7 +49,7 @@ The main idea of the package is to provide running operations on R vectors. Runn
 
 - `which` used with running index, which value ('first' or 'last')
 
-![first or last](man/figures/running_max_firstlast.png)
+![first or last](man/figures/running_which.png)
 
 ### Creating windows
 Function creates list of windows. Because `runner` provide limited functionality, one can create running-window-list which can be further processed by user to obtain desired statistic (eg. window sum). `x` is a vector to be 'runned on' and `k` is a length of window. In this example window length is varying as specified by `k`. Provide one value to obtain constant window size.
@@ -67,6 +67,7 @@ window_run( x= 1:5, k = c(1,2,3,3,2) ) %>%
   lapply(sum) %>%
   unlist
 ```
+
 ### Unique elements in window
 User can use `unique_run` create list of unique elements within specified window size.
 ```{r unique_run, echo=TRUE}
@@ -111,15 +112,33 @@ data.frame(x,
 
 ### Running streak
 
-To calculate number of consecutive elements one can use `streak_run`. In this case, function doesn't handle `NA` directly 
+To count consecutive elements in specified window one can use `streak_run`. Following figure illustrates how streak is calculated with three different options setup for 9th element of the input vector `x`. First shows default configuration, with full window and `na_rm=T`. Second example count within k=4 window with count reset on `NA`. Last example counting streak with continuation after `NA`. Visualisation also supported with corresponding R code.
 
-### Running indexes
+![fill run](man/figures/running_streaks.png)
 
-To return 
+```{r}
+x <- c("A","B","A","A","B","B","B",NA,"B","A","B")
+data.frame(
+  x, 
+  s0=streak_run(x),
+  s1=streak_run(x, na_rm=F, k=3),
+  s2=streak_run(x, k=4) )
+```
 
+### Running which
+To obtain index number of element satisfying some condition in window, one can use running which. Functions from this group returns index while condition is `TRUE` appeared before n-th element of a vector. In below example `whicht_run` function returns index of element containing `TRUE` value. If `na_rm=T` is specified, missing is treated as `FALSE`, and is ignored while searching for `TRUE`. While user set `na_rm=F` like in second example, function returns `NA`, because in following window `TRUE` appears after missing and it's impossible to be certain which is first (missing is an element of unknown value - could be TRUE or FALSE). 
 
+![whicht run](man/figures/running_which_more.png)
+
+```{r}
+x <- c(T,T,T,F,NA,T,F,NA,T,F,T,F)
+data.frame(
+  x, 
+  s0=whicht_run(x, which="first"),
+  s1=whicht_run(x, na_rm=F, k=5, which="first"),
+  s2=whicht_run(x, k=5,"first"))
+
+```
 
 ## Benchmarks
-
-Benchmarks comparing base functions with provided in `runner` 
 

@@ -22,25 +22,29 @@ Running functions for R vector written in Rcpp
 You can install runner from github with:
 
 
+```r
+# install.packages("runner")
+# devtools::install_github("gogonzo/runner")
+```
 
 ## Examples
 The main idea of the package is to provide running operations on R vectors. Running functions are these which are applied to all elements up to actual one. For example implemented already in `base` `cumsum`, `cummin` etc. Functions provided in this package works similar but with extended functionality such as handling `NA` and custom window size. The most functions provided in package are based on the same logic:  
 
-- `k` window size denotes number of elements from i-th backwards, where functions are calculated.  
+- window size `k` denotes number of elements from i-th backwards, where functions are calculated.  
 
 ![window size](man/figures/running_window.png)
 
-- `na_rm` argument handling missing and is equivalent to `na.rm`.
+- argument `na_rm=T` handling missing and is equivalent to `na.rm`.
 
 ![na_rm](man/figures/running_sum_narm.png)
 
-- `na_pad` if window size exceeds number of available elements, than first `k-1` are filled with `NA`.  
+- `na_pad=T` if window size exceeds number of available elements, than first `k-1` elements are filled with `NA`.  
 
 ![na_pad](man/figures/running_sum_napad.png)
 
-- `which` In case of running index, which value ('first' or 'last')
+- `which` used with running index, which value ('first' or 'last')
 
-![first or last](man/figures/running_max_firstlast.png)
+![first or last](man/figures/running_which.png)
 
 ### Creating windows
 Function creates list of windows. Because `runner` provide limited functionality, one can create running-window-list which can be further processed by user to obtain desired statistic (eg. window sum). `x` is a vector to be 'runned on' and `k` is a length of window. In this example window length is varying as specified by `k`. Provide one value to obtain constant window size.
@@ -75,6 +79,7 @@ window_run( x= 1:5, k = c(1,2,3,3,2) ) %>%
   unlist
 #> [1] 1 3 6 9 9
 ```
+
 ### Unique elements in window
 User can use `unique_run` create list of unique elements within specified window size.
 
@@ -96,10 +101,10 @@ unique_run( x=x2, k = 3 )
 #> [1] "a" "b"
 #> 
 #> [[5]]
-#> [1] "b" "a"
+#> [1] "a" "b"
 #> 
 #> [[6]]
-#> [1] "c" "a"
+#> [1] "a" "c"
 ```
 
 ### Running aggregations `(mean|sum|min|max)_run`
@@ -166,15 +171,59 @@ data.frame(x,
 
 ### Running streak
 
-To calculate number of consecutive elements one can use `streak_run`. In this case, function doesn't handle `NA` directly 
+To count consecutive elements in specified window one can use `streak_run`. Following figure illustrates how streak is calculated with three different options setup for 9th element of the input vector `x`. First shows default configuration, with full window and `na_rm=T`. Second example count within k=4 window with count reset on `NA`. Last example counting streak with continuation after `NA`. Visualisation also supported with corresponding R code.
 
-### Running indexes
-
-To return 
+![fill run](man/figures/running_streaks.png)
 
 
+```r
+x <- c("A","B","A","A","B","B","B",NA,"B","A","B")
+data.frame(
+  x, 
+  s0=streak_run(x),
+  s1=streak_run(x, na_rm=F, k=3),
+  s2=streak_run(x, k=4) )
+#>       x s0 s1 s2
+#> 1     A  1  1  1
+#> 2     B  1  1  1
+#> 3     A  1  1  1
+#> 4     A  2  2  2
+#> 5     B  1  1  1
+#> 6     B  2  2  2
+#> 7     B  3  3  3
+#> 8  <NA>  3 NA  3
+#> 9     B  4  1  3
+#> 10    A  1  1  1
+#> 11    B  1  1  1
+```
+
+### Running which
+To obtain index number of element satisfying some condition in window, one can use running which. Functions from this group returns index while condition is `TRUE` appeared before n-th element of a vector. In below example `whicht_run` function returns index of element containing `TRUE` value. If `na_rm=T` is specified, missing is treated as `FALSE`, and is ignored while searching for `TRUE`. While user set `na_rm=F` like in second example, function returns `NA`, because in following window `TRUE` appears after missing and it's impossible to be certain which is first (missing is an element of unknown value - could be TRUE or FALSE). 
+
+![whicht run](man/figures/running_which_more.png)
+
+
+```r
+x <- c(T,T,T,F,NA,T,F,NA,T,F,T,F)
+data.frame(
+  x, 
+  s0=whicht_run(x, which="first"),
+  s1=whicht_run(x, na_rm=F, k=5, which="first"),
+  s2=whicht_run(x, k=5,"first"))
+#>        x s0 s1 s2
+#> 1   TRUE  1  1  1
+#> 2   TRUE  1  1  1
+#> 3   TRUE  1  1  1
+#> 4  FALSE  1  1  1
+#> 5     NA  1  1  1
+#> 6   TRUE  1  2  2
+#> 7  FALSE  1  3  3
+#> 8     NA  1 NA  6
+#> 9   TRUE  1 NA  6
+#> 10 FALSE  1  6  6
+#> 11  TRUE  1 NA  9
+#> 12 FALSE  1 NA  9
+```
 
 ## Benchmarks
-
-Benchmarks comparing base functions with provided in `runner` 
 
