@@ -77,6 +77,7 @@ max_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE) {
 #' Calculates running series of consecutive elements
 #' @param x vector of any type where running streak is calculated
 #' @param k running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
+#' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed streak prior to element.
 #' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 #' @return numeric vector of length equals length of \code{x} containing running streak length in \code{k}-long window.
 #' @examples
@@ -89,8 +90,8 @@ max_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE) {
 #' streak_run(x2, na_pad=TRUE, k=3) # streak run within k=3 with padding NA
 #' streak_run(x1, k=k) # streak run within varying window size specified by vector k
 #' @export
-streak_run <- function(x, k = 0L, na_pad = FALSE) {
-    .Call('_runner_streak_run', PACKAGE = 'runner', x, k, na_pad)
+streak_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE) {
+    .Call('_runner_streak_run', PACKAGE = 'runner', x, k, na_rm, na_pad)
 }
 
 #' Fill NA with previous non-NA element
