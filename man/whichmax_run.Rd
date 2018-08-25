@@ -4,7 +4,8 @@
 \alias{whichmax_run}
 \title{Running which.max}
 \usage{
-whichmax_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
+whichmax_run(x, k = 0L, which = "last", na_rm = TRUE,
+  na_pad = FALSE)
 }
 \arguments{
 \item{x}{numeric (or integer) vector for which running whichrun is calculated.}

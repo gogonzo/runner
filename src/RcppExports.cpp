@@ -58,15 +58,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // streak_run
-IntegerVector streak_run(SEXP x, IntegerVector k, bool na_pad);
-RcppExport SEXP _runner_streak_run(SEXP xSEXP, SEXP kSEXP, SEXP na_padSEXP) {
+IntegerVector streak_run(SEXP x, IntegerVector k, bool na_rm, bool na_pad);
+RcppExport SEXP _runner_streak_run(SEXP xSEXP, SEXP kSEXP, SEXP na_rmSEXP, SEXP na_padSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
+    Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
     Rcpp::traits::input_parameter< bool >::type na_pad(na_padSEXP);
-    rcpp_result_gen = Rcpp::wrap(streak_run(x, k, na_pad));
+    rcpp_result_gen = Rcpp::wrap(streak_run(x, k, na_rm, na_pad));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -175,7 +176,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_runner_unique_run", (DL_FUNC) &_runner_unique_run, 2},
     {"_runner_min_run", (DL_FUNC) &_runner_min_run, 4},
     {"_runner_max_run", (DL_FUNC) &_runner_max_run, 4},
-    {"_runner_streak_run", (DL_FUNC) &_runner_streak_run, 3},
+    {"_runner_streak_run", (DL_FUNC) &_runner_streak_run, 4},
     {"_runner_fill_run", (DL_FUNC) &_runner_fill_run, 3},
     {"_runner_mean_run", (DL_FUNC) &_runner_mean_run, 4},
     {"_runner_sum_run", (DL_FUNC) &_runner_sum_run, 4},

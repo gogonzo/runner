@@ -4,7 +4,8 @@
 \alias{whichmin_run}
 \title{Running which.min}
 \usage{
-whichmin_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
+whichmin_run(x, k = 0L, which = "last", na_rm = TRUE,
+  na_pad = FALSE)
 }
 \arguments{
 \item{x}{input logical vector where running whichrun is calculated.}
