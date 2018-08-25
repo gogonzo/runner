@@ -12,7 +12,6 @@ Installation
 You can install runner from github with:
 
 ``` r
-# install.packages("runner")
 # devtools::install_github("gogonzo/runner")
 ```
 
@@ -39,7 +38,7 @@ The main idea of the package is to provide running operations on R vectors. Runn
 
 ### Creating windows
 
-Function creates list of windows. Because `runner` provide limited functionality, one can create running-window-list which can be further processed by user to obtain desired statistic (eg. window sum). `x` is a vector to be 'runned on' and `k` is a length of window. In this example window length is varying as specified by `k`. Provide one value to obtain constant window size.
+Function creates list of windows. Because `runner` provide limited functionality, one can create running-window-list which can be further processed by user to obtain desired statistic (eg. window sum). `x` is a vector to be 'run on' and `k` is a length of window. In this example window length is varying as specified by `k`. Provide one value to obtain constant window size.
 
 ``` r
 library(runner); library(magrittr)
@@ -100,7 +99,7 @@ unique_run( x=x2, k = 3 )
 
 ### Running aggregations `(mean|sum|min|max)_run`
 
-Runner provides basic aggregation methods calculated within running windows. Below example showing some functions behaviour for different arguments setup. Let's take a look at 8th element of a vector on which `min_run` is calculated. First setup uses default values, so algorithm is looking for minimum value in all elements before actual (i=8). By default missing values are removed before calculations by argument `na_rm=TRUE`, and also window is not specified. The default is equivalent of `base::cummin` with additional option to ignore `NA` values. In second example within window k=5, the lowest value is -3. In the last example minimum is not available due to extistence of `NA`. Graphical example is reproduced below in the code.
+Runner provides basic aggregation methods calculated within running windows. Below example showing some functions behavior for different arguments setup. Let's take a look at 8th element of a vector on which `min_run` is calculated. First setup uses default values, so algorithm is looking for minimum value in all elements before actual (i=8). By default missing values are removed before calculations by argument `na_rm=TRUE`, and also window is not specified. The default is equivalent of `base::cummin` with additional option to ignore `NA` values. In second example within window k=5, the lowest value is -3. In the last example minimum is not available due to existence of `NA`. Graphical example is reproduced below in the code.
 
 ![running minimum](vignettes/images/running_minimum.png)
 
@@ -132,7 +131,7 @@ data.frame(x, a0, a1, a2, a3, a4)
 
 ### fill\_run
 
-Function used to replace `NA` with previous non-NA element. To understand how `fill_run` works, take a look on ilustration. Row 'x' represents, and another rows represent replaced `NA` by fill\_run with different options setup (run\_for\_first=TRUE and only\_within=TRUE respectively). By default, `fill_run` replaces all `NA` if they were preceded by any value. If `NA` appeared in the beginning of the vector then it would not be replaced. But if user specify `run_for_firsty=TRUE` initial empty values values will be replaced by next non-empty value. Option `only_within=TRUE` means that `NA` values would be replaced if they were surrounded by pair of identiacl values. No windows provided in this functionality.
+Function used to replace `NA` with previous non-NA element. To understand how `fill_run` works, take a look on illustration. Row 'x' represents, and another rows represent replaced `NA` by fill\_run with different options setup (run\_for\_first=TRUE and only\_within=TRUE respectively). By default, `fill_run` replaces all `NA` if they were preceded by any value. If `NA` appeared in the beginning of the vector then it would not be replaced. But if user specify `run_for_first=TRUE` initial empty values values will be replaced by next non-empty value. Option `only_within=TRUE` means that `NA` values would be replaced if they were surrounded by pair of identical values. No windows provided in this functionality.
 
 ![fill run](vignettes/images/fill_run.png)
 
@@ -159,7 +158,7 @@ data.frame(x,
 
 ### Running streak
 
-To count consecutive elements in specified window one can use `streak_run`. Following figure illustrates how streak is calculated with three different options setup for 9th element of the input vector `x`. First shows default configuration, with full window and `na_rm=T`. Second example count within k=4 window with count reset on `NA`. Last example counting streak with continuation after `NA`. Visualisation also supported with corresponding R code.
+To count consecutive elements in specified window one can use `streak_run`. Following figure illustrates how streak is calculated with three different options setup for 9th element of the input vector `x`. First shows default configuration, with full window and `na_rm=T`. Second example count within k=4 window with count reset on `NA`. Last example counting streak with continuation after `NA`. Visualization also supported with corresponding R code.
 
 ![fill run](vignettes/images/running_streaks.png)
 
