@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 ```
 
 ## About
-Package contains standard running functions (aka. windowed, rolling, cumulative) with additional options. The most of the functions are already implemented in R `base::cumsum`, `RcppRoll::roll_sum`, `zoo::rollsum` and runner does not improve `base` or `RcppRoll` performance. Instead of speed improvement, `runner` provides extended functionality like handling missings and varying window size. `runner` brings also rolling streak and rollin which, what extends beyond range of functions already implemented in R packages.
+Package contains standard running functions (aka. windowed, rolling, cumulative) with additional options. The most of the functions are already implemented in R (e.g. `base::cumsum`, `RcppRoll::roll_sum`, `zoo::rollsum`) and runner does not improve `base` or `RcppRoll` performance. Instead of speed improvement, `runner` provides extended functionality like handling missings and varying window size. `runner` brings also rolling streak and rollin which, what extends beyond range of functions already implemented in R packages.
 
 ## Installation
 

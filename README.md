@@ -2,12 +2,12 @@
 `runner` an R package for running operations.
 =============================================
 
-[![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner) [![Project Status](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) [![MIT License](https://badges.frapsoft.com/os/mit/mit.svg)](https://opensource.org/licenses/mit-license.php) [![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)](https://codecov.io/github/gogonzo/runner?branch=master)
+[![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner) [![Project Status](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html) [![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)](https://codecov.io/github/gogonzo/runner?branch=master)
 
 About
 -----
 
-Package contains standard running functions (aka. windowed, rolling, cumulative) with additional options. The most of the functions are already implemented in R `base::cumsum`, `RcppRoll::roll_sum`, `zoo::rollsum` and runner does not improve `base` or `RcppRoll` performance. Instead of speed improvement, `runner` provides extended functionality like handling missings and varying window size. `runner` brings also rolling streak and rollin which, what extends beyond range of functions already implemented in R packages.
+Package contains standard running functions (aka. windowed, rolling, cumulative) with additional options. The most of the functions are already implemented in R (e.g. `base::cumsum`, `RcppRoll::roll_sum`, `zoo::rollsum`) and runner does not improve `base` or `RcppRoll` performance. Instead of speed improvement, `runner` provides extended functionality like handling missings and varying window size. `runner` brings also rolling streak and rollin which, what extends beyond range of functions already implemented in R packages.
 
 Installation
 ------------
@@ -89,16 +89,16 @@ unique_run( x=x2, k = 3 )
 #> [1] "a"
 #> 
 #> [[3]]
-#> [1] "a" "b"
+#> [1] "b" "a"
 #> 
 #> [[4]]
-#> [1] "a" "b"
+#> [1] "b" "a"
 #> 
 #> [[5]]
-#> [1] "a" "b"
+#> [1] "b" "a"
 #> 
 #> [[6]]
-#> [1] "a" "c"
+#> [1] "c" "a"
 ```
 
 ### Running aggregations `(mean|sum|min|max)_run`
@@ -170,9 +170,9 @@ To count consecutive elements in specified window one can use `streak_run`. Foll
 x <- c("A","B","A","A","B","B","B",NA,"B","A","B")
 data.frame(
   x, 
-  s0=streak_run(x),
-  s1=streak_run(x, na_rm=F, k=3),
-  s2=streak_run(x, k=4) )
+  s0 = streak_run(x),
+  s1 = streak_run(x, na_rm=F, k=3),
+  s2 = streak_run(x, k=4) )
 #>       x s0 s1 s2
 #> 1     A  1  1  1
 #> 2     B  1  1  1
@@ -197,9 +197,9 @@ To obtain index number of element satisfying some condition in window, one can u
 x <- c(T,T,T,F,NA,T,F,NA,T,F,T,F)
 data.frame(
   x, 
-  s0=whicht_run(x, which="first"),
-  s1=whicht_run(x, na_rm=F, k=5, which="first"),
-  s2=whicht_run(x, k=5,"first"))
+  s0 = whicht_run(x, which="first"),
+  s1 = whicht_run(x, na_rm=F, k=5, which="first"),
+  s2 = whicht_run(x, k=5,"first"))
 #>        x s0 s1 s2
 #> 1   TRUE  1  1  1
 #> 2   TRUE  1  1  1
