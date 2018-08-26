@@ -6,8 +6,8 @@ Depends: R (>= 3.0)
 Authors@R: person("Dawid", "Kałędkowski", email = "dawid.kaledkowski@gmail.com", role = c("aut", "cre"))
 Maintainer: Dawid Kałędkowski <dawid.kaledkowski@gmail.com>
 Description: Package contains running functions (a.k.a. windowed, rolling, cumulative) 
-  with varying window size and missings handling options. Package brings also 
-  rolling streak and rolling which, what extends beyond range of functions 
+  with varying window size and missing handling options. Package brings also 
+  running streak and running which, what extends beyond range of functions 
   already implemented in R packages.
 License: GPL (>= 2)
 Encoding: UTF-8
