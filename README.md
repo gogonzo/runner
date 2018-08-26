@@ -4,7 +4,10 @@
 
 [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner) [![Project Status](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) [![MIT License](https://badges.frapsoft.com/os/mit/mit.svg)](https://opensource.org/licenses/mit-license.php) [![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)](https://codecov.io/github/gogonzo/runner?branch=master)
 
-Running functions for R vector written in Rcpp
+About
+-----
+
+Package contains standard running functions (aka. windowed, rolling, cumulative) with additional options. The most of the functions are already implemented in R `base::cumsum`, `RcppRoll::roll_sum`, `zoo::rollsum` and runner does not improve `base` or `RcppRoll` performance. Instead of speed improvement, `runner` provides extended functionality like handling missings and varying window size. `runner` brings also rolling streak and rollin which, what extends beyond range of functions already implemented in R packages.
 
 Installation
 ------------
@@ -13,6 +16,7 @@ You can install runner from github with:
 
 ``` r
 # devtools::install_github("gogonzo/runner")
+install.packages("runner")
 ```
 
 Examples
@@ -85,16 +89,16 @@ unique_run( x=x2, k = 3 )
 #> [1] "a"
 #> 
 #> [[3]]
-#> [1] "b" "a"
+#> [1] "a" "b"
 #> 
 #> [[4]]
-#> [1] "b" "a"
+#> [1] "a" "b"
 #> 
 #> [[5]]
-#> [1] "b" "a"
+#> [1] "a" "b"
 #> 
 #> [[6]]
-#> [1] "c" "a"
+#> [1] "a" "c"
 ```
 
 ### Running aggregations `(mean|sum|min|max)_run`
@@ -210,6 +214,3 @@ data.frame(
 #> 11  TRUE  1 NA  9
 #> 12 FALSE  1 NA  9
 ```
-
-Benchmarks
-----------

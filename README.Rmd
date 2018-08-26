@@ -17,14 +17,16 @@ knitr::opts_chunk$set(
 [![MIT License](https://badges.frapsoft.com/os/mit/mit.svg)](https://opensource.org/licenses/mit-license.php)
 [![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)](https://codecov.io/github/gogonzo/runner?branch=master)
 
-Running functions for R vector written in Rcpp
+## About
+Package contains standard running functions (aka. windowed, rolling, cumulative) with additional options. The most of the functions are already implemented in R `base::cumsum`, `RcppRoll::roll_sum`, `zoo::rollsum` and runner does not improve `base` or `RcppRoll` performance. Instead of speed improvement, `runner` provides extended functionality like handling missings and varying window size. `runner` brings also rolling streak and rollin which, what extends beyond range of functions already implemented in R packages.
 
 ## Installation
 
 You can install runner from github with:
 
-```{r gh-installation, echo=TRUE}
+```{r gh-installation, eval=FALSE}
 # devtools::install_github("gogonzo/runner")
+install.packages("runner")
 ```
 
 ## Examples
@@ -115,9 +117,9 @@ To count consecutive elements in specified window one can use `streak_run`. Foll
 x <- c("A","B","A","A","B","B","B",NA,"B","A","B")
 data.frame(
   x, 
-  s0=streak_run(x),
-  s1=streak_run(x, na_rm=F, k=3),
-  s2=streak_run(x, k=4) )
+  s0 = streak_run(x),
+  s1 = streak_run(x, na_rm=F, k=3),
+  s2 = streak_run(x, k=4) )
 ```
 
 ### Running which
@@ -129,10 +131,8 @@ To obtain index number of element satisfying some condition in window, one can u
 x <- c(T,T,T,F,NA,T,F,NA,T,F,T,F)
 data.frame(
   x, 
-  s0=whicht_run(x, which="first"),
-  s1=whicht_run(x, na_rm=F, k=5, which="first"),
-  s2=whicht_run(x, k=5,"first"))
+  s0 = whicht_run(x, which="first"),
+  s1 = whicht_run(x, na_rm=F, k=5, which="first"),
+  s2 = whicht_run(x, k=5,"first"))
 
 ```
-
-## Benchmarks
