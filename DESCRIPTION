@@ -1,17 +1,14 @@
 Package: runner
-Title: Running operations
+Title: Running Operations For Vectors
 Type: Package
 Version: 0.1.0
 Depends: R (>= 3.0)
 Authors@R: person("Dawid", "Kałędkowski", email = "dawid.kaledkowski@gmail.com", role = c("aut", "cre"))
 Maintainer: Dawid Kałędkowski <dawid.kaledkowski@gmail.com>
-Description: Package contains standard running functions (aka. windowed, rolling, cumulative) 
-  with additional options. The most of the functions are already implemented in R 
-  (eg. base::cumsum, RcppRoll::roll_sum, zoo::rollsum) and runner does not improve 
-  base or RcppRoll performance. Instead of speed improvement, runner provides 
-  extended functionality like handling missings and varying window size. Package 
-  brings also rolling streak and rolling which, what extends beyond range of 
-  functions already implemented in R packages.
+Description: Package contains running functions (a.k.a. windowed, rolling, cumulative) 
+  with varying window size and missings handling options. Package brings also 
+  rolling streak and rolling which, what extends beyond range of functions 
+  already implemented in R packages.
 License: GPL (>= 2)
 Encoding: UTF-8
 BugReports: https://github.com/gogonzo/runner/issues
