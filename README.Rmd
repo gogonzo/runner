@@ -22,7 +22,7 @@ Package contains standard running functions (aka. windowed, rolling, cumulative)
 
 ## Installation
 
-You can install runner from github with:
+Install package from from github or from CRAN.
 
 ```{r gh-installation, eval=FALSE}
 # devtools::install_github("gogonzo/runner")

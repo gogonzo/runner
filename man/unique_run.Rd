@@ -4,7 +4,7 @@
 \alias{unique_run}
 \title{List of running windows}
 \usage{
-unique_run(x, k = 0L)
+unique_run(x, k = 0L, unit = "element")
 }
 \arguments{
 \item{x}{Vector of any type}
