@@ -1,11 +1,11 @@
 Package: runner
-Title: Running Operations For Vectors
+Title: Running Operations for Vectors
 Type: Package
 Version: 0.1.0
 Depends: R (>= 3.0)
 Authors@R: person("Dawid", "Kałędkowski", email = "dawid.kaledkowski@gmail.com", role = c("aut", "cre"))
 Maintainer: Dawid Kałędkowski <dawid.kaledkowski@gmail.com>
-Description: Package contains running functions (a.k.a. windowed, rolling, cumulative) 
+Description: Calculates running functions (a.k.a. windowed, rolling, cumulative) 
   with varying window size and missing handling options. Package brings also 
   running streak and running which, what extends beyond range of functions 
   already implemented in R packages.

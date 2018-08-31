@@ -12,10 +12,9 @@ knitr::opts_chunk$set(
 ```
 
 # `runner` an R package for running operations.
-[![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner)
-[![Project Status](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-[![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)](https://codecov.io/github/gogonzo/runner?branch=master)
+![Cran badge](https://www.r-pkg.org/badges/version/runner)
+![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner)
+![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)](https://codecov.io/github/gogonzo/runner?branch=master)
 
 ## About
 Package contains standard running functions (aka. windowed, rolling, cumulative) with additional options. The most of the functions are already implemented in R (e.g. `base::cumsum`, `RcppRoll::roll_sum`, `zoo::rollsum`) and runner does not improve `base` or `RcppRoll` performance. Instead of speed improvement, `runner` provides extended functionality like handling missings and varying window size. `runner` brings also rolling streak and rollin which, what extends beyond range of functions already implemented in R packages.

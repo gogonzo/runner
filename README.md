@@ -2,7 +2,7 @@
 `runner` an R package for running operations.
 =============================================
 
-[![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner) [![Project Status](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html) [![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)](https://codecov.io/github/gogonzo/runner?branch=master)
+![Cran badge](https://www.r-pkg.org/badges/version/runner) ![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)\](<https://travis-ci.org/gogonzo/runner>) ![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)\](<https://codecov.io/github/gogonzo/runner?branch=master>)
 
 About
 -----
@@ -98,7 +98,7 @@ unique_run( x=x2, k = 3 )
 #> [1] "b" "a"
 #> 
 #> [[6]]
-#> [1] "c" "a"
+#> [1] "a" "c"
 ```
 
 ### Running aggregations `(mean|sum|min|max)_run`
