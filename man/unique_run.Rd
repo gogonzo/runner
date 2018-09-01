@@ -4,12 +4,14 @@
 \alias{unique_run}
 \title{List of running windows}
 \usage{
-unique_run(x, k = 0L)
+unique_run(x, k = 0L, indexes = 1L)
 }
 \arguments{
 \item{x}{Vector of any type}
 
 \item{k}{integer vector which specifies window length}
+
+\item{indexes}{an optional integer vector containing indexes numbers of observation.}
 }
 \description{
 Creates list of windows
