@@ -2,32 +2,34 @@
 % Please edit documentation in R/RcppExports.R
 \name{max_run}
 \alias{max_run}
-\title{Running maximum}
+\title{Running minimum}
 \usage{
-max_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
+max_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE, indexes = 0L)
 }
 \arguments{
-\item{x}{input numeric vector where running maximum is calculated.}
+\item{x}{input numeric vector where running minimum is calculated.}
 
 \item{k}{Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
 
-\item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed maximum prior to element.}
+\item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.}
 
 \item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
+
+\item{indexes}{an optional integer vector containing indexes numbers of observation.}
 }
 \value{
-numeric vector of length equals length of \code{x} containing running max in \code{k}-long window.
+numeric vector of length equals length of \code{x} containing running min in \code{k}-long window.
 }
 \description{
-\code{max_run} calculates running max on given \code{x} numeric vector and specified \code{k} window size.
+\code{min_run} calculates running min on given \code{x} numeric vector, specified \code{k} window size.
 }
 \examples{
 set.seed(11)
-x1 <- sample(c(1,2,3), 15, replace=TRUE)
-x2 <- sample(c(NA,1,2,3), 15, replace=TRUE)
-k  <- sample(1:4, 15,replace=TRUE)
-max_run(x1) # simple cumulative minimum
-max_run(x2, na_rm = TRUE) # cumulative minimum with removing NA.
-max_run(x2, na_rm = TRUE, k=4) # minimum in 4-element window
-max_run(x2, na_rm = FALSE, k=k) # minimum in varying k window size
+x1 <- sample( c(1,2,3), 15, replace=TRUE)
+x2 <- sample( c(NA,1,2,3), 15, replace=TRUE)
+k  <- sample( 1:4, 15, replace=TRUE)
+min_run(x1) # simple cumulative minimum
+min_run(x2, na_rm = TRUE) # cumulative minimum with removing NA.
+min_run(x2, na_rm = TRUE, k=4) # minimum in 4-element window
+min_run(x2, na_rm = FALSE, k=k) # minimum in varying k window size
 }
