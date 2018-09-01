@@ -1,10 +1,22 @@
-#include <Rcpp.h>
 using namespace Rcpp;
 
-namespace impl {
+namespace fill {
+
 
   template <int RTYPE>
-  Vector<RTYPE> fill_run_impl(const Vector<RTYPE>& x, bool run_for_first, bool only_within)
+  int run_for_non_na(const Vector<RTYPE>& x, int i){
+    int first_non_na = -1;
+    int n = x.size();
+
+    for(int j=i; j < n; j++)
+      if( !Vector<RTYPE>::is_na(x(j)) )
+        return j;
+
+      return first_non_na;
+  }
+
+  template <int RTYPE>
+  Vector<RTYPE> fill_run(const Vector<RTYPE>& x, bool run_for_first, bool only_within)
   {
 
     int n = x.size();
@@ -72,58 +84,6 @@ namespace impl {
       }
     }
 
-    return res;
-  }
-
-  template <int RTYPE>
-  Rcpp::List window_to_list(const Vector<RTYPE>& x, IntegerVector k)
-  {
-    int n = x.size();
-    IntegerVector idx;
-    List res(n);
-
-    impl::check_for_valid_k2(n, k);
-
-    if(k.size() > 1){
-      for(int i=0; i < n; i ++){
-        idx = impl::window_idx(i, k(i) );
-        res(i) = x[idx];
-      }
-
-    } else{
-      for(int i=0; i < n; i ++){
-        idx = impl::window_idx(i, k(0) );
-        res(i) = x[idx];
-      }
-    }
-
-    return res;
-  }
-
-
-  template <int RTYPE>
-  SEXP unique_to_list( const Vector<RTYPE>& x, IntegerVector k ) {
-    int n = x.size();
-    IntegerVector idx;
-    List res(n);
-    Vector<RTYPE> levs;
-
-    impl::check_for_valid_k2(n, k);
-
-    if(k.size() > 1){
-      for(int i=0; i < n; i ++){
-        idx = impl::window_idx(i, k(i) );
-        levs = x[idx];
-        res(i) = unique(levs);
-      }
-
-    } else{
-      for(int i=0; i < n; i ++){
-        idx = impl::window_idx(i, k(0) );
-        levs = x[idx];
-        res(i) = unique(levs);
-      }
-    }
     return res;
   }
 
