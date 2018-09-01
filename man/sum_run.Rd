@@ -4,7 +4,7 @@
 \alias{sum_run}
 \title{Running sum}
 \usage{
-sum_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE, unit = "element")
+sum_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 }
 \arguments{
 \item{x}{vector of any type where running sum is calculated}

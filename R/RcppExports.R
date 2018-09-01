@@ -10,8 +10,8 @@
 #' window_run(1:10, k=3)
 #' window_run(letters[1:10],k=c(1,2,2,4,5,5,5,5,5,5))
 #' @export
-window_run <- function(x, k = 0L, unit = "element") {
-    .Call('_runner_window_run', PACKAGE = 'runner', x, k, unit)
+window_run <- function(x, k = 0L) {
+    .Call('_runner_window_run', PACKAGE = 'runner', x, k)
 }
 
 #' List of running windows
@@ -23,8 +23,8 @@ window_run <- function(x, k = 0L, unit = "element") {
 #' unique_run(1:10, k=3)
 #' unique_run(letters[1:10],k=c(1,2,2,4,5,5,5,5,5,5))
 #' @export
-unique_run <- function(x, k = 0L, unit = "element") {
-    .Call('_runner_unique_run', PACKAGE = 'runner', x, k, unit)
+unique_run <- function(x, k = 0L) {
+    .Call('_runner_unique_run', PACKAGE = 'runner', x, k)
 }
 
 #' Running minimum
@@ -46,8 +46,8 @@ unique_run <- function(x, k = 0L, unit = "element") {
 #' min_run(x2, na_rm = TRUE, k=4) # minimum in 4-element window
 #' min_run(x2, na_rm = FALSE, k=k) # minimum in varying k window size
 #' @export
-min_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, unit = "element") {
-    .Call('_runner_min_run', PACKAGE = 'runner', x, k, na_rm, na_pad, unit)
+min_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE) {
+    .Call('_runner_min_run', PACKAGE = 'runner', x, k, na_rm, na_pad)
 }
 
 #' Running maximum
@@ -68,8 +68,8 @@ min_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, unit = "element") {
 #' max_run(x2, na_rm = TRUE, k=4) # minimum in 4-element window
 #' max_run(x2, na_rm = FALSE, k=k) # minimum in varying k window size
 #' @export
-max_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, unit = "element") {
-    .Call('_runner_max_run', PACKAGE = 'runner', x, k, na_rm, na_pad, unit)
+max_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE) {
+    .Call('_runner_max_run', PACKAGE = 'runner', x, k, na_rm, na_pad)
 }
 
 #' Running streak length
@@ -90,8 +90,8 @@ max_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, unit = "element") {
 #' streak_run(x2, na_pad=TRUE, k=3) # streak run within k=3 with padding NA
 #' streak_run(x1, k=k) # streak run within varying window size specified by vector k
 #' @export
-streak_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, unit = "element") {
-    .Call('_runner_streak_run', PACKAGE = 'runner', x, k, na_rm, na_pad, unit)
+streak_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE) {
+    .Call('_runner_streak_run', PACKAGE = 'runner', x, k, na_rm, na_pad)
 }
 
 #' Fill NA with previous non-NA element
@@ -129,8 +129,8 @@ fill_run <- function(x, run_for_first = FALSE, only_within = FALSE) {
 #' mean_run(x2, na_rm = FALSE )
 #' mean_run(x2, na_rm = TRUE, k=4)
 #' @export
-mean_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, unit = "element") {
-    .Call('_runner_mean_run', PACKAGE = 'runner', x, k, na_rm, na_pad, unit)
+mean_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE) {
+    .Call('_runner_mean_run', PACKAGE = 'runner', x, k, na_rm, na_pad)
 }
 
 #' Running sum
@@ -151,8 +151,8 @@ mean_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, unit = "element") 
 #' sum_run(x2, na_rm = FALSE )
 #' sum_run(x2, na_rm = TRUE, k=4)
 #' @export
-sum_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, unit = "element") {
-    .Call('_runner_sum_run', PACKAGE = 'runner', x, k, na_rm, na_pad, unit)
+sum_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE) {
+    .Call('_runner_sum_run', PACKAGE = 'runner', x, k, na_rm, na_pad)
 }
 
 #' Running which-true function

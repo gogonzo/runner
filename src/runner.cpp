@@ -18,20 +18,22 @@ using namespace Rcpp;
 //' window_run(letters[1:10],k=c(1,2,2,4,5,5,5,5,5,5))
 //' @export
 // [[Rcpp::export]]
-SEXP window_run(SEXP x, IntegerVector k = 0, std::string unit = "element") {
+SEXP window_run(SEXP x, IntegerVector k = 0) {
 
-  switch (TYPEOF(x)) {
-  case INTSXP: return impl::window_to_list(as<IntegerVector>(x), k);
-  case REALSXP: return impl::window_to_list(as<NumericVector>(x), k);
-  case STRSXP: return impl::window_to_list(as<CharacterVector>(x), k);
-  default: {
-    warning(
-      "Invalid SEXPTYPE %d (%s).\n",
-      TYPEOF(x), type2name(x)
-    );
-    return R_NilValue;
-  }
-  }
+
+    switch (TYPEOF(x)) {
+    case INTSXP: return impl::window_to_list(as<IntegerVector>(x), k);
+    case REALSXP: return impl::window_to_list(as<NumericVector>(x), k);
+    case STRSXP: return impl::window_to_list(as<CharacterVector>(x), k);
+    default: {
+      warning(
+        "Invalid SEXPTYPE %d (%s).\n",
+        TYPEOF(x), type2name(x)
+      );
+      return R_NilValue;
+    }
+    }
+
   return R_NilValue;
 }
 
@@ -46,7 +48,7 @@ SEXP window_run(SEXP x, IntegerVector k = 0, std::string unit = "element") {
 //' unique_run(letters[1:10],k=c(1,2,2,4,5,5,5,5,5,5))
 //' @export
 // [[Rcpp::export]]
-SEXP unique_run( SEXP x, IntegerVector k=0, std::string unit = "element" ) {
+SEXP unique_run( SEXP x, IntegerVector k=0) {
   switch( TYPEOF(x) ) {
     case INTSXP:  return impl::unique_to_list<INTSXP>(x, k);
     case REALSXP: return impl::unique_to_list<REALSXP>(x, k);
@@ -86,8 +88,7 @@ NumericVector min_run(
   NumericVector x,
   IntegerVector k = 0,
   bool na_rm = true,
-  bool na_pad = false,
-  std::string unit = "element"
+  bool na_pad = false
   ){
 
     int n = x.size();
@@ -138,8 +139,7 @@ NumericVector max_run(
     NumericVector x,
     IntegerVector k = 0,
     bool na_rm = true,
-    bool na_pad = false,
-    std::string unit = "element"
+    bool na_pad = false
 ){
 
   int n = x.size();
@@ -189,8 +189,7 @@ IntegerVector streak_run(
     SEXP x,
     IntegerVector k=0,
     bool na_rm = true,
-    bool na_pad = false,
-    std::string unit = "element") {
+    bool na_pad = false) {
 
   impl::check_for_valid_k(x, k);
 
@@ -268,8 +267,7 @@ NumericVector mean_run(
     NumericVector x,
     IntegerVector k=0,
     bool na_rm = true,
-    bool na_pad = false,
-    std::string unit = "element") {
+    bool na_pad = false) {
 
   int n = x.size();
   NumericVector res(n);
@@ -345,8 +343,7 @@ NumericVector sum_run(
     NumericVector x,
     IntegerVector k=0,
     bool na_rm = true,
-    bool na_pad = false,
-    std::string unit = "element") {
+    bool na_pad = false) {
 
   int n = x.size();
   NumericVector res(n);

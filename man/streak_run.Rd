@@ -4,8 +4,7 @@
 \alias{streak_run}
 \title{Running streak length}
 \usage{
-streak_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE,
-  unit = "element")
+streak_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 }
 \arguments{
 \item{x}{vector of any type where running streak is calculated}

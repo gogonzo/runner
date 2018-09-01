@@ -4,7 +4,7 @@
 \alias{mean_run}
 \title{Running mean}
 \usage{
-mean_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE, unit = "element")
+mean_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE)
 }
 \arguments{
 \item{x}{vector of any type on which running mean is calculated}
