@@ -4,12 +4,14 @@
 \alias{window_run}
 \title{List of running windows}
 \usage{
-window_run(x, k = 0L)
+window_run(x, k = 0L, interval = 1L)
 }
 \arguments{
 \item{x}{Vector of any type}
 
 \item{k}{integer vector which specifies window length}
+
+\item{unit}{character describing unit of window length. Default is "element". Date units are optional ("day","month","year").}
 }
 \description{
 Creates list of windows
