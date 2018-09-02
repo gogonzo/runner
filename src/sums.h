@@ -1,4 +1,3 @@
-#include <Rcpp.h>
 using namespace Rcpp;
 
 namespace impl {
@@ -76,7 +75,7 @@ namespace impl {
 
     for(int i = 0; i < n; i++){
       cur_sum = NumericVector::get_na();
-      i1 = impl::window_index( i, k( i ) );
+      if( (i - k(i) + 1) < 0) i1 = 0; else i1 = i - k(i) + 1;
       res( i ) = sum_vector(x, i1, i);
     }
     return res;
@@ -90,7 +89,7 @@ namespace impl {
 
     for(int i = 0; i < n; i++){
       count = 0;
-      i1 = impl::window_index( i, k( i ) );
+      if( (i - k(i) + 1) < 0) i1 = 0; else i1 = i - k(i) + 1;
       for(int j = i1; j <= i ; ++j){
         if(ISNAN( x( j ) ))
           count += 1;
