@@ -28,16 +28,12 @@ NumericVector mean_run(
     bool na_pad = false,
     IntegerVector indexes=1) {
 
-  int n = x.size();
-  int i1;
-  double add;
-  int first_na = -1;
-  int fnn;
-  NumericVector res(n);
-  NumericVector sums(n);
+  int n = x.size(), first_na = -1,fnn, i1;
+  double x1, nas1, non1;
+
+  NumericVector res(n), sums(n);
   NumericVector nas = impl::calc_na_vector( x );
-  NumericVector na  = impl::calc_na1_vector( x );
-  NumericVector nna = impl::calc_nonna_vector( x );
+  NumericVector non = impl::calc_nonna_vector( x );
 
   // CHECK FOR POSSIBLE ERRORS
   if( k.size() != n and k.size() > 1 ){
@@ -45,6 +41,7 @@ NumericVector mean_run(
   } else if( Rcpp::any(Rcpp::is_na(k)) ){
     stop("Function doesn't accept NA values in k vector");
   }
+
 
   // RUN FOR FIRST NON-NA
   for(int i = 0; i < n; i++)
@@ -54,11 +51,10 @@ NumericVector mean_run(
       break;
     }
 
-
-    // NORMAL CUMSUM ------------
+    // NORMAL CUMMEAN ------------
     if( k.size() == 1 & k(0) == 0 ){
       if(na_rm){
-        res = impl::calc_sum_vector( x );
+        res = impl::calc_sum_vector( x ) / non;
       } else {
         res = impl::calc_sum_vector( x );
         first_na = impl::first_na_index( x );
@@ -70,16 +66,26 @@ NumericVector mean_run(
     } else if(k.size()==1 & indexes.size()==1){
       sums = impl::calc_sum_vector0( x );
       for(int i = fnn; i<n; i++){
-        i1 = ( i - k(0) + 1) < 0 ? 0 : i - k(0) + 1;
-        add = ISNAN(x(i1)) ? 0.0 : x(i1);
-        res( i ) = ( sums(i) - sums(i1) + add) /
-                   ( i - i1 - nas(i)  - nas(i1)  + na(i1));
-        if( ( nas(i) - nas(i1) + na(i1) )==k(0) ){
+
+        if( i > k(0) ){
+          i1   = i - k(0);
+          x1   = sums( i1 );
+          nas1 = nas( i1 );
+          non1 = non( i1 );
+        } else {
+          i1   = 0;
+          x1   = 0.0;
+          nas1 = 0.0;
+          non1 = 0.0;
+        }
+
+        res( i ) = ( sums(i) - x1 ) / (non(i) - non1);
+        if( ( nas(i) - nas1 )==k(0) ){
           res(i) = NumericVector::get_na();
           continue;
         }
         if(!na_rm)
-          if( nas(i) > ( nas(i1)-na(i1) ) )
+          if( nas(i) > nas1 )
             res(i) = NumericVector::get_na();
       }
 
@@ -88,67 +94,82 @@ NumericVector mean_run(
     } else if( k.size() > 1  & indexes.size()==1){
       sums = impl::calc_sum_vector0( x );
       for(int i = fnn; i<n; i++){
-        i1 = ( i - k(i) + 1) < 0 ? 0 : i - k(i) + 1;
-        add = ISNAN(x(i1)) ? 0.0 : x(i1);
-        res( i ) = ( sums(i) - sums(i1) + add) /
-          ( nas(i)  - nas(i1)  + na(i1));
-        if( ( nas(i) - nas(i1) + na(i1) )==k(i) ){
+        if( i > k(i) ){
+          i1   = i - k(i);
+          x1   = sums( i1 );
+          nas1 = nas( i1 );
+          non1 = non( i1 );
+        } else {
+          i1   = 0;
+          x1   = 0.0;
+          nas1 = 0.0;
+          non1 = 0.0;
+        }
+
+        res( i ) = ( sums(i) - x1 ) / (non(i) - non1);
+        if( ( nas(i) - nas1 )==k(i) ){
           res(i) = NumericVector::get_na();
           continue;
         }
         if(!na_rm)
-          if( nas(i) > ( nas(i1)-na(i1) ) )
+          if( nas(i) > nas1 )
             res(i) = NumericVector::get_na();
       }
 
-      // DATE WINDOW -----------
+      // IDX WINDOW -----------
     } else if( k.size() == 1 & indexes.size() > 1 ){
       sums = impl::calc_sum_vector0( x );
       for(int i = fnn; i<n; i++){
         for(int j=i; j>=0; j--)
           if( (indexes(i) - indexes(j) > (k(0) - 1) )){
-            i1 = j + 1;
+            i1   = j;
+            x1   = sums( j );
+            nas1 = nas( j );
+            non1 = non( j );
             break;
           } else if(j == 0){
-            i1 = 0;
+            i1   = 0;
+            x1   = 0.0;
+            nas1 = 0.0;
+            non1 = 0.0;
           }
-          add = ISNAN(x(i1)) ? 0.0 : x(i1);
-          res( i ) = ( sums(i) - sums(i1) + add) /
-                     ( nas(i)  - nas(i1)  + na(i1));
-          if( ( nas(i) - nas(i1) + na(i1) )==k(0) ){
+          res( i ) = ( sums(i) - x1 ) / (non(i) - non1);
+          if( ( nas(i) - nas1 )==k(0) ){
             res(i) = NumericVector::get_na();
             continue;
           }
           if(!na_rm)
-            if( nas(i) > ( nas(i1)-na(i1) ) )
+            if( nas(i) > nas1 )
               res(i) = NumericVector::get_na();
       }
 
-      // DATE VARYING WINDOW -----------
+      // IDX VARYING WINDOW -----------
     } else if( k.size() > 1 & indexes.size() > 1 ) {
       sums = impl::calc_sum_vector0( x );
       for(int i = fnn; i<n; i++){
         for(int j=i; j>=0; j--)
           if( (indexes(i) - indexes(j) > (k(i) - 1) )){
-            i1 = j + 1;
+            i1   = j;
+            x1   = sums( j );
+            nas1 = nas( j );
+            non1 = non( j );
             break;
           } else if(j == 0){
-            i1 = 0;
+            i1   = 0;
+            x1   = 0.0;
+            nas1 = 0.0;
+            non1 = 0.0;
           }
-          add = ISNAN(x(i1)) ? 0.0 : x(i1);
-          res( i ) = ( sums(i) - sums(i1) + add) /
-                     ( nas(i)  - nas(i1)  + na(i1));
-          if( ( nas(i) - nas(i1) + na(i1) )==k(i) ){
+          res( i ) = ( sums(i) - x1 ) / (non(i) - non1);
+          if( ( nas(i) - nas1 )==k(i) ){
             res(i) = NumericVector::get_na();
             continue;
           }
           if(!na_rm)
-            if( nas(i) > ( nas(i1)-na(i1) ) )
+            if( nas(i) > nas1 )
               res(i) = NumericVector::get_na();
       }
-
     }
-
 
     /* pad NA at from 0:(k-1) */
     if(na_pad)
@@ -184,14 +205,9 @@ NumericVector sum_run(
     bool na_pad = false,
     IntegerVector indexes=1) {
 
-  int n = x.size();
-  int i1;
-  double x1, nas1, add;
-  int first_na = -1;
-  int fnn;
-  NumericVector res(n);
-  NumericVector sums(n);
-  NumericVector nas = impl::calc_na_vector( x );
+  int n = x.size(), i1, fnn, first_na = -1;
+  double x1, nas1;
+  NumericVector res(n), sums(n), nas = impl::calc_na_vector( x );
 
 
   // CHECK FOR POSSIBLE ERRORS
@@ -228,15 +244,15 @@ NumericVector sum_run(
 
       if( i > k(0) ){
         i1   = i - k(0);
-        x1   = sums( i - k(0) );
-        nas1 = nas( i - k(0) );
+        x1   = sums( i1 );
+        nas1 = nas( i1 );
       } else {
         i1   = 0;
         x1   = 0.0;
         nas1 = 0.0;
       }
 
-      res( i ) = ( sums(i) - x1 );
+      res( i ) = sums(i) - x1;
       if( ( nas(i) - nas1 )==k(0) ){
         res(i) = NumericVector::get_na();
         continue;
