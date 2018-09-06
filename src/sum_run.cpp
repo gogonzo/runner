@@ -1,66 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
-#include "sums.h"
-
-//' Running sum
-//'
-//' Running sum in specified window of numeric vector.
-//' @param x vector of any type where running sum is calculated
-//' @param k Running window size.  Not yet implemented.
-//' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.
-//' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
-//' @return numeric vector of length equals length of \code{x} containing running sum in \code{k}-long window.
-//' @examples
-//' set.seed(11)
-//' x1 <- rnorm(15)
-//' x2 <- sample(c(rep(NA,5),rnorm(15)), 15, replace=TRUE)
-//' k <- sample(1:15, 15, replace=TRUE)
-//' sum_run(x1)
-//' sum_run(x2, na_rm = TRUE)
-//' sum_run(x2, na_rm = FALSE )
-//' sum_run(x2, na_rm = TRUE, k=4)
-//' @export
-// [[Rcpp::export]]
-NumericVector sum_run(
-    NumericVector x,
-    IntegerVector k=0,
-    bool na_rm = true,
-    bool na_pad = false) {
-
-  int n = x.size();
-  NumericVector res(n);
-  NumericVector nas(n);
-
-  if( k(0) == 0 ){
-    k(0) = n;
-  } else if( k.size() != n and k.size() > 1 ){
-    stop("length of k and length x differs. k=0 and k=length(x) only allowed");
-  } else if( Rcpp::any(Rcpp::is_na(k)) ){
-    stop("Function doesn't accept NA values in k vector");
-  }
-
-  /* calculate window sum */
-  if( k.size() == 1 ){
-    res = impl::calc_sum_window(x, res, k(0) );
-    if(!na_rm){
-      /* calculate number of NA's in window */
-      nas = impl::count_na_window(x, k(0) );
-      for(int i =0; i < n; i++)
-        if(nas ( i )>0 )
-          res( i ) = NumericVector::get_na();
-    }
-
-  } else {
-    res = impl::calc_sum_window2(x, res, k );
-  }
-
-
-  /* pad NA at from 0:(k-1) */
-  if(na_pad)
-    std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_REAL);
-
-  return res;
-}
+#include "sum_run.h"
 
 //' Running mean
 //'
@@ -85,59 +25,307 @@ NumericVector mean_run(
     NumericVector x,
     IntegerVector k=0,
     bool na_rm = true,
-    bool na_pad = false) {
+    bool na_pad = false,
+    IntegerVector indexes=1) {
 
   int n = x.size();
+  int i1;
+  double add;
+  int first_na = -1;
+  int fnn;
   NumericVector res(n);
-  NumericVector nas(n);
+  NumericVector sums(n);
+  NumericVector nas = impl::calc_na_vector( x );
+  NumericVector na  = impl::calc_na1_vector( x );
+  NumericVector nna = impl::calc_nonna_vector( x );
 
-  if( k(0) == 0 ){
-    k(0) = n;
-  } else if( k.size() != n and k.size() > 1 ){
+  // CHECK FOR POSSIBLE ERRORS
+  if( k.size() != n and k.size() > 1 ){
     stop("length of k and length x differs. k=0 and k=length(x) only allowed");
   } else if( Rcpp::any(Rcpp::is_na(k)) ){
     stop("Function doesn't accept NA values in k vector");
   }
 
-  if(k.size() == 1 ){
-    res = impl::calc_sum_window(x, res, k(0) );
-    nas = impl::count_na_window(x, k(0) );
-
-    if(!na_rm){
-      for(int i =0; i < n; i++)
-        if(nas ( i )>0 )
-          res( i ) = NumericVector::get_na();
+  // RUN FOR FIRST NON-NA
+  for(int i = 0; i < n; i++)
+    if(!ISNAN(x(i))){
+      fnn = i;
+      std::fill(res.begin(), res.end() - n + i , NA_REAL);
+      break;
     }
 
-    /* mean = sum/(k - number_of_nas) */
-    for(int i = 0; i < n; i ++)
-      if(k(0)<=i)
-        res( i ) = res( i )/( k(0) - nas(i) );
-      else
-        res( i ) = res( i )/( i + 1 - nas(i) );
 
-  } else {
-    res = impl::calc_sum_window2(x, res, k );
-    nas = impl::count_na_window2(x, k );
+    // NORMAL CUMSUM ------------
+    if( k.size() == 1 & k(0) == 0 ){
+      if(na_rm){
+        res = impl::calc_sum_vector( x );
+      } else {
+        res = impl::calc_sum_vector( x );
+        first_na = impl::first_na_index( x );
+        if( first_na != -1)
+          std::fill(res.begin() + first_na, res.end(), NA_REAL);
+      }
 
-    if(!na_rm){
-      for(int i =0; i < n; i++)
-        if(nas ( i )>0 )
-          res( i ) = NumericVector::get_na();
+      // CONST. WINDOW ------------
+    } else if(k.size()==1 & indexes.size()==1){
+      sums = impl::calc_sum_vector0( x );
+      for(int i = fnn; i<n; i++){
+        i1 = ( i - k(0) + 1) < 0 ? 0 : i - k(0) + 1;
+        add = ISNAN(x(i1)) ? 0.0 : x(i1);
+        res( i ) = ( sums(i) - sums(i1) + add) /
+                   ( i - i1 - nas(i)  - nas(i1)  + na(i1));
+        if( ( nas(i) - nas(i1) + na(i1) )==k(0) ){
+          res(i) = NumericVector::get_na();
+          continue;
+        }
+        if(!na_rm)
+          if( nas(i) > ( nas(i1)-na(i1) ) )
+            res(i) = NumericVector::get_na();
+      }
+
+
+      // VARYING WINDOW -----------
+    } else if( k.size() > 1  & indexes.size()==1){
+      sums = impl::calc_sum_vector0( x );
+      for(int i = fnn; i<n; i++){
+        i1 = ( i - k(i) + 1) < 0 ? 0 : i - k(i) + 1;
+        add = ISNAN(x(i1)) ? 0.0 : x(i1);
+        res( i ) = ( sums(i) - sums(i1) + add) /
+          ( nas(i)  - nas(i1)  + na(i1));
+        if( ( nas(i) - nas(i1) + na(i1) )==k(i) ){
+          res(i) = NumericVector::get_na();
+          continue;
+        }
+        if(!na_rm)
+          if( nas(i) > ( nas(i1)-na(i1) ) )
+            res(i) = NumericVector::get_na();
+      }
+
+      // DATE WINDOW -----------
+    } else if( k.size() == 1 & indexes.size() > 1 ){
+      sums = impl::calc_sum_vector0( x );
+      for(int i = fnn; i<n; i++){
+        for(int j=i; j>=0; j--)
+          if( (indexes(i) - indexes(j) > (k(0) - 1) )){
+            i1 = j + 1;
+            break;
+          } else if(j == 0){
+            i1 = 0;
+          }
+          add = ISNAN(x(i1)) ? 0.0 : x(i1);
+          res( i ) = ( sums(i) - sums(i1) + add) /
+                     ( nas(i)  - nas(i1)  + na(i1));
+          if( ( nas(i) - nas(i1) + na(i1) )==k(0) ){
+            res(i) = NumericVector::get_na();
+            continue;
+          }
+          if(!na_rm)
+            if( nas(i) > ( nas(i1)-na(i1) ) )
+              res(i) = NumericVector::get_na();
+      }
+
+      // DATE VARYING WINDOW -----------
+    } else if( k.size() > 1 & indexes.size() > 1 ) {
+      sums = impl::calc_sum_vector0( x );
+      for(int i = fnn; i<n; i++){
+        for(int j=i; j>=0; j--)
+          if( (indexes(i) - indexes(j) > (k(i) - 1) )){
+            i1 = j + 1;
+            break;
+          } else if(j == 0){
+            i1 = 0;
+          }
+          add = ISNAN(x(i1)) ? 0.0 : x(i1);
+          res( i ) = ( sums(i) - sums(i1) + add) /
+                     ( nas(i)  - nas(i1)  + na(i1));
+          if( ( nas(i) - nas(i1) + na(i1) )==k(i) ){
+            res(i) = NumericVector::get_na();
+            continue;
+          }
+          if(!na_rm)
+            if( nas(i) > ( nas(i1)-na(i1) ) )
+              res(i) = NumericVector::get_na();
+      }
+
     }
 
-    /* mean = sum/(k - number_of_nas) */
-    for(int i = 0; i < n; i ++)
-      if(k(i)<=i)
-        res( i ) = res( i )/( k(i) - nas(i) );
-      else
-        res( i ) = res( i )/( i + 1 - nas(i) );
+
+    /* pad NA at from 0:(k-1) */
+    if(na_pad)
+      std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_REAL);
+
+    return res;
+}
+
+
+//' Running sum
+//'
+//' Running sum in specified window of numeric vector.
+//' @param x vector of any type where running sum is calculated
+//' @param k Running window size.  Not yet implemented.
+//' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.
+//' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
+//' @return numeric vector of length equals length of \code{x} containing running sum in \code{k}-long window.
+//' @examples
+//' set.seed(11)
+//' x1 <- rnorm(15)
+//' x2 <- sample(c(rep(NA,5),rnorm(15)), 15, replace=TRUE)
+//' k <- sample(1:15, 15, replace=TRUE)
+//' sum_run(x1)
+//' sum_run(x2, na_rm = TRUE)
+//' sum_run(x2, na_rm = FALSE )
+//' sum_run(x2, na_rm = TRUE, k=4)
+//' @export
+// [[Rcpp::export]]
+NumericVector sum_run(
+    NumericVector x,
+    IntegerVector k=0,
+    bool na_rm = true,
+    bool na_pad = false,
+    IntegerVector indexes=1) {
+
+  int n = x.size();
+  int i1;
+  double x1, nas1, add;
+  int first_na = -1;
+  int fnn;
+  NumericVector res(n);
+  NumericVector sums(n);
+  NumericVector nas = impl::calc_na_vector( x );
+
+
+  // CHECK FOR POSSIBLE ERRORS
+  if( k.size() != n and k.size() > 1 ){
+    stop("length of k and length x differs. k=0 and k=length(x) only allowed");
+  } else if( Rcpp::any(Rcpp::is_na(k)) ){
+    stop("Function doesn't accept NA values in k vector");
   }
 
-  /* pad first-k elements with NA */
+
+  // RUN FOR FIRST NON-NA
+  for(int i = 0; i < n; i++)
+    if(!ISNAN(x(i))){
+      fnn = i;
+      std::fill(res.begin(), res.end() - n + i , NA_REAL);
+      break;
+    }
+
+  // NORMAL CUMSUM ------------
+  if( k.size() == 1 & k(0) == 0 ){
+    if(na_rm){
+      res = impl::calc_sum_vector( x );
+    } else {
+      res = impl::calc_sum_vector( x );
+      first_na = impl::first_na_index( x );
+      if( first_na != -1)
+        std::fill(res.begin() + first_na, res.end(), NA_REAL);
+    }
+
+  // CONST. WINDOW ------------
+  } else if(k.size()==1 & indexes.size()==1){
+    sums = impl::calc_sum_vector0( x );
+    for(int i = fnn; i<n; i++){
+
+      if( i > k(0) ){
+        i1   = i - k(0);
+        x1   = sums( i - k(0) );
+        nas1 = nas( i - k(0) );
+      } else {
+        i1   = 0;
+        x1   = 0.0;
+        nas1 = 0.0;
+      }
+
+      res( i ) = ( sums(i) - x1 );
+      if( ( nas(i) - nas1 )==k(0) ){
+        res(i) = NumericVector::get_na();
+        continue;
+      }
+      if(!na_rm)
+        if( nas(i) > nas1 )
+          res(i) = NumericVector::get_na();
+    }
+
+
+  // VARYING WINDOW -----------
+  } else if( k.size() > 1  & indexes.size()==1){
+    sums = impl::calc_sum_vector0( x );
+    for(int i = fnn; i<n; i++){
+      if( i > k(i) ){
+        i1   = i - k(i);
+        x1   = sums( i1 );
+        nas1 = nas( i1 );
+      } else {
+        i1   = 0;
+        x1   = 0.0;
+        nas1 = 0.0;
+      }
+
+      res( i ) = ( sums(i) - x1 );
+      if( ( nas(i) - nas1 )==k(i) ){
+        res(i) = NumericVector::get_na();
+        continue;
+      }
+      if(!na_rm)
+        if( nas(i) > nas1 )
+          res(i) = NumericVector::get_na();
+    }
+
+  // IDX WINDOW -----------
+  } else if( k.size() == 1 & indexes.size() > 1 ){
+    sums = impl::calc_sum_vector0( x );
+    for(int i = fnn; i<n; i++){
+      for(int j=i; j>=0; j--)
+        if( (indexes(i) - indexes(j) > (k(0) - 1) )){
+          i1   = j;
+          x1   = sums( j );
+          nas1 = nas( j );
+
+          break;
+        } else if(j == 0){
+          i1   = 0;
+          x1   = 0.0;
+          nas1 = 0.0;
+        }
+      res( i ) = ( sums(i) - x1 );
+      if( ( nas(i) - nas1 )==k(0) ){
+        res(i) = NumericVector::get_na();
+        continue;
+      }
+      if(!na_rm)
+        if( nas(i) > nas1 )
+          res(i) = NumericVector::get_na();
+    }
+
+  // IDX VARYING WINDOW -----------
+  } else if( k.size() > 1 & indexes.size() > 1 ) {
+    sums = impl::calc_sum_vector0( x );
+    for(int i = fnn; i<n; i++){
+      for(int j=i; j>=0; j--)
+        if( (indexes(i) - indexes(j) > (k(i) - 1) )){
+          i1   = j;
+          x1   = sums( j );
+          nas1 = nas( j );
+          break;
+        } else if(j == 0){
+          i1   = 0;
+          x1   = 0.0;
+          nas1 = 0.0;
+        }
+      res( i ) = ( sums(i) - x1 );
+      if( ( nas(i) - nas1 )==k(i) ){
+        res(i) = NumericVector::get_na();
+        continue;
+      }
+      if(!na_rm)
+        if( nas(i) > nas1 )
+          res(i) = NumericVector::get_na();
+    }
+  }
+
+  /* pad NA at from 0:(k-1) */
   if(na_pad)
     std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_REAL);
 
   return res;
 }
-
