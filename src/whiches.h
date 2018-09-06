@@ -1,4 +1,3 @@
-#include <Rcpp.h>
 using namespace Rcpp;
 
 namespace impl {
