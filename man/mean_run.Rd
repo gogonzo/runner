@@ -14,6 +14,8 @@ mean_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE, indexes = 1L)
 \item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} mean is calulating excluding \code{NA}.}
 
 \item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
+
+\item{indexes}{an optional integer vector containing indexes numbers of observation.}
 }
 \value{
 numeric vector of length equals length of \code{x} containing running mean in \code{k}-long window.
