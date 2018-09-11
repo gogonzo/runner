@@ -31,8 +31,8 @@ fill_run <- function(x, run_for_first = FALSE, only_within = FALSE) {
 #' x <- c( NA, FALSE, TRUE, NA, TRUE, FALSE, TRUE, TRUE)
 #' whicht_run( x, k=2, na_rm=TRUE, na_pad=FALSE )
 #' @export
-whicht_run <- function(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE) {
-    .Call('_runner_whicht_run', PACKAGE = 'runner', x, k, which, na_rm, na_pad)
+whicht_run <- function(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE, indexes = 0L) {
+    .Call('_runner_whicht_run', PACKAGE = 'runner', x, k, which, na_rm, na_pad, indexes)
 }
 
 #' Index of previous, different element
@@ -54,52 +54,6 @@ whicht_run <- function(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE) 
 #' @export
 whichd_run <- function(x, k = 0L, na_pad = FALSE) {
     .Call('_runner_whichd_run', PACKAGE = 'runner', x, k, na_pad)
-}
-
-#' Running which.max
-#'
-#' Running index of the (first or last) maximum.
-#' @param x numeric (or integer) vector for which running whichrun is calculated.
-#' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
-#' @param which specifies whether \code{"first"} or \code{"last"} index is returned.
-#' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
-#' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.
-#' @return Numeric vector of length equals length of \code{x} containing running index of maximum in \code{k}-long window.
-#' @examples
-#' x1 <- c(1, 1, 2, 1, 1, 3, 1, 1, 3, 1, 1, 2, 3, 3, 3)
-#' x2 <- c(2, 1, 1, NA, 3, 2, 1, NA, 1, NA, NA, NA, 1, 2, 1)
-#' k  <- c(5, 1, 8, 1, 1, 15, 2, 5, 14, 2, 3, 7, 14, 13, 12)
-#' whichmax_run(x1, which="first")
-#' whichmax_run(x2, na_rm = TRUE, which="last")
-#' whichmax_run(x2, k=3, na_rm = TRUE, which="last")
-#' whichmax_run(x2 , k=k, na_rm = FALSE, which="first")
-#' @export
-whichmax_run <- function(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE) {
-    .Call('_runner_whichmax_run', PACKAGE = 'runner', x, k, which, na_rm, na_pad)
-}
-
-#' Running which.min
-#'
-#' Running index of the (first or last) maximum.
-#' @param x input logical vector where running whichrun is calculated.
-#' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
-#' @param which specifies whether \code{"first"} or \code{"last"} index is returned.
-#' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
-#' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.
-#' @return numeric vector of length equals length of \code{x} containing running index of maximum in \code{k}-long window.
-#' @examples
-#' set.seed(11)
-#' x1 <- c(1, 1, 2, 1, 1, 3, 1, 1, 3, 1, 1, 2, 3, 3, 3)
-#' x2 <- c(2, 1, 1, NA, 3, 2, 1, NA, 1, NA, NA, NA, 1, 2, 1)
-#' k  <- c(5, 1, 8, 1, 1, 15, 2, 5, 14, 2, 3, 7, 14, 13, 12)
-#' whichmin_run( x1 , which="first") # running index of minimum
-#' whichmin_run(x1, which="last")
-#' whichmin_run( x2, na_rm = TRUE , which="last" ) # running min-index ommiting NA
-#' whichmin_run(x2 , k=3, na_rm = TRUE, which="first") # running min-index in 3-element window
-#' whichmin_run( x2 , k = k , na_rm = TRUE, which = "last") # running min-index in varying window size
-#' @export
-whichmin_run <- function(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE) {
-    .Call('_runner_whichmin_run', PACKAGE = 'runner', x, k, which, na_rm, na_pad)
 }
 
 #' Running minimum
@@ -235,7 +189,7 @@ unique_run <- function(x, k = 0L, indexes = 1L) {
 #' Creates list of windows
 #' @param x Vector of any type
 #' @param k integer vector which specifies window length
-#' @param indexes an optional integer vector containing indexes numbers of observation.
+#' @param indexes an optional integer vector containing index of observations.
 #' @examples
 #' window_run(1:10, k=3)
 #' window_run(letters[1:10],k=c(1,2,2,4,5,5,5,5,5,5))
