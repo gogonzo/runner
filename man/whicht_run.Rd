@@ -4,7 +4,8 @@
 \alias{whicht_run}
 \title{Running which-true function}
 \usage{
-whicht_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE)
+whicht_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE,
+  indexes = 0L)
 }
 \arguments{
 \item{x}{input logical vector where running which-true is calculated.}

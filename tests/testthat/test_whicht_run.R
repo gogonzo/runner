@@ -1,17 +1,17 @@
 context("WhichTrue max")
 set.seed(11)
-x1 <- c(TRUE,  TRUE, FALSE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE)
-x2 <- c(TRUE, TRUE, NA, NA, TRUE, NA, FALSE, TRUE, TRUE, NA, TRUE, TRUE, NA, NA, TRUE)
-k <- c(6, 5, 4, 2, 5, 3, 7, 4, 4, 1, 5, 4, 1, 2, 4)
+x1 <- sample(c(T,F,NA), 20, replace=T)
+x2 <- sample(c(T,F,NA), 20, replace=T)
+k <- sample(1:20, 20, replace=T)
 
 test_that("whicht_run first and last",{
-  for(i in 1:15)
+  for(i in 1:20)
     expect_equal(
       whicht_run(x1,which = "first")[i] ,
       min( which(x1[1:i]), na.rm=T )
     )
 
-  for(i in 1:15)
+  for(i in 1:20)
     expect_equal(
       whicht_run(x1,which = "last")[i] ,
       max( which(x1[1:i]), na.rm=T )
@@ -19,57 +19,130 @@ test_that("whicht_run first and last",{
 })
 
 
-test_that("max_run with na_rm=F", {
-  for(i in 1:15)
+test_that("whicht with na_rm=F", {
+  for(i in 1:20)
     expect_equal(
       whicht_run(x2, na_rm = F)[i] ,
-      as.integer(ifelse(any(is.na(x2[1:i])),NA,max( which(x2[1:i]), na.rm=F )))
+      as.integer(
+        ifelse(
+          max(which(x2[1:i])) > max(c(0,which(is.na(x2[1:i]) ))),
+          max(which(x2[1:i])), NA
+        )
+      )
     )
 
-  for(i in 1:15)
+  for(i in 1:20)
     expect_equal(
-      whicht_run(x2, na_rm = F, which = "first" )[i] ,
-      min( which(x2[1:i]), na.rm=F )
+      whicht_run(x2, na_rm = F, which = "first")[i] ,
+      as.integer(
+        ifelse(
+          min(which(x2[1:i])) < min(c(which(is.na(x2[1:i])),Inf)),
+          min(which(x2[1:i])), NA
+        )
+      )
+    )
+})
+
+test_that("whicht with na_rm=T k=4", {
+  idx <- as.integer(1:20)
+  for(i in 1:20)
+    expect_equal(
+      whicht_run(x2, na_rm = T, k=4)[i] ,
+      ifelse(is.finite(max( idx[idx %in% (pmax(1,i-4+1):i) & x2], na.rm=T)),
+             max( idx[idx %in% (pmax(1,i-4+1):i) & x2], na.rm=T),
+             NA_integer_)
+    )
+
+  for(i in 1:20)
+    expect_equal(
+      whicht_run(x2, na_rm = T, k=4, which="first")[i] ,
+      ifelse(is.finite(min( idx[idx %in% (pmax(1,i-4+1):i) & x2], na.rm=T)),
+             min( idx[idx %in% (pmax(1,i-4+1):i) & x2], na.rm=T),
+             NA_integer_)
     )
 })
 
 
+test_that("whicht with na_rm=F k=4", {
+  idx <- 1:20
+  for(i in 1:20)
+    expect_equal(
+      whicht_run(x2, na_rm = F, k=4)[i] ,
+      ifelse(
+        max( idx[ idx %in% (pmax(1,i-3):i) & x2], na.rm=T) >
+        max( c(0,idx[ idx %in% (pmax(1,i-3):i) & is.na(x2) ]), na.rm=T),
+        max( idx[ idx %in% (pmax(1,i-3):i) & x2], na.rm=T), NA_integer_
+      )
+    )
 
-test_that("max_run with na_rm=T k=4", {
-  expect_equal(
-    whicht_run(x2, na_rm = T,which = "first",k=4 ) ,
-    as.integer(c(1, 1, 1, 1, 2, 5, 5, 5, 8, 8, 8, 9, 11, 11, 12))
-  )
-
-  expect_equal(
-    whicht_run(x2, na_rm = T,which = "last",k=4 ) ,
-    as.integer(c(1, 2, 2, 2, 5, 5, 5, 8, 9, 9, 11, 12, 12,12, 15))
-  )
+  for(i in 1:20)
+    expect_equal(
+      whicht_run(x2, na_rm = F, k=4, which="first")[i] ,
+      ifelse(
+        min( idx[ idx %in% (pmax(1,i-3):i) & x2], na.rm=T) <
+        min( c(Inf,idx[ idx %in% (pmax(1,i-3):i) & is.na(x2)]), na.rm=T),
+        min( idx[ idx %in% (pmax(1,i-3):i) & x2], na.rm=T), NA_integer_
+      )
+    )
 })
 
-test_that("max_run with na_rm=F k=4", {
-  expect_equal(
-    whicht_run(x2, k=k, na_rm = T,which="last" ) ,
-    as.integer(c( 1, 2, 2, NA, 5, 5, 5, 8, 9, NA, 11, 12, NA,NA, 15 ))
-  )
+
+test_that("whicht with na_rm=T k=k", {
+  idx <- as.integer(1:20)
+  for(i in 1:20)
+    expect_equal(
+      whicht_run(x2, na_rm = T, k=k)[i] ,
+      ifelse(is.finite(max( idx[idx %in% (pmax(1,i-k[i]+1):i) & x2], na.rm=T)),
+         max( idx[idx %in% (pmax(1,i-k[i]+1):i) & x2], na.rm=T),
+         NA_integer_)
+    )
+
+
+  for(i in 1:20)
+    expect_equal(
+      whicht_run(x2, na_rm = T, k=k, which="first")[i] ,
+      ifelse(is.finite(min( idx[idx %in% (pmax(1,i-k[i]+1):i) & x2], na.rm=T)),
+             min( idx[idx %in% (pmax(1,i-k[i]+1):i) & x2], na.rm=T),
+             NA_integer_)
+    )
 })
 
-test_that("max_run pads NA's", {
+
+test_that("whicht with sequential indexes equals non-indexed",{
+  x <- sample(c(NA,F,T),10, replace=T)
+  k <- sample(1:10,10,replace=T)
+
   expect_identical(
-    whicht_run( x2, na_pad=T, k=3, which="first" ),
-    as.integer(c( NA, NA, 1, 2, 5, 5, 5, 8, 8, 8, 9,11,11,12,15))
+    whicht_run( x, which="last", indexes=1:10),
+    whicht_run( x, which="last")
   )
+  expect_identical(
+    whicht_run( x, which="last", k=4,indexes=seq(2,20, by=2) ),
+    whicht_run( x, which="last", k=2 )
+  )
+  expect_identical(
+    whicht_run( x, which="last", k=k*2,indexes=(1:10)*2 ),
+    whicht_run( x, which="last", k=k )
+  )
+
 })
 
-test_that("varying window", {
-  expect_equal(
-    whicht_run(x1,k=k, which="first"),
-    c(1,  1,  1,  4,  1,  4,  1,  5,  7, 10,  7, 10, NA, NA, 12)
-  )
+test_that("whicht for indexed window",{
+  x <- c(NA,F, T, NA, F, F, T, T, NA, T, F , T)
+  i <- c(1, 2, 3, 3,  3, 4, 6, 8, 9,  9, 13, 13)
+  k <- sample(1:12,12,replace=T)
 
-  expect_equal(
-    whicht_run(x1,k=k, which="last"),
-    c(1,  2,  2,  4,  5,  5,  7,  8,  8, 10,  11, 12, NA, NA, 12)
+  expect_identical(
+    whicht_run( x, which="last", indexes=i, k=3, na_rm=F),
+    as.integer(c(NA, NA, 3, NA, NA, NA, 7, 8, NA, 10, NA, 12))
+  )
+  expect_identical(
+    whicht_run( x, which="first", indexes=i, k=2, na_rm=F),
+    as.integer(c(NA, NA, 3, 3, 3, 3, 7, 8, 8, 8, NA, 12))
+  )
+  expect_identical(
+    whicht_run( x, which="last", indexes=i, k=2, na_rm=T),
+    as.integer(c(NA, NA, 3, 3, 3, 3, 7, 8, 8, 10, NA, 12))
   )
 
 })
