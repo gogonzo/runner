@@ -66,44 +66,6 @@ min_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, indexes = 0L) {
     .Call('_runner_min_run', PACKAGE = 'runner', x, k, na_rm, na_pad, indexes)
 }
 
-#' Running which-true function
-#'
-#' \code{whicht_run} checks \code{which} element has value TRUE within specified running window.
-#' @param x input logical vector where running which-true is calculated.
-#' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
-#' @param which specifies whether \code{"first"} or \code{"last"} index is returned.
-#' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
-#' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.
-#' @return numeric vector of length equals length of \code{x} containing running index in \code{k}-long window.
-#' @examples
-#' x <- c( NA, FALSE, TRUE, NA, TRUE, FALSE, TRUE, TRUE)
-#' whicht_run( x, k=2, na_rm=TRUE, na_pad=FALSE )
-#' @export
-whicht_run <- function(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE, indexes = 0L) {
-    .Call('_runner_whicht_run', PACKAGE = 'runner', x, k, which, na_rm, na_pad, indexes)
-}
-
-#' Index of previous, different element
-#'
-#' Index of previous element different than current
-#' @param x vector of any type where running index is calculated
-#' @param k running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
-#' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
-#' @return numeric vector of length equals length of \code{x} containing running index length in \code{k}-long window.
-#' @examples
-#' set.seed(11)
-#' x1 <- sample(c("a","b"),15,replace=TRUE)
-#' x2 <- sample(c(NA_character_,"a","b"),15,replace=TRUE)
-#' k  <- sample(1:4,15,replace=TRUE)
-#' whichd_run(x1)
-#' whichd_run(x1, k=2)
-#' whichd_run(x2, na_pad=TRUE, k=3)
-#' whichd_run(x1, k=k)
-#' @export
-whichd_run <- function(x, k = 0L, na_pad = FALSE) {
-    .Call('_runner_whichd_run', PACKAGE = 'runner', x, k, na_pad)
-}
-
 #' Running streak length
 #'
 #' Calculates running series of consecutive elements
@@ -185,6 +147,45 @@ sum_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, indexes = 1L) {
 #' @export
 unique_run <- function(x, k = 0L, indexes = 1L) {
     .Call('_runner_unique_run', PACKAGE = 'runner', x, k, indexes)
+}
+
+#' Running which-true function
+#'
+#' \code{whicht_run} checks \code{which} element has value TRUE within specified running window.
+#' @param x input logical vector where running which-true is calculated.
+#' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
+#' @param which specifies whether \code{"first"} or \code{"last"} index is returned.
+#' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
+#' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.
+#' @param indexes an optional integer vector containing indexes numbers of observation.
+#' @return numeric vector of length equals length of \code{x} containing running index in \code{k}-long window.
+#' @examples
+#' x <- c( NA, FALSE, TRUE, NA, TRUE, FALSE, TRUE, TRUE)
+#' whicht_run( x, k=2, na_rm=TRUE, na_pad=FALSE )
+#' @export
+whicht_run <- function(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE, indexes = 0L) {
+    .Call('_runner_whicht_run', PACKAGE = 'runner', x, k, which, na_rm, na_pad, indexes)
+}
+
+#' Index of previous, different element
+#'
+#' Index of previous element different than current
+#' @param x vector of any type where running index is calculated
+#' @param k running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
+#' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
+#' @return numeric vector of length equals length of \code{x} containing running index length in \code{k}-long window.
+#' @examples
+#' set.seed(11)
+#' x1 <- sample(c("a","b"),15,replace=TRUE)
+#' x2 <- sample(c(NA_character_,"a","b"),15,replace=TRUE)
+#' k  <- sample(1:4,15,replace=TRUE)
+#' whichd_run(x1)
+#' whichd_run(x1, k=2)
+#' whichd_run(x2, na_pad=TRUE, k=3)
+#' whichd_run(x1, k=k)
+#' @export
+whichd_run <- function(x, k = 0L, na_pad = FALSE) {
+    .Call('_runner_whichd_run', PACKAGE = 'runner', x, k, na_pad)
 }
 
 #' List of running windows

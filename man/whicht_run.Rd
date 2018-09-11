@@ -6,6 +6,9 @@
 \usage{
 whicht_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE,
   indexes = 0L)
+
+whicht_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE,
+  indexes = 0L)
 }
 \arguments{
 \item{x}{input logical vector where running which-true is calculated.}
@@ -17,14 +20,34 @@ whicht_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE,
 \item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.}
 
 \item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
+
+\item{indexes}{an optional integer vector containing indexes numbers of observation.}
+
+\item{x}{input logical vector where running which-true is calculated.}
+
+\item{k}{Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
+
+\item{which}{specifies whether \code{"first"} or \code{"last"} index is returned.}
+
+\item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
+
+\item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.}
+
+\item{indexes}{an optional integer vector containing indexes numbers of observation.}
 }
 \value{
+numeric vector of length equals length of \code{x} containing running index in \code{k}-long window.
+
 numeric vector of length equals length of \code{x} containing running index in \code{k}-long window.
 }
 \description{
 \code{whicht_run} checks \code{which} element has value TRUE within specified running window.
+
+\code{whicht_run} checks \code{which} element has value TRUE within specified running window.
 }
 \examples{
+x <- c( NA, FALSE, TRUE, NA, TRUE, FALSE, TRUE, TRUE)
+whicht_run( x, k=2, na_rm=TRUE, na_pad=FALSE )
 x <- c( NA, FALSE, TRUE, NA, TRUE, FALSE, TRUE, TRUE)
 whicht_run( x, k=2, na_rm=TRUE, na_pad=FALSE )
 }

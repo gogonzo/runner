@@ -1,7 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 #include "errors.h"
-#include "whiches.h"
+#include "which_run.h"
 
 //' Running which-true function
 //'
@@ -11,6 +11,7 @@ using namespace Rcpp;
 //' @param which specifies whether \code{"first"} or \code{"last"} index is returned.
 //' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 //' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.
+//' @param indexes an optional integer vector containing indexes numbers of observation.
 //' @return numeric vector of length equals length of \code{x} containing running index in \code{k}-long window.
 //' @examples
 //' x <- c( NA, FALSE, TRUE, NA, TRUE, FALSE, TRUE, TRUE)
