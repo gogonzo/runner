@@ -9,6 +9,7 @@ using namespace Rcpp;
 //' @param k running window size. Not yet implemented.
 //' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} mean is calulating excluding \code{NA}.
 //' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
+//' @param indexes an optional integer vector containing indexes numbers of observation.
 //' @return numeric vector of length equals length of \code{x} containing running mean in \code{k}-long window.
 //' @examples
 //' set.seed(11)
@@ -186,6 +187,7 @@ NumericVector mean_run(
 //' @param k Running window size.  Not yet implemented.
 //' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.
 //' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
+//' @param indexes an optional integer vector containing indexes numbers of observation.
 //' @return numeric vector of length equals length of \code{x} containing running sum in \code{k}-long window.
 //' @examples
 //' set.seed(11)
@@ -227,7 +229,7 @@ NumericVector sum_run(
     }
 
   // NORMAL CUMSUM ------------
-  if( k.size() == 1 & k(0) == 0 ){
+  if( (k.size() == 1) & ((k(0) == 0)|(k(0)==n)) ){
     if(na_rm){
       res = impl::calc_sum_vector( x );
     } else {

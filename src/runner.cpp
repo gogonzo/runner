@@ -1,7 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 #include "errors.h"
-#include "which_extremes.h"
 #include "whiches.h"
 
 //' Running which-true function
@@ -23,43 +22,223 @@ IntegerVector whicht_run(
     IntegerVector k = 0,
     std::string which = "last",
     bool na_rm = true,
-    bool na_pad = false
+    bool na_pad = false,
+    IntegerVector indexes = 0
 ){
-
-  int n = x.size();
-  impl::check_for_valid_k2(n, k);
+  int n = x.size(), i1, na1, true1;
+  LogicalVector x2(n);
   IntegerVector res(n);
+  IntegerVector na = impl::which_NA(x);
 
+  // replace NA -> false
+  for(int i=0;i<n;i++) if( x(i) == true ) x2(i) = true;
 
-  /* not windowed */
-  if( ( k(0) <= 1 or k(0) == n ) and k.size() == 1 ){
-    if( which == "last")
-      res = impl::cum_whicht_l(x, res, na_rm);
-    else
-      res = impl::cum_whicht_f(x, res, na_rm);
+  // true INDEXES
+  IntegerVector w = impl::whicht_vector(x2);
 
-    /* windowed */
-  } else if( k.size() == 1 ){
+  // CUMULATIVE
+  if(indexes.size()==1){
+    if( (k.size()==1) & ((k(0) == 0)|(k(0)==n)) ){
+      if(na_rm){
+        if( which == "first" ){
+          for(int i=0;i<n;i++){
+            true1 = impl::first(w[w<=i]);
+            res(i) = true1 >= 0 ? true1 + 1 : IntegerVector::get_na();
+          }
+        } else if( which == "last" ){
+          for(int i=0;i<n;i++){
+            true1 = impl::last(w[w<=i]);
+            res(i) = true1 >= 0 ? true1 + 1 : IntegerVector::get_na();
+          }
+        }
+      } else {
 
-    if( which == "last")
-      res = impl::window_whicht_l(x, res, k(0), na_rm);
-    else
-      res = impl::window_whicht_f(x, res, k(0), na_rm);
+        if( which == "first" ){
+          for(int i=0;i<n;i++){
+            true1  = impl::first(w[w<=i]);
+            na1    = impl::first(na[na<=i]);
+            res(i) = true1 < na1 ? true1 + 1 : IntegerVector::get_na();
+          }
+        } else if( which == "last" ){
+          for(int i=0;i<n;i++){
+            true1  = impl::last(w[w<=i]);
+            na1    = impl::last(na[na<=i]);
+            res(i) = true1 > na1 ? true1 + 1 : IntegerVector::get_na();
+          }
+        }
+      }
 
-    /* varying window size */
-  } else {
-    if( which == "last")
-      res = impl::window_whicht2_l(x, res, k, na_rm);
-    else
-      res = impl::window_whicht2_f(x, res, k, na_rm);
+      // CONST WINDOW
+    } else if(k.size()==1){
+      if(na_rm){
+        if( which == "first" ){
+          for(int i=0;i<n;i++){
+            i1 = (i - k(0) + 1) < 0 ? 0 : i-k(0)+1;
+            true1 = impl::first(w[w<=i & w>=i1]);
+            res(i) = true1 >= 0 ? true1 + 1 : IntegerVector::get_na();
+          }
+        } else if(which == "last") {
+          for(int i=0;i<n;i++){
+            i1 = (i - k(0) + 1) < 0 ? 0 : i-k(0)+1;
+            true1 = impl::last(w[w<=i & w>=i1]);
+            res(i) = true1 >= 0 ? true1 + 1 : IntegerVector::get_na();
+          }
+        }
+      } else {
+        if( which == "first" ){
+          for(int i=0;i<n;i++){
+            i1 = (i-k(0)+1) < 0 ? 0 : i-k(0)+1;
+            na1   = impl::first(na[na<=i & na>=i1]);
+            true1 = impl::first(w[w<=i & w>=i1]);
+            res(i) = true1 < na1 ? true1 + 1 : IntegerVector::get_na();
+          }
+        } else if(which == "last") {
+          for(int i=0;i<n;i++){
+            i1 = (i - k(0) + 1) < 0 ? 0 : i-k(0)+1;
+            na1   = impl::last(na[na<=i & na>=i1]);
+            true1 = impl::last(w[w<=i & w>=i1]);
+            res(i) = true1 > na1 ? true1 + 1 : IntegerVector::get_na();
+          }
+        }
+      }
+
+      // VARYING WINDOW
+    } else if(k.size() > 1){
+      if(na_rm){
+        if( which == "first" ){
+          for(int i=0;i<n;i++){
+            i1 = (i - k(i) + 1) < 0 ? 0 : i-k(i)+1;
+            true1 = impl::first(w[w<=i & w>=i1]);
+            res(i) = true1 >= 0 ? true1 + 1 : IntegerVector::get_na();
+          }
+        } else if(which == "last") {
+          for(int i=0;i<n;i++){
+            i1 = (i - k(i) + 1) < 0 ? 0 : i-k(i)+1;
+            true1 = impl::last(w[w<=i & w>=i1]);
+            res(i) = true1 >= 0 ? true1 + 1 : IntegerVector::get_na();
+          }
+        }
+      } else {
+        if( which == "first" ){
+          for(int i=0;i<n;i++){
+            i1 = (i-k(i)+1) < 0 ? 0 : i-k(i)+1;
+            na1   = impl::first(na[na<=i & na>=i1]);
+            true1 = impl::first(w[w<=i & w>=i1]);
+            res(i) = true1 < na1 ? true1 + 1 : IntegerVector::get_na();
+          }
+        } else if(which == "last") {
+          for(int i=0;i<n;i++){
+            i1 = (i - k(i) + 1) < 0 ? 0 : i-k(i)+1;
+            na1   = impl::last(na[na<=i & na>=i1]);
+            true1 = impl::last(w[w<=i & w>=i1]);
+            res(i) = true1 > na1 ? true1 + 1 : IntegerVector::get_na();
+          }
+        }
+      }
+    }
+  } else if(indexes.size()==n){
+    if( (k.size()==1) & (k(0) == 0) ){
+      if(na_rm){
+        if( which == "first" ){
+          for(int i=0;i<n;i++){
+            true1 = impl::first(w[w<=i]);
+            res(i) = true1 >= 0 ? true1 + 1 : IntegerVector::get_na();
+          }
+        } else if( which == "last" ){
+          for(int i=0;i<n;i++){
+            true1 = impl::last(w[w<=i]);
+            res(i) = true1 >= 0 ? true1 + 1 : IntegerVector::get_na();
+          }
+        }
+      } else {
+
+        if( which == "first" ){
+          for(int i=0;i<n;i++){
+            true1  = impl::first(w[w<=i]);
+            na1    = impl::first(na[na<=i]);
+            res(i) = true1 < na1 ? true1 + 1 : IntegerVector::get_na();
+          }
+        } else if( which == "last" ){
+          for(int i=0;i<n;i++){
+            true1  = impl::last(w[w<=i]);
+            na1    = impl::last(na[na<=i]);
+            res(i) = true1 > na1 ? true1 + 1 : IntegerVector::get_na();
+          }
+        }
+      }
+
+      // CONST WINDOW
+    } else if(k.size()==1){
+      if(na_rm){
+        if( which == "first" ){
+          for(int i=0;i<n;i++){
+            i1 = impl::get_window_start(i,k(0), indexes );
+            true1 = impl::first(w[w<=i & w>=i1]);
+            res(i) = true1 >= 0 ? true1 + 1 : IntegerVector::get_na();
+          }
+        } else if(which == "last") {
+          for(int i=0;i<n;i++){
+            i1 = impl::get_window_start(i,k(0), indexes );
+            true1 = impl::last(w[w<=i & w>=i1]);
+            res(i) = true1 >= 0 ? true1 + 1 : IntegerVector::get_na();
+          }
+        }
+      } else {
+        if( which == "first" ){
+          for(int i=0;i<n;i++){
+            i1 = impl::get_window_start(i,k(0), indexes );
+            na1   = impl::first(na[na<=i & na>=i1]);
+            true1 = impl::first(w[w<=i & w>=i1]);
+            res(i) = true1 < na1 ? true1 + 1 : IntegerVector::get_na();
+          }
+        } else if(which == "last") {
+          for(int i=0;i<n;i++){
+            i1 = impl::get_window_start(i,k(0), indexes );
+            na1   = impl::last(na[na<=i & na>=i1]);
+            true1 = impl::last(w[w<=i & w>=i1]);
+            res(i) = true1 > na1 ? true1 + 1 : IntegerVector::get_na();
+          }
+        }
+      }
+
+      // VARYING WINDOW
+    } else if(k.size() > 1){
+      if(na_rm){
+        if( which == "first" ){
+          for(int i=0;i<n;i++){
+            i1 = impl::get_window_start(i,k(i), indexes );
+            true1 = impl::first(w[w<=i & w>=i1]);
+            res(i) = true1 >= 0 ? true1 + 1 : IntegerVector::get_na();
+          }
+        } else if(which == "last") {
+          for(int i=0;i<n;i++){
+            i1 = impl::get_window_start(i,k(i), indexes );
+            true1 = impl::last(w[w<=i & w>=i1]);
+            res(i) = true1 >= 0 ? true1 + 1 : IntegerVector::get_na();
+          }
+        }
+      } else {
+        if( which == "first" ){
+          for(int i=0;i<n;i++){
+            i1 = impl::get_window_start(i,k(i), indexes );
+            na1   = impl::first(na[na<=i & na>=i1]);
+            true1 = impl::first(w[w<=i & w>=i1]);
+            res(i) = true1 < na1 ? true1 + 1 : IntegerVector::get_na();
+          }
+        } else if(which == "last") {
+          for(int i=0;i<n;i++){
+            i1 = impl::get_window_start(i,k(i), indexes );
+            na1   = impl::last(na[na<=i & na>=i1]);
+            true1 = impl::last(w[w<=i & w>=i1]);
+            res(i) = true1 > na1 ? true1 + 1 : IntegerVector::get_na();
+          }
+        }
+      }
+    }
   }
-
-  /* pad NA's */
-  if(na_pad)
-    std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_REAL);
-
   return res;
 }
+
 
 //' Index of previous, different element
 //'
@@ -87,10 +266,10 @@ IntegerVector whichd_run(
   impl::check_for_valid_k(x, k);
 
   switch (TYPEOF(x)) {
-    case INTSXP: return impl::whichd_run_(as<IntegerVector>(x), k, na_pad);
+    case INTSXP:  return impl::whichd_run_(as<IntegerVector>(x), k, na_pad);
     case REALSXP: return impl::whichd_run_(as<NumericVector>(x), k, na_pad);
-    case STRSXP: return impl::whichd_run_(as<CharacterVector>(x), k, na_pad);
-    case LGLSXP: return impl::whichd_run_(as<LogicalVector>(x), k, na_pad);
+    case STRSXP:  return impl::whichd_run_(as<CharacterVector>(x), k, na_pad);
+    case LGLSXP:  return impl::whichd_run_(as<LogicalVector>(x), k, na_pad);
     case CPLXSXP: return impl::whichd_run_(as<ComplexVector>(x), k, na_pad);
   default: {
     warning(
@@ -101,128 +280,3 @@ IntegerVector whichd_run(
   }
   }
 }
-
-
-//' Running which.max
-//'
-//' Running index of the (first or last) maximum.
-//' @param x numeric (or integer) vector for which running whichrun is calculated.
-//' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
-//' @param which specifies whether \code{"first"} or \code{"last"} index is returned.
-//' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
-//' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.
-//' @return Numeric vector of length equals length of \code{x} containing running index of maximum in \code{k}-long window.
-//' @examples
-//' x1 <- c(1, 1, 2, 1, 1, 3, 1, 1, 3, 1, 1, 2, 3, 3, 3)
-//' x2 <- c(2, 1, 1, NA, 3, 2, 1, NA, 1, NA, NA, NA, 1, 2, 1)
-//' k  <- c(5, 1, 8, 1, 1, 15, 2, 5, 14, 2, 3, 7, 14, 13, 12)
-//' whichmax_run(x1, which="first")
-//' whichmax_run(x2, na_rm = TRUE, which="last")
-//' whichmax_run(x2, k=3, na_rm = TRUE, which="last")
-//' whichmax_run(x2 , k=k, na_rm = FALSE, which="first")
-//' @export
-// [[Rcpp::export]]
-IntegerVector whichmax_run(
-    NumericVector x,
-    IntegerVector k = 0,
-    std::string which = "last",
-    bool na_rm = true,
-    bool na_pad = false
-){
-
-  int n = x.size();
-  impl::check_for_valid_k2(n, k);
-  IntegerVector res;
-
-  /* not windowed */
-  if( ( k(0) <= 1 or k(0) == n ) and k.size() == 1 ){
-    if( which == "last" )
-      res = impl::cum_extr_l( x, na_rm );
-    else
-      res = impl::cum_extr_f( x, na_rm );
-
-    /* windowed */
-  } else if( k.size() == 1 ){
-    if( which == "last" )
-      res = impl::window_extr_l(x, k(0), na_rm);
-    else
-      res = impl::window_extr_f(x, k(0), na_rm);
-
-    /* varying window size */
-  } else {
-    if( which == "last" )
-      res = impl::window_extr2_l(x, k, na_rm);
-    else
-      res = impl::window_extr2_f(x, k, na_rm);
-  }
-
-  /* pad NA's */
-  if(na_pad)
-    std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_REAL);
-
-  return res;
-}
-
-
-//' Running which.min
-//'
-//' Running index of the (first or last) maximum.
-//' @param x input logical vector where running whichrun is calculated.
-//' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
-//' @param which specifies whether \code{"first"} or \code{"last"} index is returned.
-//' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
-//' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.
-//' @return numeric vector of length equals length of \code{x} containing running index of maximum in \code{k}-long window.
-//' @examples
-//' set.seed(11)
-//' x1 <- c(1, 1, 2, 1, 1, 3, 1, 1, 3, 1, 1, 2, 3, 3, 3)
-//' x2 <- c(2, 1, 1, NA, 3, 2, 1, NA, 1, NA, NA, NA, 1, 2, 1)
-//' k  <- c(5, 1, 8, 1, 1, 15, 2, 5, 14, 2, 3, 7, 14, 13, 12)
-//' whichmin_run( x1 , which="first") # running index of minimum
-//' whichmin_run(x1, which="last")
-//' whichmin_run( x2, na_rm = TRUE , which="last" ) # running min-index ommiting NA
-//' whichmin_run(x2 , k=3, na_rm = TRUE, which="first") # running min-index in 3-element window
-//' whichmin_run( x2 , k = k , na_rm = TRUE, which = "last") # running min-index in varying window size
-//' @export
-// [[Rcpp::export]]
-IntegerVector whichmin_run(
-    NumericVector x,
-    IntegerVector k = 0,
-    std::string which = "last",
-    bool na_rm = true,
-    bool na_pad = false
-){
-
-  int n = x.size();
-  impl::check_for_valid_k2(n, k);
-  IntegerVector res;
-
-  /* not windowed */
-  if( ( k(0) <= 1 or k(0) == n ) and k.size() == 1 ){
-    if( which == "last" )
-      res = impl::cum_extr_l( -x, na_rm );
-    else
-      res = impl::cum_extr_f( -x, na_rm );
-
-    /* windowed */
-  } else if( k.size() == 1 ){
-    if( which == "last" )
-      res = impl::window_extr_l(-x, k(0), na_rm);
-    else
-      res = impl::window_extr_f(-x, k(0), na_rm);
-
-    /* varying window size */
-  } else {
-    if( which == "last" )
-      res = impl::window_extr2_l(-x, k, na_rm);
-    else
-      res = impl::window_extr2_f(-x, k, na_rm);
-  }
-
-  /* pad NA's */
-  if(na_pad)
-    std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_REAL);
-
-  return res;
-}
-

@@ -1,6 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
-#include "running_max.h"
+#include "min_run.h"
 
 //' Running minimum
 //'
@@ -23,7 +23,7 @@ using namespace Rcpp;
 //' min_run(x2, na_rm = FALSE, k=k) # minimum in varying k window size
 //' @export
 // [[Rcpp::export]]
-NumericVector max_run(
+NumericVector min_run(
     NumericVector x,
     IntegerVector k = 0,
     bool na_rm = true,
@@ -42,17 +42,17 @@ NumericVector max_run(
     stop("Function doesn't accept NA values in k vector");
   }
 
-  /* not windowed - cum_max */
+  /* not windowed - cum_min */
   if( ( k(0) <= 1 or k(0) == n ) and k.size() == 1 ){
-    res = min::window_max(x, na_rm);
+    res = min::window_min(x, na_rm);
 
     /* windowed */
   } else if( k.size() == 1 ){
-    res = indexes.size() == 1 ? min::window_max21(x, k, na_rm) : min::window_max31(x, k, indexes, na_rm);
+    res = indexes.size() == 1 ? min::window_min21(x, k, na_rm) : min::window_min31(x, k, indexes, na_rm);
 
     /* varying window size */
   } else if( k.size() > 0){
-    res = indexes.size() == 1 ? min::window_max22(x, k, na_rm) : min::window_max32(x, k, indexes, na_rm);
+    res = indexes.size() == 1 ? min::window_min22(x, k, na_rm) : min::window_min32(x, k, indexes, na_rm);
   }
 
   /* pad NA's */

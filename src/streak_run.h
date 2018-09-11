@@ -113,7 +113,6 @@ namespace streak {
       for(int i=0; i < n; i++){
         for(int j=i; j>=0; j--){
           if( (indexes(i) - indexes(j) > (k(0) - 1) )){
-
             res(i) = calc_actual_streak(x, i, j+1, na_rm);
             break;
           } else if(j==0){
@@ -126,7 +125,6 @@ namespace streak {
       for(int i=0; i < n; i++){
         for(int j=i; j>=0; j--){
           if( (indexes(i) - indexes(j) > (k(i) - 1) )){
-
             res(i) = calc_actual_streak(x, i, j+1, na_rm);
             break;
           } else if(j==0){

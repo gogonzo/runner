@@ -2,164 +2,35 @@ using namespace Rcpp;
 
 namespace impl {
 
-  IntegerVector cum_whicht_l(LogicalVector x, IntegerVector res, bool na_rm ){
-    int n = x.size();
-
-
-    if(  !na_rm and LogicalVector::is_na( x(0) ) ){
-      std::fill(res.begin(), res.end(), IntegerVector::get_na() );
-      return res;
-    } else if ( x(0)==true ){
-      res(0) = 1;
-    } else {
-      res(0) = LogicalVector::get_na();
-    }
-
-    for(int i = 1; i < n; ++i) {
-      if( !na_rm and LogicalVector::is_na( x(i) ) ){
-        std::fill(res.begin() + i, res.end(), IntegerVector::get_na() );
-        return res;
-      }
-
-      if( x(i)==true  ){
-        res(i) =  i + 1;
-      } else {
-        res( i ) = res(i - 1 );
-      }
-    }
-
-    return res;
+  IntegerVector which_NA(LogicalVector x) {
+    IntegerVector v = Rcpp::seq(0, x.size()-1);
+    return v[Rcpp::is_na(x)];
   }
 
-  IntegerVector cum_whicht_f(LogicalVector x, IntegerVector res, bool na_rm ){
-    int n = x.size();
-
-    if( !na_rm and LogicalVector::is_na( x(0) ) ){
-      std::fill(res.begin(), res.end(), IntegerVector::get_na() );
-      return res;
-    } else if ( x(0)==true ){
-      std::fill(res.begin(), res.end(), 1 );
-      return res;
-    } else {
-      res(0) = LogicalVector::get_na();
-    }
-
-    for(int i = 1; i < n; ++i) {
-      if( !na_rm and LogicalVector::is_na( x(i) ) ){
-        std::fill(res.begin() + i, res.end(), IntegerVector::get_na() );
-        return res;
-      }
-
-      if( x(i)==true    ){
-        std::fill(res.begin() + i, res.end(), i + 1 );
-        break;
-      } else {
-        res(i) = LogicalVector::get_na();
-      }
-    }
-
-    return res;
+  IntegerVector whicht_vector(LogicalVector x){
+    IntegerVector v = Rcpp::seq(0, x.size()-1);
+    return v[ x ];
   }
 
-  IntegerVector window_whicht_l(LogicalVector x, IntegerVector res, int k, bool na_rm ){
+  int first(IntegerVector x){
+    if(x.size()>0)
+      return x(0);
+    return std::numeric_limits<int>::max();
+  }
+  int last(IntegerVector x){
     int n = x.size();
-    int i1;
-    int idx;
-
-    for(int i = 0; i < n; i++){
-      i1 = impl::window_index( i, k );
-      idx = IntegerVector::get_na();
-      for(int j = i; j >= i1 ; --j){
-        if( !na_rm and LogicalVector::is_na( x(j) ) ){
-          idx = IntegerVector::get_na();
-          break;
-        }
-        if( x( j )==true ){
-          idx = j + 1;
-          break;
-        }
-      }
-      res( i ) = idx;
-    }
-
-    return res;
+    if(n>0)
+      return x(n-1);
+    return -1;
   }
 
-  IntegerVector window_whicht_f(LogicalVector x, IntegerVector res, int k, bool na_rm ){
-    int n = x.size();
-    int i1;
-    int idx;
-
-    for(int i = 0; i < n; i++){
-      i1 = impl::window_index( i, k );
-      idx = IntegerVector::get_na();
-
-      for(int j = i1; j <= i ; ++j){
-        if( !na_rm and LogicalVector::is_na( x(j) ) ){
-          idx = IntegerVector::get_na();
-          break;
-        }
-
-        if( x( j )==true ){
-          idx = j + 1;
-          break;
-        }
-      }
-      res( i ) = idx;
-    }
-
-    return res;
+  int get_window_start(int i, int k, IntegerVector indexes){
+    for(int j=i; j>=0; j--)
+      if( indexes(i) - indexes(j) > k - 1 )
+        return j + 1;
+    return 0;
   }
 
-  IntegerVector window_whicht2_l(LogicalVector x, IntegerVector res, IntegerVector k, bool na_rm ){
-    int n = x.size();
-    int i1;
-    int idx;
-
-    for(int i = 0; i < n; i++){
-      i1 = impl::window_index( i, k(i) );
-      idx = IntegerVector::get_na();
-      for(int j = i; j >= i1 ; --j){
-        if( !na_rm and LogicalVector::is_na( x(j) ) ){
-          idx = IntegerVector::get_na();
-          break;
-        }
-        if( x( j )==true ){
-          idx = j + 1;
-          break;
-        }
-      }
-      res( i ) = idx;
-    }
-
-    return res;
-  }
-
-  IntegerVector window_whicht2_f(LogicalVector x, IntegerVector res, IntegerVector k, bool na_rm ){
-    int n = x.size();
-    int i1;
-    int idx;
-
-    for(int i = 0; i < n; i++){
-      i1 = impl::window_index( i, k(i) );
-      idx = IntegerVector::get_na();
-
-      for(int j = i1; j <= i ; ++j){
-        if( !na_rm and LogicalVector::is_na( x(j) ) ){
-          idx = IntegerVector::get_na();
-          break;
-        }
-
-        if( x( j )==true ){
-          idx = j + 1;
-          break;
-        }
-      }
-      res( i ) = idx;
-    }
-
-    return res;
-  }
 
 }
 
@@ -170,8 +41,7 @@ using namespace Rcpp;
 namespace impl {
 
 template <int RTYPE>
-int calc_whichd(const Vector<RTYPE>& x, int i, int i2)
-{
+int calc_whichd(const Vector<RTYPE>& x, int i, int i2){
   int cur_whichd  = IntegerVector::get_na();
 
   for(int j = i; j > i2 ; --j) {
@@ -186,8 +56,7 @@ int calc_whichd(const Vector<RTYPE>& x, int i, int i2)
 }
 
 template <int RTYPE>
-IntegerVector whichd_run_(const Vector<RTYPE>& x, IntegerVector k,bool na_pad)
-{
+IntegerVector whichd_run_(const Vector<RTYPE>& x, IntegerVector k,bool na_pad){
 
   int i2;
   int n = x.size();
@@ -228,6 +97,5 @@ IntegerVector whichd_run_(const Vector<RTYPE>& x, IntegerVector k,bool na_pad)
 
   return res;
 }
-
 }
 
