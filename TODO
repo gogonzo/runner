@@ -1,8 +1,10 @@
++ streak_run with +indexes_diff except +1
++ whicht_run - idx as indexes[condition_true]
++ whichd_run - idx as indexes[condition_true]
+
 + window_var
 + table_run (counting number of elements in window)
 + unique_run (list of unique elements in window)
-+ window_run with additional POSIXct argument to specify time-window size. Results in list
-+ streak_run for logical counting TRUE only - other are zeros
 + streak_run for k=n non-recursive
 + countt_run (counting TRUE)
 + counting streaks in window

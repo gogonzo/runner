@@ -10,6 +10,7 @@
 ^cran-comments\.md$
 ^\.travis\.yml$
 ^codecov\.yml$
+^appveyor\.yml$
 \.gitignore
 \.xcf
 TODO
