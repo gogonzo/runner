@@ -9,7 +9,6 @@ test_that("mean_run basic",{
       mean_run(x1)[i] ,
       mean(x1[1:i])
     )
-
 })
 
 test_that("mean_run with na_rm=T", {
