@@ -90,7 +90,7 @@ IntegerVector whicht_run(
           for(int i=0;i<n;i++){
             i1 = (i-k(0)+1) < 0 ? 0 : i-k(0)+1;
             na1   = impl::first(na[(na<=i) & (na>=i1)]);
-            true1 = impl::first(w[w<=i & w>=i1]);
+            true1 = impl::first(w[(w<=i) & (w>=i1)]);
             res(i) = (true1 < na1) ? true1 + 1 : IntegerVector::get_na();
           }
         } else if(which == "last") {
