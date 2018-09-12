@@ -9,7 +9,7 @@ using namespace Rcpp;
 //' @param k running window size. Not yet implemented.
 //' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} mean is calulating excluding \code{NA}.
 //' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
-//' @param indexes an optional integer vector containing indexes numbers of observation.
+//' @param idx an optional integer vector containing idx numbers of observation.
 //' @return numeric vector of length equals length of \code{x} containing running mean in \code{k}-long window.
 //' @examples
 //' set.seed(11)
@@ -27,7 +27,7 @@ NumericVector mean_run(
     IntegerVector k=0,
     bool na_rm = true,
     bool na_pad = false,
-    IntegerVector indexes=1 ){
+    IntegerVector idx=1 ){
 
   int n = x.size(), first_na = -1,fnn, i1;
   double x1, nas1, non1;
@@ -64,7 +64,7 @@ NumericVector mean_run(
       }
 
       // CONST. WINDOW ------------
-    } else if( (k.size()==1) & (indexes.size()==1) ){
+    } else if( (k.size()==1) & (idx.size()==1) ){
       sums = impl::calc_sum_vector0( x );
       for(int i = fnn; i<n; i++){
 
@@ -92,7 +92,7 @@ NumericVector mean_run(
 
 
       // VARYING WINDOW -----------
-    } else if( (k.size() > 1)  & (indexes.size()==1) ){
+    } else if( (k.size() > 1)  & (idx.size()==1) ){
       sums = impl::calc_sum_vector0( x );
       for(int i = fnn; i<n; i++){
         if( i > k(i) ){
@@ -118,11 +118,11 @@ NumericVector mean_run(
       }
 
       // IDX WINDOW -----------
-    } else if( (k.size() == 1) & (indexes.size() > 1) ){
+    } else if( (k.size() == 1) & (idx.size() > 1) ){
       sums = impl::calc_sum_vector0( x );
       for(int i = fnn; i<n; i++){
         for(int j=i; j>=0; j--)
-          if( (indexes(i) - indexes(j)) > (k(0) - 1) ){
+          if( (idx(i) - idx(j)) > (k(0) - 1) ){
             i1   = j;
             x1   = sums( j );
             nas1 = nas( j );
@@ -145,11 +145,11 @@ NumericVector mean_run(
       }
 
       // IDX VARYING WINDOW -----------
-    } else if( (k.size() > 1) & (indexes.size() > 1) ) {
+    } else if( (k.size() > 1) & (idx.size() > 1) ) {
       sums = impl::calc_sum_vector0( x );
       for(int i = fnn; i<n; i++){
         for(int j=i; j>=0; j--)
-          if( (indexes(i) - indexes(j)) > (k(i) - 1) ){
+          if( (idx(i) - idx(j)) > (k(i) - 1) ){
             i1   = j;
             x1   = sums( j );
             nas1 = nas( j );
@@ -187,7 +187,7 @@ NumericVector mean_run(
 //' @param k Running window size.  Not yet implemented.
 //' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.
 //' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
-//' @param indexes an optional integer vector containing indexes numbers of observation.
+//' @param idx an optional integer vector containing idx numbers of observation.
 //' @return numeric vector of length equals length of \code{x} containing running sum in \code{k}-long window.
 //' @examples
 //' set.seed(11)
@@ -205,7 +205,7 @@ NumericVector sum_run(
     IntegerVector k=0,
     bool na_rm = true,
     bool na_pad = false,
-    IntegerVector indexes=1) {
+    IntegerVector idx=1) {
 
   int n = x.size(), i1, fnn, first_na = -1;
   double x1, nas1;
@@ -240,7 +240,7 @@ NumericVector sum_run(
     }
 
   // CONST. WINDOW ------------
-  } else if( (k.size()==1) & (indexes.size()==1) ){
+  } else if( (k.size()==1) & (idx.size()==1) ){
     sums = impl::calc_sum_vector0( x );
     for(int i = fnn; i<n; i++){
 
@@ -266,7 +266,7 @@ NumericVector sum_run(
 
 
   // VARYING WINDOW -----------
-  } else if( (k.size() > 1)  & (indexes.size()==1) ){
+  } else if( (k.size() > 1)  & (idx.size()==1) ){
     sums = impl::calc_sum_vector0( x );
     for(int i = fnn; i<n; i++){
       if( i > k(i) ){
@@ -290,11 +290,11 @@ NumericVector sum_run(
     }
 
   // IDX WINDOW -----------
-  } else if( (k.size() == 1) & (indexes.size()>1) ){
+  } else if( (k.size() == 1) & (idx.size()>1) ){
     sums = impl::calc_sum_vector0( x );
     for(int i = fnn; i<n; i++){
       for(int j=i; j>=0; j--)
-        if( (indexes(i) - indexes(j)) > (k(0) - 1) ){
+        if( (idx(i) - idx(j)) > (k(0) - 1) ){
           i1   = j;
           x1   = sums( j );
           nas1 = nas( j );
@@ -316,11 +316,11 @@ NumericVector sum_run(
     }
 
   // IDX VARYING WINDOW -----------
-  } else if( (k.size() > 1) & (indexes.size()>1) ) {
+  } else if( (k.size() > 1) & (idx.size()>1) ) {
     sums = impl::calc_sum_vector0( x );
     for(int i = fnn; i<n; i++){
       for(int j=i; j>=0; j--)
-        if( (indexes(i) - indexes(j)) > (k(i) - 1) ){
+        if( (idx(i) - idx(j)) > (k(i) - 1) ){
           i1   = j;
           x1   = sums( j );
           nas1 = nas( j );

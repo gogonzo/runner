@@ -23,13 +23,13 @@ fill_run <- function(x, run_for_first = FALSE, only_within = FALSE) {
 #' Vector of input lagged along integer vector
 #' @param x Vector of any type
 #' @param k integer vector which specifies window length
-#' @param indexes an optional integer vector containing index of observations.
+#' @param idx an optional integer vector containing index of observations.
 #' @examples
 #' lag_run(1:10, k=3)
-#' lag_run(letters[1:10],k=2, indexes=c(1,1,1,2,3,4,6,7,8,10))
+#' lag_run(letters[1:10],k=2, idx=c(1,1,1,2,3,4,6,7,8,10))
 #' @export
-lag_run <- function(x, k = 0L, indexes = 1L) {
-    .Call('_runner_lag_run', PACKAGE = 'runner', x, k, indexes)
+lag_run <- function(x, k = 0L, idx = 1L) {
+    .Call('_runner_lag_run', PACKAGE = 'runner', x, k, idx)
 }
 
 #' Running minimum
@@ -40,7 +40,7 @@ lag_run <- function(x, k = 0L, indexes = 1L) {
 #' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
 #' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 #' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.
-#' @param indexes an optional integer vector containing indexes numbers of observation.
+#' @param idx an optional integer vector containing idx numbers of observation.
 #' @return numeric vector of length equals length of \code{x} containing running min in \code{k}-long window.
 #' @examples
 #' set.seed(11)
@@ -52,8 +52,8 @@ lag_run <- function(x, k = 0L, indexes = 1L) {
 #' min_run(x2, na_rm = TRUE, k=4) # minimum in 4-element window
 #' min_run(x2, na_rm = FALSE, k=k) # minimum in varying k window size
 #' @export
-max_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, indexes = 0L) {
-    .Call('_runner_max_run', PACKAGE = 'runner', x, k, na_rm, na_pad, indexes)
+max_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, idx = 0L) {
+    .Call('_runner_max_run', PACKAGE = 'runner', x, k, na_rm, na_pad, idx)
 }
 
 #' Running minimum
@@ -64,7 +64,7 @@ max_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, indexes = 0L) {
 #' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
 #' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 #' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.
-#' @param indexes an optional integer vector containing indexes numbers of observation.
+#' @param idx an optional integer vector containing idx numbers of observation.
 #' @return numeric vector of length equals length of \code{x} containing running min in \code{k}-long window.
 #' @examples
 #' set.seed(11)
@@ -76,8 +76,8 @@ max_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, indexes = 0L) {
 #' min_run(x2, na_rm = TRUE, k=4) # minimum in 4-element window
 #' min_run(x2, na_rm = FALSE, k=k) # minimum in varying k window size
 #' @export
-min_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, indexes = 0L) {
-    .Call('_runner_min_run', PACKAGE = 'runner', x, k, na_rm, na_pad, indexes)
+min_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, idx = 0L) {
+    .Call('_runner_min_run', PACKAGE = 'runner', x, k, na_rm, na_pad, idx)
 }
 
 #' Running streak length
@@ -110,7 +110,7 @@ streak_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, indexes = 1L) {
 #' @param k running window size. Not yet implemented.
 #' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} mean is calulating excluding \code{NA}.
 #' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
-#' @param indexes an optional integer vector containing indexes numbers of observation.
+#' @param idx an optional integer vector containing idx numbers of observation.
 #' @return numeric vector of length equals length of \code{x} containing running mean in \code{k}-long window.
 #' @examples
 #' set.seed(11)
@@ -122,8 +122,8 @@ streak_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, indexes = 1L) {
 #' mean_run(x2, na_rm = FALSE )
 #' mean_run(x2, na_rm = TRUE, k=4)
 #' @export
-mean_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, indexes = 1L) {
-    .Call('_runner_mean_run', PACKAGE = 'runner', x, k, na_rm, na_pad, indexes)
+mean_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, idx = 1L) {
+    .Call('_runner_mean_run', PACKAGE = 'runner', x, k, na_rm, na_pad, idx)
 }
 
 #' Running sum
@@ -133,7 +133,7 @@ mean_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, indexes = 1L) {
 #' @param k Running window size.  Not yet implemented.
 #' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.
 #' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
-#' @param indexes an optional integer vector containing indexes numbers of observation.
+#' @param idx an optional integer vector containing idx numbers of observation.
 #' @return numeric vector of length equals length of \code{x} containing running sum in \code{k}-long window.
 #' @examples
 #' set.seed(11)
@@ -145,8 +145,8 @@ mean_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, indexes = 1L) {
 #' sum_run(x2, na_rm = FALSE )
 #' sum_run(x2, na_rm = TRUE, k=4)
 #' @export
-sum_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, indexes = 1L) {
-    .Call('_runner_sum_run', PACKAGE = 'runner', x, k, na_rm, na_pad, indexes)
+sum_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, idx = 1L) {
+    .Call('_runner_sum_run', PACKAGE = 'runner', x, k, na_rm, na_pad, idx)
 }
 
 #' List of running windows
@@ -154,13 +154,13 @@ sum_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, indexes = 1L) {
 #' Creates list of windows
 #' @param x Vector of any type
 #' @param k integer vector which specifies window length
-#' @param indexes an optional integer vector containing indexes numbers of observation.
+#' @param idx an optional integer vector containing idx numbers of observation.
 #' @examples
 #' unique_run(1:10, k=3)
 #' unique_run(letters[1:10],k=c(1,2,2,4,5,5,5,5,5,5))
 #' @export
-unique_run <- function(x, k = 0L, indexes = 1L) {
-    .Call('_runner_unique_run', PACKAGE = 'runner', x, k, indexes)
+unique_run <- function(x, k = 0L, idx = 1L) {
+    .Call('_runner_unique_run', PACKAGE = 'runner', x, k, idx)
 }
 
 #' Running which-true function
@@ -207,12 +207,12 @@ whichd_run <- function(x, k = 0L, na_pad = FALSE) {
 #' Creates list of windows
 #' @param x Vector of any type
 #' @param k integer vector which specifies window length
-#' @param indexes an optional integer vector containing index of observations.
+#' @param idx an optional integer vector containing index of observations.
 #' @examples
 #' window_run(1:10, k=3)
 #' window_run(letters[1:10],k=c(1,2,2,4,5,5,5,5,5,5))
 #' @export
-window_run <- function(x, k = 0L, indexes = 1L) {
-    .Call('_runner_window_run', PACKAGE = 'runner', x, k, indexes)
+window_run <- function(x, k = 0L, idx = 1L) {
+    .Call('_runner_window_run', PACKAGE = 'runner', x, k, idx)
 }
 

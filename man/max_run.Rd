@@ -4,7 +4,7 @@
 \alias{max_run}
 \title{Running minimum}
 \usage{
-max_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE, indexes = 0L)
+max_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE, idx = 0L)
 }
 \arguments{
 \item{x}{input numeric vector where running minimum is calculated.}

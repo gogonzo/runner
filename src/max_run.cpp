@@ -10,7 +10,7 @@ using namespace Rcpp;
 //' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
 //' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 //' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.
-//' @param indexes an optional integer vector containing indexes numbers of observation.
+//' @param idx an optional integer vector containing idx numbers of observation.
 //' @return numeric vector of length equals length of \code{x} containing running min in \code{k}-long window.
 //' @examples
 //' set.seed(11)
@@ -28,7 +28,7 @@ NumericVector max_run(
     IntegerVector k = 0,
     bool na_rm = true,
     bool na_pad = false,
-    IntegerVector indexes = 0
+    IntegerVector idx = 0
 ){
 
   int n = x.size();
@@ -48,11 +48,11 @@ NumericVector max_run(
 
     /* windowed */
   } else if( k.size() == 1 ){
-    res = indexes.size() == 1 ? min::window_max21(x, k, na_rm) : min::window_max31(x, k, indexes, na_rm);
+    res = idx.size() == 1 ? min::window_max21(x, k, na_rm) : min::window_max31(x, k, idx, na_rm);
 
     /* varying window size */
   } else if( k.size() > 0){
-    res = indexes.size() == 1 ? min::window_max22(x, k, na_rm) : min::window_max32(x, k, indexes, na_rm);
+    res = idx.size() == 1 ? min::window_max22(x, k, na_rm) : min::window_max32(x, k, idx, na_rm);
   }
 
   /* pad NA's */

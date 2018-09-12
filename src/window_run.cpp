@@ -7,13 +7,13 @@ using namespace Rcpp;
 //' Creates list of windows
 //' @param x Vector of any type
 //' @param k integer vector which specifies window length
-//' @param indexes an optional integer vector containing index of observations.
+//' @param idx an optional integer vector containing index of observations.
 //' @examples
 //' window_run(1:10, k=3)
 //' window_run(letters[1:10],k=c(1,2,2,4,5,5,5,5,5,5))
 //' @export
 // [[Rcpp::export]]
-SEXP window_run(SEXP x, IntegerVector k = 0, IntegerVector indexes = 1) {
+SEXP window_run(SEXP x, IntegerVector k = 0, IntegerVector idx = 1) {
 
   int n = Rf_length(x);
 
@@ -26,11 +26,11 @@ SEXP window_run(SEXP x, IntegerVector k = 0, IntegerVector indexes = 1) {
   }
 
 
-  if( indexes.size() > 1){
+  if( idx.size() > 1){
     switch (TYPEOF(x)) {
-    case INTSXP: return window::window_to_list_int(as<IntegerVector>(x), k, indexes);
-    case REALSXP: return window::window_to_list_int(as<NumericVector>(x), k, indexes);
-    case STRSXP: return window::window_to_list_int(as<CharacterVector>(x), k, indexes);
+    case INTSXP: return window::window_to_list_int(as<IntegerVector>(x), k, idx);
+    case REALSXP: return window::window_to_list_int(as<NumericVector>(x), k, idx);
+    case STRSXP: return window::window_to_list_int(as<CharacterVector>(x), k, idx);
     default: {
       warning(
         "Invalid SEXPTYPE %d (%s).\n",
