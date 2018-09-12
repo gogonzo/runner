@@ -27,7 +27,7 @@ NumericVector mean_run(
     IntegerVector k=0,
     bool na_rm = true,
     bool na_pad = false,
-    IntegerVector indexes=1) {
+    IntegerVector indexes=1 ){
 
   int n = x.size(), first_na = -1,fnn, i1;
   double x1, nas1, non1;
@@ -37,7 +37,7 @@ NumericVector mean_run(
   NumericVector non = impl::calc_nonna_vector( x );
 
   // CHECK FOR POSSIBLE ERRORS
-  if( k.size() != n and k.size() > 1 ){
+  if( (k.size() != n) & (k.size() > 1) ){
     stop("length of k and length x differs. k=0 and k=length(x) only allowed");
   } else if( Rcpp::any(Rcpp::is_na(k)) ){
     stop("Function doesn't accept NA values in k vector");
@@ -53,7 +53,7 @@ NumericVector mean_run(
     }
 
     // NORMAL CUMMEAN ------------
-    if( k.size() == 1 & k(0) == 0 ){
+    if( (k.size() == 1) & (k(0) == 0) ){
       if(na_rm){
         res = impl::calc_sum_vector( x ) / non;
       } else {
@@ -64,7 +64,7 @@ NumericVector mean_run(
       }
 
       // CONST. WINDOW ------------
-    } else if(k.size()==1 & indexes.size()==1){
+    } else if( (k.size()==1) & (indexes.size()==1) ){
       sums = impl::calc_sum_vector0( x );
       for(int i = fnn; i<n; i++){
 
@@ -92,7 +92,7 @@ NumericVector mean_run(
 
 
       // VARYING WINDOW -----------
-    } else if( k.size() > 1  & indexes.size()==1){
+    } else if( (k.size() > 1)  & (indexes.size()==1) ){
       sums = impl::calc_sum_vector0( x );
       for(int i = fnn; i<n; i++){
         if( i > k(i) ){
@@ -118,11 +118,11 @@ NumericVector mean_run(
       }
 
       // IDX WINDOW -----------
-    } else if( k.size() == 1 & indexes.size() > 1 ){
+    } else if( (k.size() == 1) & (indexes.size() > 1) ){
       sums = impl::calc_sum_vector0( x );
       for(int i = fnn; i<n; i++){
         for(int j=i; j>=0; j--)
-          if( (indexes(i) - indexes(j) > (k(0) - 1) )){
+          if( (indexes(i) - indexes(j)) > (k(0) - 1) ){
             i1   = j;
             x1   = sums( j );
             nas1 = nas( j );
@@ -145,11 +145,11 @@ NumericVector mean_run(
       }
 
       // IDX VARYING WINDOW -----------
-    } else if( k.size() > 1 & indexes.size() > 1 ) {
+    } else if( (k.size() > 1) & (indexes.size() > 1) ) {
       sums = impl::calc_sum_vector0( x );
       for(int i = fnn; i<n; i++){
         for(int j=i; j>=0; j--)
-          if( (indexes(i) - indexes(j) > (k(i) - 1) )){
+          if( (indexes(i) - indexes(j)) > (k(i) - 1) ){
             i1   = j;
             x1   = sums( j );
             nas1 = nas( j );
@@ -213,7 +213,7 @@ NumericVector sum_run(
 
 
   // CHECK FOR POSSIBLE ERRORS
-  if( k.size() != n and k.size() > 1 ){
+  if( (k.size() != n) and (k.size() > 1) ){
     stop("length of k and length x differs. k=0 and k=length(x) only allowed");
   } else if( Rcpp::any(Rcpp::is_na(k)) ){
     stop("Function doesn't accept NA values in k vector");
@@ -240,7 +240,7 @@ NumericVector sum_run(
     }
 
   // CONST. WINDOW ------------
-  } else if(k.size()==1 & indexes.size()==1){
+  } else if( (k.size()==1) & (indexes.size()==1) ){
     sums = impl::calc_sum_vector0( x );
     for(int i = fnn; i<n; i++){
 
@@ -266,7 +266,7 @@ NumericVector sum_run(
 
 
   // VARYING WINDOW -----------
-  } else if( k.size() > 1  & indexes.size()==1){
+  } else if( (k.size() > 1)  & (indexes.size()==1) ){
     sums = impl::calc_sum_vector0( x );
     for(int i = fnn; i<n; i++){
       if( i > k(i) ){
@@ -290,11 +290,11 @@ NumericVector sum_run(
     }
 
   // IDX WINDOW -----------
-  } else if( k.size() == 1 & indexes.size() > 1 ){
+  } else if( (k.size() == 1) & (indexes.size()>1) ){
     sums = impl::calc_sum_vector0( x );
     for(int i = fnn; i<n; i++){
       for(int j=i; j>=0; j--)
-        if( (indexes(i) - indexes(j) > (k(0) - 1) )){
+        if( (indexes(i) - indexes(j)) > (k(0) - 1) ){
           i1   = j;
           x1   = sums( j );
           nas1 = nas( j );
@@ -316,11 +316,11 @@ NumericVector sum_run(
     }
 
   // IDX VARYING WINDOW -----------
-  } else if( k.size() > 1 & indexes.size() > 1 ) {
+  } else if( (k.size() > 1) & (indexes.size()>1) ) {
     sums = impl::calc_sum_vector0( x );
     for(int i = fnn; i<n; i++){
       for(int j=i; j>=0; j--)
-        if( (indexes(i) - indexes(j) > (k(i) - 1) )){
+        if( (indexes(i) - indexes(j)) > (k(i) - 1) ){
           i1   = j;
           x1   = sums( j );
           nas1 = nas( j );

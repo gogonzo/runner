@@ -26,7 +26,7 @@ namespace impl {
 
   int get_window_start(int i, int k, IntegerVector indexes){
     for(int j=i; j>=0; j--)
-      if( indexes(i) - indexes(j) > k - 1 )
+      if( (indexes(i) - indexes(j)) >( k - 1) )
         return j + 1;
     return 0;
   }
@@ -68,10 +68,10 @@ IntegerVector whichd_run_(const Vector<RTYPE>& x, IntegerVector k,bool na_pad){
   res(0) = cur_whichd = NumericVector::get_na();
 
 
-  if(nk==1 and ( k(0)==0 or k(0)==n ) ){
+  if(nk==1 and ( (k(0)==0) or (k(0)==n) ) ){
     /* whichd run full */
     for(int i=1; i < n ; i++) {
-      if( Vector<RTYPE>::is_na( x( i ) ) ) {
+      if( Vector<RTYPE>::is_na(x(i)) ) {
         cur_whichd = IntegerVector::get_na();
       } else if( x( i - 1 ) == x( i ) ){
       } else {
