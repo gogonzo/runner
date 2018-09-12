@@ -18,6 +18,20 @@ fill_run <- function(x, run_for_first = FALSE, only_within = FALSE) {
     .Call('_runner_fill_run', PACKAGE = 'runner', x, run_for_first, only_within)
 }
 
+#' Lag dependent on variable
+#'
+#' Vector of input lagged along integer vector
+#' @param x Vector of any type
+#' @param k integer vector which specifies window length
+#' @param indexes an optional integer vector containing index of observations.
+#' @examples
+#' lag_run(1:10, k=3)
+#' lag_run(letters[1:10],k=2, indexes=c(1,1,1,2,3,4,6,7,8,10))
+#' @export
+lag_run <- function(x, k = 0L, indexes = 1L) {
+    .Call('_runner_lag_run', PACKAGE = 'runner', x, k, indexes)
+}
+
 #' Running minimum
 #'
 #'

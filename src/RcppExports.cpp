@@ -18,6 +18,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// lag_run
+SEXP lag_run(SEXP x, IntegerVector k, IntegerVector indexes);
+RcppExport SEXP _runner_lag_run(SEXP xSEXP, SEXP kSEXP, SEXP indexesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type indexes(indexesSEXP);
+    rcpp_result_gen = Rcpp::wrap(lag_run(x, k, indexes));
+    return rcpp_result_gen;
+END_RCPP
+}
 // max_run
 NumericVector max_run(NumericVector x, IntegerVector k, bool na_rm, bool na_pad, IntegerVector indexes);
 RcppExport SEXP _runner_max_run(SEXP xSEXP, SEXP kSEXP, SEXP na_rmSEXP, SEXP na_padSEXP, SEXP indexesSEXP) {
@@ -151,6 +164,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_runner_fill_run", (DL_FUNC) &_runner_fill_run, 3},
+    {"_runner_lag_run", (DL_FUNC) &_runner_lag_run, 3},
     {"_runner_max_run", (DL_FUNC) &_runner_max_run, 5},
     {"_runner_min_run", (DL_FUNC) &_runner_min_run, 5},
     {"_runner_streak_run", (DL_FUNC) &_runner_streak_run, 5},
