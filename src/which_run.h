@@ -26,7 +26,7 @@ namespace impl {
 
   int get_window_start(int i, int k, IntegerVector indexes){
     for(int j=i; j>=0; j--)
-      if( (indexes(i) - indexes(j)) >( k - 1) )
+      if( (indexes(i) - indexes(j)) > ( k - 1) )
         return j + 1;
     return 0;
   }
