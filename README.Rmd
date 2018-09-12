@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 
 ![Cran badge](https://www.r-pkg.org/badges/version/runner)
 [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/elo2zero/runner?branch=master&svg=true)](https://ci.appveyor.com/project/elo2zero/runner)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner)
 ![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)
 
 ## About
