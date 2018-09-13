@@ -15,7 +15,7 @@ sum_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE, idx = 1L)
 
 \item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
 
-\item{indexes}{an optional integer vector containing indexes numbers of observation.}
+\item{idx}{an optional integer vector containing idx numbers of observation.}
 }
 \value{
 numeric vector of length equals length of \code{x} containing running sum in \code{k}-long window.

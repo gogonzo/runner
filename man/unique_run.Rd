@@ -11,7 +11,7 @@ unique_run(x, k = 0L, idx = 1L)
 
 \item{k}{integer vector which specifies window length}
 
-\item{indexes}{an optional integer vector containing indexes numbers of observation.}
+\item{idx}{an optional integer vector containing idx numbers of observation.}
 }
 \description{
 Creates list of windows

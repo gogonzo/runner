@@ -11,12 +11,12 @@ lag_run(x, k = 0L, idx = 1L)
 
 \item{k}{integer vector which specifies window length}
 
-\item{indexes}{an optional integer vector containing index of observations.}
+\item{idx}{an optional integer vector containing index of observations.}
 }
 \description{
 Vector of input lagged along integer vector
 }
 \examples{
 lag_run(1:10, k=3)
-lag_run(letters[1:10],k=2, indexes=c(1,1,1,2,3,4,6,7,8,10))
+lag_run(letters[1:10],k=2, idx=c(1,1,1,2,3,4,6,7,8,10))
 }

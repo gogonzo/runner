@@ -11,7 +11,7 @@ window_run(x, k = 0L, idx = 1L)
 
 \item{k}{integer vector which specifies window length}
 
-\item{indexes}{an optional integer vector containing index of observations.}
+\item{idx}{an optional integer vector containing index of observations.}
 }
 \description{
 Creates list of windows

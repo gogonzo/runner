@@ -137,3 +137,5 @@ data.frame(
   s2 = whicht_run(x, k=5,"first"))
 
 ```
+
+## Custom indexes
