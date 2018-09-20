@@ -32,6 +32,19 @@ lag_run <- function(x, k = 0L, idx = 1L) {
     .Call('_runner_lag_run', PACKAGE = 'runner', x, k, idx)
 }
 
+#' Length of running windows
+#'
+#' Calculates length of running windows
+#' @param x Vector of any type
+#' @param k integer vector which specifies window length
+#' @param idx an optional integer vector containing index of observations.
+#' @examples
+#' length_run(k=3,idx=c(1,2,2,4,5,5,5,5,5,5))
+#' @export
+length_run <- function(k = 0L, idx = 0L) {
+    .Call('_runner_length_run', PACKAGE = 'runner', k, idx)
+}
+
 #' Running minimum
 #'
 #'

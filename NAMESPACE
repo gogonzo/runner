@@ -2,6 +2,7 @@
 
 export(fill_run)
 export(lag_run)
+export(length_run)
 export(max_run)
 export(mean_run)
 export(min_run)
