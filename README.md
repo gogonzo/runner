@@ -1,6 +1,9 @@
 
-`runner` an R package for running operations.
-=============================================
+`runner` a R package for running operations.
+============================================
+
+sport <img src="man/figures/hexlogo.png" align="right" />
+=========================================================
 
 ![Cran badge](https://www.r-pkg.org/badges/version/runner) [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner) ![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)
 
@@ -95,7 +98,7 @@ unique_run( x=x2, k = 3 )
 #> [1] "a" "b"
 #> 
 #> [[5]]
-#> [1] "b" "a"
+#> [1] "a" "b"
 #> 
 #> [[6]]
 #> [1] "c" "a"
@@ -214,3 +217,6 @@ data.frame(
 #> 11  TRUE  1 NA  9
 #> 12 FALSE  1 NA  9
 ```
+
+Custom indexes
+--------------
