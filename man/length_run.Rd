@@ -10,11 +10,9 @@ length_run(k = 0L, idx = 0L)
 \item{k}{integer vector which specifies window length}
 
 \item{idx}{an optional integer vector containing index of observations.}
-
-\item{x}{Vector of any type}
 }
 \description{
-Calculates length of running windows
+Number of elements in window specified by idx
 }
 \examples{
 length_run(k=3,idx=c(1,2,2,4,5,5,5,5,5,5))

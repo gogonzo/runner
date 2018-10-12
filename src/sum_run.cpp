@@ -27,7 +27,8 @@ NumericVector mean_run(
     IntegerVector k=0,
     bool na_rm = true,
     bool na_pad = false,
-    IntegerVector idx=1 ){
+    IntegerVector idx=1
+){
 
   int n = x.size(), first_na = -1,fnn, i1;
   double x1, nas1, non1;

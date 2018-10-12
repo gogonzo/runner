@@ -4,8 +4,7 @@ using namespace Rcpp;
 
 //' Length of running windows
 //'
-//' Calculates length of running windows
-//' @param x Vector of any type
+//' Number of elements in window specified by idx
 //' @param k integer vector which specifies window length
 //' @param idx an optional integer vector containing index of observations.
 //' @examples

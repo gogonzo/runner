@@ -33,12 +33,14 @@ namespace lag {
   Vector<RTYPE> lag_run21(const Vector<RTYPE>& x, int k, IntegerVector indexes){
     int n = x.size();
     Vector<RTYPE> out(n);
-    for(int i = 0; i<n; i++){
-      for(int j = i; j >= 0;j--){
-        if(indexes(j) <= (indexes(i)-k)){
+    out(0) = Vector<RTYPE>::get_na();
+
+    for(int i = 1; i<n; i++){
+      for(int j = i; j > 0;j--){
+        if(indexes(j-1) < (indexes(i)-k)){
           out(i) = x(j);
           break;
-        } else if(j==0){
+        } else if(j==1){
           out(i) = Vector<RTYPE>::get_na();
         }
       }
@@ -50,12 +52,14 @@ namespace lag {
   Vector<RTYPE> lag_run22(const Vector<RTYPE>& x, IntegerVector k, IntegerVector indexes){
     int n = x.size();
     Vector<RTYPE> out(n);
-    for(int i = 0; i<n; i++){
-      for(int j = i; j >= 0;j--){
-        if(indexes(j) <= (indexes(i)-k(i))){
+    out(0) = Vector<RTYPE>::get_na();
+
+    for(int i = 1; i<n; i++){
+      for(int j = i; j > 0;j--){
+        if(indexes(j-1) < (indexes(i)-k(i))){
           out(i) = x(j);
           break;
-        } else if(j==0){
+        } else if(j==1){
           out(i) = Vector<RTYPE>::get_na();
         }
       }
