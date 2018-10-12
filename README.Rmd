@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 
 # `runner` a R package for running operations.
 
-# sport <img src="man/figures/hexlogo.png" align="right" />
+# sport <img src="man/images/hexlogo.png" align="right" />
 
 ![Cran badge](https://www.r-pkg.org/badges/version/runner)
 [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner)
