@@ -46,6 +46,40 @@ test_that("window_run with k varying", {
     )
 })
 
+
+test_that("window_run with idx++ same as window_run with windows",{
+  expect_identical( window_run(x1,k=3) , window_run(x1,k=3, idx=1:10) )
+  expect_identical( window_run(x1,k=k) , window_run(x1,k=k, idx=1:10) )
+})
+
+test_that("unique_run with idx",{
+  x11 <- list()
+  x22 <- list()
+  idx <- cumsum(sample(c(1,2,3,4), 10, replace=T))
+
+  for(i in 1:10)
+    for(j in i:1)
+      if(idx[j] >= (idx[i]-2)){
+        x11[[i]] <- x1[j:i]
+      } else {
+        break;
+      }
+
+
+  for(i in 1:10)
+    for(j in i:1)
+      if(idx[j] >= (idx[i]-(k[i]-1))){
+        x22[[i]] <- x1[j:i]
+      } else {
+        break;
+      }
+
+  expect_identical(window_run(x1, k=3, idx=idx), x11)
+  expect_identical(window_run(x1, k=k, idx=idx), x22)
+})
+
+
+
 test_that("Error handling in max_run",{
   expect_error(window_run(x2, k=c(2,2,2,2,2,2,2,2,2,NA)))
   expect_error(window_run(x2, k=c(2,2,2,2,2,2,2,2,2,2,2,2,2,2,2)))

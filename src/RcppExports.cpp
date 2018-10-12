@@ -74,8 +74,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // streak_run
-IntegerVector streak_run(SEXP x, IntegerVector k, bool na_rm, bool na_pad, IntegerVector indexes);
-RcppExport SEXP _runner_streak_run(SEXP xSEXP, SEXP kSEXP, SEXP na_rmSEXP, SEXP na_padSEXP, SEXP indexesSEXP) {
+IntegerVector streak_run(SEXP x, IntegerVector k, bool na_rm, bool na_pad, IntegerVector idx);
+RcppExport SEXP _runner_streak_run(SEXP xSEXP, SEXP kSEXP, SEXP na_rmSEXP, SEXP na_padSEXP, SEXP idxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -83,8 +83,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
     Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
     Rcpp::traits::input_parameter< bool >::type na_pad(na_padSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type indexes(indexesSEXP);
-    rcpp_result_gen = Rcpp::wrap(streak_run(x, k, na_rm, na_pad, indexes));
+    Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP);
+    rcpp_result_gen = Rcpp::wrap(streak_run(x, k, na_rm, na_pad, idx));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -132,8 +132,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // whicht_run
-IntegerVector whicht_run(LogicalVector x, IntegerVector k, std::string which, bool na_rm, bool na_pad, IntegerVector indexes);
-RcppExport SEXP _runner_whicht_run(SEXP xSEXP, SEXP kSEXP, SEXP whichSEXP, SEXP na_rmSEXP, SEXP na_padSEXP, SEXP indexesSEXP) {
+IntegerVector whicht_run(LogicalVector x, IntegerVector k, std::string which, bool na_rm, bool na_pad, IntegerVector idx);
+RcppExport SEXP _runner_whicht_run(SEXP xSEXP, SEXP kSEXP, SEXP whichSEXP, SEXP na_rmSEXP, SEXP na_padSEXP, SEXP idxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -142,8 +142,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::string >::type which(whichSEXP);
     Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
     Rcpp::traits::input_parameter< bool >::type na_pad(na_padSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type indexes(indexesSEXP);
-    rcpp_result_gen = Rcpp::wrap(whicht_run(x, k, which, na_rm, na_pad, indexes));
+    Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP);
+    rcpp_result_gen = Rcpp::wrap(whicht_run(x, k, which, na_rm, na_pad, idx));
     return rcpp_result_gen;
 END_RCPP
 }

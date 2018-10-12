@@ -69,3 +69,46 @@ test_that("Error handling in min_run",{
   expect_error(min_run(x2, k=c(2,2,2,2,NA)))
   expect_error(min_run(x2, k=c(2,2,2,2,2,2)))
 })
+
+
+
+test_that("min_run with idx++ same as min_run with windows",{
+  expect_identical( min_run(x1,k=3) , min_run(x1,k=3, idx=1:15) )
+  expect_identical( min_run(x1,k=k) , min_run(x1,k=k, idx=1:15) )
+})
+
+test_that("min_run with idx",{
+  x11 <- rep(NA, 15)
+  x22 <- rep(NA, 15)
+  idx <- cumsum(sample(c(1,2,3,4), 15, replace=T))
+
+  for(i in 1:15)
+    for(j in i:1)
+      if(idx[j] >= (idx[i]-2)){
+        x11[i] <- min(x1[j:i])
+      } else {
+        break;
+      }
+
+
+  for(i in 1:15)
+    for(j in i:1)
+      if(idx[j] >= (idx[i]-(k[i]-1))){
+        x22[i] <- min(x1[j:i])
+      } else {
+        break;
+      }
+
+  expect_identical(min_run(x1, k=3, idx=idx), x11)
+  expect_identical(min_run(x1, k=k, idx=idx), x22)
+
+})
+
+
+test_that("Error handling in min_run",{
+  expect_error(min_run(x2, k=c(2,2,2,2,NA)))
+  expect_error(min_run(x2, k=c(2,2,2,2,2,2)))
+})
+
+
+

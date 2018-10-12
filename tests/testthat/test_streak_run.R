@@ -54,6 +54,12 @@ test_that("streak_run handles NA's", {
   )
 })
 
+test_that("sum_run with idx++ same as sum_run with windows",{
+  expect_identical( streak_run(x1,k=3) , streak_run(x1,k=3, idx=1:15) )
+  expect_identical( streak_run(x1,k=k1) , streak_run(x1,k=k1, idx=1:15) )
+})
+
+
 test_that("Error in streak_run",{
   expect_error(streak_run(x1, k=c(2,2,2,2,NA,2,2)))
   expect_error(streak_run(x1, k=c(2,2,2,2,2,2)))

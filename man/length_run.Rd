@@ -4,7 +4,7 @@
 \alias{length_run}
 \title{Length of running windows}
 \usage{
-length_run(k = 0L, idx = 0L)
+length_run(k = 1L, idx = 0L)
 }
 \arguments{
 \item{k}{integer vector which specifies window length}
@@ -12,7 +12,7 @@ length_run(k = 0L, idx = 0L)
 \item{idx}{an optional integer vector containing index of observations.}
 }
 \description{
-Number of elements in window specified by idx
+Number of elements in k-long window calculated on idx vector. If idx is an `as.integer(date)` vector, then k=number of days in window - then the result is number of observations within k days window.
 }
 \examples{
 length_run(k=3,idx=c(1,2,2,4,5,5,5,5,5,5))

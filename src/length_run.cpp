@@ -4,14 +4,14 @@ using namespace Rcpp;
 
 //' Length of running windows
 //'
-//' Number of elements in window specified by idx
+//' Number of elements in k-long window calculated on idx vector. If idx is an `as.integer(date)` vector, then k=number of days in window - then the result is number of observations within k days window.
 //' @param k integer vector which specifies window length
 //' @param idx an optional integer vector containing index of observations.
 //' @examples
 //' length_run(k=3,idx=c(1,2,2,4,5,5,5,5,5,5))
 //' @export
 // [[Rcpp::export]]
-IntegerVector length_run(IntegerVector k = 0, IntegerVector idx = 0) {
+IntegerVector length_run(IntegerVector k = 1, IntegerVector idx = 0) {
 
   int n = idx.size();
   IntegerVector res(n);
@@ -24,7 +24,7 @@ IntegerVector length_run(IntegerVector k = 0, IntegerVector idx = 0) {
           res(i) = i - j;
           break;
         } else if(j == 0){
-          res(i) = i + 1;
+          res(i) = IntegerVector::get_na();
         }
     }
 
@@ -36,7 +36,7 @@ IntegerVector length_run(IntegerVector k = 0, IntegerVector idx = 0) {
           res(i) = i - j;
           break;
         } else if(j == 0){
-          res(i) = i + 1;
+          res(i) = IntegerVector::get_na();
         }
     }
   }

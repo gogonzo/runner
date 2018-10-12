@@ -5,7 +5,7 @@
 \title{Running which-true function}
 \usage{
 whicht_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE,
-  indexes = 0L)
+  idx = 0L)
 }
 \arguments{
 \item{x}{input logical vector where running which-true is calculated.}
@@ -18,7 +18,7 @@ whicht_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE,
 
 \item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
 
-\item{indexes}{an optional integer vector containing indexes numbers of observation.}
+\item{idx}{an optional integer vector containing indexes numbers of observation.}
 }
 \value{
 numeric vector of length equals length of \code{x} containing running index in \code{k}-long window.

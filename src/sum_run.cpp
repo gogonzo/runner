@@ -69,7 +69,7 @@ NumericVector mean_run(
       sums = impl::calc_sum_vector0( x );
       for(int i = fnn; i<n; i++){
 
-        if( i > k(0) ){
+        if( i >= k(0) ){
           i1   = i - k(0);
           x1   = sums( i1 );
           nas1 = nas( i1 );
@@ -96,7 +96,7 @@ NumericVector mean_run(
     } else if( (k.size() > 1)  & (idx.size()==1) ){
       sums = impl::calc_sum_vector0( x );
       for(int i = fnn; i<n; i++){
-        if( i > k(i) ){
+        if( i >= k(i) ){
           i1   = i - k(i);
           x1   = sums( i1 );
           nas1 = nas( i1 );
@@ -123,7 +123,7 @@ NumericVector mean_run(
       sums = impl::calc_sum_vector0( x );
       for(int i = fnn; i<n; i++){
         for(int j=i; j>=0; j--)
-          if( (idx(i) - idx(j)) > (k(0) - 1) ){
+          if( (idx(i) - idx(j)) >= k(0) ){
             i1   = j;
             x1   = sums( j );
             nas1 = nas( j );
@@ -150,7 +150,7 @@ NumericVector mean_run(
       sums = impl::calc_sum_vector0( x );
       for(int i = fnn; i<n; i++){
         for(int j=i; j>=0; j--)
-          if( (idx(i) - idx(j)) > (k(i) - 1) ){
+          if( (idx(i) - idx(j)) >= k(i) ){
             i1   = j;
             x1   = sums( j );
             nas1 = nas( j );
@@ -245,7 +245,7 @@ NumericVector sum_run(
     sums = impl::calc_sum_vector0( x );
     for(int i = fnn; i<n; i++){
 
-      if( i > k(0) ){
+      if( i >= k(0) ){
         i1   = i - k(0);
         x1   = sums( i1 );
         nas1 = nas( i1 );
@@ -270,7 +270,7 @@ NumericVector sum_run(
   } else if( (k.size() > 1)  & (idx.size()==1) ){
     sums = impl::calc_sum_vector0( x );
     for(int i = fnn; i<n; i++){
-      if( i > k(i) ){
+      if( i >= k(i) ){
         i1   = i - k(i);
         x1   = sums( i1 );
         nas1 = nas( i1 );
@@ -295,18 +295,15 @@ NumericVector sum_run(
     sums = impl::calc_sum_vector0( x );
     for(int i = fnn; i<n; i++){
       for(int j=i; j>=0; j--)
-        if( (idx(i) - idx(j)) > (k(0) - 1) ){
-          i1   = j;
+        if( (idx(i) - idx(j)) >= k(0) ){
           x1   = sums( j );
           nas1 = nas( j );
-
           break;
         } else if(j == 0){
-          i1   = 0;
           x1   = 0.0;
           nas1 = 0.0;
         }
-      res( i ) = ( sums(i) - x1 );
+      res( i ) = sums(i) - x1;
       if( ( nas(i) - nas1 )==k(0) ){
         res(i) = NumericVector::get_na();
         continue;
@@ -321,13 +318,11 @@ NumericVector sum_run(
     sums = impl::calc_sum_vector0( x );
     for(int i = fnn; i<n; i++){
       for(int j=i; j>=0; j--)
-        if( (idx(i) - idx(j)) > (k(i) - 1) ){
-          i1   = j;
+        if( (idx(i) - idx(j)) >= k(i) ){
           x1   = sums( j );
           nas1 = nas( j );
           break;
         } else if(j == 0){
-          i1   = 0;
           x1   = 0.0;
           nas1 = 0.0;
         }

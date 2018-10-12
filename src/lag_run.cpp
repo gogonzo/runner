@@ -13,7 +13,7 @@ using namespace Rcpp;
 //' lag_run(letters[1:10],k=2, idx=c(1,1,1,2,3,4,6,7,8,10))
 //' @export
 // [[Rcpp::export]]
-SEXP lag_run(SEXP x, IntegerVector k = 0, IntegerVector idx = 1) {
+SEXP lag_run(SEXP x, IntegerVector k = 1, IntegerVector idx = 1) {
 
   if( (idx.size()==1) & (k.size()==1)) {
     switch (TYPEOF(x)) {

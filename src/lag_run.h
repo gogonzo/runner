@@ -7,7 +7,7 @@ namespace lag {
     int n = x.size();
     Vector<RTYPE> out(n);
     for(int i = 0; i<n; i++)
-      if(i-k>0){
+      if((i-k)>=0){
         out(i) = x(i-k);
       } else {
         out(i) = Vector<RTYPE>::get_na();
@@ -21,7 +21,7 @@ namespace lag {
     int n = x.size();
     Vector<RTYPE> out(n);
     for(int i = 0; i<n; i++)
-      if(i-k(i)>0){
+      if((i-k(i))>=0){
         out(i) = x( i-k(i) );
       } else {
         out(i) = Vector<RTYPE>::get_na();
@@ -36,11 +36,11 @@ namespace lag {
     out(0) = Vector<RTYPE>::get_na();
 
     for(int i = 1; i<n; i++){
-      for(int j = i; j > 0;j--){
-        if(indexes(j-1) < (indexes(i)-k)){
+      for(int j = (i-1); j >= 0;j--){
+        if(indexes(j) <= (indexes(i)-k)){
           out(i) = x(j);
           break;
-        } else if(j==1){
+        } else if(j==0){
           out(i) = Vector<RTYPE>::get_na();
         }
       }
@@ -55,11 +55,11 @@ namespace lag {
     out(0) = Vector<RTYPE>::get_na();
 
     for(int i = 1; i<n; i++){
-      for(int j = i; j > 0;j--){
-        if(indexes(j-1) < (indexes(i)-k(i))){
+      for(int j = (i-1); j >= 0;j--){
+        if(indexes(j) <= (indexes(i)-k(i))){
           out(i) = x(j);
           break;
-        } else if(j==1){
+        } else if(j==0){
           out(i) = Vector<RTYPE>::get_na();
         }
       }

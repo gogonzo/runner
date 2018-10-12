@@ -1,4 +1,4 @@
-context("WhichTrue max")
+context("Running which")
 set.seed(11)
 x1 <- sample(c(T,F,NA), 20, replace=T)
 x2 <- sample(c(T,F,NA), 20, replace=T)
@@ -107,21 +107,20 @@ test_that("whicht with na_rm=T k=k", {
     )
 })
 
-
 test_that("whicht with sequential indexes equals non-indexed",{
   x <- sample(c(NA,F,T),10, replace=T)
   k <- sample(1:10,10,replace=T)
 
   expect_identical(
-    whicht_run( x, which="last", indexes=1:10),
+    whicht_run( x, which="last", idx=1:10),
     whicht_run( x, which="last")
   )
   expect_identical(
-    whicht_run( x, which="last", k=4,indexes=seq(2,20, by=2) ),
+    whicht_run( x, which="last", k=4,idx=seq(2,20, by=2) ),
     whicht_run( x, which="last", k=2 )
   )
   expect_identical(
-    whicht_run( x, which="last", k=k*2,indexes=(1:10)*2 ),
+    whicht_run( x, which="last", k=k*2,idx=(1:10)*2 ),
     whicht_run( x, which="last", k=k )
   )
 
@@ -133,15 +132,15 @@ test_that("whicht for indexed window",{
   k <- sample(1:12,12,replace=T)
 
   expect_identical(
-    whicht_run( x, which="last", indexes=i, k=3, na_rm=F),
+    whicht_run( x, which="last", idx=i, k=3, na_rm=F),
     as.integer(c(NA, NA, 3, NA, NA, NA, 7, 8, NA, 10, NA, 12))
   )
   expect_identical(
-    whicht_run( x, which="first", indexes=i, k=2, na_rm=F),
+    whicht_run( x, which="first", idx=i, k=2, na_rm=F),
     as.integer(c(NA, NA, 3, 3, 3, 3, 7, 8, 8, 8, NA, 12))
   )
   expect_identical(
-    whicht_run( x, which="last", indexes=i, k=2, na_rm=T),
+    whicht_run( x, which="last", idx=i, k=2, na_rm=T),
     as.integer(c(NA, NA, 3, 3, 3, 3, 7, 8, 8, 10, NA, 12))
   )
 

@@ -9,7 +9,7 @@ using namespace Rcpp;
 //' @param k running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
 //' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed streak prior to element.
 //' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
-//' @param indexes an optional integer vector containing indexes numbers of observation.
+//' @param idx an optional integer vector containing indexes numbers of observation.
 //' @return numeric vector of length equals length of \code{x} containing running streak length in \code{k}-long window.
 //' @examples
 //' set.seed(11)
@@ -27,7 +27,7 @@ IntegerVector streak_run(
     IntegerVector k=0,
     bool na_rm = true,
     bool na_pad = false,
-    IntegerVector indexes=1) {
+    IntegerVector idx=1) {
 
   int n = Rf_length(x);
 
@@ -39,7 +39,7 @@ IntegerVector streak_run(
     stop("Function doesn't accept NA values in k vector");
   }
 
-  if( indexes.size() == 1){
+  if( idx.size() == 1){
     switch (TYPEOF(x)) {
     case INTSXP: return streak::streak_run1(as<IntegerVector>(x), k, na_rm, na_pad);
     case REALSXP: return streak::streak_run1(as<NumericVector>(x), k, na_rm, na_pad);
@@ -57,11 +57,11 @@ IntegerVector streak_run(
 
   } else {
     switch (TYPEOF(x)) {
-    case INTSXP: return streak::streak_run2(as<IntegerVector>(x), k, na_rm, na_pad, indexes);
-    case REALSXP: return streak::streak_run2(as<NumericVector>(x), k, na_rm, na_pad, indexes);
-    case STRSXP: return streak::streak_run2(as<CharacterVector>(x), k, na_rm, na_pad, indexes);
-    case LGLSXP: return streak::streak_run2(as<LogicalVector>(x), k, na_rm, na_pad, indexes);
-    case CPLXSXP: return streak::streak_run2(as<ComplexVector>(x), k, na_rm, na_pad, indexes);
+    case INTSXP: return streak::streak_run2(as<IntegerVector>(x), k, na_rm, na_pad, idx);
+    case REALSXP: return streak::streak_run2(as<NumericVector>(x), k, na_rm, na_pad, idx);
+    case STRSXP: return streak::streak_run2(as<CharacterVector>(x), k, na_rm, na_pad, idx);
+    case LGLSXP: return streak::streak_run2(as<LogicalVector>(x), k, na_rm, na_pad, idx);
+    case CPLXSXP: return streak::streak_run2(as<ComplexVector>(x), k, na_rm, na_pad, idx);
     default: {
       warning(
         "Invalid SEXPTYPE %d (%s).\n",

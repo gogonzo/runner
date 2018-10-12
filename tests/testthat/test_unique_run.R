@@ -1,4 +1,4 @@
-context("Running window")
+context("Running unique")
 set.seed(11)
 x1 <- 1:10
 x2 <- letters[1:10]
@@ -33,8 +33,6 @@ test_that("unique_run k=constant",{
       sort(unique(as.numeric(x1[idx(i,2):i])))
     )
 
-
-
 })
 
 test_that("unique_run with k varying", {
@@ -44,6 +42,40 @@ test_that("unique_run with k varying", {
       sort(unique(x2[idx(i,k[i]):i]))
     )
 })
+
+test_that("unique_run with idx++ same as unique_run with windows",{
+  expect_identical( unique_run(x1,k=3) , unique_run(x1,k=3, idx=1:10) )
+  expect_identical( unique_run(x1,k=k) , unique_run(x1,k=k, idx=1:10) )
+})
+
+test_that("unique_run with idx",{
+  x11 <- list()
+  x22 <- list()
+  idx <- cumsum(sample(c(1,2,3,4), 10, replace=T))
+
+  for(i in 1:10)
+    for(j in i:1)
+      if(idx[j] >= (idx[i]-2)){
+        x11[[i]] <- sort(unique(x1[j:i]))
+      } else {
+        break;
+      }
+
+
+  for(i in 1:10)
+    for(j in i:1)
+      if(idx[j] >= (idx[i]-(k[i]-1))){
+        x22[[i]] <- sort(unique(x1[j:i]))
+      } else {
+        break;
+      }
+
+  expect_identical(lapply(unique_run(x1, k=3, idx=idx),sort), x11)
+  expect_identical(lapply(unique_run(x1, k=k, idx=idx),sort), x22)
+
+})
+
+
 
 test_that("Error handling in max_run",{
   expect_error(unique_run(x2, k=c(2,2,2,2,2,2,2,2,2,NA)))

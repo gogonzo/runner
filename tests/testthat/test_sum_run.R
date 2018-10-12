@@ -46,6 +46,39 @@ test_that("sum_run with na_rm=T k=4", {
     )
 })
 
+test_that("sum_run with idx++ same as sum_run with windows",{
+  expect_identical( sum_run(x1,k=3) , sum_run(x1,k=3, idx=0:14) )
+  expect_identical( sum_run(x1,k=k) , sum_run(x1,k=k, idx=1:15) )
+
+  data.frame(x1, k, idx=1:15, v1=sum_run(x1,k=3), v2=sum_run(x1,k=3, idx=1:15) )
+})
+
+test_that("sum_run with idx",{
+  x11 <- rep(NA, 15)
+  x22 <- rep(NA, 15)
+  idx <- cumsum(sample(c(1,2,3,4), 15, replace=T))
+
+  for(i in 1:15)
+    for(j in i:1)
+      if(idx[j] >= (idx[i]-2)){
+        x11[i] <- sum(x1[j:i])
+      } else {
+        break;
+      }
+
+
+  for(i in 1:15)
+    for(j in i:1)
+      if(idx[j] >= (idx[i]-(k[i]-1))){
+        x22[i] <- sum(x1[j:i])
+      } else {
+        break;
+      }
+
+  expect_equal(sum_run(x1, k=3, idx=idx), x11)
+  expect_equal(sum_run(x1, k=k, idx=idx), x22)
+
+})
 
 
 test_that("Error handling in sum_run",{
