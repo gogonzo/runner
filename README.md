@@ -29,7 +29,9 @@ The main idea of the package is to provide running operations on R vectors. Runn
 
 -   window size `k` denotes number of elements from i-th backwards, where functions are calculated. `k` can be also specified by vector of the same length as x as illustrated in second example.
 
-![window size](vignettes/images/options_window_size.png) ![window size](vignettes/images/options_window_size_varying.png)
+![window size](vignettes/images/options_window_size.png)
+
+![window size](vignettes/images/options_window_size_varying.png)
 
 -   argument `na_rm=T` handling missing and is equivalent to `na.rm`.
 
@@ -116,16 +118,16 @@ unique_run( x=x2, k = 3 )
 #> [1] "a"
 #> 
 #> [[3]]
-#> [1] "a" "b"
+#> [1] "b" "a"
 #> 
 #> [[4]]
-#> [1] "a" "b"
+#> [1] "b" "a"
 #> 
 #> [[5]]
 #> [1] "b" "a"
 #> 
 #> [[6]]
-#> [1] "c" "a"
+#> [1] "a" "c"
 ```
 
 ### Running aggregations `(mean|sum|min|max)_run`
