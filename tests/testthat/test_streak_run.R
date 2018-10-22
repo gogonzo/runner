@@ -57,6 +57,10 @@ test_that("streak_run handles NA's", {
 test_that("sum_run with idx++ same as sum_run with windows",{
   expect_identical( streak_run(x1,k=3) , streak_run(x1,k=3, idx=1:15) )
   expect_identical( streak_run(x1,k=k1) , streak_run(x1,k=k1, idx=1:15) )
+
+
+  expect_identical( streak_run(as.factor(x1),k=3) , streak_run(as.factor(x1),k=3, idx=1:15) )
+  expect_identical( streak_run(as.factor(x1),k=k1), streak_run(as.factor(x1),k=k1, idx=1:15) )
 })
 
 

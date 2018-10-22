@@ -5,12 +5,12 @@
 sport <img src="vignettes/images/hexlogo.png" align="right" />
 ==============================================================
 
-![Cran badge](https://www.r-pkg.org/badges/version/runner) [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner) ![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)
+[![Cran badge](https://www.r-pkg.org/badges/version/runner)](https://cran.r-project.org/web/packages/runner/index.html) [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner) ![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)
 
 About
 -----
 
-Package contains standard running functions (aka. windowed, rolling, cumulative) with additional options. The most of the functions are already implemented in R (e.g. `base::cumsum`, `RcppRoll::roll_sum`, `zoo::rollsum`) and runner does not improve `base` or `RcppRoll` performance. Instead of speed improvement, `runner` provides extended functionality like handling missings and varying window size. `runner` brings also rolling streak and rollin which, what extends beyond range of functions already implemented in R packages.
+Package contains standard running functions (aka. windowed, rolling, cumulative) with additional options. `runner` provides extended functionality like date windows, handling missings and varying window size. `runner` brings also rolling streak and rollin which, what extends beyond range of functions already implemented in R packages.
 
 Installation
 ------------
@@ -27,21 +27,25 @@ Examples
 
 The main idea of the package is to provide running operations on R vectors. Running functions are these which are applied to all elements up to actual one. For example implemented already in `base` `cumsum`, `cummin` etc. Functions provided in this package works similar but with extended functionality such as handling `NA` and custom window size. The most functions provided in package are based on the same logic:
 
--   window size `k` denotes number of elements from i-th backwards, where functions are calculated.
+-   window size `k` denotes number of elements from i-th backwards, where functions are calculated. `k` can be also specified by vector of the same length as x as illustrated in second example.
 
-![window size](vignettes/images/running_window.png)
+![window size](vignettes/images/options_window_size.png) ![window size](vignettes/images/options_window_size_varying.png)
 
 -   argument `na_rm=T` handling missing and is equivalent to `na.rm`.
 
-![na\_rm](vignettes/images/running_sum_narm.png)
+![na\_rm](vignettes/images/options_na_rm.png)
 
 -   `na_pad=T` if window size exceeds number of available elements, than first `k-1` elements are filled with `NA`.
 
-![na\_pad](vignettes/images/running_sum_napad.png)
+![na\_pad](vignettes/images/options_na_pad.png)
 
 -   `which` used with running index, which value ('first' or 'last')
 
-![first or last](vignettes/images/running_which.png)
+![first or last](vignettes/images/options_which_first_last.png)
+
+-   `idx` to calculate within time window. `idx` is a date (or numeric) vector of the same length as x. `k` then should to be an integer specyfying time window span. In the example k=5 window sum.
+
+![idx](vignettes/images/options_idx.png)
 
 ### Creating windows
 
@@ -76,6 +80,26 @@ window_run( x= 1:5, k = c(1,2,3,3,2) ) %>%
 #> [1] 1 3 6 9 9
 ```
 
+One can also specify window based on a date of other numeric index. To do this date should be passed via `idx` argument and k should be integer denoting date-window span.
+
+``` r
+window_run( x = 1:5, k = 3, idx = c(1,2,5,6,7) ) 
+#> [[1]]
+#> [1] 1
+#> 
+#> [[2]]
+#> [1] 1 2
+#> 
+#> [[3]]
+#> [1] 3
+#> 
+#> [[4]]
+#> [1] 3 4
+#> 
+#> [[5]]
+#> [1] 3 4 5
+```
+
 ### Unique elements in window
 
 User can use `unique_run` create list of unique elements within specified window size.
@@ -101,7 +125,7 @@ unique_run( x=x2, k = 3 )
 #> [1] "b" "a"
 #> 
 #> [[6]]
-#> [1] "a" "c"
+#> [1] "c" "a"
 ```
 
 ### Running aggregations `(mean|sum|min|max)_run`
@@ -113,27 +137,30 @@ Runner provides basic aggregation methods calculated within running windows. Bel
 ``` r
 x <- c(1,-5,1,-3,NA,NA,NA,1,-1,NA,-2,3)
 k <- c(4,5,2,5,4,4,2,2,4,4,3,1)
+idx <- c(1,3,4,6,7,10,13,16,19,21,23,26)
 
 a0 <- cummin(x)
 a1 <- min_run(x, na_rm = TRUE)
 a2 <- min_run(x, k=5, na_rm = TRUE)
 a3 <- min_run(x, na_rm = FALSE)
 a4 <- min_run(x, k=k, na_rm = TRUE, na_pad = TRUE)
+a5 <- min_run(x, k=5, idx=idx)
 
-data.frame(x, a0, a1, a2, a3, a4)
-#>     x a0 a1 a2 a3 a4
-#> 1   1  1  1  1  1 NA
-#> 2  -5 -5 -5 -5 -5 NA
-#> 3   1 -5 -5 -5 -5 NA
-#> 4  -3 -5 -5 -5 -5 -5
-#> 5  NA NA -5 -5 NA -5
-#> 6  NA NA -5 -5 NA -3
-#> 7  NA NA -5 -3 NA NA
-#> 8   1 NA -5 -3 NA  1
-#> 9  -1 NA -5 -1 NA -1
-#> 10 NA NA -5 -1 NA -1
-#> 11 -2 NA -5 -2 NA -2
-#> 12  3 NA -5 -2 NA  3
+
+data.frame(idx, x, a0, a1, a2, a3, a4, a5)
+#>    idx  x a0 a1 a2 a3 a4  a5
+#> 1    1  1  1  1  1  1 NA   1
+#> 2    3 -5 -5 -5 -5 -5 NA  -5
+#> 3    4  1 -5 -5 -5 -5 NA  -5
+#> 4    6 -3 -5 -5 -5 -5 -5  -5
+#> 5    7 NA NA -5 -5 NA -5  -5
+#> 6   10 NA NA -5 -5 NA -3  -3
+#> 7   13 NA NA -5 -3 NA NA Inf
+#> 8   16  1 NA -5 -3 NA  1   1
+#> 9   19 -1 NA -5 -1 NA -1  -1
+#> 10  21 NA NA -5 -1 NA -1  -1
+#> 11  23 -2 NA -5 -2 NA -2  -2
+#> 12  26  3 NA -5 -2 NA  3  -2
 ```
 
 ### fill\_run

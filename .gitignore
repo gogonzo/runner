@@ -16,8 +16,9 @@ src/*.dll
 # cran comments
 cran-comments.md
 
-# gimp file
+# gimp/libre file
 *.xcf
+*.ods
 
 # remove
 README.Rmd

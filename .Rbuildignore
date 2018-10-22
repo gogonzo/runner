@@ -4,7 +4,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^data-raw$
-^README\.md$
 ^README\.Rmd$
 ^README-.*\.png$
 ^cran-comments\.md$
@@ -14,3 +13,4 @@
 \.gitignore
 \.xcf
 TODO
+\.ods
