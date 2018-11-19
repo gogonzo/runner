@@ -23,7 +23,7 @@ NumericVector window_min(NumericVector x, bool na_rm ){
   for(int i = 0; i < x.size(); i ++){
     // handling NAs
     if( !na_rm and NumericVector::is_na( x(i) ) ){
-      std::fill(res.begin() + i, res.end(), NumericVector::get_na() );
+      std::fill(res.begin() + i, res.end(), NA_REAL );
       break;
     }
 
@@ -42,12 +42,12 @@ NumericVector window_min21(NumericVector x, IntegerVector k, bool na_rm){
 
   for(int i = 0; i < n; i++){
 
-    cur_min = NumericVector::get_na();
+    cur_min = NA_REAL;
     if( (i - k(0) + 1) < 0) i1 = 0; else i1 = i - k(0) + 1;
 
     for(int j = i1; j <= i ; ++j){
       if(!na_rm and NumericVector::is_na(x(j)) ){
-        cur_min = NumericVector::get_na();
+        cur_min = NA_REAL;
         break;
       }
 
@@ -69,12 +69,12 @@ NumericVector window_min22(NumericVector x, IntegerVector k, bool na_rm){
 
   for(int i = 0; i < n; i++){
 
-    cur_min = NumericVector::get_na();
+    cur_min = NA_REAL;
     if( (i - k(i) + 1) < 0) i1 = 0; else i1 = i - k(i) + 1;
 
     for(int j = i1; j <= i ; ++j){
       if(!na_rm and NumericVector::is_na(x(j)) ){
-        cur_min = NumericVector::get_na();
+        cur_min = NA_REAL;
         break;
       }
 
@@ -91,14 +91,14 @@ NumericVector window_min31( NumericVector x, IntegerVector k, IntegerVector inde
   IntegerVector idx;
 
   for(int i=0; i < x.size(); i++){
-    cur_min = INFINITY;
+    cur_min = R_PosInf;
     for(int j=i;j>=0;j--){
       if( (indexes(i) - indexes(j) > (k(0) - 1) ))
         break;
       if (x(j) < cur_min){
         cur_min = x(j);
       } else if (NumericVector::is_na(cur_min) & !na_rm){
-        cur_min = NumericVector::get_na();
+        cur_min = NA_REAL;
         break;
       }
 
@@ -115,14 +115,14 @@ NumericVector window_min32( NumericVector x, IntegerVector k, IntegerVector inde
   IntegerVector idx;
 
   for(int i=0; i < x.size(); i++){
-    cur_min = INFINITY;
+    cur_min = R_PosInf;
     for(int j=i;j>=0;j--){
       if( (indexes(i) - indexes(j) > (k(i) - 1) ))
         break;
       if (x(j) < cur_min){
         cur_min = x(j);
       } else if (NumericVector::is_na(cur_min) & !na_rm){
-        cur_min = NumericVector::get_na();
+        cur_min = NA_REAL;
         break;
       }
 

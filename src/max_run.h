@@ -45,7 +45,7 @@ NumericVector window_max21(NumericVector x, IntegerVector k, bool na_rm){
 
     for(int j = i1; j <= i ; ++j){
       if(!na_rm and NumericVector::is_na(x(j)) ){
-        cur_max = NumericVector::get_na();
+        cur_max = NA_REAL;
         break;
       }
 
@@ -67,12 +67,12 @@ NumericVector window_max22(NumericVector x, IntegerVector k, bool na_rm){
 
   for(int i = 0; i < n; i++){
 
-    cur_max = NumericVector::get_na();
+    cur_max = NA_REAL;
     if( (i - k(i) + 1) < 0) i1 = 0; else i1 = i - k(i) + 1;
 
     for(int j = i1; j <= i ; ++j){
       if(!na_rm and NumericVector::is_na(x(j)) ){
-        cur_max = NumericVector::get_na();
+        cur_max = NA_REAL;
         break;
       }
 
@@ -89,14 +89,14 @@ NumericVector window_max31( NumericVector x, IntegerVector k, IntegerVector inde
   IntegerVector idx;
 
   for(int i=0; i < x.size(); i++){
-    cur_max = -INFINITY;
+    cur_max = R_NegInf;
     for(int j=i;j>=0;j--){
       if( (indexes(i) - indexes(j) > (k(0) - 1) ))
         break;
       if (x(j) > cur_max){
         cur_max = x(j);
       } else if (NumericVector::is_na(cur_max) & !na_rm){
-        cur_max = NumericVector::get_na();
+        cur_max = NA_REAL;
         break;
       }
 
@@ -113,14 +113,14 @@ NumericVector window_max32( NumericVector x, IntegerVector k, IntegerVector inde
   IntegerVector idx;
 
   for(int i=0; i < x.size(); i++){
-    cur_max = -INFINITY;
+    cur_max = R_NegInf;
     for(int j=i;j>=0;j--){
       if( (indexes(i) - indexes(j) > (k(i) - 1) ))
         break;
       if (x(j) > cur_max){
         cur_max = x(j);
       } else if (NumericVector::is_na(cur_max) & !na_rm){
-        cur_max = NumericVector::get_na();
+        cur_max = NA_REAL;
         break;
       }
 

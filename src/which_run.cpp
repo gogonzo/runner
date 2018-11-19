@@ -44,12 +44,12 @@ IntegerVector whicht_run(
         if( which == "first" ){
           for(int i=0;i<n;i++){
             true1 = impl::first(w[w<=i]);
-            res(i) = (true1 >= 0) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 >= 0) ? true1 + 1 : NA_INTEGER;
           }
         } else if( which == "last" ){
           for(int i=0;i<n;i++){
             true1 = impl::last(w[w<=i]);
-            res(i) = (true1 >= 0) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 >= 0) ? true1 + 1 : NA_INTEGER;
           }
         }
       } else {
@@ -58,13 +58,13 @@ IntegerVector whicht_run(
           for(int i=0;i<n;i++){
             true1  = impl::first(w[w<=i]);
             na1    = impl::first(na[na<=i]);
-            res(i) = (true1 < na1) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 < na1) ? true1 + 1 : NA_INTEGER;
           }
         } else if( which == "last" ){
           for(int i=0;i<n;i++){
             true1  = impl::last(w[w<=i]);
             na1    = impl::last(na[na<=i]);
-            res(i) = (true1 > na1) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 > na1) ? true1 + 1 : NA_INTEGER;
           }
         }
       }
@@ -76,7 +76,7 @@ IntegerVector whicht_run(
           for(int i=0;i<n;i++){
             i1 = (i - k(0) + 1) < 0 ? 0 : i-k(0)+1;
             true1 = impl::first(w[(w<=i) & (w>=i1)]);
-            res(i) = (true1 >= 0) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 >= 0) ? true1 + 1 : NA_INTEGER;
           }
         } else if(which == "last") {
           for(int i=0;i<n;i++){
@@ -91,14 +91,14 @@ IntegerVector whicht_run(
             i1 = (i-k(0)+1) < 0 ? 0 : i-k(0)+1;
             na1   = impl::first(na[(na<=i) & (na>=i1)]);
             true1 = impl::first(w[(w<=i) & (w>=i1)]);
-            res(i) = (true1 < na1) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 < na1) ? true1 + 1 : NA_INTEGER;
           }
         } else if(which == "last") {
           for(int i=0;i<n;i++){
             i1 = (i - k(0) + 1) < 0 ? 0 : i-k(0)+1;
             na1   = impl::last(na[(na<=i) & (na>=i1)]);
             true1 = impl::last(w[(w<=i) & (w>=i1)]);
-            res(i) = (true1 > na1) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 > na1) ? true1 + 1 : NA_INTEGER;
           }
         }
       }
@@ -110,13 +110,13 @@ IntegerVector whicht_run(
           for(int i=0;i<n;i++){
             i1 = (i - k(i) + 1) < 0 ? 0 : i-k(i)+1;
             true1 = impl::first(w[(w<=i) & (w>=i1)]);
-            res(i) = (true1 >= 0) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 >= 0) ? true1 + 1 : NA_INTEGER;
           }
         } else if(which == "last") {
           for(int i=0;i<n;i++){
             i1 = (i - k(i) + 1) < 0 ? 0 : i-k(i)+1;
             true1 = impl::last(w[(w<=i) & (w>=i1)]);
-            res(i) = (true1 >= 0) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 >= 0) ? true1 + 1 : NA_INTEGER;
           }
         }
       } else {
@@ -125,14 +125,14 @@ IntegerVector whicht_run(
             i1 = (i-k(i)+1) < 0 ? 0 : i-k(i)+1;
             na1   = impl::first(na[(na<=i) & (na>=i1)]);
             true1 = impl::first(w[(w<=i) & (w>=i1)]);
-            res(i) = (true1 < na1) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 < na1) ? true1 + 1 : NA_INTEGER;
           }
         } else if(which == "last") {
           for(int i=0;i<n;i++){
             i1 = (i - k(i) + 1) < 0 ? 0 : i-k(i)+1;
             na1   = impl::last(na[(na<=i) & (na>=i1)]);
             true1 = impl::last(w[(w<=i) & (w>=i1)]);
-            res(i) = (true1 > na1) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 > na1) ? true1 + 1 : NA_INTEGER;
           }
         }
       }
@@ -143,12 +143,12 @@ IntegerVector whicht_run(
         if( which == "first" ){
           for(int i=0;i<n;i++){
             true1 = impl::first(w[w<=i]);
-            res(i) = (true1 >= 0) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 >= 0) ? true1 + 1 : NA_INTEGER;
           }
         } else if( which == "last" ){
           for(int i=0;i<n;i++){
             true1 = impl::last(w[w<=i]);
-            res(i) = (true1 >= 0) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 >= 0) ? true1 + 1 : NA_INTEGER;
           }
         }
       } else {
@@ -157,13 +157,13 @@ IntegerVector whicht_run(
           for(int i=0;i<n;i++){
             true1  = impl::first(w[w<=i]);
             na1    = impl::first(na[na<=i]);
-            res(i) = (true1 < na1) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 < na1) ? true1 + 1 : NA_INTEGER;
           }
         } else if( which == "last" ){
           for(int i=0;i<n;i++){
             true1  = impl::last(w[w<=i]);
             na1    = impl::last(na[na<=i]);
-            res(i) = (true1 > na1) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 > na1) ? true1 + 1 : NA_INTEGER;
           }
         }
       }
@@ -175,13 +175,13 @@ IntegerVector whicht_run(
           for(int i=0;i<n;i++){
             i1 = impl::get_window_start(i,k(0), idx );
             true1 = impl::first(w[(w<=i) & (w>=i1)]);
-            res(i) = (true1 >= 0) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 >= 0) ? true1 + 1 : NA_INTEGER;
           }
         } else if(which == "last") {
           for(int i=0;i<n;i++){
             i1 = impl::get_window_start(i,k(0), idx );
             true1 = impl::last(w[(w<=i) & (w>=i1)]);
-            res(i) = (true1 >= 0) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 >= 0) ? true1 + 1 : NA_INTEGER;
           }
         }
       } else {
@@ -190,14 +190,14 @@ IntegerVector whicht_run(
             i1 = impl::get_window_start(i,k(0), idx );
             na1   = impl::first(na[(na<=i) & (na>=i1)]);
             true1 = impl::first(w[(w<=i) & (w>=i1)]);
-            res(i) = (true1 < na1) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 < na1) ? true1 + 1 : NA_INTEGER;
           }
         } else if(which == "last") {
           for(int i=0;i<n;i++){
             i1 = impl::get_window_start(i,k(0), idx );
             na1   = impl::last(na[(na<=i) & (na>=i1)]);
             true1 = impl::last(w[(w<=i) & (w>=i1)]);
-            res(i) = (true1 > na1) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 > na1) ? true1 + 1 : NA_INTEGER;
           }
         }
       }
@@ -209,13 +209,13 @@ IntegerVector whicht_run(
           for(int i=0;i<n;i++){
             i1 = impl::get_window_start(i,k(i), idx );
             true1 = impl::first(w[(w<=i) & (w>=i1)]);
-            res(i) = (true1 >= 0) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 >= 0) ? true1 + 1 : NA_INTEGER;
           }
         } else if(which == "last") {
           for(int i=0;i<n;i++){
             i1 = impl::get_window_start(i,k(i), idx );
             true1 = impl::last(w[(w<=i) & (w>=i1)]);
-            res(i) = (true1 >= 0) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 >= 0) ? true1 + 1 : NA_INTEGER;
           }
         }
       } else {
@@ -224,14 +224,14 @@ IntegerVector whicht_run(
             i1 = impl::get_window_start(i,k(i), idx );
             na1   = impl::first(na[(na<=i) & (na>=i1)]);
             true1 = impl::first(w[(w<=i) & (w>=i1)]);
-            res(i) = (true1 < na1) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 < na1) ? true1 + 1 : NA_INTEGER;
           }
         } else if(which == "last") {
           for(int i=0;i<n;i++){
             i1 = impl::get_window_start(i,k(i), idx );
             na1   = impl::last(na[(na<=i) & (na>=i1)]);
             true1 = impl::last(w[(w<=i) & (w>=i1)]);
-            res(i) = (true1 > na1) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 > na1) ? true1 + 1 : NA_INTEGER;
           }
         }
       }

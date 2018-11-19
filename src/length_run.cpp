@@ -24,7 +24,7 @@ IntegerVector length_run(IntegerVector k = 1, IntegerVector idx = 0) {
           res(i) = i - j;
           break;
         } else if(j == 0){
-          res(i) = IntegerVector::get_na();
+          res(i) = NA_INTEGER;
         }
     }
 
@@ -36,7 +36,7 @@ IntegerVector length_run(IntegerVector k = 1, IntegerVector idx = 0) {
           res(i) = i - j;
           break;
         } else if(j == 0){
-          res(i) = IntegerVector::get_na();
+          res(i) = NA_INTEGER;
         }
     }
   }

@@ -10,21 +10,21 @@ namespace streak {
   template <int RTYPE>
   int  calc_actual_streak(const Vector<RTYPE>& x, int i, int i2, bool na_rm)
   {
-    int j_f = IntegerVector::get_na();
+    int j_f = NA_INTEGER;
     int cur_streak=1;
 
     // run for first finite
     for(int j = i; j >= i2 ; --j)
       if( Vector<RTYPE>::is_na(x(j)) ){
         if(!na_rm){
-          return IntegerVector::get_na();}
+          return NA_INTEGER;}
       } else {
         j_f = j;
         break;
       }
 
     if( IntegerVector::is_na(j_f))
-        return IntegerVector::get_na();
+        return NA_INTEGER;
 
 
     for(int j = j_f; j >= i2 ; --j) {
@@ -57,7 +57,7 @@ namespace streak {
     /*  initial streak */
     for(int i=0; i < n ; i++)
     if ( Vector<RTYPE>::is_na( x(i) ) ){
-      res(i) = NumericVector::get_na();
+      res(i) = NA_INTEGER;
     } else {
       j_f = i;
       res(i) = cur_streak = 1;
@@ -75,14 +75,14 @@ namespace streak {
           } else if( Vector<RTYPE>::is_na( x( i )  ) ) {
             if(!na_rm){
               cur_streak = 0;
-              res( i ) = IntegerVector::get_na();
+              res( i ) = NA_INTEGER;
               continue;}
           } else {
             cur_streak = 1;
             j_f = i;
           }
         }
-        res( i ) = cur_streak == 0 ? IntegerVector::get_na() : cur_streak;
+        res( i ) = cur_streak == 0 ? NA_INTEGER : cur_streak;
       }
     } else {
     /* streak_run window */
@@ -98,7 +98,7 @@ namespace streak {
 
     /* if padding with NA */
     if(na_pad)
-      std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_REAL);
+      std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_INTEGER);
 
     return res;
   }

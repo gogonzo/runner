@@ -31,9 +31,7 @@ namespace impl {
     return 0;
   }
 
-
 }
-
 
 #include <Rcpp.h>
 using namespace Rcpp;
@@ -42,7 +40,7 @@ namespace impl {
 
 template <int RTYPE>
 int calc_whichd(const Vector<RTYPE>& x, int i, int i2){
-  int cur_whichd  = IntegerVector::get_na();
+  int cur_whichd  = NA_INTEGER;
 
   for(int j = i; j > i2 ; --j) {
       if( x( j ) == x( j - 1 ) ){
@@ -65,14 +63,14 @@ IntegerVector whichd_run_(const Vector<RTYPE>& x, IntegerVector k,bool na_pad){
   IntegerVector res(n);
 
   /*  initial whichd */
-  res(0) = cur_whichd = NumericVector::get_na();
+  res(0) = cur_whichd = NA_INTEGER;
 
 
   if(nk==1 and ( (k(0)==0) or (k(0)==n) ) ){
     /* whichd run full */
     for(int i=1; i < n ; i++) {
       if( Vector<RTYPE>::is_na(x(i)) ) {
-        cur_whichd = IntegerVector::get_na();
+        cur_whichd = NA_INTEGER;
       } else if( x( i - 1 ) == x( i ) ){
       } else {
         cur_whichd = i;
@@ -93,7 +91,7 @@ IntegerVector whichd_run_(const Vector<RTYPE>& x, IntegerVector k,bool na_pad){
 
   /* if padding with NA */
   if(na_pad)
-    std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_REAL);
+    std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_INTEGER);
 
   return res;
 }

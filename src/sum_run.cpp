@@ -83,12 +83,12 @@ NumericVector mean_run(
 
         res( i ) = ( sums(i) - x1 ) / (non(i) - non1);
         if( ( nas(i) - nas1 )==k(0) ){
-          res(i) = NumericVector::get_na();
+          res(i) = NA_REAL;
           continue;
         }
         if(!na_rm)
           if( nas(i) > nas1 )
-            res(i) = NumericVector::get_na();
+            res(i) = NA_REAL;
       }
 
 
@@ -110,12 +110,12 @@ NumericVector mean_run(
 
         res( i ) = ( sums(i) - x1 ) / (non(i) - non1);
         if( ( nas(i) - nas1 )==k(i) ){
-          res(i) = NumericVector::get_na();
+          res(i) = NA_REAL;
           continue;
         }
         if(!na_rm)
           if( nas(i) > nas1 )
-            res(i) = NumericVector::get_na();
+            res(i) = NA_REAL;
       }
 
       // IDX WINDOW -----------
@@ -137,12 +137,12 @@ NumericVector mean_run(
           }
           res( i ) = ( sums(i) - x1 ) / (non(i) - non1);
           if( ( nas(i) - nas1 )==k(0) ){
-            res(i) = NumericVector::get_na();
+            res(i) = NA_REAL;
             continue;
           }
           if(!na_rm)
             if( nas(i) > nas1 )
-              res(i) = NumericVector::get_na();
+              res(i) = NA_REAL;
       }
 
       // IDX VARYING WINDOW -----------
@@ -164,12 +164,12 @@ NumericVector mean_run(
           }
           res( i ) = ( sums(i) - x1 ) / (non(i) - non1);
           if( ( nas(i) - nas1 )==k(i) ){
-            res(i) = NumericVector::get_na();
+            res(i) = NA_REAL;
             continue;
           }
           if(!na_rm)
             if( nas(i) > nas1 )
-              res(i) = NumericVector::get_na();
+              res(i) = NA_REAL;
       }
     }
 
@@ -257,12 +257,12 @@ NumericVector sum_run(
 
       res( i ) = sums(i) - x1;
       if( ( nas(i) - nas1 )==k(0) ){
-        res(i) = NumericVector::get_na();
+        res(i) = NA_REAL;
         continue;
       }
       if(!na_rm)
         if( nas(i) > nas1 )
-          res(i) = NumericVector::get_na();
+          res(i) = NA_REAL;
     }
 
 
@@ -282,12 +282,12 @@ NumericVector sum_run(
 
       res( i ) = ( sums(i) - x1 );
       if( ( nas(i) - nas1 )==k(i) ){
-        res(i) = NumericVector::get_na();
+        res(i) = NA_REAL;
         continue;
       }
       if(!na_rm)
         if( nas(i) > nas1 )
-          res(i) = NumericVector::get_na();
+          res(i) = NA_REAL;
     }
 
   // IDX WINDOW -----------
@@ -305,12 +305,12 @@ NumericVector sum_run(
         }
       res( i ) = sums(i) - x1;
       if( ( nas(i) - nas1 )==k(0) ){
-        res(i) = NumericVector::get_na();
+        res(i) = NA_REAL;
         continue;
       }
       if(!na_rm)
         if( nas(i) > nas1 )
-          res(i) = NumericVector::get_na();
+          res(i) = NA_REAL;
     }
 
   // IDX VARYING WINDOW -----------
@@ -328,12 +328,12 @@ NumericVector sum_run(
         }
       res( i ) = ( sums(i) - x1 );
       if( ( nas(i) - nas1 )==k(i) ){
-        res(i) = NumericVector::get_na();
+        res(i) = NA_REAL;
         continue;
       }
       if(!na_rm)
         if( nas(i) > nas1 )
-          res(i) = NumericVector::get_na();
+          res(i) = NA_REAL;
     }
   }
 
