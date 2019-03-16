@@ -1,4 +1,5 @@
 context("Streak Length")
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(11)
 x1 <- sample(c("a","b"),15,replace=T)
 x2 <- sample(c(NA_character_,"a","b"),15,replace=T)

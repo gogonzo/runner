@@ -1,4 +1,5 @@
 context("Running max")
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(11)
 x1 <- sample(c(1,2,3), 15, replace=T)
 x2 <- sample(c(NA,1,2,3), 15, replace=T)
