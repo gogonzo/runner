@@ -32,7 +32,7 @@ Install package from from github or from CRAN.
 install.packages("runner")
 ```
 
-## Options
+## Using runner
 The main idea of the package is to provide running operations on R vectors. Running functions are these which are applied to all elements up to actual one. For example implemented already in `base` `cumsum`, `cummin` etc. Functions provided in this package works similar but with extended functionality such as handling `NA`, custom window size. The most functions provided in package are based on the same logic:  
 
 ![](vignettes/images/runner_api.png)
