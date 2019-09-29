@@ -5,7 +5,7 @@
 sport <img src="vignettes/images/hexlogo.png" align="right" />
 ==============================================================
 
-[![Cran badge](https://www.r-pkg.org/badges/version/runner)](https://cran.r-project.org/web/packages/runner/index.html) [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner) ![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)
+[![Cran badge](https://cranlogs.r-pkg.org/badges/runner)](https://cran.r-project.org/web/packages/runner/index.html) [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner) ![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)
 
 About
 -----
@@ -22,32 +22,44 @@ Install package from from github or from CRAN.
 install.packages("runner")
 ```
 
-Examples
---------
+Options
+-------
 
-The main idea of the package is to provide running operations on R vectors. Running functions are these which are applied to all elements up to actual one. For example implemented already in `base` `cumsum`, `cummin` etc. Functions provided in this package works similar but with extended functionality such as handling `NA` and custom window size. The most functions provided in package are based on the same logic:
+The main idea of the package is to provide running operations on R vectors. Running functions are these which are applied to all elements up to actual one. For example implemented already in `base` `cumsum`, `cummin` etc. Functions provided in this package works similar but with extended functionality such as handling `NA`, custom window size. The most functions provided in package are based on the same logic:
 
--   window size `k` denotes number of elements from i-th backwards, where functions are calculated. `k` can be also specified by vector of the same length as x as illustrated in second example.
+![](vignettes/images/runner_api.png)
 
-![window size](vignettes/images/options_window_size.png)
+### fixed window size
 
-![window size](vignettes/images/options_window_size_varying.png)
+`k` denotes number of elements in window. For fixed window size `k` should be single value.
 
--   argument `na_rm=T` handling missing and is equivalent to `na.rm`.
+![](vignettes/images/options_window_size.png)
 
-![na\_rm](vignettes/images/options_na_rm.png)
+### Varying window size
+
+For varying window size `k` should be of the same length as `x`. Varying window size means that for element `[i]` function will be calculated on window of length `k[i]`.
+
+![](vignettes/images/options_window_size_varying.png)
+
+### Windows depending on date
+
+Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies `idx` argument, than running functions are applied on windows depending on date. `idx` should be the same length as `x` of class `Date` or `integer`. Including `idx` can be combined with varying window size, than k will denote number of periods in window different for each data point.
+
+![](vignettes/images/options_idx.png)
+
+### Other options
+
+-   `na_rm = TRUE` handling missing and is equivalent to `na.rm`.
+
+![](vignettes/images/options_na_rm.png)
 
 -   `na_pad=T` if window size exceeds number of available elements, than first `k-1` elements are filled with `NA`.
 
-![na\_pad](vignettes/images/options_na_pad.png)
+![](vignettes/images/options_na_pad.png)
 
 -   `which` used with running index, which value ('first' or 'last')
 
-![first or last](vignettes/images/options_which_first_last.png)
-
--   `idx` to calculate within time window. `idx` is a date (or numeric) vector of the same length as x. `k` then should to be an integer specyfying time window span. In the example k=5 window sum.
-
-![idx](vignettes/images/options_idx.png)
+![](vignettes/images/options_which_first_last.png)
 
 ### Creating windows
 
@@ -118,16 +130,16 @@ unique_run( x=x2, k = 3 )
 #> [1] "a"
 #> 
 #> [[3]]
-#> [1] "a" "b"
+#> [1] "b" "a"
 #> 
 #> [[4]]
-#> [1] "a" "b"
+#> [1] "b" "a"
 #> 
 #> [[5]]
 #> [1] "b" "a"
 #> 
 #> [[6]]
-#> [1] "c" "a"
+#> [1] "a" "c"
 ```
 
 ### Running aggregations `(mean|sum|min|max)_run`
