@@ -5,7 +5,7 @@
 sport <img src="vignettes/images/hexlogo.png" align="right" />
 ==============================================================
 
-[![Cran badge](https://cranlogs.r-pkg.org/badges/runner)](https://cran.r-project.org/web/packages/runner/index.html) [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner) ![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)
+[![Cran badge](https://cranlogs.r-pkg.org/badges/runner)](https://CRAN.R-project.org/package=pkgname) [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner) ![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)
 
 About
 -----
@@ -188,25 +188,25 @@ User can use `unique_run` create list of unique elements within specified window
 ``` r
 x2 <- sample( letters[1:3], 6, replace=TRUE)
 x2 
-#> [1] "b" "c" "a" "b" "b" "b"
+#> [1] "c" "b" "b" "c" "b" "c"
 unique_run( x=x2, k = 3 )
 #> [[1]]
-#> [1] "b"
+#> [1] "c"
 #> 
 #> [[2]]
-#> [1] "b" "c"
+#> [1] "c" "b"
 #> 
 #> [[3]]
-#> [1] "a" "b" "c"
+#> [1] "c" "b"
 #> 
 #> [[4]]
-#> [1] "a" "b" "c"
+#> [1] "c" "b"
 #> 
 #> [[5]]
-#> [1] "a" "b"
+#> [1] "c" "b"
 #> 
 #> [[6]]
-#> [1] "b"
+#> [1] "c" "b"
 ```
 
 Apply custom function
@@ -238,22 +238,22 @@ varying_window <- runner(x = x, k = k, f = function(x) mean(x, trim = 0.05))
 date_windows <- runner(x = x, k = k, idx = idx, f = function(x) mean(x, trim = 0.05))
 
 data.frame(x, k, idx, simple_mean, trimmed_mean, varying_window, date_windows)
-#>             x  k idx simple_mean trimmed_mean varying_window date_windows
-#> 1  0.11665880  8   1   0.1166588    0.1166588      0.1166588    0.1166588
-#> 2  0.87228201  4   3   0.4944704    0.4944704      0.4944704    0.4944704
-#> 3  0.07700546  8   5   0.3553154    0.3553154      0.3553154    0.3553154
-#> 4  0.43373192  3   8   0.3749195    0.3749195      0.4610065    0.4337319
-#> 5  0.48035918  2   9   0.4658446    0.4658446      0.4570456    0.4570456
-#> 6  0.79405299  4  11   0.4462874    0.4462874      0.4462874    0.5693814
-#> 7  0.96002550 11  13   0.6670424    0.6670424      0.5334451    0.6029095
-#> 8  0.28044668 12  16   0.6287211    0.6287211      0.5018203    0.5042703
-#> 9  0.58431785  9  19   0.6547108    0.6547108      0.5109867    0.6547108
-#> 10 0.88948713 12  22   0.6785693    0.6785693      0.5488368    0.7016660
-#> 11 0.87792381 13  24   0.6580439    0.6580439      0.5787538    0.7184402
-#> 12 0.10310343 15  25   0.6137081    0.6137081      0.5391162    0.6413368
-#> 13 0.51498605  8  28   0.5963751    0.5963751      0.6255429    0.5963751
-#> 14 0.92186639  8  30   0.6044699    0.6044699      0.6415196    0.6044699
-#> 15 0.90290645  4  32   0.6107156    0.6107156      0.6107156    0.9123864
+#>            x  k idx simple_mean trimmed_mean varying_window date_windows
+#> 1  0.3695196  5   1   0.3695196    0.3695196      0.3695196    0.3695196
+#> 2  0.8402415 15   3   0.6048805    0.6048805      0.6048805    0.6048805
+#> 3  0.9895164  1   7   0.7330925    0.7330925      0.9895164    0.9895164
+#> 4  0.9149770  6  11   0.7785636    0.7785636      0.7785636    0.9522467
+#> 5  0.1607406 14  13   0.7263689    0.7263689      0.6549990    0.6549990
+#> 6  0.8078310 10  16   0.7182662    0.7182662      0.6804710    0.7182662
+#> 7  0.5436285 12  20   0.6067943    0.6067943      0.6609221    0.6067943
+#> 8  0.5366184  6  23   0.5122046    0.5122046      0.6588853    0.5401234
+#> 9  0.3640215  6  26   0.5630248    0.5630248      0.5546362    0.4503199
+#> 10 0.4679857  8  29   0.4780635    0.4780635      0.5981649    0.4562085
+#> 11 0.5901377 15  32   0.4896908    0.4896908      0.5986562    0.5004784
+#> 12 0.7573067 13  34   0.5448629    0.5448629      0.6118770    0.5432140
+#> 13 0.6533287  1  38   0.6171897    0.6171897      0.6533287    0.6533287
+#> 14 0.8207037  6  41   0.7053692    0.7053692      0.6089140    0.7370162
+#> 15 0.7804692  8  42   0.7529521    0.7529521      0.6213215    0.7515005
 ```
 
 ### Creating windows
