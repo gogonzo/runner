@@ -54,7 +54,7 @@ int calc_whichd(const Vector<RTYPE>& x, int i, int i2){
 }
 
 template <int RTYPE>
-IntegerVector whichd_run_(const Vector<RTYPE>& x, IntegerVector k,bool na_pad){
+IntegerVector whichd_run_(const Vector<RTYPE>& x, IntegerVector k, bool na_pad){
 
   int i2;
   int n = x.size();
