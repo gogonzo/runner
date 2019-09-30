@@ -2,10 +2,10 @@
 `runner` a R package for running operations.
 ============================================
 
-sport <img src="vignettes/images/hexlogo.png" align="right" />
-==============================================================
+<img src="vignettes/images/hexlogo.png" align="right" />
+========================================================
 
-[![Cran badge](https://cranlogs.r-pkg.org/badges/runner)](https://CRAN.R-project.org/package=pkgname) [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner) ![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)
+[![Cran badge](https://cranlogs.r-pkg.org/badges/runner)](https://CRAN.R-project.org/package=runner) [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner) ![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)
 
 About
 -----
@@ -188,25 +188,25 @@ User can use `unique_run` create list of unique elements within specified window
 ``` r
 x2 <- sample( letters[1:3], 6, replace=TRUE)
 x2 
-#> [1] "c" "b" "b" "c" "b" "c"
+#> [1] "b" "b" "c" "b" "a" "c"
 unique_run( x=x2, k = 3 )
 #> [[1]]
-#> [1] "c"
+#> [1] "b"
 #> 
 #> [[2]]
-#> [1] "c" "b"
+#> [1] "b"
 #> 
 #> [[3]]
-#> [1] "c" "b"
+#> [1] "b" "c"
 #> 
 #> [[4]]
-#> [1] "c" "b"
+#> [1] "b" "c"
 #> 
 #> [[5]]
-#> [1] "c" "b"
+#> [1] "b" "a" "c"
 #> 
 #> [[6]]
-#> [1] "c" "b"
+#> [1] "b" "a" "c"
 ```
 
 Apply custom function
@@ -238,22 +238,22 @@ varying_window <- runner(x = x, k = k, f = function(x) mean(x, trim = 0.05))
 date_windows <- runner(x = x, k = k, idx = idx, f = function(x) mean(x, trim = 0.05))
 
 data.frame(x, k, idx, simple_mean, trimmed_mean, varying_window, date_windows)
-#>            x  k idx simple_mean trimmed_mean varying_window date_windows
-#> 1  0.3695196  5   1   0.3695196    0.3695196      0.3695196    0.3695196
-#> 2  0.8402415 15   3   0.6048805    0.6048805      0.6048805    0.6048805
-#> 3  0.9895164  1   7   0.7330925    0.7330925      0.9895164    0.9895164
-#> 4  0.9149770  6  11   0.7785636    0.7785636      0.7785636    0.9522467
-#> 5  0.1607406 14  13   0.7263689    0.7263689      0.6549990    0.6549990
-#> 6  0.8078310 10  16   0.7182662    0.7182662      0.6804710    0.7182662
-#> 7  0.5436285 12  20   0.6067943    0.6067943      0.6609221    0.6067943
-#> 8  0.5366184  6  23   0.5122046    0.5122046      0.6588853    0.5401234
-#> 9  0.3640215  6  26   0.5630248    0.5630248      0.5546362    0.4503199
-#> 10 0.4679857  8  29   0.4780635    0.4780635      0.5981649    0.4562085
-#> 11 0.5901377 15  32   0.4896908    0.4896908      0.5986562    0.5004784
-#> 12 0.7573067 13  34   0.5448629    0.5448629      0.6118770    0.5432140
-#> 13 0.6533287  1  38   0.6171897    0.6171897      0.6533287    0.6533287
-#> 14 0.8207037  6  41   0.7053692    0.7053692      0.6089140    0.7370162
-#> 15 0.7804692  8  42   0.7529521    0.7529521      0.6213215    0.7515005
+#>             x  k idx simple_mean trimmed_mean varying_window date_windows
+#> 1  0.38583502  3   2   0.3858350    0.3858350      0.3858350   0.38583502
+#> 2  0.07752929  2   5   0.2316822    0.2316822      0.2316822   0.07752929
+#> 3  0.57656265 11   7   0.3466423    0.3466423      0.3466423   0.34664232
+#> 4  0.33857956  3   9   0.3446266    0.3446266      0.3308905   0.45757111
+#> 5  0.64316990  4  10   0.4089604    0.4089604      0.4089604   0.51943737
+#> 6  0.57206304 15  14   0.5325938    0.5325938      0.4322899   0.43228991
+#> 7  0.97284027 10  18   0.6316632    0.6316632      0.5095114   0.63166319
+#> 8  0.44270686  8  19   0.6576950    0.6576950      0.5011608   0.66253673
+#> 9  0.69699375  8  21   0.6711510    0.6711510      0.5400557   0.67115098
+#> 10 0.15635949 13  24   0.5672251    0.5672251      0.4862640   0.56819268
+#> 11 0.06388711  5  28   0.3399868    0.3399868      0.4665575   0.11012330
+#> 12 0.15208290  8  31   0.2673308    0.2673308      0.4625129   0.12410983
+#> 13 0.45374364 11  34   0.2065183    0.2065183      0.4608172   0.20651828
+#> 14 0.25401691  1  36   0.2309326    0.2309326      0.2540169   0.25401691
+#> 15 0.06179891 11  38   0.2304106    0.2304106      0.4063330   0.19710589
 ```
 
 ### Creating windows

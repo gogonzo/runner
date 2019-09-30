@@ -13,9 +13,9 @@ knitr::opts_chunk$set(
 
 # `runner` a R package for running operations.
 
-# sport <img src="vignettes/images/hexlogo.png" align="right" />
+# <img src="vignettes/images/hexlogo.png" align="right" />
 
-[![Cran badge](https://cranlogs.r-pkg.org/badges/runner)](https://CRAN.R-project.org/package=pkgname)
+[![Cran badge](https://cranlogs.r-pkg.org/badges/runner)](https://CRAN.R-project.org/package=runner)
 [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner)
 ![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)
