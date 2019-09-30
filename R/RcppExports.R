@@ -92,6 +92,22 @@ min_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, idx = 0L) {
     .Call('_runner_min_run', PACKAGE = 'runner', x, k, na_rm, na_pad, idx)
 }
 
+#' Custom running function
+#'
+#' Applies custom function to running windows
+#' @param x Vector of any type
+#' @param f R function to be applied on `x`
+#' @param k integer vector which specifies window length
+#' @param idx an optional integer vector containing index of observations.
+#' @examples
+#' runner(1:10, f = mean, k = 3)
+#' runner(1:10, k = 3, f = function(x) mean(x, na.rm = TRUE))
+#' runner(letters[1:10], k = c(1,2,2,4,5,5,5,5,5,5), f = function(x) length(unique(x)))
+#' @export
+runner <- function(x, k = 0L, idx = 1L, f = NULL) {
+    .Call('_runner_runner', PACKAGE = 'runner', x, k, idx, f)
+}
+
 #' Running streak length
 #'
 #' Calculates running series of consecutive elements

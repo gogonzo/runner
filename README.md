@@ -23,7 +23,7 @@ install.packages("runner")
 ```
 
 Using runner
--------
+------------
 
 The main idea of the package is to provide running operations on R vectors. Running functions are these which are applied to all elements up to actual one. For example implemented already in `base` `cumsum`, `cummin` etc. Functions provided in this package works similar but with extended functionality such as handling `NA`, custom window size. The most functions provided in package are based on the same logic:
 
@@ -61,87 +61,6 @@ Sometimes data points in dataset are not equally spaced (missing weeekends, holi
 
 ![](vignettes/images/options_which_first_last.png)
 
-### Creating windows
-
-Function creates list of windows. Because `runner` provide limited functionality, one can create running-window-list which can be further processed by user to obtain desired statistic (eg. window sum). `x` is a vector to be 'run on' and `k` is a length of window. In this example window length is varying as specified by `k`. Provide one value to obtain constant window size.
-
-``` r
-library(runner); library(magrittr)
-set.seed(11)
-window_run( x = 1:5, k = c(1,2,3,3,2) )
-#> [[1]]
-#> [1] 1
-#> 
-#> [[2]]
-#> [1] 1 2
-#> 
-#> [[3]]
-#> [1] 1 2 3
-#> 
-#> [[4]]
-#> [1] 2 3 4
-#> 
-#> [[5]]
-#> [1] 4 5
-```
-
-Such windows can be used in further calculations, with any R function. Example below shows how to obtain running `sum` in specified, varying window length (specified by `k`).
-
-``` r
-window_run( x= 1:5, k = c(1,2,3,3,2) ) %>%
-  lapply(sum) %>%
-  unlist
-#> [1] 1 3 6 9 9
-```
-
-One can also specify window based on a date of other numeric index. To do this date should be passed via `idx` argument and k should be integer denoting date-window span.
-
-``` r
-window_run( x = 1:5, k = 3, idx = c(1,2,5,6,7) ) 
-#> [[1]]
-#> [1] 1
-#> 
-#> [[2]]
-#> [1] 1 2
-#> 
-#> [[3]]
-#> [1] 3
-#> 
-#> [[4]]
-#> [1] 3 4
-#> 
-#> [[5]]
-#> [1] 3 4 5
-```
-
-### Unique elements in window
-
-User can use `unique_run` create list of unique elements within specified window size.
-
-``` r
-x2 <- sample( letters[1:3], 6, replace=TRUE)
-x2 
-#> [1] "a" "a" "b" "a" "a" "c"
-unique_run( x=x2, k = 3 )
-#> [[1]]
-#> [1] "a"
-#> 
-#> [[2]]
-#> [1] "a"
-#> 
-#> [[3]]
-#> [1] "b" "a"
-#> 
-#> [[4]]
-#> [1] "b" "a"
-#> 
-#> [[5]]
-#> [1] "b" "a"
-#> 
-#> [[6]]
-#> [1] "a" "c"
-```
-
 ### Running aggregations `(mean|sum|min|max)_run`
 
 Runner provides basic aggregation methods calculated within running windows. Below example showing some functions behavior for different arguments setup. Let's take a look at 8th element of a vector on which `min_run` is calculated. First setup uses default values, so algorithm is looking for minimum value in all elements before actual (i=8). By default missing values are removed before calculations by argument `na_rm=TRUE`, and also window is not specified. The default is equivalent of `base::cummin` with additional option to ignore `NA` values. In second example within window k=5, the lowest value is -3. In the last example minimum is not available due to existence of `NA`. Graphical example is reproduced below in the code.
@@ -149,6 +68,9 @@ Runner provides basic aggregation methods calculated within running windows. Bel
 ![running minimum](vignettes/images/running_minimum.png)
 
 ``` r
+library(runner)
+library(magrittr)
+
 x <- c(1,-5,1,-3,NA,NA,NA,1,-1,NA,-2,3)
 k <- c(4,5,2,5,4,4,2,2,4,4,3,1)
 idx <- c(1,3,4,6,7,10,13,16,19,21,23,26)
@@ -259,5 +181,129 @@ data.frame(
 #> 12 FALSE  1 NA  9
 ```
 
-Custom indexes
---------------
+### Unique elements in window
+
+User can use `unique_run` create list of unique elements within specified window size.
+
+``` r
+x2 <- sample( letters[1:3], 6, replace=TRUE)
+x2 
+#> [1] "b" "c" "a" "b" "b" "b"
+unique_run( x=x2, k = 3 )
+#> [[1]]
+#> [1] "b"
+#> 
+#> [[2]]
+#> [1] "b" "c"
+#> 
+#> [[3]]
+#> [1] "a" "b" "c"
+#> 
+#> [[4]]
+#> [1] "a" "b" "c"
+#> 
+#> [[5]]
+#> [1] "a" "b"
+#> 
+#> [[6]]
+#> [1] "b"
+```
+
+Apply custom function
+---------------------
+
+### Own runner
+
+One can use own function with function `runner` which will be applied in the same way as other build-in functions.
+
+![](vignettes/images/custom_runner.png)
+
+Below example of using `base::mean` inside of the `runner` function.
+
+``` r
+x <- runif(15)
+k <- sample(1:15, 15, replace = TRUE)
+idx <- cumsum(sample(c(1,2,3,4), 15, replace=T))
+
+# simple call
+simple_mean <- runner(x = x, k = 4, f = mean)
+
+# additional arguments for mean
+trimmed_mean <- runner(x = x, k = 4, f = function(x) mean(x, trim = 0.05))
+
+# varying window size
+varying_window <- runner(x = x, k = k, f = function(x) mean(x, trim = 0.05))
+
+# date windows
+date_windows <- runner(x = x, k = k, idx = idx, f = function(x) mean(x, trim = 0.05))
+
+data.frame(x, k, idx, simple_mean, trimmed_mean, varying_window, date_windows)
+#>             x  k idx simple_mean trimmed_mean varying_window date_windows
+#> 1  0.11665880  8   1   0.1166588    0.1166588      0.1166588    0.1166588
+#> 2  0.87228201  4   3   0.4944704    0.4944704      0.4944704    0.4944704
+#> 3  0.07700546  8   5   0.3553154    0.3553154      0.3553154    0.3553154
+#> 4  0.43373192  3   8   0.3749195    0.3749195      0.4610065    0.4337319
+#> 5  0.48035918  2   9   0.4658446    0.4658446      0.4570456    0.4570456
+#> 6  0.79405299  4  11   0.4462874    0.4462874      0.4462874    0.5693814
+#> 7  0.96002550 11  13   0.6670424    0.6670424      0.5334451    0.6029095
+#> 8  0.28044668 12  16   0.6287211    0.6287211      0.5018203    0.5042703
+#> 9  0.58431785  9  19   0.6547108    0.6547108      0.5109867    0.6547108
+#> 10 0.88948713 12  22   0.6785693    0.6785693      0.5488368    0.7016660
+#> 11 0.87792381 13  24   0.6580439    0.6580439      0.5787538    0.7184402
+#> 12 0.10310343 15  25   0.6137081    0.6137081      0.5391162    0.6413368
+#> 13 0.51498605  8  28   0.5963751    0.5963751      0.6255429    0.5963751
+#> 14 0.92186639  8  30   0.6044699    0.6044699      0.6415196    0.6044699
+#> 15 0.90290645  4  32   0.6107156    0.6107156      0.6107156    0.9123864
+```
+
+### Creating windows
+
+Function creates list of windows. Because `runner` provide limited functionality, one can create running-window-list which can be further processed by user to obtain desired statistic (eg. window sum). `x` is a vector to be 'run on' and `k` is a length of window. In this example window length is varying as specified by `k`. Provide one value to obtain constant window size.
+
+``` r
+set.seed(11)
+window_run(x = 1:5, k = c(1,2,3,3,2) )
+#> [[1]]
+#> [1] 1
+#> 
+#> [[2]]
+#> [1] 1 2
+#> 
+#> [[3]]
+#> [1] 1 2 3
+#> 
+#> [[4]]
+#> [1] 2 3 4
+#> 
+#> [[5]]
+#> [1] 4 5
+```
+
+Such windows can be used in further calculations, with any R function. Example below shows how to obtain running `sum` in specified, varying window length (specified by `k`).
+
+``` r
+window_run( x= 1:5, k = c(1,2,3,3,2) ) %>%
+  lapply(sum) %>%
+  unlist
+#> [1] 1 3 6 9 9
+```
+
+One can also specify window based on a date of other numeric index. To do this date should be passed via `idx` argument and k should be integer denoting date-window span.
+
+``` r
+window_run( x = 1:5, k = 3, idx = c(1,2,5,6,7) ) 
+#> [[1]]
+#> [1] 1
+#> 
+#> [[2]]
+#> [1] 1 2
+#> 
+#> [[3]]
+#> [1] 3
+#> 
+#> [[4]]
+#> [1] 3 4
+#> 
+#> [[5]]
+#> [1] 3 4 5
+```
