@@ -1,3 +1,6 @@
+# runner 0.2.1
+* added runner function which allows to apply custom function on running windows - so far returning only numeric
+
 # runner 0.2.0
 
 ## Improvements

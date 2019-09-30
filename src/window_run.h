@@ -40,7 +40,7 @@ Rcpp::List window_to_list_int(const Vector<RTYPE>& x, IntegerVector k, IntegerVe
   if(k.size() > 1){
     for(int i=0; i < n; i++){
       for(int j=i; j>=0; j--){
-        if( (indexes(i) - indexes(j) > (k(i) - 1) )){
+        if( (indexes(i) - indexes(j) > (k(i) - 1))){
 
           idx = j + Rcpp::seq_len(i - j);
           break;
