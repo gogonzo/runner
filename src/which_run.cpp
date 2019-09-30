@@ -82,7 +82,7 @@ IntegerVector whicht_run(
           for(int i=0;i<n;i++){
             i1 = (i - k(0) + 1) < 0 ? 0 : i-k(0)+1;
             true1 = impl::last(w[(w<=i) & (w>=i1)]);
-            res(i) = (true1 >= 0) ? true1 + 1 : IntegerVector::get_na();
+            res(i) = (true1 >= 0) ? true1 + 1 : NA_INTEGER;
           }
         }
       } else {
