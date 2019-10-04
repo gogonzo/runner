@@ -8,6 +8,12 @@ find_idx <- function(i, k) ifelse((i - k + 1) < 1, 1, i - k + 1)
 test_that("window_run k = constant",{
   for(i in 1:10)
     expect_equal(
+      window_run(x1)[i][[1]],
+      x1[seq_len(i)]
+    )
+
+  for(i in 1:10)
+    expect_equal(
      window_run(x1, k = 2)[i][[1]],
      x1[find_idx(i, 2):i]
     )
@@ -39,13 +45,59 @@ test_that("window_run with k varying", {
     )
 })
 
+test_that("window_run with idx same as window_run with windows",{
+  x <- sample(c(rep(NA, 20), runif(100)), 100)
+  k <- qbinom(runif(100, 0.2, 0.8), 10, 0.5)
+  lag <- qbinom(runif(100, 0, 0.5), 10, 0.3)
 
-test_that("window_run with idx++ same as window_run with windows",{
-  expect_identical(window_run(x1, k = 3) , window_run(x1, k = 3, idx = 1:10))
-  expect_identical(window_run(x1, k = k) , window_run(x1, k = k, idx = 1:10))
+  expect_identical(window_run(x, k = 3) ,
+                   window_run(x, k = 3, idx = 1:100))
+  expect_identical(window_run(x, k = k) ,
+                   window_run(x, k = k, idx = 1:100))
+
+  expect_identical(window_run(x, k = k, lag = 5),
+                   window_run(x, k = k, lag = 5, idx = 1:100))
+
+  expect_identical(window_run(x, k = k, lag = lag),
+                   window_run(x, k = k, lag = lag, idx = 1:100))
 })
 
-test_that("unique_run with idx",{
+test_that("Lagged date window", {
+  x <- sample(c(rep(NA, 20), runif(100)), 100)
+  k <- qbinom(runif(100, 0.2, 0.8), 10, 0.5)
+  lag <- qbinom(runif(100, 0, 0.5), 10, 0.3)
+  idx <- cumsum(sample(c(1,2,3,4), 100, replace = TRUE))
+
+  out <- window_run(x, k = 5, lag = 3, idx = idx)
+  test <- lapply(seq_along(x), function(i) {
+    lower <- idx[i] - 3 - 5  + 1
+    upper <- idx[i] - 3
+    x[idx %in% seq(lower, upper)]
+  })
+  expect_equal(out, test)
+
+  out <- window_run(x, k = k, lag = 3, idx = idx)
+  test <- lapply(seq_along(x), function(i) {
+    lower <- idx[i] - 3 - k[i]  + 1
+    upper <- idx[i] - 3
+    x[idx %in% seq(lower, upper)]
+  })
+
+  expect_equal(out, test)
+
+  out <- window_run(x, k = k, lag = lag, idx = idx)
+  test <- lapply(seq_along(x), function(i) {
+    lower <- idx[i] - lag[i] - k[i]  + 1
+    upper <- idx[i] - lag[i]
+    x[idx %in% seq(lower, upper)]
+  })
+
+  expect_equal(out, test)
+})
+
+
+
+test_that("window_run with idx",{
   x11 <- list()
   x22 <- list()
   idx <- cumsum(sample(c(1, 2, 3, 4), 10, replace = TRUE))
@@ -71,9 +123,22 @@ test_that("unique_run with idx",{
   expect_identical(window_run(x1, k = k, idx = idx), x22)
 })
 
+test_that("Test non-numeric arguments", {
+  expect_silent(window_run(as.integer(1:10), k = 5))
+  expect_silent(window_run(letters[1:10], k = 5))
+  expect_silent(window_run(as.factor(letters[1:10]), k = 5))
+  expect_silent(window_run(seq(Sys.Date(), Sys.Date() + 9, by = "1 day"), k = 5))
+})
 
+test_that("Errors", {
+  expect_error(window_run(list(1:10), k = 5), "Invalid data type")
 
-test_that("Error handling in max_run",{
-  expect_error(window_run(x2, k = c(2, 2, 2, 2, 2, 2, 2, 2, 2, NA)))
-  expect_error(window_run(x2, k = c(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)))
+  expect_error(window_run(1:10, k = (1:9)), "length of k and length x differs")
+  expect_error(window_run(1:10, k = c(NA, 1:9)), "Function doesn't accept NA values in k vector")
+
+  expect_error(window_run(1:10, lag = (1:9)), "length of lag and length x differs")
+  expect_error(window_run(1:10, lag = c(NA, 1:9)), "Function doesn't accept NA values in lag vector")
+
+  expect_error(window_run(1:10, idx = (1:9)), "length of idx and length x differs")
+  expect_error(window_run(1:10, idx = c(NA, 1:9)), "Function doesn't accept NA values in idx vector")
 })

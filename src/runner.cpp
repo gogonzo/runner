@@ -98,15 +98,26 @@ NumericVector runner_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVec
 //' @export
 // [[Rcpp::export]]
 SEXP runner(SEXP x, IntegerVector k = 0, IntegerVector lag = 0, IntegerVector idx = 1, Function f = R_NilValue) {
-
   int n = Rf_length(x);
 
-  if (k(0) == 0) {
+  if( k(0) == 0 ){
     k(0) = n;
-  } else if (k.size() != n and k.size() > 1) {
-    stop("length of k and length x differs. k=0 and k=length(x) only allowed");
-  } else if ( Rcpp::any(Rcpp::is_na(k))) {
+  } else if(k.size() != n and k.size() > 1){
+    stop("length of k and length x differs. length(k) should be 1 or equal to x");
+  } else if( Rcpp::any(Rcpp::is_na(k)) ){
     stop("Function doesn't accept NA values in k vector");
+  }
+
+  if(idx.size() != n and idx.size() > 1){
+    stop("length of idx and length x differs. length(idx) should be 1 or equal to x");
+  } else if( Rcpp::any(Rcpp::is_na(idx)) ){
+    stop("Function doesn't accept NA values in idx vector");
+  }
+
+  if(lag.size() != n and lag.size() > 1){
+    stop("length of lag and length x differs. length(lag) should be 1 or equal to x");
+  } else if( Rcpp::any(Rcpp::is_na(lag)) ){
+    stop("Function doesn't accept NA values in lag vector");
   }
 
   if (idx.size() > 1) {
@@ -115,11 +126,7 @@ SEXP runner(SEXP x, IntegerVector k = 0, IntegerVector lag = 0, IntegerVector id
     case REALSXP: return runner_on_date(as<NumericVector>(x),   k, lag, idx, f);
     case STRSXP:  return runner_on_date(as<CharacterVector>(x), k, lag, idx, f);
     default: {
-      warning(
-        "Invalid SEXPTYPE %d (%s).\n",
-        TYPEOF(x), type2name(x)
-      );
-      return R_NilValue;
+      stop("Invalid data type - only integer, numeric, character, factor, date vectors are possible.");
     }
     }
   } else {
@@ -128,11 +135,7 @@ SEXP runner(SEXP x, IntegerVector k = 0, IntegerVector lag = 0, IntegerVector id
     case REALSXP: return runner_simple(as<NumericVector>(x),   k, lag, f);
     case STRSXP:  return runner_simple(as<CharacterVector>(x), k, lag, f);
     default: {
-      warning(
-        "Invalid SEXPTYPE %d (%s).\n",
-        TYPEOF(x), type2name(x)
-      );
-      return R_NilValue;
+      stop("Invalid data type - only integer, numeric, character, factor, date vectors are possible.");
     }
     }
 
@@ -185,25 +188,26 @@ List window_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, 
   if (k.size() > 1) {
     if (lag.size() > 1) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(0));
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(i));
         res(i) = apply::get_window(x, idx);
       }
-    } else if (lag(0) > 0) {
+    } else if (lag(0) > 0){
       for (int i = 0; i < n; i++) {
         idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(0));
         res(i) = apply::get_window(x, idx);
       }
     } else {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), 0);
+        idx = apply::get_dwindow_idx(indexes, i, k(i));
         res(i) = apply::get_window(x, idx);
       }
     }
   } else {
     if (lag.size() > 1) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(0));
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(i));
         res(i) = apply::get_window(x, idx);
+
       }
     } else if (lag(0) > 0) {
       for (int i = 0; i < n; i++) {
@@ -239,9 +243,21 @@ SEXP window_run(SEXP x, IntegerVector k = 0, IntegerVector lag = 0, IntegerVecto
   if( k(0) == 0 ){
     k(0) = n;
   } else if(k.size() != n and k.size() > 1){
-    stop("length of k and length x differs. k=0 and k=length(x) only allowed");
+    stop("length of k and length x differs. length(k) should be 1 or equal to x");
   } else if( Rcpp::any(Rcpp::is_na(k)) ){
     stop("Function doesn't accept NA values in k vector");
+  }
+
+  if(idx.size() != n and idx.size() > 1){
+    stop("length of idx and length x differs. length(idx) should be 1 or equal to x");
+  } else if( Rcpp::any(Rcpp::is_na(idx)) ){
+    stop("Function doesn't accept NA values in idx vector");
+  }
+
+  if(lag.size() != n and lag.size() > 1){
+    stop("length of lag and length x differs. length(lag) should be 1 or equal to x");
+  } else if( Rcpp::any(Rcpp::is_na(lag)) ){
+    stop("Function doesn't accept NA values in lag vector");
   }
 
 
@@ -251,11 +267,7 @@ SEXP window_run(SEXP x, IntegerVector k = 0, IntegerVector lag = 0, IntegerVecto
     case REALSXP: return window_on_date(as<NumericVector>(x), k, lag, idx);
     case STRSXP: return window_on_date(as<CharacterVector>(x), k, lag, idx);
     default: {
-      warning(
-        "Invalid SEXPTYPE %d (%s).\n",
-        TYPEOF(x), type2name(x)
-      );
-      return R_NilValue;
+      stop("Invalid data type - only integer, numeric, character, factor, date vectors are possible.");
     }
     }
   } else {
@@ -264,11 +276,7 @@ SEXP window_run(SEXP x, IntegerVector k = 0, IntegerVector lag = 0, IntegerVecto
     case REALSXP: return window_simple(as<NumericVector>(x), k, lag);
     case STRSXP: return window_simple(as<CharacterVector>(x), k, lag);
     default: {
-      warning(
-        "Invalid SEXPTYPE %d (%s).\n",
-        TYPEOF(x), type2name(x)
-      );
-      return R_NilValue;
+      stop("Invalid data type - only integer, numeric, character, factor, date vectors are possible.");
     }
     }
 

@@ -7,59 +7,65 @@ idx <- cumsum(sample(c(1,2,3,4), 15, replace=T))
 
 test_that("constant window", {
   expect_equal(
-    mean_run(x1, k = 5, na_rm = FALSE),
-    runner(x1, k = 5, f = mean)
+    runner(x1, f = mean),
+    sapply(window_run(x1), mean)
   )
 
   expect_equal(
-    mean_run(x2, k = 5, na_rm = FALSE),
-    runner(x2, k = 5, f = mean)
+    runner(x1, k = 5, f = mean),
+    sapply(window_run(x1, k = 5), mean)
   )
 
   expect_equal(
-    mean_run(x2, k = 5, na_rm = TRUE),
-    runner(x2, k = 5, f = function(x) mean(x, na.rm = TRUE))
+    runner(x2, k = 5, f = function(x) mean(x, na.rm = FALSE)),
+    sapply(window_run(x2, k = 5), mean, na.rm = FALSE)
+  )
+
+  expect_equal(
+    runner(x2, k = 5, f = function(x) mean(x, na.rm = TRUE)),
+    sapply(window_run(x2, k = 5), mean, na.rm = TRUE)
   )
 })
 
 test_that("varying window", {
   expect_equal(
-    mean_run(x1, k = k, na_rm = FALSE),
-    runner(x1, k = k, f = mean)
+    runner(x1, k = k, f = mean),
+    sapply(window_run(x1, k = k), mean)
   )
 
   expect_equal(
-    mean_run(x2, k = k, na_rm = FALSE),
-    runner(x2, k = k, f = mean)
+    runner(x2, k = k, f = mean),
+    sapply(window_run(x2, k = k), mean)
   )
 
   expect_equal(
-    mean_run(x2, k = k, na_rm = TRUE),
-    runner(x2, k = k, f = function(x) mean(x, na.rm = TRUE))
+    runner(x2, k = k, f = function(x) mean(x, na.rm = TRUE)),
+    sapply(window_run(x2, k = k), mean, na.rm = TRUE)
   )
 })
 
 
 test_that("date window", {
   expect_equal(
-    mean_run(x1, k = k, na_rm = FALSE, idx = idx),
-    runner(x1, k = k, idx = idx, f = mean)
+    runner(x1, k = k, idx = idx, f = mean),
+    sapply(window_run(x1, k = k, idx = idx), mean)
   )
 
   expect_equal(
-    mean_run(x2, k = k, na_rm = FALSE, idx = idx),
-    runner(x2, k = k, idx = idx, f = mean)
+    runner(x2, k = k, idx = idx, f = mean),
+    sapply(window_run(x2, k = k, idx = idx), mean)
   )
 
   expect_equal(
-    mean_run(x2, k = k, na_rm = TRUE, idx = idx),
-    runner(x2, k = k, idx = idx, f = function(x) mean(x, na.rm = TRUE))
+    runner(x2, k = k, idx = idx, f = function(x) mean(x, na.rm = TRUE)),
+    sapply(window_run(x2, k = k, idx = idx), mean, na.rm = TRUE)
   )
 })
 
 test_that("Lagged date window", {
   x <- sample(c(rep(NA, 20), runif(100)), 100)
   k <- qbinom(runif(100, 0.2, 0.8), 10, 0.5)
+  lag <- qbinom(runif(100, 0, 0.5), 10, 0.3)
   idx <- cumsum(sample(c(1,2,3,4), 100, replace = TRUE))
 
   out <- runner(x, k = 5, lag = 3, idx = idx, f = function(x) mean(x, na.rm = TRUE))
@@ -81,7 +87,14 @@ test_that("Lagged date window", {
 
   expect_equal(out, test)
 
+  out <- runner(x, k = k, lag = lag, idx = idx, f = function(x) mean(x, na.rm = TRUE))
+  test <- vapply(seq_along(x), function(i) {
+    lower <- idx[i] - lag[i] - k[i]  + 1
+    upper <- idx[i] - lag[i]
+    mean(x[idx %in% seq(lower, upper)], na.rm = TRUE)
+  }, numeric(1))
 
+  expect_equal(out, test)
 })
 
 test_that("Function applied on other types", {
