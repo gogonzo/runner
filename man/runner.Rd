@@ -4,18 +4,18 @@
 \alias{runner}
 \title{Custom running function}
 \usage{
-runner(x, k = 0L, lag = 0L, idx = 1L, f = NULL)
+runner(x, f, k = 0L, lag = 0L, idx = integer(0))
 }
 \arguments{
 \item{x}{Vector of any type}
+
+\item{f}{R function to be applied on `x`}
 
 \item{k}{integer vector which specifies window length}
 
 \item{lag}{integer vector which specifies window shift}
 
 \item{idx}{an optional integer vector containing index of observations.}
-
-\item{f}{R function to be applied on `x`}
 }
 \description{
 Applies custom function to running windows
@@ -23,5 +23,7 @@ Applies custom function to running windows
 \examples{
 runner(1:10, f = mean, k = 3)
 runner(1:10, k = 3, f = function(x) mean(x, na.rm = TRUE))
-runner(letters[1:10], k = c(1,2,2,4,5,5,5,5,5,5), f = function(x) length(unique(x)))
+runner(letters[1:10],
+       k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5),
+       f = function(x) length(unique(x)))
 }

@@ -3,15 +3,34 @@ using namespace Rcpp;
 
 //' Length of running windows
 //'
-//' Number of elements in k-long window calculated on idx vector. If idx is an `as.integer(date)` vector, then k=number of days in window - then the result is number of observations within k days window.
+//' Number of elements in k-long window calculated on idx vector.
+//' If idx is an `as.integer(date)` vector, then k=number of days in window -
+//' then the result is number of observations within k days window.
 //' @param k integer vector which specifies window length
+//' @param lag integer vector which specifies window shift
 //' @param idx an optional integer vector containing index of observations.
 //' @examples
-//' length_run(k=3,idx=c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
+//' length_run(k = 3, idx = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
 //' @export
 // [[Rcpp::export]]
-IntegerVector length_run(IntegerVector k = 1, IntegerVector idx = 0) {
+IntegerVector length_run(IntegerVector k = 1, IntegerVector lag = 0, IntegerVector idx = IntegerVector(0)) {
   int n = idx.size();
+  if (n == 0) {
+    stop("idx should be of length > 0");
+  }
+
+  if(k.size() != n and k.size() > 1){
+    stop("length of k and length of idx differs. length(k) should be 1 or equal to idx");
+  } else if( Rcpp::any(Rcpp::is_na(k)) ){
+    stop("Function doesn't accept NA values in k vector");
+  }
+
+  if(lag.size() != n and lag.size() > 1){
+    stop("length of lag and length of lag differs. length(lag) should be 1 or equal to lag");
+  } else if( Rcpp::any(Rcpp::is_na(lag)) ){
+    stop("Function doesn't accept NA values in lag vector");
+  }
+
   IntegerVector res(n);
   if ((k.size() == 1)) {
     for (int i = 0; i < n; i++) {

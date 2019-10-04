@@ -14,8 +14,6 @@ NumericVector runner_simple(const Vector<RTYPE>& x, IntegerVector k, IntegerVect
         idx = apply::get_window_idx(i, k(i), lag(i));
         res(i) = apply::apply_on_window(x, idx, f);
       }
-
-
     } else {
       for (int i = 0; i < n; i++) {
         idx = apply::get_window_idx(i, k(i), lag(0));
@@ -94,33 +92,40 @@ NumericVector runner_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVec
 //' @examples
 //' runner(1:10, f = mean, k = 3)
 //' runner(1:10, k = 3, f = function(x) mean(x, na.rm = TRUE))
-//' runner(letters[1:10], k = c(1,2,2,4,5,5,5,5,5,5), f = function(x) length(unique(x)))
+//' runner(letters[1:10],
+//'        k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5),
+//'        f = function(x) length(unique(x)))
 //' @export
 // [[Rcpp::export]]
-SEXP runner(SEXP x, IntegerVector k = 0, IntegerVector lag = 0, IntegerVector idx = 1, Function f = R_NilValue) {
+SEXP runner(SEXP x,
+            Function f,
+            IntegerVector k = 0,
+            IntegerVector lag = 0,
+            IntegerVector idx = IntegerVector(0)) {
+
   int n = Rf_length(x);
 
-  if( k(0) == 0 ){
+  if(k.size() == 1 && k(0) == 0) {
     k(0) = n;
-  } else if(k.size() != n and k.size() > 1){
-    stop("length of k and length x differs. length(k) should be 1 or equal to x");
-  } else if( Rcpp::any(Rcpp::is_na(k)) ){
+  } else if (k.size() != n and k.size() > 1) {
+    stop("length of k and length of x differs. length(k) should be 1 or equal to x");
+  } else if (Rcpp::any(Rcpp::is_na(k))) {
     stop("Function doesn't accept NA values in k vector");
   }
 
-  if(idx.size() != n and idx.size() > 1){
-    stop("length of idx and length x differs. length(idx) should be 1 or equal to x");
-  } else if( Rcpp::any(Rcpp::is_na(idx)) ){
+  if (idx.size() != n and idx.size() > 1) {
+    stop("length of idx and length of x differs. length(idx) should be 1 or equal to x");
+  } else if (Rcpp::any(Rcpp::is_na(idx))) {
     stop("Function doesn't accept NA values in idx vector");
   }
 
-  if(lag.size() != n and lag.size() > 1){
-    stop("length of lag and length x differs. length(lag) should be 1 or equal to x");
-  } else if( Rcpp::any(Rcpp::is_na(lag)) ){
+  if (lag.size() != n and lag.size() > 1) {
+    stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
+  } else if (Rcpp::any(Rcpp::is_na(lag))) {
     stop("Function doesn't accept NA values in lag vector");
   }
 
-  if (idx.size() > 1) {
+  if (idx.size() > 0) {
     switch (TYPEOF(x)) {
     case INTSXP:  return runner_on_date(as<IntegerVector>(x),   k, lag, idx, f);
     case REALSXP: return runner_on_date(as<NumericVector>(x),   k, lag, idx, f);
@@ -236,26 +241,26 @@ List window_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, 
 //' window_run(letters[1:10],k=c(1,2,2,4,5,5,5,5,5,5))
 //' @export
 // [[Rcpp::export]]
-SEXP window_run(SEXP x, IntegerVector k = 0, IntegerVector lag = 0, IntegerVector idx = 1) {
+SEXP window_run(SEXP x, IntegerVector k = 0, IntegerVector lag = 0, IntegerVector idx = IntegerVector(0)) {
 
   int n = Rf_length(x);
 
-  if( k(0) == 0 ){
+  if(k.size() == 1 && k(0) == 0) {
     k(0) = n;
   } else if(k.size() != n and k.size() > 1){
-    stop("length of k and length x differs. length(k) should be 1 or equal to x");
+    stop("length of k and length of x differs. length(k) should be 1 or equal to x");
   } else if( Rcpp::any(Rcpp::is_na(k)) ){
     stop("Function doesn't accept NA values in k vector");
   }
 
   if(idx.size() != n and idx.size() > 1){
-    stop("length of idx and length x differs. length(idx) should be 1 or equal to x");
+    stop("length of idx and length of x differs. length(idx) should be 1 or equal to x");
   } else if( Rcpp::any(Rcpp::is_na(idx)) ){
     stop("Function doesn't accept NA values in idx vector");
   }
 
   if(lag.size() != n and lag.size() > 1){
-    stop("length of lag and length x differs. length(lag) should be 1 or equal to x");
+    stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
   } else if( Rcpp::any(Rcpp::is_na(lag)) ){
     stop("Function doesn't accept NA values in lag vector");
   }

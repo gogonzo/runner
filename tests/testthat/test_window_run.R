@@ -133,12 +133,12 @@ test_that("Test non-numeric arguments", {
 test_that("Errors", {
   expect_error(window_run(list(1:10), k = 5), "Invalid data type")
 
-  expect_error(window_run(1:10, k = (1:9)), "length of k and length x differs")
+  expect_error(window_run(1:10, k = (1:9)), "length of k and length of x differs")
   expect_error(window_run(1:10, k = c(NA, 1:9)), "Function doesn't accept NA values in k vector")
 
-  expect_error(window_run(1:10, lag = (1:9)), "length of lag and length x differs")
+  expect_error(window_run(1:10, lag = (1:9)), "length of lag and length of x differs")
   expect_error(window_run(1:10, lag = c(NA, 1:9)), "Function doesn't accept NA values in lag vector")
 
-  expect_error(window_run(1:10, idx = (1:9)), "length of idx and length x differs")
+  expect_error(window_run(1:10, idx = (1:9)), "length of idx and length of x differs")
   expect_error(window_run(1:10, idx = c(NA, 1:9)), "Function doesn't accept NA values in idx vector")
 })

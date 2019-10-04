@@ -34,14 +34,17 @@ lag_run <- function(x, k = 1L, idx = 1L) {
 
 #' Length of running windows
 #'
-#' Number of elements in k-long window calculated on idx vector. If idx is an `as.integer(date)` vector, then k=number of days in window - then the result is number of observations within k days window.
+#' Number of elements in k-long window calculated on idx vector.
+#' If idx is an `as.integer(date)` vector, then k=number of days in window -
+#' then the result is number of observations within k days window.
 #' @param k integer vector which specifies window length
+#' @param lag integer vector which specifies window shift
 #' @param idx an optional integer vector containing index of observations.
 #' @examples
-#' length_run(k=3,idx=c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
+#' length_run(k = 3, idx = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
 #' @export
-length_run <- function(k = 1L, idx = 0L) {
-    .Call('_runner_length_run', PACKAGE = 'runner', k, idx)
+length_run <- function(k = 1L, lag = 0L, idx = integer(0)) {
+    .Call('_runner_length_run', PACKAGE = 'runner', k, lag, idx)
 }
 
 #' Running minimum
@@ -103,10 +106,12 @@ min_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, idx = 0L) {
 #' @examples
 #' runner(1:10, f = mean, k = 3)
 #' runner(1:10, k = 3, f = function(x) mean(x, na.rm = TRUE))
-#' runner(letters[1:10], k = c(1,2,2,4,5,5,5,5,5,5), f = function(x) length(unique(x)))
+#' runner(letters[1:10],
+#'        k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5),
+#'        f = function(x) length(unique(x)))
 #' @export
-runner <- function(x, k = 0L, lag = 0L, idx = 1L, f = NULL) {
-    .Call('_runner_runner', PACKAGE = 'runner', x, k, lag, idx, f)
+runner <- function(x, f, k = 0L, lag = 0L, idx = integer(0)) {
+    .Call('_runner_runner', PACKAGE = 'runner', x, f, k, lag, idx)
 }
 
 #' List of running windows
@@ -120,7 +125,7 @@ runner <- function(x, k = 0L, lag = 0L, idx = 1L, f = NULL) {
 #' window_run(1:10, k=3)
 #' window_run(letters[1:10],k=c(1,2,2,4,5,5,5,5,5,5))
 #' @export
-window_run <- function(x, k = 0L, lag = 0L, idx = 1L) {
+window_run <- function(x, k = 0L, lag = 0L, idx = integer(0)) {
     .Call('_runner_window_run', PACKAGE = 'runner', x, k, lag, idx)
 }
 

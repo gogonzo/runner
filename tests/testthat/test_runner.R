@@ -114,3 +114,20 @@ test_that("Function applied on other types", {
     expect_silent(runner(as.Date(1:15, origin = "1970-01-01"), k = k, f = length))
     expect_silent(runner(as.Date(1:15, origin = "1970-01-01"), k = k, idx, f = length))
 })
+
+test_that("Errors", {
+  expect_error(runner(x = letters[1:5]))
+  expect_error(runner(x = letters[1:5], f = ""))
+
+  expect_error(runner(list(1:10), k = 5, f = mean), "Invalid data type")
+
+  expect_error(runner(1:10, k = (1:9), f = mean), "length of k and length of x differs")
+  expect_error(runner(1:10, k = c(NA, 1:9), f = mean), "Function doesn't accept NA values in k vector")
+
+  expect_error(runner(1:10, lag = (1:9), f = mean), "length of lag and length of x differs")
+  expect_error(runner(1:10, lag = c(NA, 1:9), f = mean), "Function doesn't accept NA values in lag vector")
+
+  expect_error(runner(1:10, idx = (1:9), f = mean), "length of idx and length of x differs")
+  expect_error(runner(1:10, idx = c(NA, 1:9), f = mean), "Function doesn't accept NA values in idx vector")
+
+})

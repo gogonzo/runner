@@ -32,14 +32,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // length_run
-IntegerVector length_run(IntegerVector k, IntegerVector idx);
-RcppExport SEXP _runner_length_run(SEXP kSEXP, SEXP idxSEXP) {
+IntegerVector length_run(IntegerVector k, IntegerVector lag, IntegerVector idx);
+RcppExport SEXP _runner_length_run(SEXP kSEXP, SEXP lagSEXP, SEXP idxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type lag(lagSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP);
-    rcpp_result_gen = Rcpp::wrap(length_run(k, idx));
+    rcpp_result_gen = Rcpp::wrap(length_run(k, lag, idx));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -74,17 +75,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // runner
-SEXP runner(SEXP x, IntegerVector k, IntegerVector lag, IntegerVector idx, Function f);
-RcppExport SEXP _runner_runner(SEXP xSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP idxSEXP, SEXP fSEXP) {
+SEXP runner(SEXP x, Function f, IntegerVector k, IntegerVector lag, IntegerVector idx);
+RcppExport SEXP _runner_runner(SEXP xSEXP, SEXP fSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP idxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Function >::type f(fSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type lag(lagSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP);
-    Rcpp::traits::input_parameter< Function >::type f(fSEXP);
-    rcpp_result_gen = Rcpp::wrap(runner(x, k, lag, idx, f));
+    rcpp_result_gen = Rcpp::wrap(runner(x, f, k, lag, idx));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -193,7 +194,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_runner_fill_run", (DL_FUNC) &_runner_fill_run, 3},
     {"_runner_lag_run", (DL_FUNC) &_runner_lag_run, 3},
-    {"_runner_length_run", (DL_FUNC) &_runner_length_run, 2},
+    {"_runner_length_run", (DL_FUNC) &_runner_length_run, 3},
     {"_runner_max_run", (DL_FUNC) &_runner_max_run, 5},
     {"_runner_min_run", (DL_FUNC) &_runner_min_run, 5},
     {"_runner_runner", (DL_FUNC) &_runner_runner, 5},
