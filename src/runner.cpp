@@ -14,6 +14,8 @@ NumericVector runner_simple(const Vector<RTYPE>& x, IntegerVector k, IntegerVect
         idx = apply::get_window_idx(i, k(i), lag(i));
         res(i) = apply::apply_on_window(x, idx, f);
       }
+
+
     } else {
       for (int i = 0; i < n; i++) {
         idx = apply::get_window_idx(i, k(i), lag(0));
@@ -62,7 +64,7 @@ NumericVector runner_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVec
   } else {
     if (lag.size() > 1) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(0));
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(i));
         res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
 
       }
