@@ -38,7 +38,7 @@ lag_run <- function(x, k = 1L, idx = 1L) {
 #' @param k integer vector which specifies window length
 #' @param idx an optional integer vector containing index of observations.
 #' @examples
-#' length_run(k=3,idx=c(1,2,2,4,5,5,5,5,5,5))
+#' length_run(k=3,idx=c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
 #' @export
 length_run <- function(k = 1L, idx = 0L) {
     .Call('_runner_length_run', PACKAGE = 'runner', k, idx)
@@ -104,8 +104,22 @@ min_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, idx = 0L) {
 #' runner(1:10, k = 3, f = function(x) mean(x, na.rm = TRUE))
 #' runner(letters[1:10], k = c(1,2,2,4,5,5,5,5,5,5), f = function(x) length(unique(x)))
 #' @export
-runner <- function(x, k = 0L, idx = 1L, f = NULL) {
-    .Call('_runner_runner', PACKAGE = 'runner', x, k, idx, f)
+runner <- function(x, k = 0L, lag = 0L, idx = 1L, f = NULL) {
+    .Call('_runner_runner', PACKAGE = 'runner', x, k, lag, idx, f)
+}
+
+#' List of running windows
+#'
+#' Creates list of windows
+#' @param x Vector of any type
+#' @param k integer vector which specifies window length
+#' @param idx an optional integer vector containing index of observations.
+#' @examples
+#' window_run(1:10, k=3)
+#' window_run(letters[1:10],k=c(1,2,2,4,5,5,5,5,5,5))
+#' @export
+window_run <- function(x, k = 0L, lag = 0L, idx = 1L) {
+    .Call('_runner_window_run', PACKAGE = 'runner', x, k, lag, idx)
 }
 
 #' Running streak length
@@ -228,19 +242,5 @@ whicht_run <- function(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE, 
 #' @export
 whichd_run <- function(x, k = 0L, na_pad = FALSE) {
     .Call('_runner_whichd_run', PACKAGE = 'runner', x, k, na_pad)
-}
-
-#' List of running windows
-#'
-#' Creates list of windows
-#' @param x Vector of any type
-#' @param k integer vector which specifies window length
-#' @param idx an optional integer vector containing index of observations.
-#' @examples
-#' window_run(1:10, k=3)
-#' window_run(letters[1:10],k=c(1,2,2,4,5,5,5,5,5,5))
-#' @export
-window_run <- function(x, k = 0L, idx = 1L) {
-    .Call('_runner_window_run', PACKAGE = 'runner', x, k, idx)
 }
 

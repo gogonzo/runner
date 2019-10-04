@@ -57,6 +57,33 @@ test_that("date window", {
   )
 })
 
+test_that("Lagged date window", {
+  x <- sample(c(rep(NA, 20), runif(100)), 100)
+  k <- qbinom(runif(100, 0.2, 0.8), 10, 0.5)
+  idx <- cumsum(sample(c(1,2,3,4), 100, replace = TRUE))
+
+  out <- runner(x, k = 5, lag = 3, idx = idx, f = function(x) mean(x, na.rm = TRUE))
+  test <- vapply(seq_along(x), function(i) {
+    lower <- idx[i] - 3 - 5  + 1
+    upper <- idx[i] - 3
+    mean(x[idx %in% seq(lower, upper)], na.rm = TRUE)
+  }, numeric(1))
+
+  expect_equal(out, test)
+
+
+  out <- runner(x, k = k, lag = 3, idx = idx, f = function(x) mean(x, na.rm = TRUE))
+  test <- vapply(seq_along(x), function(i) {
+    lower <- idx[i] - 3 - k[i]  + 1
+    upper <- idx[i] - 3
+    mean(x[idx %in% seq(lower, upper)], na.rm = TRUE)
+  }, numeric(1))
+
+  expect_equal(out, test)
+
+
+})
+
 test_that("Function applied on other types", {
     expect_silent(runner(as.integer(1:15), k = 5, f = length))
     expect_silent(runner(as.integer(1:15), k = k, f = length))

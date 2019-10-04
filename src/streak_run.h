@@ -16,8 +16,9 @@ namespace streak {
     // run for first finite
     for(int j = i; j >= i2 ; --j)
       if( Vector<RTYPE>::is_na(x(j)) ){
-        if(!na_rm){
-          return NA_INTEGER;}
+        if(!na_rm) {
+          return NA_INTEGER;
+        }
       } else {
         j_f = j;
         break;
@@ -104,7 +105,7 @@ namespace streak {
   }
 
   template <int RTYPE>
-  IntegerVector streak_run2( const Vector<RTYPE>& x, IntegerVector k, bool na_rm, bool na_pad, IntegerVector indexes){
+  IntegerVector streak_run2( const Vector<RTYPE>& x, IntegerVector k, bool na_rm, bool na_pad, IntegerVector indexes) {
     int n = x.size();
     IntegerVector res( n );
     IntegerVector idx;
