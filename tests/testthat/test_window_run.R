@@ -6,7 +6,6 @@ k <- sample(1:10, 10, replace = TRUE)
 find_idx <- function(i, k) ifelse((i - k + 1) < 1, 1, i - k + 1)
 
 test_that("window_run k = constant",{
-
   for(i in 1:10)
     expect_equal(
      window_run(x1, k = 2)[i][[1]],
@@ -25,15 +24,11 @@ test_that("window_run k = constant",{
       as.character(x2[find_idx(i, 2):i])
     )
 
-
   for(i in 1:10)
     expect_equal(
       window_run(as.numeric(x1), k = 2)[i][[1]],
       as.numeric(x1[find_idx(i, 2):i])
     )
-
-
-
 })
 
 test_that("window_run with k varying", {
@@ -66,7 +61,7 @@ test_that("unique_run with idx",{
 
   for(i in 1:10)
     for(j in i:1)
-      if(idx[j] >= (idx[i] - (k[i] - 1))){
+      if(idx[j] >= (idx[i] - (k[i] - 1))) {
         x22[[i]] <- x1[j:i]
       } else {
         break;

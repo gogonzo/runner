@@ -85,9 +85,10 @@ NumericVector runner_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVec
 //'
 //' Applies custom function to running windows
 //' @param x Vector of any type
-//' @param f R function to be applied on `x`
 //' @param k integer vector which specifies window length
+//' @param lag integer vector which specifies window shift
 //' @param idx an optional integer vector containing index of observations.
+//' @param f R function to be applied on `x`
 //' @examples
 //' runner(1:10, f = mean, k = 3)
 //' runner(1:10, k = 3, f = function(x) mean(x, na.rm = TRUE))
@@ -222,6 +223,7 @@ List window_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, 
 //' Creates list of windows
 //' @param x Vector of any type
 //' @param k integer vector which specifies window length
+//' @param lag integer vector which specifies window shift
 //' @param idx an optional integer vector containing index of observations.
 //' @examples
 //' window_run(1:10, k=3)

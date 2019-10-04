@@ -11,6 +11,8 @@ window_run(x, k = 0L, lag = 0L, idx = 1L)
 
 \item{k}{integer vector which specifies window length}
 
+\item{lag}{integer vector which specifies window shift}
+
 \item{idx}{an optional integer vector containing index of observations.}
 }
 \description{

@@ -96,9 +96,10 @@ min_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, idx = 0L) {
 #'
 #' Applies custom function to running windows
 #' @param x Vector of any type
-#' @param f R function to be applied on `x`
 #' @param k integer vector which specifies window length
+#' @param lag integer vector which specifies window shift
 #' @param idx an optional integer vector containing index of observations.
+#' @param f R function to be applied on `x`
 #' @examples
 #' runner(1:10, f = mean, k = 3)
 #' runner(1:10, k = 3, f = function(x) mean(x, na.rm = TRUE))
@@ -113,6 +114,7 @@ runner <- function(x, k = 0L, lag = 0L, idx = 1L, f = NULL) {
 #' Creates list of windows
 #' @param x Vector of any type
 #' @param k integer vector which specifies window length
+#' @param lag integer vector which specifies window shift
 #' @param idx an optional integer vector containing index of observations.
 #' @examples
 #' window_run(1:10, k=3)

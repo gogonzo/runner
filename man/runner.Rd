@@ -11,6 +11,8 @@ runner(x, k = 0L, lag = 0L, idx = 1L, f = NULL)
 
 \item{k}{integer vector which specifies window length}
 
+\item{lag}{integer vector which specifies window shift}
+
 \item{idx}{an optional integer vector containing index of observations.}
 
 \item{f}{R function to be applied on `x`}
