@@ -6,11 +6,8 @@ using namespace Rcpp;
 //'
 //'
 //' \code{min_run} calculates running min on given \code{x} numeric vector, specified \code{k} window size.
-//' @param x input numeric vector where running minimum is calculated.
-//' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
-//' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
-//' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.
-//' @param idx an optional integer vector containing idx numbers of observation.
+//' @inheritParams runner
+//' @inheritParams sum_run
 //' @return numeric vector of length equals length of \code{x} containing running min in \code{k}-long window.
 //' @examples
 //' set.seed(11)
@@ -26,28 +23,42 @@ using namespace Rcpp;
 NumericVector max_run(
     NumericVector x,
     IntegerVector k = 0,
+    IntegerVector lag = 0,
     bool na_rm = true,
     bool na_pad = false,
-    IntegerVector idx = 0
+    IntegerVector idx = IntegerVector(0)
 ){
 
   int n = x.size();
-  NumericVector res;
 
-  if( k(0) == 0 ){
+  if(k.size() == 1 && k(0) == 0) {
     k(0) = n;
-  } else if(k.size() != n and k.size() > 1){
-    stop("length of k and length x differs. k=0 and k=length(x) only allowed");
-  } else if( Rcpp::any(Rcpp::is_na(k)) ){
+  } else if (k.size() != n and k.size() > 1) {
+    stop("length of k and length of x differs. length(k) should be 1 or equal to x");
+  } else if (Rcpp::any(Rcpp::is_na(k))) {
     stop("Function doesn't accept NA values in k vector");
   }
 
+  if (idx.size() != n and idx.size() > 1) {
+    stop("length of idx and length of x differs. length(idx) should be 1 or equal to x");
+  } else if (Rcpp::any(Rcpp::is_na(idx))) {
+    stop("Function doesn't accept NA values in idx vector");
+  }
+
+  if (lag.size() != n and lag.size() > 1) {
+    stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
+  } else if (Rcpp::any(Rcpp::is_na(lag))) {
+    stop("Function doesn't accept NA values in lag vector");
+  }
+
+  NumericVector res;
+
   /* not windowed - cum_max */
-  if( ( k(0) <= 1 or k(0) == n ) and k.size() == 1 ){
+  if((k(0) <= 1 or k(0) == n ) and k.size() == 1){
     res = min::window_max(x, na_rm);
 
     /* windowed */
-  } else if( k.size() == 1 ){
+  } else if(k.size() == 1){
     res = idx.size() == 1 ? min::window_max21(x, k, na_rm) : min::window_max31(x, k, idx, na_rm);
 
     /* varying window size */
@@ -61,3 +72,4 @@ NumericVector max_run(
 
   return res;
 }
+

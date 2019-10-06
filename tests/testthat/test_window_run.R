@@ -128,6 +128,9 @@ test_that("Test non-numeric arguments", {
   expect_silent(window_run(letters[1:10], k = 5))
   expect_silent(window_run(as.factor(letters[1:10]), k = 5))
   expect_silent(window_run(seq(Sys.Date(), Sys.Date() + 9, by = "1 day"), k = 5))
+  expect_silent(window_run(sample(c(TRUE, FALSE), 10, replace = TRUE), k = 5))
+  expect_silent(window_run(as.complex(1:10), k = 5))
+
 })
 
 test_that("Errors", {

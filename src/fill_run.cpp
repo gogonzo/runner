@@ -16,20 +16,16 @@ using namespace Rcpp;
 //' fill_run(c(NA,NA,1,2,NA,NA,2,2,NA,NA,1, NA, NA), run_for_first=TRUE,only_within = TRUE)
 //' @export
 // [[Rcpp::export]]
-SEXP fill_run(SEXP x, bool run_for_first = false, bool only_within=false) {
+SEXP fill_run(SEXP x, bool run_for_first = false, bool only_within = false) {
 
   switch (TYPEOF(x)) {
-  case INTSXP: return fill::fill_run(  as<IntegerVector>(x), run_for_first,only_within);
-  case REALSXP: return fill::fill_run( as<NumericVector>(x), run_for_first,only_within);
-  case STRSXP: return fill::fill_run(  as<CharacterVector>(x), run_for_first,only_within);
-  case LGLSXP: return fill::fill_run(  as<LogicalVector>(x), run_for_first,only_within);
-  case CPLXSXP: return fill::fill_run( as<ComplexVector>(x), run_for_first,only_within);
+  case INTSXP: return fill::fill_run(  as<IntegerVector>(x), run_for_first, only_within);
+  case REALSXP: return fill::fill_run( as<NumericVector>(x), run_for_first, only_within);
+  case STRSXP: return fill::fill_run(  as<CharacterVector>(x), run_for_first, only_within);
+  case LGLSXP: return fill::fill_run(  as<LogicalVector>(x), run_for_first, only_within);
+  case CPLXSXP: return fill::fill_run( as<ComplexVector>(x), run_for_first, only_within);
   default: {
-    warning(
-      "Invalid SEXPTYPE %d (%s).\n",
-      TYPEOF(x), type2name(x)
-    );
-    return 0;
+    stop("Invalid data type - only integer, numeric, character, factor, date vectors are possible.");
   }
   }
 }

@@ -5,11 +5,8 @@ using namespace Rcpp;
 //' Running streak length
 //'
 //' Calculates running series of consecutive elements
-//' @param x vector of any type where running streak is calculated
-//' @param k running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
-//' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed streak prior to element.
-//' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
-//' @param idx an optional integer vector containing indexes numbers of observation.
+//' @inheritParams runner
+//' @inheritParams sum_run
 //' @return numeric vector of length equals length of \code{x} containing running streak length in \code{k}-long window.
 //' @examples
 //' set.seed(11)
@@ -24,50 +21,57 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 IntegerVector streak_run(
     SEXP x,
-    IntegerVector k=0,
+    IntegerVector k = 0,
+    IntegerVector lag = 0,
     bool na_rm = true,
     bool na_pad = false,
-    IntegerVector idx=1) {
+    IntegerVector idx = IntegerVector(0)) {
 
   int n = Rf_length(x);
 
-  if( k(0) == 0 ){
+  if(k.size() == 1 && k(0) == 0) {
     k(0) = n;
-  } else if(k.size() != n and k.size() > 1){
-    stop("length of k and length x differs. k=0 and k=length(x) only allowed");
-  } else if( Rcpp::any(Rcpp::is_na(k)) ){
+  } else if (k.size() != n and k.size() > 1) {
+    stop("length of k and length of x differs. length(k) should be 1 or equal to x");
+  } else if (Rcpp::any(Rcpp::is_na(k))) {
     stop("Function doesn't accept NA values in k vector");
   }
 
-  if( idx.size() == 1){
+  if (idx.size() != n and idx.size() > 1) {
+    stop("length of idx and length of x differs. length(idx) should be 1 or equal to x");
+  } else if (Rcpp::any(Rcpp::is_na(idx))) {
+    stop("Function doesn't accept NA values in idx vector");
+  }
+
+  if (lag.size() != n and lag.size() > 1) {
+    stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
+  } else if (Rcpp::any(Rcpp::is_na(lag))) {
+    stop("Function doesn't accept NA values in lag vector");
+  } else if (lag.size() == 1 & lag(0) >= n & idx.size() == 0) {
+    warning("lag value is greater than length of x");
+  }
+
+  if (idx.size() == 0) {
     switch (TYPEOF(x)) {
-    case INTSXP: return streak::streak_run1(as<IntegerVector>(x), k, na_rm, na_pad);
-    case REALSXP: return streak::streak_run1(as<NumericVector>(x), k, na_rm, na_pad);
-    case STRSXP: return streak::streak_run1(as<CharacterVector>(x), k, na_rm, na_pad);
-    case LGLSXP: return streak::streak_run1(as<LogicalVector>(x), k, na_rm, na_pad);
-    case CPLXSXP: return streak::streak_run1(as<ComplexVector>(x), k, na_rm, na_pad);
+    case INTSXP: return streak::streak_run1(as<IntegerVector>(x),   k, lag, na_rm, na_pad);
+    case REALSXP: return streak::streak_run1(as<NumericVector>(x),  k, lag, na_rm, na_pad);
+    case STRSXP: return streak::streak_run1(as<CharacterVector>(x), k, lag, na_rm, na_pad);
+    case LGLSXP: return streak::streak_run1(as<LogicalVector>(x),   k, lag, na_rm, na_pad);
+    case CPLXSXP: return streak::streak_run1(as<ComplexVector>(x),  k, lag, na_rm, na_pad);
     default: {
-      warning(
-        "Invalid SEXPTYPE %d (%s).\n",
-        TYPEOF(x), type2name(x)
-      );
-      return 0;
+      stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }
     }
 
   } else {
     switch (TYPEOF(x)) {
-    case INTSXP: return streak::streak_run2(as<IntegerVector>(x), k, na_rm, na_pad, idx);
-    case REALSXP: return streak::streak_run2(as<NumericVector>(x), k, na_rm, na_pad, idx);
-    case STRSXP: return streak::streak_run2(as<CharacterVector>(x), k, na_rm, na_pad, idx);
-    case LGLSXP: return streak::streak_run2(as<LogicalVector>(x), k, na_rm, na_pad, idx);
-    case CPLXSXP: return streak::streak_run2(as<ComplexVector>(x), k, na_rm, na_pad, idx);
+    case INTSXP: return streak::streak_run2(as<IntegerVector>(x),   k, lag, na_rm, na_pad, idx);
+    case REALSXP: return streak::streak_run2(as<NumericVector>(x),  k, lag, na_rm, na_pad, idx);
+    case STRSXP: return streak::streak_run2(as<CharacterVector>(x), k, lag, na_rm, na_pad, idx);
+    case LGLSXP: return streak::streak_run2(as<LogicalVector>(x),   k, lag, na_rm, na_pad, idx);
+    case CPLXSXP: return streak::streak_run2(as<ComplexVector>(x),  k, lag, na_rm, na_pad, idx);
     default: {
-      warning(
-        "Invalid SEXPTYPE %d (%s).\n",
-        TYPEOF(x), type2name(x)
-      );
-      return 0;
+        stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }
     }
 

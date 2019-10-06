@@ -51,11 +51,8 @@ length_run <- function(k = 1L, lag = 0L, idx = integer(0)) {
 #'
 #'
 #' \code{min_run} calculates running min on given \code{x} numeric vector, specified \code{k} window size.
-#' @param x input numeric vector where running minimum is calculated.
-#' @param k Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
-#' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
-#' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.
-#' @param idx an optional integer vector containing idx numbers of observation.
+#' @inheritParams runner
+#' @inheritParams sum_run
 #' @return numeric vector of length equals length of \code{x} containing running min in \code{k}-long window.
 #' @examples
 #' set.seed(11)
@@ -67,8 +64,8 @@ length_run <- function(k = 1L, lag = 0L, idx = integer(0)) {
 #' min_run(x2, na_rm = TRUE, k=4) # minimum in 4-element window
 #' min_run(x2, na_rm = FALSE, k=k) # minimum in varying k window size
 #' @export
-max_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, idx = 0L) {
-    .Call('_runner_max_run', PACKAGE = 'runner', x, k, na_rm, na_pad, idx)
+max_run <- function(x, k = 0L, lag = 0L, na_rm = TRUE, na_pad = FALSE, idx = integer(0)) {
+    .Call('_runner_max_run', PACKAGE = 'runner', x, k, lag, na_rm, na_pad, idx)
 }
 
 #' Running minimum
@@ -132,11 +129,8 @@ window_run <- function(x, k = 0L, lag = 0L, idx = integer(0)) {
 #' Running streak length
 #'
 #' Calculates running series of consecutive elements
-#' @param x vector of any type where running streak is calculated
-#' @param k running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}
-#' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed streak prior to element.
-#' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
-#' @param idx an optional integer vector containing indexes numbers of observation.
+#' @inheritParams runner
+#' @inheritParams sum_run
 #' @return numeric vector of length equals length of \code{x} containing running streak length in \code{k}-long window.
 #' @examples
 #' set.seed(11)
@@ -148,8 +142,8 @@ window_run <- function(x, k = 0L, lag = 0L, idx = integer(0)) {
 #' streak_run(x2, na_pad=TRUE, k=3) # streak run within k=3 with padding NA
 #' streak_run(x1, k=k) # streak run within varying window size specified by vector k
 #' @export
-streak_run <- function(x, k = 0L, na_rm = TRUE, na_pad = FALSE, idx = 1L) {
-    .Call('_runner_streak_run', PACKAGE = 'runner', x, k, na_rm, na_pad, idx)
+streak_run <- function(x, k = 0L, lag = 0L, na_rm = TRUE, na_pad = FALSE, idx = integer(0)) {
+    .Call('_runner_streak_run', PACKAGE = 'runner', x, k, lag, na_rm, na_pad, idx)
 }
 
 #' Running mean

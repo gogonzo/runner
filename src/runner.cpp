@@ -130,8 +130,10 @@ SEXP runner(SEXP x,
     case INTSXP:  return runner_on_date(as<IntegerVector>(x),   k, lag, idx, f);
     case REALSXP: return runner_on_date(as<NumericVector>(x),   k, lag, idx, f);
     case STRSXP:  return runner_on_date(as<CharacterVector>(x), k, lag, idx, f);
+    case LGLSXP: return runner_on_date(as<LogicalVector>(x),    k, lag, idx, f);
+    case CPLXSXP: return runner_on_date(as<ComplexVector>(x),   k, lag, idx, f);
     default: {
-      stop("Invalid data type - only integer, numeric, character, factor, date vectors are possible.");
+      stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }
     }
   } else {
@@ -139,8 +141,10 @@ SEXP runner(SEXP x,
     case INTSXP:  return runner_simple(as<IntegerVector>(x),   k, lag, f);
     case REALSXP: return runner_simple(as<NumericVector>(x),   k, lag, f);
     case STRSXP:  return runner_simple(as<CharacterVector>(x), k, lag, f);
+    case LGLSXP: return runner_simple(as<LogicalVector>(x),    k, lag, f);
+    case CPLXSXP: return runner_simple(as<ComplexVector>(x),   k, lag, f);
     default: {
-      stop("Invalid data type - only integer, numeric, character, factor, date vectors are possible.");
+      stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }
     }
 
@@ -268,20 +272,24 @@ SEXP window_run(SEXP x, IntegerVector k = 0, IntegerVector lag = 0, IntegerVecto
 
   if( idx.size() > 1){
     switch (TYPEOF(x)) {
-    case INTSXP: return window_on_date(as<IntegerVector>(x), k, lag, idx);
-    case REALSXP: return window_on_date(as<NumericVector>(x), k, lag, idx);
+    case INTSXP: return window_on_date(as<IntegerVector>(x),   k, lag, idx);
+    case REALSXP: return window_on_date(as<NumericVector>(x),  k, lag, idx);
     case STRSXP: return window_on_date(as<CharacterVector>(x), k, lag, idx);
+    case LGLSXP: return window_on_date(as<LogicalVector>(x),   k, lag, idx);
+    case CPLXSXP: return window_on_date(as<ComplexVector>(x),  k, lag, idx);
     default: {
-      stop("Invalid data type - only integer, numeric, character, factor, date vectors are possible.");
+      stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }
     }
   } else {
     switch (TYPEOF(x)) {
-    case INTSXP: return window_simple(as<IntegerVector>(x), k, lag);
-    case REALSXP: return window_simple(as<NumericVector>(x), k, lag);
+    case INTSXP: return window_simple(as<IntegerVector>(x),   k, lag);
+    case REALSXP: return window_simple(as<NumericVector>(x),  k, lag);
     case STRSXP: return window_simple(as<CharacterVector>(x), k, lag);
+    case LGLSXP: return window_simple(as<LogicalVector>(x),   k, lag);
+    case CPLXSXP: return window_simple(as<ComplexVector>(x),  k, lag);
     default: {
-      stop("Invalid data type - only integer, numeric, character, factor, date vectors are possible.");
+      stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }
     }
 

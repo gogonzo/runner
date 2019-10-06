@@ -15,8 +15,6 @@ test_that("length_run constant k", {
     }
   }
 
-
-
   for(i in 1:10) {
     for(j in i:1) {
       if(idx[j] <= (idx[i]-k[i])){
