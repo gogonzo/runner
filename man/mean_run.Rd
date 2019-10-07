@@ -4,14 +4,17 @@
 \alias{mean_run}
 \title{Running mean}
 \usage{
-mean_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE, idx = 1L)
+mean_run(x, k = 0L, lag = 0L, na_rm = TRUE, na_pad = FALSE,
+  idx = integer(0))
 }
 \arguments{
-\item{x}{vector of any type on which running mean is calculated}
+\item{x}{vector of any type where running sum is calculated}
 
-\item{k}{running window size. Not yet implemented.}
+\item{k}{Running window size.  Not yet implemented.}
 
-\item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} mean is calulating excluding \code{NA}.}
+\item{lag}{integer vector which specifies window shift}
+
+\item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.}
 
 \item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
 
@@ -21,7 +24,7 @@ mean_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE, idx = 1L)
 numeric vector of length equals length of \code{x} containing running mean in \code{k}-long window.
 }
 \description{
-Running mean
+Running mean in specified window of numeric vector.
 }
 \examples{
 set.seed(11)
