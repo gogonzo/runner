@@ -1,0 +1,258 @@
+using namespace Rcpp;
+
+namespace aggr {
+    template <int RTYPE>
+    int calc_actual_streak(const Vector<RTYPE>& x, int u, int l, bool na_rm) {
+      int j_f = NA_INTEGER;
+      int cur_streak = 1;
+      // run for first finite
+      for (int j = u; j >= l ; --j) {
+        if (Vector<RTYPE>::is_na(x(j))) {
+          if (!na_rm) {
+            return NA_INTEGER;
+          }
+        } else {
+          j_f = j;
+          break;
+        }
+      }
+
+      if (IntegerVector::is_na(j_f)) return NA_INTEGER;
+      for (int j = j_f; j >= l ; --j) {
+        if (j < j_f) {
+          if (x(j) == x(j_f)) {
+            cur_streak += 1;
+            j_f = j;
+          } else if (!Vector<RTYPE>::is_na(x(j))) {
+            return cur_streak;
+          } else {
+            if (!na_rm) return cur_streak;
+          }
+        }
+      }
+      return cur_streak;
+    }
+
+    double calc_max(NumericVector x, int u, int l, bool na_rm) {
+      double cur_max = NA_REAL;
+
+      if (na_rm) {
+        for (int i = l; i <= u ; ++i) {
+          if (x(i) > cur_max or NumericVector::is_na(cur_max)) {
+            cur_max = x(i);
+          }
+        }
+      } else {
+        for (int i = l; i <= u; ++i) {
+          if (NumericVector::is_na(x(i))) {
+            cur_max = NA_REAL;
+            return cur_max;
+          }
+          if (NumericVector::is_na(cur_max) or x(i) > cur_max) {
+            cur_max = x(i);
+          }
+        }
+      }
+      return cur_max;
+    }
+
+    double calc_min(NumericVector x, int u, int l, bool na_rm) {
+      double cur_min = NA_REAL;
+
+      if (na_rm) {
+        for (int i = l; i <= u ; ++i) {
+          if (x(i) < cur_min or NumericVector::is_na(cur_min)) {
+            cur_min = x(i);
+          }
+        }
+      } else {
+        for (int i = l; i <= u; ++i) {
+          if (NumericVector::is_na(x(i))) {
+            cur_min = NA_REAL;
+            return cur_min;
+          }
+          if (NumericVector::is_na(cur_min) or x(i) < cur_min) {
+            cur_min = x(i);
+          }
+        }
+      }
+      return cur_min;
+    }
+
+    double calc_sum(NumericVector x, int u, int l, bool na_rm) {
+      double cur_sum = NA_REAL;
+      if (na_rm) {
+        for (int i = l; i <= u ; ++i) {
+          if (NumericVector::is_na(cur_sum) & !NumericVector::is_na(x(i))) {
+            cur_sum = x(i);
+          } else if (!NumericVector::is_na(x(i))) {
+            cur_sum += x(i);
+          }
+        }
+      } else {
+        for (int i = l; i <= u; ++i) {
+          if (NumericVector::is_na(x(i))) {
+            return NA_REAL;
+          }
+          if (NumericVector::is_na(cur_sum) & !NumericVector::is_na(x(i))) {
+            cur_sum = x(i);
+          } else if (!NumericVector::is_na(x(i))) {
+            cur_sum += x(i);
+          }
+        }
+      }
+      return cur_sum;
+    }
+
+    double calc_mean(NumericVector x, int u, int l, bool na_rm) {
+      double cur_sum = NA_REAL;
+      int nonna = 0;
+
+      if (na_rm) {
+        for (int i = l; i <= u ; ++i) {
+          if (NumericVector::is_na(cur_sum) & !NumericVector::is_na(x(i))) {
+            nonna += 1;
+            cur_sum = x(i);
+          } else if (!NumericVector::is_na(x(i))) {
+            nonna += 1;
+            cur_sum += x(i);
+          }
+        }
+      } else {
+        for (int i = l; i <= u; ++i) {
+          if (NumericVector::is_na(x(i))) {
+            return NA_REAL;
+          }
+          if (NumericVector::is_na(cur_sum) & !NumericVector::is_na(x(i))) {
+            nonna += 1;
+            cur_sum = x(i);
+          } else if (!NumericVector::is_na(x(i))) {
+            nonna += 1;
+            cur_sum += x(i);
+          }
+        }
+      }
+      return cur_sum/nonna;
+    }
+
+    NumericVector cummax(NumericVector x, bool na_rm) {
+      int n = x.size();
+      NumericVector res(n);
+      double cur_max = NA_REAL;
+
+      if (na_rm) {
+        for (int i = 0; i < n ; ++i) {
+          if (x(i) > cur_max or NumericVector::is_na(cur_max)) {
+            cur_max = x(i);
+          }
+          res(i) = cur_max;
+        }
+      } else {
+        for (int i = 0; i < n; ++i) {
+          if (NumericVector::is_na(x(i))) {
+            std::fill(res.begin() + i, res.end(), NA_REAL);
+            return res;
+          }
+          if (NumericVector::is_na(cur_max) or x(i) > cur_max) {
+            cur_max = x(i);
+          }
+          res(i) = cur_max;
+        }
+      }
+      return res;
+    }
+
+    NumericVector cummin(NumericVector x, bool na_rm) {
+      int n = x.size();
+      NumericVector res(n);
+      double cur_max = NA_REAL;
+
+      if (na_rm) {
+        for (int i = 0; i < n ; ++i) {
+          if (x(i) < cur_max or NumericVector::is_na(cur_max)) {
+            cur_max = x(i);
+          }
+          res(i) = cur_max;
+        }
+      } else {
+        for (int i = 0; i < n; ++i) {
+          if (NumericVector::is_na(x(i))) {
+            std::fill(res.begin() + i, res.end(), NA_REAL);
+            return res;
+          }
+          if (NumericVector::is_na(cur_max) or x(i) < cur_max) {
+            cur_max = x(i);
+          }
+          res(i) = cur_max;
+        }
+      }
+      return res;
+    }
+
+    NumericVector cumsum(NumericVector x, bool na_rm) {
+      int n = x.size();
+      NumericVector res(n);
+      double cur_sum = NA_REAL;
+
+      if (na_rm) {
+        for (int i = 0; i < n ; ++i) {
+          if (NumericVector::is_na(cur_sum) & !NumericVector::is_na(x(i))) {
+            cur_sum = x(i);
+          } else if (!NumericVector::is_na(x(i))) {
+            cur_sum += x(i);
+          }
+          res(i) = cur_sum;
+        }
+      } else {
+        for (int i = 0; i < n; ++i) {
+          if (NumericVector::is_na(x(i))) {
+            std::fill(res.begin() + i, res.end(), NA_REAL);
+            return res;
+          }
+          if (NumericVector::is_na(cur_sum) & !NumericVector::is_na(x(i))) {
+            cur_sum = x(i);
+          } else if (!NumericVector::is_na(x(i))) {
+            cur_sum += x(i);
+          }
+          res(i) = cur_sum;
+        }
+      }
+      return res;
+    }
+
+    NumericVector cummean(NumericVector x, bool na_rm) {
+      int n = x.size();
+      NumericVector res(n);
+      double cur_sum = NA_REAL;
+      double nonna = 0;
+
+      if (na_rm) {
+        for (int i = 0; i < n ; ++i) {
+          if (NumericVector::is_na(cur_sum) & !NumericVector::is_na(x(i))) {
+            cur_sum = x(i);
+            nonna += 1;
+          } else if (!NumericVector::is_na(x(i))) {
+            cur_sum += x(i);
+            nonna += 1;
+          }
+          res(i) = cur_sum/nonna;
+        }
+      } else {
+        for (int i = 0; i < n; ++i) {
+          if (NumericVector::is_na(x(i))) {
+            std::fill(res.begin() + i, res.end(), NA_REAL);
+            return res;
+          }
+          if (NumericVector::is_na(cur_sum) & !NumericVector::is_na(x(i))) {
+            cur_sum = x(i);
+            nonna += 1;
+          } else if (!NumericVector::is_na(x(i))) {
+            cur_sum += x(i);
+            nonna += 1;
+          }
+          res(i) = cur_sum/nonna;
+        }
+      }
+      return res;
+    }
+}
