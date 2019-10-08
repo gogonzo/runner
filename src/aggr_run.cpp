@@ -26,8 +26,8 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 NumericVector sum_run(
     NumericVector x,
-    IntegerVector k = 0,
-    IntegerVector lag = 0,
+    IntegerVector k = IntegerVector(1),
+    IntegerVector lag = IntegerVector(1),
     bool na_rm = true,
     bool na_pad = false,
     IntegerVector idx = IntegerVector(0)) {
@@ -122,9 +122,7 @@ NumericVector sum_run(
   if (na_pad)
     std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_REAL);
 
-
   return res;
-
 }
 
 //' Running mean
@@ -136,7 +134,7 @@ NumericVector sum_run(
 //' @examples
 //' set.seed(11)
 //' x1 <- rnorm(15)
-//' x2 <- sample(c(rep(NA,5),rnorm(15)), 15, replace=TRUE)
+//' x2 <- sample(c(rep(NA,5), rnorm(15)), 15, replace=TRUE)
 //' k <- sample(1:15, 15, replace=TRUE)
 //' mean_run(x1)
 //' mean_run(x2, na_rm = TRUE)
@@ -146,8 +144,8 @@ NumericVector sum_run(
 // [[Rcpp::export]]
 NumericVector mean_run(
     NumericVector x,
-    IntegerVector k = 0,
-    IntegerVector lag = 0,
+    IntegerVector k = IntegerVector(1),
+    IntegerVector lag = IntegerVector(1),
     bool na_rm = true,
     bool na_pad = false,
     IntegerVector idx = IntegerVector(0)) {
@@ -268,8 +266,8 @@ NumericVector mean_run(
 // [[Rcpp::export]]
 NumericVector max_run(
     NumericVector x,
-    IntegerVector k = 0,
-    IntegerVector lag = 0,
+    IntegerVector k = IntegerVector(1),
+    IntegerVector lag = IntegerVector(1),
     bool na_rm = true,
     bool na_pad = false,
     IntegerVector idx = IntegerVector(0)) {
@@ -377,19 +375,19 @@ NumericVector max_run(
 //' @return numeric vector of length equals length of \code{x} containing running min in \code{k}-long window.
 //' @examples
 //' set.seed(11)
-//' x1 <- sample( c(1,2,3), 15, replace=TRUE)
-//' x2 <- sample( c(NA,1,2,3), 15, replace=TRUE)
-//' k  <- sample( 1:4, 15, replace=TRUE)
-//' min_run(x1) # simple cumulative minimum
-//' min_run(x2, na_rm = TRUE) # cumulative minimum with removing NA.
-//' min_run(x2, na_rm = TRUE, k=4) # minimum in 4-element window
-//' min_run(x2, na_rm = FALSE, k=k) # minimum in varying k window size
+//' x1 <- sample(c(1, 2, 3), 15, replace = TRUE)
+//' x2 <- sample(c(NA, 1, 2, 3), 15, replace = TRUE)
+//' k  <- sample(1:4, 15, replace = TRUE)
+//' min_run(x1)
+//' min_run(x2, na_rm = TRUE)
+//' min_run(x2, na_rm = TRUE, k = 4)
+//' min_run(x2, na_rm = FALSE, k = k)
 //' @export
 // [[Rcpp::export]]
 NumericVector min_run(
     NumericVector x,
-    IntegerVector k = 0,
-    IntegerVector lag = 0,
+    IntegerVector k = IntegerVector(1),
+    IntegerVector lag = IntegerVector(1),
     bool na_rm = true,
     bool na_pad = false,
     IntegerVector idx = IntegerVector(0)) {
@@ -483,6 +481,131 @@ NumericVector min_run(
   /* if padding with NA */
   if (na_pad)
     std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_REAL);
+
+
+  return res;
+}
+
+//' Running which
+//'
+//'
+//' \code{min_run} calculates running which - returns index of element where \code{x == TRUE}.
+//' @inheritParams runner
+//' @inheritParams sum_run
+//' @return integer vector of indexes of the same length as \code{x}.
+//' @examples
+//' set.seed(11)
+//' x1 <- sample(c(1, 2, 3), 15, replace = TRUE)
+//' x2 <- sample(c(NA, 1, 2, 3), 15, replace = TRUE)
+//' k  <- sample(1:4, 15, replace = TRUE)
+//' whicht_run(x1)
+//' whicht_run(x2, na_rm = TRUE)
+//' whicht_run(x2, na_rm = TRUE, k = 4)
+//' whicht_run(x2, na_rm = FALSE, k = k)
+//' @export
+// [[Rcpp::export]]
+IntegerVector whicht_run(
+    LogicalVector x,
+    IntegerVector k = IntegerVector(1),
+    IntegerVector lag = IntegerVector(1),
+    std::string which = "last",
+    bool na_rm = true,
+    bool na_pad = false,
+    IntegerVector idx = IntegerVector(0)) {
+
+  int n = x.size();
+
+  if (k.size() == 1 && k(0) == 0) {
+    k(0) = n;
+  } else if (k.size() != n and k.size() > 1) {
+    stop("length of k and length of x differs. length(k) should be 1 or equal to x");
+  } else if (Rcpp::any(Rcpp::is_na(k))) {
+    stop("Function doesn't accept NA values in k vector");
+  }
+
+  if (idx.size() != n and idx.size() > 1) {
+    stop("length of idx and length of x differs. length(idx) should be 1 or equal to x");
+  } else if (Rcpp::any(Rcpp::is_na(idx))) {
+    stop("Function doesn't accept NA values in idx vector");
+  }
+
+  if (lag.size() != n and lag.size() > 1) {
+    stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
+  } else if (Rcpp::any(Rcpp::is_na(lag))) {
+    stop("Function doesn't accept NA values in lag vector");
+  } else if (lag.size() == 1 & lag(0) >= n & idx.size() == 0) {
+    warning("lag value is greater than length of x");
+  }
+
+  if (which != "last" & which != "first") {
+    stop("which value should be either 'first' or 'last'");
+  }
+
+  IntegerVector b(2);
+  IntegerVector res(n);
+
+  /* Simple - no indexes */
+  if (idx.size() == 0) {
+    /* cum whicht */
+    if (k.size() == 1 & lag.size() == 1 & k(0) == n) {
+      if (lag(0) >= n) {
+        std::fill(res.begin(), res.end(), NA_INTEGER);
+        return res;
+      }
+      res = aggr::cumwhicht(x, na_rm, which);
+      std::fill(res.begin(), res.end() - n + lag(0), NA_INTEGER);
+      // no lag
+    } else if (k.size() == 1 & lag.size() == 1) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, k(0), lag(0));
+        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+      }
+    } else if (k.size() > 1 & lag.size() == 1) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, k(i), lag(0));
+        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+      }
+    } else if (k.size() == 1 & lag.size() > 1) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, k(0), lag(i));
+        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+      }
+    } else if (k.size() > 1 & lag.size() > 1) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, k(i), lag(i));
+        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+      }
+    }
+
+    /* on indexes */
+  } else {
+    if (k.size() == 1 & lag.size() == 1) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul_dl(idx, i, k(0), lag(0));
+        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+      }
+    } else if (k.size() > 1 & lag.size() == 1) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul_dl(idx, i, k(i), lag(0));
+        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+      }
+    } else if (k.size() == 1 & lag.size() > 1) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul_dl(idx, i, k(0), lag(i));
+        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+      }
+    }   else if (k.size() > 1 & lag.size() > 1) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul_dl(idx, i, k(i), lag(i));
+        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+      }
+    }
+  }
+
+
+  /* if padding with NA */
+  if (na_pad)
+    std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_INTEGER);
 
 
   return res;
@@ -613,8 +736,8 @@ IntegerVector streak_run2(const Vector<RTYPE>& x, IntegerVector k, IntegerVector
 // [[Rcpp::export]]
 IntegerVector streak_run(
     SEXP x,
-    IntegerVector k = 0,
-    IntegerVector lag = 0,
+    IntegerVector k = IntegerVector(1),
+    IntegerVector lag = IntegerVector(1),
     bool na_rm = true,
     bool na_pad = false,
     IntegerVector idx = IntegerVector(0)) {

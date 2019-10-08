@@ -1,8 +1,8 @@
 context("Test Runner")
-x1 <- rnorm(15)
-x2 <- sample(c(rep(NA,5), rnorm(15)), 15, replace = TRUE)
-k <- sample(1:15, 15, replace = TRUE)
-idx <- cumsum(sample(c(1,2,3,4), 15, replace=T))
+x1 <- rnorm(30)
+x2 <- sample(c(rep(NA, 5), rnorm(15)), 30, replace = TRUE)
+k <- sample(1:15, 30, replace = TRUE)
+idx <- cumsum(sample(c(1, 2, 3, 4), 30, replace = TRUE))
 
 
 test_that("constant window", {
@@ -98,21 +98,21 @@ test_that("Lagged date window", {
 })
 
 test_that("Function applied on other types", {
-    expect_silent(runner(as.integer(1:15), k = 5, f = length))
-    expect_silent(runner(as.integer(1:15), k = k, f = length))
-    expect_silent(runner(as.integer(1:15), k = k, idx, f = length))
+    expect_silent(runner(as.integer(1:30), k = 5, f = length))
+    expect_silent(runner(as.integer(1:30), k = k, f = length))
+    expect_silent(runner(as.integer(1:30), k = k, idx, f = length))
 
-    expect_silent(runner(letters[1:15], k = 5, f = length))
-    expect_silent(runner(letters[1:15], k = k, f = length))
-    expect_silent(runner(letters[1:15], k = k, idx, f = length))
+    expect_silent(runner(letters[1:30], k = 5, f = length))
+    expect_silent(runner(letters[1:30], k = k, f = length))
+    expect_silent(runner(letters[1:30], k = k, idx, f = length))
 
-    expect_silent(runner(as.factor(letters[1:15]), k = 5, f = length))
-    expect_silent(runner(as.factor(letters[1:15]), k = k, f = length))
-    expect_silent(runner(as.factor(letters[1:15]), k = k, idx, f = length))
+    expect_silent(runner(as.factor(letters[1:30]), k = 5, f = length))
+    expect_silent(runner(as.factor(letters[1:30]), k = k, f = length))
+    expect_silent(runner(as.factor(letters[1:30]), k = k, idx, f = length))
 
-    expect_silent(runner(as.Date(1:15, origin = "1970-01-01"), k = 5, f = length))
-    expect_silent(runner(as.Date(1:15, origin = "1970-01-01"), k = k, f = length))
-    expect_silent(runner(as.Date(1:15, origin = "1970-01-01"), k = k, idx, f = length))
+    expect_silent(runner(as.Date(1:30, origin = "1970-01-01"), k = 5, f = length))
+    expect_silent(runner(as.Date(1:30, origin = "1970-01-01"), k = k, f = length))
+    expect_silent(runner(as.Date(1:30, origin = "1970-01-01"), k = k, idx, f = length))
 })
 
 test_that("Errors", {
@@ -129,5 +129,4 @@ test_that("Errors", {
 
   expect_error(runner(1:10, idx = (1:9), f = mean), "length of idx and length of x differs")
   expect_error(runner(1:10, idx = c(NA, 1:9), f = mean), "Function doesn't accept NA values in idx vector")
-
 })

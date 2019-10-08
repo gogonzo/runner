@@ -69,6 +69,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// whicht_run
+IntegerVector whicht_run(LogicalVector x, IntegerVector k, IntegerVector lag, std::string which, bool na_rm, bool na_pad, IntegerVector idx);
+RcppExport SEXP _runner_whicht_run(SEXP xSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP whichSEXP, SEXP na_rmSEXP, SEXP na_padSEXP, SEXP idxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< LogicalVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type lag(lagSEXP);
+    Rcpp::traits::input_parameter< std::string >::type which(whichSEXP);
+    Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
+    Rcpp::traits::input_parameter< bool >::type na_pad(na_padSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP);
+    rcpp_result_gen = Rcpp::wrap(whicht_run(x, k, lag, which, na_rm, na_pad, idx));
+    return rcpp_result_gen;
+END_RCPP
+}
 // streak_run
 IntegerVector streak_run(SEXP x, IntegerVector k, IntegerVector lag, bool na_rm, bool na_pad, IntegerVector idx);
 RcppExport SEXP _runner_streak_run(SEXP xSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP na_rmSEXP, SEXP na_padSEXP, SEXP idxSEXP) {
@@ -99,15 +116,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // lag_run
-SEXP lag_run(SEXP x, IntegerVector k, IntegerVector idx);
-RcppExport SEXP _runner_lag_run(SEXP xSEXP, SEXP kSEXP, SEXP idxSEXP) {
+SEXP lag_run(SEXP x, IntegerVector k, IntegerVector idx, bool nearest);
+RcppExport SEXP _runner_lag_run(SEXP xSEXP, SEXP kSEXP, SEXP idxSEXP, SEXP nearestSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP);
-    rcpp_result_gen = Rcpp::wrap(lag_run(x, k, idx));
+    Rcpp::traits::input_parameter< bool >::type nearest(nearestSEXP);
+    rcpp_result_gen = Rcpp::wrap(lag_run(x, k, idx, nearest));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -153,63 +171,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// unique_run
-SEXP unique_run(SEXP x, IntegerVector k, IntegerVector idx);
-RcppExport SEXP _runner_unique_run(SEXP xSEXP, SEXP kSEXP, SEXP idxSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP);
-    rcpp_result_gen = Rcpp::wrap(unique_run(x, k, idx));
-    return rcpp_result_gen;
-END_RCPP
-}
-// whicht_run
-IntegerVector whicht_run(LogicalVector x, IntegerVector k, std::string which, bool na_rm, bool na_pad, IntegerVector idx);
-RcppExport SEXP _runner_whicht_run(SEXP xSEXP, SEXP kSEXP, SEXP whichSEXP, SEXP na_rmSEXP, SEXP na_padSEXP, SEXP idxSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< LogicalVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
-    Rcpp::traits::input_parameter< std::string >::type which(whichSEXP);
-    Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
-    Rcpp::traits::input_parameter< bool >::type na_pad(na_padSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP);
-    rcpp_result_gen = Rcpp::wrap(whicht_run(x, k, which, na_rm, na_pad, idx));
-    return rcpp_result_gen;
-END_RCPP
-}
-// whichd_run
-IntegerVector whichd_run(SEXP x, IntegerVector k, bool na_pad);
-RcppExport SEXP _runner_whichd_run(SEXP xSEXP, SEXP kSEXP, SEXP na_padSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
-    Rcpp::traits::input_parameter< bool >::type na_pad(na_padSEXP);
-    rcpp_result_gen = Rcpp::wrap(whichd_run(x, k, na_pad));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_runner_sum_run", (DL_FUNC) &_runner_sum_run, 6},
     {"_runner_mean_run", (DL_FUNC) &_runner_mean_run, 6},
     {"_runner_max_run", (DL_FUNC) &_runner_max_run, 6},
     {"_runner_min_run", (DL_FUNC) &_runner_min_run, 6},
+    {"_runner_whicht_run", (DL_FUNC) &_runner_whicht_run, 7},
     {"_runner_streak_run", (DL_FUNC) &_runner_streak_run, 6},
     {"_runner_fill_run", (DL_FUNC) &_runner_fill_run, 3},
-    {"_runner_lag_run", (DL_FUNC) &_runner_lag_run, 3},
+    {"_runner_lag_run", (DL_FUNC) &_runner_lag_run, 4},
     {"_runner_length_run", (DL_FUNC) &_runner_length_run, 3},
     {"_runner_runner", (DL_FUNC) &_runner_runner, 5},
     {"_runner_window_run", (DL_FUNC) &_runner_window_run, 4},
-    {"_runner_unique_run", (DL_FUNC) &_runner_unique_run, 3},
-    {"_runner_whicht_run", (DL_FUNC) &_runner_whicht_run, 6},
-    {"_runner_whichd_run", (DL_FUNC) &_runner_whichd_run, 3},
     {NULL, NULL, 0}
 };
 

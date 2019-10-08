@@ -1,36 +1,36 @@
 context("Running window")
 set.seed(11)
-x1 <- 1:10
-x2 <- letters[1:10]
-k <- sample(1:10, 10, replace = TRUE)
+x1 <- 1:30
+x2 <- letters[1:30]
+k <- sample(1:10, 30, replace = TRUE)
 find_idx <- function(i, k) ifelse((i - k + 1) < 1, 1, i - k + 1)
 
 test_that("window_run k = constant",{
-  for(i in 1:10)
+  for(i in 1:30)
     expect_equal(
       window_run(x1)[i][[1]],
       x1[seq_len(i)]
     )
 
-  for(i in 1:10)
+  for(i in 1:30)
     expect_equal(
      window_run(x1, k = 2)[i][[1]],
      x1[find_idx(i, 2):i]
     )
 
-  for(i in 1:10)
+  for(i in 1:30)
     expect_equal(
       window_run(x2, k = 2)[i][[1]],
       x2[find_idx(i, 2):i]
     )
 
-  for(i in 1:10)
+  for(i in 1:30)
     expect_equal(
       window_run(as.character(x2), k = 2)[i][[1]],
       as.character(x2[find_idx(i, 2):i])
     )
 
-  for(i in 1:10)
+  for(i in 1:30)
     expect_equal(
       window_run(as.numeric(x1), k = 2)[i][[1]],
       as.numeric(x1[find_idx(i, 2):i])
@@ -38,7 +38,7 @@ test_that("window_run k = constant",{
 })
 
 test_that("window_run with k varying", {
-  for(i in 1:10)
+  for(i in 1:30)
     expect_equal(
       window_run(x2, k = k)[i][[1]],
       x2[find_idx(i, k[i]):i]
@@ -100,9 +100,9 @@ test_that("Lagged date window", {
 test_that("window_run with idx",{
   x11 <- list()
   x22 <- list()
-  idx <- cumsum(sample(c(1, 2, 3, 4), 10, replace = TRUE))
+  idx <- cumsum(sample(c(1, 2, 3, 4), 30, replace = TRUE))
 
-  for(i in 1:10)
+  for(i in 1:30)
     for(j in i:1)
       if(idx[j] >= (idx[i] - 2)){
         x11[[i]] <- x1[j:i]
@@ -111,7 +111,7 @@ test_that("window_run with idx",{
       }
 
 
-  for(i in 1:10)
+  for(i in 1:30)
     for(j in i:1)
       if(idx[j] >= (idx[i] - (k[i] - 1))) {
         x22[[i]] <- x1[j:i]

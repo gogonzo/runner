@@ -13,7 +13,9 @@ using namespace Rcpp;
 //' length_run(k = 3, idx = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
 //' @export
 // [[Rcpp::export]]
-IntegerVector length_run(IntegerVector k = 1, IntegerVector lag = 0, IntegerVector idx = IntegerVector(0)) {
+IntegerVector length_run(IntegerVector k = IntegerVector(1),
+                         IntegerVector lag = IntegerVector(1),
+                         IntegerVector idx = IntegerVector(0)) {
   int n = idx.size();
   if (n == 0) {
     stop("idx should be of length > 0");

@@ -2,31 +2,37 @@
 % Please edit documentation in R/RcppExports.R
 \name{whicht_run}
 \alias{whicht_run}
-\title{Running which-true function}
+\title{Running which}
 \usage{
-whicht_run(x, k = 0L, which = "last", na_rm = TRUE, na_pad = FALSE,
-  idx = 0L)
+whicht_run(x, k = 0L, lag = 0L, which = "last", na_rm = TRUE,
+  na_pad = FALSE, idx = integer(0))
 }
 \arguments{
-\item{x}{input logical vector where running which-true is calculated.}
+\item{x}{Vector of any type}
 
-\item{k}{Running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
+\item{k}{integer vector which specifies window length}
 
-\item{which}{specifies whether \code{"first"} or \code{"last"} index is returned.}
+\item{lag}{integer vector which specifies window shift}
 
-\item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed minimum prior to element.}
+\item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.}
 
 \item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
 
-\item{idx}{an optional integer vector containing indexes numbers of observation.}
+\item{idx}{an optional integer vector containing index of observations.}
 }
 \value{
-numeric vector of length equals length of \code{x} containing running index in \code{k}-long window.
+integer vector of indexes of the same length as \code{x}.
 }
 \description{
-\code{whicht_run} checks \code{which} element has value TRUE within specified running window.
+\code{min_run} calculates running which - returns index of element where \code{x == TRUE}.
 }
 \examples{
-x <- c( NA, FALSE, TRUE, NA, TRUE, FALSE, TRUE, TRUE)
-whicht_run( x, k=2, na_rm=TRUE, na_pad=FALSE )
+set.seed(11)
+x1 <- sample(c(1, 2, 3), 15, replace = TRUE)
+x2 <- sample(c(NA, 1, 2, 3), 15, replace = TRUE)
+k  <- sample(1:4, 15, replace = TRUE)
+whicht_run(x1)
+whicht_run(x2, na_rm = TRUE)
+whicht_run(x2, na_rm = TRUE, k = 4)
+whicht_run(x2, na_rm = FALSE, k = k)
 }

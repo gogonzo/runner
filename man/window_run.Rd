@@ -4,7 +4,7 @@
 \alias{window_run}
 \title{List of running windows}
 \usage{
-window_run(x, k = 0L, lag = 0L, idx = integer(0))
+window_run(x, k = integer(1), lag = integer(1), idx = integer(0))
 }
 \arguments{
 \item{x}{Vector of any type}

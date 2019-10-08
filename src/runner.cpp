@@ -99,8 +99,8 @@ NumericVector runner_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVec
 // [[Rcpp::export]]
 SEXP runner(SEXP x,
             Function f,
-            IntegerVector k = 0,
-            IntegerVector lag = 0,
+            IntegerVector k = IntegerVector(1),
+            IntegerVector lag = IntegerVector(1),
             IntegerVector idx = IntegerVector(0)) {
 
   int n = Rf_length(x);
@@ -241,56 +241,58 @@ List window_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, 
 //' @param lag integer vector which specifies window shift
 //' @param idx an optional integer vector containing index of observations.
 //' @examples
-//' window_run(1:10, k=3)
-//' window_run(letters[1:10],k=c(1,2,2,4,5,5,5,5,5,5))
+//' window_run(1:10, k = 3)
+//' window_run(letters[1:10], k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
 //' @export
 // [[Rcpp::export]]
-SEXP window_run(SEXP x, IntegerVector k = 0, IntegerVector lag = 0, IntegerVector idx = IntegerVector(0)) {
+SEXP window_run(SEXP x,
+                IntegerVector k = IntegerVector(1),
+                IntegerVector lag = IntegerVector(1),
+                IntegerVector idx = IntegerVector(0)) {
 
   int n = Rf_length(x);
-
-  if(k.size() == 1 && k(0) == 0) {
+  if (k.size() == 1 && k(0) == 0) {
     k(0) = n;
-  } else if(k.size() != n and k.size() > 1){
+  } else if (k.size() != n and k.size() > 1) {
     stop("length of k and length of x differs. length(k) should be 1 or equal to x");
-  } else if( Rcpp::any(Rcpp::is_na(k)) ){
+  } else if ( Rcpp::any(Rcpp::is_na(k)) ) {
     stop("Function doesn't accept NA values in k vector");
   }
 
-  if(idx.size() != n and idx.size() > 1){
+  if(idx.size() != n and idx.size() > 1) {
     stop("length of idx and length of x differs. length(idx) should be 1 or equal to x");
   } else if( Rcpp::any(Rcpp::is_na(idx)) ){
     stop("Function doesn't accept NA values in idx vector");
   }
 
-  if(lag.size() != n and lag.size() > 1){
+  if(lag.size() != n and lag.size() > 1) {
     stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
-  } else if( Rcpp::any(Rcpp::is_na(lag)) ){
+  } else if( Rcpp::any(Rcpp::is_na(lag))) {
     stop("Function doesn't accept NA values in lag vector");
   }
 
 
-  if( idx.size() > 1){
+  if(idx.size() > 1) {
     switch (TYPEOF(x)) {
-    case INTSXP: return window_on_date(as<IntegerVector>(x),   k, lag, idx);
-    case REALSXP: return window_on_date(as<NumericVector>(x),  k, lag, idx);
-    case STRSXP: return window_on_date(as<CharacterVector>(x), k, lag, idx);
-    case LGLSXP: return window_on_date(as<LogicalVector>(x),   k, lag, idx);
-    case CPLXSXP: return window_on_date(as<ComplexVector>(x),  k, lag, idx);
-    default: {
-      stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
-    }
+      case INTSXP: return window_on_date(as<IntegerVector>(x),   k, lag, idx);
+      case REALSXP: return window_on_date(as<NumericVector>(x),  k, lag, idx);
+      case STRSXP: return window_on_date(as<CharacterVector>(x), k, lag, idx);
+      case LGLSXP: return window_on_date(as<LogicalVector>(x),   k, lag, idx);
+      case CPLXSXP: return window_on_date(as<ComplexVector>(x),  k, lag, idx);
+      default: {
+        stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
+      }
     }
   } else {
     switch (TYPEOF(x)) {
-    case INTSXP: return window_simple(as<IntegerVector>(x),   k, lag);
-    case REALSXP: return window_simple(as<NumericVector>(x),  k, lag);
-    case STRSXP: return window_simple(as<CharacterVector>(x), k, lag);
-    case LGLSXP: return window_simple(as<LogicalVector>(x),   k, lag);
-    case CPLXSXP: return window_simple(as<ComplexVector>(x),  k, lag);
-    default: {
-      stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
-    }
+      case INTSXP: return window_simple(as<IntegerVector>(x),   k, lag);
+      case REALSXP: return window_simple(as<NumericVector>(x),  k, lag);
+      case STRSXP: return window_simple(as<CharacterVector>(x), k, lag);
+      case LGLSXP: return window_simple(as<LogicalVector>(x),   k, lag);
+      case CPLXSXP: return window_simple(as<ComplexVector>(x),  k, lag);
+      default: {
+        stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
+      }
     }
 
 
