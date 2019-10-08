@@ -5,9 +5,12 @@ using namespace Rcpp;
 //' Lag dependent on variable
 //'
 //' Vector of input lagged along integer vector
-//' @param x Vector of any type
-//' @param k integer vector which specifies window length
-//' @param idx an optional integer vector containing index of observations.
+//' @inheritParams runner
+//' @inheritParams sum_run
+//' @param nearest logical value. Applied when \code{idx} is used, then \code{nearest = false} returns
+//' observation lagged exactly by the specified number of "periods". When \code{nearest = true}
+//' function returns latest observation within lag window.
+//' @paeam
 //' @examples
 //' lag_run(1:10, k = 3)
 //' lag_run(letters[1:10], k = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10))

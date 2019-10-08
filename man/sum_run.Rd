@@ -4,8 +4,8 @@
 \alias{sum_run}
 \title{Running sum}
 \usage{
-sum_run(x, k = 0L, lag = 0L, na_rm = TRUE, na_pad = FALSE,
-  idx = integer(0))
+sum_run(x, k = integer(1), lag = integer(1), na_rm = TRUE,
+  na_pad = FALSE, idx = integer(0))
 }
 \arguments{
 \item{x}{vector of any type where running sum is calculated}
@@ -29,10 +29,10 @@ Running sum in specified window of numeric vector.
 \examples{
 set.seed(11)
 x1 <- rnorm(15)
-x2 <- sample(c(rep(NA,5),rnorm(15)), 15, replace=TRUE)
-k <- sample(1:15, 15, replace=TRUE)
+x2 <- sample(c(rep(NA, 5),rnorm(15)), 15, replace = TRUE)
+k <- sample(1:15, 15, replace = TRUE)
 sum_run(x1)
 sum_run(x2, na_rm = TRUE)
-sum_run(x2, na_rm = FALSE )
-sum_run(x2, na_rm = TRUE, k=4)
+sum_run(x2, na_rm = FALSE)
+sum_run(x2, na_rm = TRUE, k = 4)
 }

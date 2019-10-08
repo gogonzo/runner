@@ -4,8 +4,8 @@
 \alias{min_run}
 \title{Running minimum}
 \usage{
-min_run(x, k = 0L, lag = 0L, na_rm = TRUE, na_pad = FALSE,
-  idx = integer(0))
+min_run(x, k = integer(1), lag = integer(1), na_rm = TRUE,
+  na_pad = FALSE, idx = integer(0))
 }
 \arguments{
 \item{x}{Vector of any type}

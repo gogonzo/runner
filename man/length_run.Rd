@@ -4,7 +4,7 @@
 \alias{length_run}
 \title{Length of running windows}
 \usage{
-length_run(k = 1L, lag = 0L, idx = integer(0))
+length_run(k = integer(1), lag = integer(1), idx = integer(0))
 }
 \arguments{
 \item{k}{integer vector which specifies window length}

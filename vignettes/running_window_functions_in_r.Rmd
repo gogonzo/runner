@@ -68,7 +68,7 @@ Sometimes data points in dataset are not equally spaced (missing weeekends, holi
 ### Running aggregations `(mean|sum|min|max)_run`
 
 Runner provides basic aggregation methods calculated within running windows. Below example showing some functions behavior for different arguments setup. Let's take a look at 8th element of a vector on which `min_run` is calculated. 
-First setup uses default values, so algorithm is looking for minimum value in all elements before actual (i=8). By default missing values are removed before calculations by argument `na_rm=TRUE`, and also window is not specified. The default is equivalent of `base::cummin` with additional option to ignore `NA` values. In second example within window k=5, the lowest value is -3. In the last example minimum is not available due to existence of `NA`. Graphical example is reproduced below in the code.
+First setup uses default values, so algorithm is looking for minimum value in all elements before actual (i=8). By default missing values are removed before calculations by argument `na_rm = TRUE`, and also window is not specified. The default is equivalent of `base::cummin` with additional option to ignore `NA` values. In second example within window k=5, the lowest value is -3. In the last example minimum is not available due to existence of `NA`. Graphical example is reproduced below in the code.
 
 ![running minimum](images/running_minimum.png)
 
@@ -112,7 +112,7 @@ To count consecutive elements in specified window one can use `streak_run`. Foll
 ![fill run](images/running_streaks.png)
 
 ```{r}
-x <- c("A","B","A","A","B","B","B",NA,"B","A","B")
+x <- c("A", "B", "A", "A", "B", "B", "B", NA, "B", "A", "B")
 data.frame(
   x, 
   s0 = streak_run(x),
@@ -121,7 +121,7 @@ data.frame(
 ```
 
 ### Running which
-To obtain index number of element satisfying some condition in window, one can use running which. Functions from this group returns index while condition is `TRUE` appeared before n-th element of a vector. In below example `whicht_run` function returns index of element containing `TRUE` value. If `na_rm=T` is specified, missing is treated as `FALSE`, and is ignored while searching for `TRUE`. While user set `na_rm=F` like in second example, function returns `NA`, because in following window `TRUE` appears after missing and it's impossible to be certain which is first (missing is an element of unknown value - could be TRUE or FALSE). 
+To obtain index number of element satisfying some condition in window, one can use running which. Functions from this group returns index while condition is `TRUE` appeared before n-th element of a vector. In below example `which_run` function returns index of element containing `TRUE` value. If `na_rm=T` is specified, missing is treated as `FALSE`, and is ignored while searching for `TRUE`. While user set `na_rm = F` like in second example, function returns `NA`, because in following window `TRUE` appears after missing and it's impossible to be certain which is first (missing is an element of unknown value - could be TRUE or FALSE). 
 
 ![whicht run](images/running_which_more.png)
 
@@ -129,19 +129,10 @@ To obtain index number of element satisfying some condition in window, one can u
 x <- c(T,T,T,F,NA,T,F,NA,T,F,T,F)
 data.frame(
   x, 
-  s0 = whicht_run(x, which = "first"),
-  s1 = whicht_run(x, na_rm = FALSE, k = 5, which = "first"),
-  s2 = whicht_run(x, k = 5, which = "first"))
+  s0 = which_run(x, which = "first"),
+  s1 = which_run(x, na_rm = FALSE, k = 5, which = "first"),
+  s2 = which_run(x, k = 5, which = "last"))
 
-```
-
-
-### Unique elements in window
-User can use `unique_run` create list of unique elements within specified window size.
-```{r unique_run, echo=TRUE}
-x2 <- sample(letters[1:3], 6, replace = TRUE)
-x2 
-unique_run(x = x2, k = 3)
 ```
 
 ## Apply custom function

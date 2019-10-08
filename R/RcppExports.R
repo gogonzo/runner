@@ -14,12 +14,12 @@
 #' @examples
 #' set.seed(11)
 #' x1 <- rnorm(15)
-#' x2 <- sample(c(rep(NA,5),rnorm(15)), 15, replace=TRUE)
-#' k <- sample(1:15, 15, replace=TRUE)
+#' x2 <- sample(c(rep(NA, 5),rnorm(15)), 15, replace = TRUE)
+#' k <- sample(1:15, 15, replace = TRUE)
 #' sum_run(x1)
 #' sum_run(x2, na_rm = TRUE)
-#' sum_run(x2, na_rm = FALSE )
-#' sum_run(x2, na_rm = TRUE, k=4)
+#' sum_run(x2, na_rm = FALSE)
+#' sum_run(x2, na_rm = TRUE, k = 4)
 #' @export
 sum_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad = FALSE, idx = integer(0)) {
     .Call('_runner_sum_run', PACKAGE = 'runner', x, k, lag, na_rm, na_pad, idx)
@@ -93,19 +93,21 @@ min_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad = 
 #' \code{min_run} calculates running which - returns index of element where \code{x == TRUE}.
 #' @inheritParams runner
 #' @inheritParams sum_run
+#' @param which \code{character} value "first" or "last" denoting if the first or last \code{TRUE}
+#' index is returned from the window.
 #' @return integer vector of indexes of the same length as \code{x}.
 #' @examples
 #' set.seed(11)
 #' x1 <- sample(c(1, 2, 3), 15, replace = TRUE)
 #' x2 <- sample(c(NA, 1, 2, 3), 15, replace = TRUE)
 #' k  <- sample(1:4, 15, replace = TRUE)
-#' whicht_run(x1)
-#' whicht_run(x2, na_rm = TRUE)
-#' whicht_run(x2, na_rm = TRUE, k = 4)
-#' whicht_run(x2, na_rm = FALSE, k = k)
+#' which_run(x1)
+#' which_run(x2, na_rm = TRUE)
+#' which_run(x2, na_rm = TRUE, k = 4)
+#' which_run(x2, na_rm = FALSE, k = k)
 #' @export
-whicht_run <- function(x, k = integer(1), lag = integer(1), which = "last", na_rm = TRUE, na_pad = FALSE, idx = integer(0)) {
-    .Call('_runner_whicht_run', PACKAGE = 'runner', x, k, lag, which, na_rm, na_pad, idx)
+which_run <- function(x, k = integer(1), lag = integer(1), which = "last", na_rm = TRUE, na_pad = FALSE, idx = integer(0)) {
+    .Call('_runner_which_run', PACKAGE = 'runner', x, k, lag, which, na_rm, na_pad, idx)
 }
 
 #' Running streak length
@@ -148,9 +150,12 @@ fill_run <- function(x, run_for_first = FALSE, only_within = FALSE) {
 #' Lag dependent on variable
 #'
 #' Vector of input lagged along integer vector
-#' @param x Vector of any type
-#' @param k integer vector which specifies window length
-#' @param idx an optional integer vector containing index of observations.
+#' @inheritParams runner
+#' @inheritParams sum_run
+#' @param nearest logical value. Applied when \code{idx} is used, then \code{nearest = false} returns
+#' observation lagged exactly by the specified number of "periods". When \code{nearest = true}
+#' function returns latest observation within lag window.
+#' @paeam
 #' @examples
 #' lag_run(1:10, k = 3)
 #' lag_run(letters[1:10], k = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10))

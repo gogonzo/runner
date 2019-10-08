@@ -4,7 +4,7 @@
 \alias{lag_run}
 \title{Lag dependent on variable}
 \usage{
-lag_run(x, k = 1L, idx = 1L)
+lag_run(x, k = 1L, idx = 1L, nearest = FALSE)
 }
 \arguments{
 \item{x}{Vector of any type}
@@ -17,6 +17,6 @@ lag_run(x, k = 1L, idx = 1L)
 Vector of input lagged along integer vector
 }
 \examples{
-lag_run(1:10, k=3)
-lag_run(letters[1:10],k=2, idx=c(1,1,1,2,3,4,6,7,8,10))
+lag_run(1:10, k = 3)
+lag_run(letters[1:10], k = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10))
 }

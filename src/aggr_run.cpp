@@ -16,12 +16,12 @@ using namespace Rcpp;
 //' @examples
 //' set.seed(11)
 //' x1 <- rnorm(15)
-//' x2 <- sample(c(rep(NA,5),rnorm(15)), 15, replace=TRUE)
-//' k <- sample(1:15, 15, replace=TRUE)
+//' x2 <- sample(c(rep(NA, 5),rnorm(15)), 15, replace = TRUE)
+//' k <- sample(1:15, 15, replace = TRUE)
 //' sum_run(x1)
 //' sum_run(x2, na_rm = TRUE)
-//' sum_run(x2, na_rm = FALSE )
-//' sum_run(x2, na_rm = TRUE, k=4)
+//' sum_run(x2, na_rm = FALSE)
+//' sum_run(x2, na_rm = TRUE, k = 4)
 //' @export
 // [[Rcpp::export]]
 NumericVector sum_run(
@@ -492,19 +492,21 @@ NumericVector min_run(
 //' \code{min_run} calculates running which - returns index of element where \code{x == TRUE}.
 //' @inheritParams runner
 //' @inheritParams sum_run
+//' @param which \code{character} value "first" or "last" denoting if the first or last \code{TRUE}
+//' index is returned from the window.
 //' @return integer vector of indexes of the same length as \code{x}.
 //' @examples
 //' set.seed(11)
 //' x1 <- sample(c(1, 2, 3), 15, replace = TRUE)
 //' x2 <- sample(c(NA, 1, 2, 3), 15, replace = TRUE)
 //' k  <- sample(1:4, 15, replace = TRUE)
-//' whicht_run(x1)
-//' whicht_run(x2, na_rm = TRUE)
-//' whicht_run(x2, na_rm = TRUE, k = 4)
-//' whicht_run(x2, na_rm = FALSE, k = k)
+//' which_run(x1)
+//' which_run(x2, na_rm = TRUE)
+//' which_run(x2, na_rm = TRUE, k = 4)
+//' which_run(x2, na_rm = FALSE, k = k)
 //' @export
 // [[Rcpp::export]]
-IntegerVector whicht_run(
+IntegerVector which_run(
     LogicalVector x,
     IntegerVector k = IntegerVector(1),
     IntegerVector lag = IntegerVector(1),
