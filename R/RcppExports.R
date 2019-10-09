@@ -87,6 +87,18 @@ min_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad = 
     .Call('_runner_min_run', PACKAGE = 'runner', x, k, lag, na_rm, na_pad, idx)
 }
 
+#' Running min/max
+#'
+#'
+#' \code{min_run} calculates running min on given \code{x} numeric vector, specified \code{k} window size.
+#' @inheritParams runner
+#' @param metric \code{character} what to return, minimum or maximum
+#' @return list.
+#' @export
+minmax_run <- function(x, metric = "min", na_rm = TRUE) {
+    .Call('_runner_minmax_run', PACKAGE = 'runner', x, metric, na_rm)
+}
+
 #' Running which
 #'
 #'

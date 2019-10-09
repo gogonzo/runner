@@ -484,6 +484,63 @@ NumericVector min_run(
   return res;
 }
 
+//' Running min/max
+//'
+//'
+//' \code{min_run} calculates running min on given \code{x} numeric vector, specified \code{k} window size.
+//' @inheritParams runner
+//' @param metric \code{character} what to return, minimum or maximum
+//' @return list.
+//' @export
+// [[Rcpp::export]]
+NumericVector minmax_run(
+    NumericVector x,
+    std::string metric = "min",
+    bool na_rm = true) {
+
+  int n = x.size();
+
+  double prev;
+  double cur;
+  double temp_max = x(0);
+  double temp_min = x(0);
+  double last_max = x(0);
+  double last_min = x(0);
+
+  IntegerVector b(2);
+  NumericVector res(n);
+  res(0) = x(0);
+  NumericVector mins = NumericVector(n);
+  NumericVector maxes = NumericVector(n);
+
+  for (int i = 1; i < n; ++i) {
+    if (NumericVector::is_na(x(i)) && !na_rm) {
+      res(i) = NA_REAL;
+    } else {
+      prev = x(i - 1);
+      cur = x(i);
+
+      if (prev > last_max && cur < prev) {
+        last_max = prev;
+        last_min = temp_min;
+        temp_min = cur;
+      } else if (prev < last_min && cur > prev) {
+        last_min = prev;
+        last_max = temp_max;
+        temp_max = cur;
+      }
+
+
+      if (cur < temp_min) temp_min = cur;
+      if (cur > temp_max) temp_max = cur;
+
+      res(i) = (metric == "min") ? temp_min : temp_max;
+    }
+  }
+
+  return res;
+}
+
 
 //' Running which
 //'
