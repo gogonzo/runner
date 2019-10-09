@@ -613,7 +613,7 @@ IntegerVector which_run(
 }
 
 template <int RTYPE>
-IntegerVector streak_run1(const Vector<RTYPE>&& x, IntegerVector k, IntegerVector lag,  bool na_rm, bool na_pad) {
+IntegerVector streak_run1(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag,  bool na_rm, bool na_pad) {
   int n = x.size();
   int j_f = 0;
   int cur_streak;
@@ -686,7 +686,7 @@ IntegerVector streak_run1(const Vector<RTYPE>&& x, IntegerVector k, IntegerVecto
 }
 
 template <int RTYPE>
-IntegerVector streak_run2(const Vector<RTYPE>&& x, IntegerVector k, IntegerVector lag, bool na_rm, bool na_pad, IntegerVector indexes) {
+IntegerVector streak_run2(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, bool na_rm, bool na_pad, IntegerVector indexes) {
   IntegerVector b;
   int n = x.size();
   IntegerVector res(n);
