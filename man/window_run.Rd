@@ -4,12 +4,14 @@
 \alias{window_run}
 \title{List of running windows}
 \usage{
-window_run(x, k = 0L, idx = 1L)
+window_run(x, k = integer(1), lag = integer(1), idx = integer(0))
 }
 \arguments{
 \item{x}{Vector of any type}
 
 \item{k}{integer vector which specifies window length}
+
+\item{lag}{integer vector which specifies window shift}
 
 \item{idx}{an optional integer vector containing index of observations.}
 }
@@ -17,6 +19,6 @@ window_run(x, k = 0L, idx = 1L)
 Creates list of windows
 }
 \examples{
-window_run(1:10, k=3)
-window_run(letters[1:10],k=c(1,2,2,4,5,5,5,5,5,5))
+window_run(1:10, k = 3)
+window_run(letters[1:10], k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
 }

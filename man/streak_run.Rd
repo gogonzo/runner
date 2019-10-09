@@ -4,18 +4,21 @@
 \alias{streak_run}
 \title{Running streak length}
 \usage{
-streak_run(x, k = 0L, na_rm = TRUE, na_pad = FALSE, idx = 1L)
+streak_run(x, k = integer(1), lag = integer(1), na_rm = TRUE,
+  na_pad = FALSE, idx = integer(0))
 }
 \arguments{
-\item{x}{vector of any type where running streak is calculated}
+\item{x}{Vector of any type}
 
-\item{k}{running window size. By default window size equals \code{length(x)}. Allow varying window size specified by vector of \code{length(x)}}
+\item{k}{integer vector which specifies window length}
 
-\item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} \code{NA} are replaced by last observed streak prior to element.}
+\item{lag}{integer vector which specifies window shift}
+
+\item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.}
 
 \item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
 
-\item{idx}{an optional integer vector containing indexes numbers of observation.}
+\item{idx}{an optional integer vector containing index of observations.}
 }
 \value{
 numeric vector of length equals length of \code{x} containing running streak length in \code{k}-long window.

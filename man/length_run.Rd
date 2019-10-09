@@ -4,16 +4,20 @@
 \alias{length_run}
 \title{Length of running windows}
 \usage{
-length_run(k = 1L, idx = 0L)
+length_run(k = integer(1), lag = integer(1), idx = integer(0))
 }
 \arguments{
 \item{k}{integer vector which specifies window length}
 
+\item{lag}{integer vector which specifies window shift}
+
 \item{idx}{an optional integer vector containing index of observations.}
 }
 \description{
-Number of elements in k-long window calculated on idx vector. If idx is an `as.integer(date)` vector, then k=number of days in window - then the result is number of observations within k days window.
+Number of elements in k-long window calculated on idx vector.
+If idx is an `as.integer(date)` vector, then k=number of days in window -
+then the result is number of observations within k days window.
 }
 \examples{
-length_run(k=3,idx=c(1,2,2,4,5,5,5,5,5,5))
+length_run(k = 3, idx = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
 }
