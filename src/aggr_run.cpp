@@ -486,6 +486,7 @@ NumericVector min_run(
   return res;
 }
 
+
 //' Running which
 //'
 //'

@@ -84,8 +84,6 @@ test_that("min_run with idx",{
 })
 
 test_that("Errors", {
-  expect_error(min_run(list(x1), k = 5), "Not compatible with requested type")
-
   expect_error(min_run(x1, k = (1:9)), "length of k and length of x differs")
   expect_error(min_run(x1, k = c(NA, k[-1])), "Function doesn't accept NA values in k vector")
 

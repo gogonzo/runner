@@ -12,6 +12,10 @@ lag_run(x, k = 1L, idx = 1L, nearest = FALSE)
 \item{k}{integer vector which specifies window length}
 
 \item{idx}{an optional integer vector containing index of observations.}
+
+\item{nearest}{logical value. Applied when \code{idx} is used, then \code{nearest = false} returns
+observation lagged exactly by the specified number of "periods". When \code{nearest = true}
+function returns latest observation within lag window.}
 }
 \description{
 Vector of input lagged along integer vector

@@ -14,6 +14,9 @@ which_run(x, k = integer(1), lag = integer(1), which = "last",
 
 \item{lag}{integer vector which specifies window shift}
 
+\item{which}{\code{character} value "first" or "last" denoting if the first or last \code{TRUE}
+index is returned from the window.}
+
 \item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.}
 
 \item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
