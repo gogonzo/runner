@@ -15,3 +15,6 @@
 \.xcf
 TODO
 \.ods
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
