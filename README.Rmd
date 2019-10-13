@@ -3,13 +3,6 @@ output:
   github_document:
     pandoc_args: --webtex
 ---
-```{r, echo = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "articles/images/"
-)
-```
 
 # `runner` a R package for running operations.
 
