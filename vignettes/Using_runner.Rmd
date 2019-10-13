@@ -24,27 +24,27 @@ install.packages("runner")
 ## Running windows
 `runner` package provides functions applied on running windows. Diagram below illustrates what running windows are - in this case running `k = 4` windows. For each of 15 elements of a vector each window contains current 4 elements (exception are first k - 1 elements where window is not complete).
 
-![](images/running_windows_explain.png)
+![](running_windows_explain.png)
 
 Using `runner` one can apply any R function `f` in running window of length defined by `k`, window `lag`, observation indexes `idx`.
 
-![](images/using_runner.png)
+![](using_runner.png)
 
 ### Window size
 `k` denotes number of elements in window. If `k` is a single value then window size is constant for all elements of x. For varying window size one should specify `k` as integer vector of `length(k) == length(x)` where each element of `k` defines window length. If `k` is empty it means that window will be cumulative (like `base::cumsum`). Example below illustrates window of `k = 4` for 10'th element of vector `x`.
-![](images/constant_window.png)
+![](constant_window.png)
 
 
 ### Window lag
 `lag` denotes how many observations windows will be lagged by. If `lag` is a single value than it's constant for all elements of x. For varying lag size one should specify `lag` as integer vector of `length(lag) == length(x)` where each element of `lag` defines lag of window. Default value of `lag = 0`. Example below illustrates window of `k = 4` lagged by `lag = 2` for 10'th element of vector `x`.
 
-![](images/lagged_window_k_lag.png)
+![](lagged_window_k_lag.png)
 
 
 ### Windows depending on date
 Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame.  If one specifies `idx` argument, than running functions are applied on windows depending on date. `idx` should be the same length as `x` of class `Date` or `integer`. Including `idx` can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size `k = 4` lagged by `lag = 2` periods for 10'th element of vector `x`. This (10th) element has `idx = 13` which means that window ranges `[8, 11]` - although `k = 4` only two elements of `x` are within this window. 
 
-![](images/custom_idx_k_lag.png)
+![](custom_idx_k_lag.png)
 
 ## Using runner
 
@@ -106,15 +106,15 @@ These functions are:
 ### Other options
 - `na_rm = TRUE` handling missing and is equivalent to `na.rm`.
 
-![](images/options_na_rm.png)
+![](options_na_rm.png)
 
 - `na_pad = TRUE` if window size exceeds number of available elements, than first `k-1` elements are filled with `NA`.  
 
-![](images/options_na_pad.png)
+![](options_na_pad.png)
 
 - `which` used with running index, which value ('first' or 'last')
 
-![](images/options_which_first_last.png)
+![](options_which_first_last.png)
 
 
 ### Running aggregations `(mean|sum|min|max)_run`
@@ -122,7 +122,7 @@ These functions are:
 Runner provides basic aggregation methods calculated within running windows. Below example showing some functions behavior for different arguments setup. Let's take a look at 8th element of a vector on which `min_run` is calculated. 
 First setup uses default values, so algorithm is looking for minimum value in all elements before actual (i=8). By default missing values are removed before calculations by argument `na_rm = TRUE`, and also window is not specified. The default is equivalent of `base::cummin` with additional option to ignore `NA` values. In second example within window k=5, the lowest value is -3. In the last example minimum is not available due to existence of `NA`. Graphical example is reproduced below in the code.
 
-![](images/running_minimum.png)
+![](running_minimum.png)
 
 ```{r min_run_example, echo=TRUE}
 library(runner)
@@ -147,7 +147,7 @@ data.frame(idx, x, a0, a1, a2, a3, a4, a5)
 ### fill_run
 Function used to replace `NA` with previous non-NA element. To understand how `fill_run` works, take a look on illustration. Row 'x' represents, and another rows represent replaced `NA` by fill_run with different options setup (run_for_first=TRUE and only_within=TRUE respectively). By default, `fill_run` replaces all `NA` if they were preceded by any value. If `NA` appeared in the beginning of the vector then it would not be replaced. But if user specify `run_for_first=TRUE` initial empty values values will be replaced by next non-empty value. Option `only_within=TRUE` means that `NA` values would be replaced if they were surrounded by pair of identical values. No windows provided in this functionality.
 
-![](images/fill_run.png)
+![](fill_run.png)
 
 ```{r}
 x <- c(NA, NA, "b", "b", "a", NA, NA, "a", "b", NA, "a", "b")
@@ -161,7 +161,7 @@ data.frame(x,
 
 To count consecutive elements in specified window one can use `streak_run`. Following figure illustrates how streak is calculated with three different options setup for 9th element of the input vector `x`. First shows default configuration, with full window and `na_rm = TRUE`. Second example count within `k = 4` window with count reset on `NA`. Last example counting streak with continuation after `NA`. Visualization also supported with corresponding R code.
 
-![](images/running_streaks.png)
+![](running_streaks.png)
 
 ```{r}
 x <- c("A", "B", "A", "A", "B", "B", "B", NA, "B", "A", "B")
@@ -175,7 +175,7 @@ data.frame(
 ### Running which
 To obtain index number of element satisfying some condition in window, one can use running which. Functions from this group returns index while condition is `TRUE` appeared before n-th element of a vector. In below example `which_run` function returns index of element containing `TRUE` value. If `na_rm=T` is specified, missing is treated as `FALSE`, and is ignored while searching for `TRUE`. While user set `na_rm = F` like in second example, function returns `NA`, because in following window `TRUE` appears after missing and it's impossible to be certain which is first (missing is an element of unknown value - could be `TRUE` or `FALSE`). 
 
-![](images/running_which_more.png)
+![](running_which_more.png)
 
 ```{r}
 x <- c(T,T,T,F,NA,T,F,NA,T,F,T,F)
