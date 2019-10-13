@@ -21,7 +21,7 @@ Install package from from github or from CRAN.
 install.packages("runner")
 ```
 
-## Using runner
+## Running windows
 `runner` package provides functions applied on running windows. Diagram below illustrates what running windows are - in this case running `k = 4` windows. For each of 15 elements of a vector each window contains current 4 elements (exception are first k - 1 elements where window is not complete).
 
 ![](images/running_windows_explain.png)
@@ -45,6 +45,8 @@ Using `runner` one can apply any R function `f` in running window of length defi
 Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame.  If one specifies `idx` argument, than running functions are applied on windows depending on date. `idx` should be the same length as `x` of class `Date` or `integer`. Including `idx` can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size `k = 4` lagged by `lag = 2` periods for 10'th element of vector `x`. This (10th) element has `idx = 13` which means that window ranges `[8, 11]` - although `k = 4` only two elements of `x` are within this window. 
 
 ![](images/custom_idx_k_lag.png)
+
+## Using runner
 
 ### Own runner
 
@@ -70,7 +72,6 @@ date_windows <- runner(x = x, k = k, idx = idx, f = function(x) mean(x, trim = 0
 
 data.frame(x, k, idx, simple_mean, trimmed_mean, varying_window, date_windows)
 ```
-
 
 ### Creating windows
 Function creates list of windows. Because `runner` provide limited functionality, one can create running-window-list which can be further processed by user to obtain desired statistic (eg. window sum). `x` is a vector to be 'run on' and `k` is a length of window. In this example window length is varying as specified by `k`. Provide one value to obtain constant window size.
