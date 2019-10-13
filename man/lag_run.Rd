@@ -9,12 +9,15 @@ lag_run(x, k = 1L, idx = 1L, nearest = FALSE)
 \arguments{
 \item{x}{Vector of any type}
 
-\item{k}{integer vector which specifies window length}
+\item{k}{\code{integer} vector or single value denoting size of the running window. If \code{k} is a single
+value then window size is constant for all elements, otherwise if \code{length(k) == length(x)} different
+window size for each element.}
 
-\item{idx}{an optional integer vector containing index of observations.}
+\item{idx}{\code{date or integer} an optional integer vector containing index of observation. If specified
+then \code{k} and \code{lag} are depending on \code{idx}. Length of \code{idx} should be equal of length \code{x}}
 
-\item{nearest}{logical value. Applied when \code{idx} is used, then \code{nearest = false} returns
-observation lagged exactly by the specified number of "periods". When \code{nearest = true}
+\item{nearest}{\code{logical} single value. Applied when \code{idx} is used, then \code{nearest = FALSE} returns
+observation lagged exactly by the specified number of "periods". When \code{nearest = TRUE}
 function returns latest observation within lag window.}
 }
 \description{

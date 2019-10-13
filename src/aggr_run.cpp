@@ -6,13 +6,12 @@ using namespace Rcpp;
 //' Running sum
 //'
 //' Running sum in specified window of numeric vector.
-//' @param x vector of any type where running sum is calculated
-//' @param k Running window size.  Not yet implemented.
-//' @param na_rm logical (default \code{na_rm=TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.
-//' @param na_pad logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
-//' @param idx an optional integer vector containing idx numbers of observation.
 //' @inheritParams runner
-//' @return numeric vector of length equals length of \code{x} containing running sum in \code{k}-long window.
+//' @param x \code{numeric} vector which running function is calculated on
+//' @param na_rm \code{logical} single value (default \code{na_rm = TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.
+//' @param na_pad \code{logical} single value (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
+//' @inheritParams runner
+//' @return sum \code{code} vector of length equals length of \code{x}.
 //' @examples
 //' set.seed(11)
 //' x1 <- rnorm(15)
@@ -130,12 +129,12 @@ NumericVector sum_run(
 //' Running mean in specified window of numeric vector.
 //' @inheritParams sum_run
 //' @inheritParams runner
-//' @return numeric vector of length equals length of \code{x} containing running mean in \code{k}-long window.
+//' @return mean {numeric} vector of length equals length of \code{x}.
 //' @examples
 //' set.seed(11)
 //' x1 <- rnorm(15)
-//' x2 <- sample(c(rep(NA,5), rnorm(15)), 15, replace=TRUE)
-//' k <- sample(1:15, 15, replace=TRUE)
+//' x2 <- sample(c(rep(NA,5), rnorm(15)), 15, replace = TRUE)
+//' k <- sample(1:15, 15, replace = TRUE)
 //' mean_run(x1)
 //' mean_run(x2, na_rm = TRUE)
 //' mean_run(x2, na_rm = FALSE )
@@ -252,7 +251,7 @@ NumericVector mean_run(
 //' \code{min_run} calculates running max on given \code{x} numeric vector, specified \code{k} window size.
 //' @inheritParams runner
 //' @inheritParams sum_run
-//' @return numeric vector of length equals length of \code{x} containing running max in \code{k}-long window.
+//' @return max {numeric} vector of length equals length of \code{x}.
 //' @examples
 //' set.seed(11)
 //' x1 <- sample( c(1,2,3), 15, replace=TRUE)
@@ -372,7 +371,7 @@ NumericVector max_run(
 //' \code{min_run} calculates running min on given \code{x} numeric vector, specified \code{k} window size.
 //' @inheritParams runner
 //' @inheritParams sum_run
-//' @return numeric vector of length equals length of \code{x} containing running min in \code{k}-long window.
+//' @return min {numeric} vector of length equals length of \code{x}.
 //' @examples
 //' set.seed(11)
 //' x1 <- sample(c(1, 2, 3), 15, replace = TRUE)
@@ -721,18 +720,19 @@ IntegerVector streak_run2(const Vector<RTYPE>& x, IntegerVector k, IntegerVector
 //' Running streak length
 //'
 //' Calculates running series of consecutive elements
+//' @param x {any type} vector which running function is calculated on
 //' @inheritParams runner
 //' @inheritParams sum_run
-//' @return numeric vector of length equals length of \code{x} containing running streak length in \code{k}-long window.
+//' @return streak [numeric] vector of length equals length of \code{x} containing number of consecutive occurences.
 //' @examples
 //' set.seed(11)
-//' x1 <- sample(c("a","b"),15,replace=TRUE)
-//' x2 <- sample(c(NA_character_,"a","b"),15,replace=TRUE)
-//' k <- sample(1:4,15,replace=TRUE)
+//' x1 <- sample(c("a","b"), 15, replace = TRUE)
+//' x2 <- sample(c(NA_character_, "a", "b"), k = 15, replace = TRUE)
+//' k <- sample(1:4, 15, replace = TRUE)
 //' streak_run(x1) # simple streak run
-//' streak_run(x1, k=2) # streak run within 2-element window
-//' streak_run(x2, na_pad=TRUE, k=3) # streak run within k=3 with padding NA
-//' streak_run(x1, k=k) # streak run within varying window size specified by vector k
+//' streak_run(x1, k = 2) # streak run within 2-element window
+//' streak_run(x2, na_pad = TRUE, k = 3) # streak run within k=3 with padding NA
+//' streak_run(x1, k = k) # streak run within varying window size specified by vector k
 //' @export
 // [[Rcpp::export]]
 IntegerVector streak_run(
