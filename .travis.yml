@@ -15,7 +15,7 @@ r_github_packages:
 after_success:
   - Rscript -e 'covr::codecov()'
   - Rscript -e 'devtools::install()'
-  - cp -rf vignettes/images articles/images
+  - Rscript -e 'print(list.files("vignettes", recursive = TRUE))'
   - Rscript -e 'pkgdown::build_site()'
 
 deploy:
