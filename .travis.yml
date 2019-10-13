@@ -7,13 +7,14 @@ cache: packages
 
 r_packages:
   - covr
+  - devtools
 
 r_github_packages:
   - r-lib/pkgdown
 
 after_success:
   - Rscript -e 'covr::codecov()'
-  - R CMD INSTALL .
+  - Rscript -e 'devtools::install()'
   - Rscript -e 'pkgdown::build_site()'
 
 deploy:
