@@ -83,7 +83,7 @@
 </div>
 <div id="section" class="section level1">
 <h1 class="hasAnchor">
-<a href="#section" class="anchor"></a><img src="articles/images/hexlogo.png" align="right">
+<a href="#section" class="anchor"></a><img src="reference/figures/hexlogo.png" align="right">
 </h1>
 <p><a href="https://CRAN.R-project.org/package=runner"><img src="https://cranlogs.r-pkg.org/badges/runner" alt="Cran badge"></a> <a href="https://travis-ci.org/gogonzo/runner"><img src="https://travis-ci.org/gogonzo/runner.svg?branch=master" alt="Travis-CI Build Status"></a> <a href="https://ci.appveyor.com/project/gogonzo/runner"><img src="https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a> <img src="https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg" alt="Coverage status"></p>
 <div id="about" class="section level2">
@@ -102,25 +102,25 @@
 <h2 class="hasAnchor">
 <a href="#using-runner" class="anchor"></a>Using runner</h2>
 <p><code>runner</code> package provides functions applied on running windows. Diagram below illustrates what running windows are - in this case running <code>k = 4</code> windows. For each of 15 elements of a vector each window contains current 4 elements (exception are first k - 1 elements where window is not complete).</p>
-<p><img src="articles/images/running_windows_explain.png"></p>
+<p><img src="reference/figures/running_windows_explain.png"></p>
 <p>Using <code>runner</code> one can apply any R function <code>f</code> in running window of length defined by <code>k</code>, window <code>lag</code>, observation indexes <code>idx</code>.</p>
-<p><img src="articles/images/using_runner.png"></p>
+<p><img src="reference/figures/using_runner.png"></p>
 <div id="window-size" class="section level3">
 <h3 class="hasAnchor">
 <a href="#window-size" class="anchor"></a>Window size</h3>
-<p><code>k</code> denotes number of elements in window. If <code>k</code> is a single value then window size is constant for all elements of x. For varying window size one should specify <code>k</code> as integer vector of <code>length(k) == length(x)</code> where each element of <code>k</code> defines window length. If <code>k</code> is empty it means that window will be cumulative (like <code><a href="https://rdrr.io/r/base/cumsum.html">base::cumsum</a></code>). Example below illustrates window of <code>k = 4</code> for 10’th element of vector <code>x</code>. <img src="articles/images/constant_window.png"></p>
+<p><code>k</code> denotes number of elements in window. If <code>k</code> is a single value then window size is constant for all elements of x. For varying window size one should specify <code>k</code> as integer vector of <code>length(k) == length(x)</code> where each element of <code>k</code> defines window length. If <code>k</code> is empty it means that window will be cumulative (like <code><a href="https://rdrr.io/r/base/cumsum.html">base::cumsum</a></code>). Example below illustrates window of <code>k = 4</code> for 10’th element of vector <code>x</code>. <img src="reference/figures/constant_window.png"></p>
 </div>
 <div id="window-lag" class="section level3">
 <h3 class="hasAnchor">
 <a href="#window-lag" class="anchor"></a>Window lag</h3>
 <p><code>lag</code> denotes how many observations windows will be lagged by. If <code>lag</code> is a single value than it’s constant for all elements of x. For varying lag size one should specify <code>lag</code> as integer vector of <code>length(lag) == length(x)</code> where each element of <code>lag</code> defines lag of window. Default value of <code>lag = 0</code>. Example below illustrates window of <code>k = 4</code> lagged by <code>lag = 2</code> for 10’th element of vector <code>x</code>.</p>
-<p><img src="articles/images/lagged_window_k_lag.png"></p>
+<p><img src="reference/figures/lagged_window_k_lag.png"></p>
 </div>
 <div id="windows-depending-on-date" class="section level3">
 <h3 class="hasAnchor">
 <a href="#windows-depending-on-date" class="anchor"></a>Windows depending on date</h3>
 <p>Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies <code>idx</code> argument, than running functions are applied on windows depending on date. <code>idx</code> should be the same length as <code>x</code> of class <code>Date</code> or <code>integer</code>. Including <code>idx</code> can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size <code>k = 4</code> lagged by <code>lag = 2</code> periods for 10’th element of vector <code>x</code>. This (10th) element has <code>idx = 13</code> which means that window ranges <code>[8, 11]</code> - although <code>k = 4</code> only two elements of <code>x</code> are within this window.</p>
-<p><img src="articles/images/custom_idx_k_lag.png"></p>
+<p><img src="reference/figures/custom_idx_k_lag.png"></p>
 </div>
 <div id="build-in-functions" class="section level3">
 <h3 class="hasAnchor">
