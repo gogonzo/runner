@@ -34,7 +34,7 @@ Calculates running series of consecutive elements
 \examples{
 set.seed(11)
 x1 <- sample(c("a","b"), 15, replace = TRUE)
-x2 <- sample(c(NA_character_, "a", "b"), k = 15, replace = TRUE)
+x2 <- sample(c(NA_character_, "a", "b"), 15, replace = TRUE)
 k <- sample(1:4, 15, replace = TRUE)
 streak_run(x1) # simple streak run
 streak_run(x1, k = 2) # streak run within 2-element window
