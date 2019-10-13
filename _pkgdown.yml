@@ -22,9 +22,9 @@ reference:
      - which_run
 
 articles:
-- title: Running window functions in R
-  contents:
-  - running_window_functions_in_r
+  - title: Using runner
+    contents:
+      - Using runner
 
 
 template:

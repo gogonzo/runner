@@ -16,9 +16,8 @@ Imports:
     Rcpp
 RoxygenNote: 6.1.0
 Suggests:
-    testthat,
-    covr,
     knitr,
+    magrittr,
     rmarkdown,
-    magrittr
+    testthat
 VignetteBuilder: knitr
