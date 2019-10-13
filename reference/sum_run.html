@@ -132,33 +132,38 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>vector of any type where running sum is calculated</p></td>
+      <td><p><code>numeric</code> vector which running function is calculated on</p></td>
     </tr>
     <tr>
       <th>k</th>
-      <td><p>Running window size.  Not yet implemented.</p></td>
+      <td><p><code>integer</code> vector or single value denoting size of the running window. If <code>k</code> is a single
+value then window size is constant for all elements, otherwise if <code>length(k) == length(x)</code> different
+window size for each element.</p></td>
     </tr>
     <tr>
       <th>lag</th>
-      <td><p>integer vector which specifies window shift</p></td>
+      <td><p><code>integer</code> vector or single value denoting window lag. If <code>lag</code> is a single
+value then window lag is constant for all elements, otherwise if <code>length(lag) == length(x)</code> different
+window size for each element.</p></td>
     </tr>
     <tr>
       <th>na_rm</th>
-      <td><p>logical (default <code>na_rm=TRUE</code>) - if <code>TRUE</code> sum is calulating excluding <code>NA</code>.</p></td>
+      <td><p><code>logical</code> single value (default <code>na_rm = TRUE</code>) - if <code>TRUE</code> sum is calulating excluding <code>NA</code>.</p></td>
     </tr>
     <tr>
       <th>na_pad</th>
-      <td><p>logical (default <code>na_pad=FALSE</code>) - if <code>TRUE</code> first k-results will be filled by <code>NA</code>. If k is not specified na_pad=F by default.</p></td>
+      <td><p><code>logical</code> single value (default <code>na_pad=FALSE</code>) - if <code>TRUE</code> first k-results will be filled by <code>NA</code>. If k is not specified na_pad=F by default.</p></td>
     </tr>
     <tr>
       <th>idx</th>
-      <td><p>an optional integer vector containing idx numbers of observation.</p></td>
+      <td><p><code>date or integer</code> an optional integer vector containing index of observation. If specified
+then <code>k</code> and <code>lag</code> are depending on <code>idx</code>. Length of <code>idx</code> should be equal of length <code>x</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>numeric vector of length equals length of <code>x</code> containing running sum in <code>k</code>-long window.</p>
+    <p>sum <code>code</code> vector of length equals length of <code>x</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>11</span>)

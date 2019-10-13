@@ -135,16 +135,19 @@
     </tr>
     <tr>
       <th>k</th>
-      <td><p>integer vector which specifies window length</p></td>
+      <td><p><code>integer</code> vector or single value denoting size of the running window. If <code>k</code> is a single
+value then window size is constant for all elements, otherwise if <code>length(k) == length(x)</code> different
+window size for each element.</p></td>
     </tr>
     <tr>
       <th>idx</th>
-      <td><p>an optional integer vector containing index of observations.</p></td>
+      <td><p><code>date or integer</code> an optional integer vector containing index of observation. If specified
+then <code>k</code> and <code>lag</code> are depending on <code>idx</code>. Length of <code>idx</code> should be equal of length <code>x</code></p></td>
     </tr>
     <tr>
       <th>nearest</th>
-      <td><p>logical value. Applied when <code>idx</code> is used, then <code>nearest = false</code> returns
-observation lagged exactly by the specified number of "periods". When <code>nearest = true</code>
+      <td><p><code>logical</code> single value. Applied when <code>idx</code> is used, then <code>nearest = FALSE</code> returns
+observation lagged exactly by the specified number of "periods". When <code>nearest = TRUE</code>
 function returns latest observation within lag window.</p></td>
     </tr>
     </table>

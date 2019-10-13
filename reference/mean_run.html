@@ -132,39 +132,44 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>vector of any type where running sum is calculated</p></td>
+      <td><p><code>numeric</code> vector which running function is calculated on</p></td>
     </tr>
     <tr>
       <th>k</th>
-      <td><p>Running window size.  Not yet implemented.</p></td>
+      <td><p><code>integer</code> vector or single value denoting size of the running window. If <code>k</code> is a single
+value then window size is constant for all elements, otherwise if <code>length(k) == length(x)</code> different
+window size for each element.</p></td>
     </tr>
     <tr>
       <th>lag</th>
-      <td><p>integer vector which specifies window shift</p></td>
+      <td><p><code>integer</code> vector or single value denoting window lag. If <code>lag</code> is a single
+value then window lag is constant for all elements, otherwise if <code>length(lag) == length(x)</code> different
+window size for each element.</p></td>
     </tr>
     <tr>
       <th>na_rm</th>
-      <td><p>logical (default <code>na_rm=TRUE</code>) - if <code>TRUE</code> sum is calulating excluding <code>NA</code>.</p></td>
+      <td><p><code>logical</code> single value (default <code>na_rm = TRUE</code>) - if <code>TRUE</code> sum is calulating excluding <code>NA</code>.</p></td>
     </tr>
     <tr>
       <th>na_pad</th>
-      <td><p>logical (default <code>na_pad=FALSE</code>) - if <code>TRUE</code> first k-results will be filled by <code>NA</code>. If k is not specified na_pad=F by default.</p></td>
+      <td><p><code>logical</code> single value (default <code>na_pad=FALSE</code>) - if <code>TRUE</code> first k-results will be filled by <code>NA</code>. If k is not specified na_pad=F by default.</p></td>
     </tr>
     <tr>
       <th>idx</th>
-      <td><p>an optional integer vector containing idx numbers of observation.</p></td>
+      <td><p><code>date or integer</code> an optional integer vector containing index of observation. If specified
+then <code>k</code> and <code>lag</code> are depending on <code>idx</code>. Length of <code>idx</code> should be equal of length <code>x</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>numeric vector of length equals length of <code>x</code> containing running mean in <code>k</code>-long window.</p>
+    <p>mean numeric vector of length equals length of <code>x</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>11</span>)
 <span class='no'>x1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>15</span>)
-<span class='no'>x2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>NA</span>,<span class='fl'>5</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>15</span>)), <span class='fl'>15</span>, <span class='kw'>replace</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='no'>k</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>15</span>, <span class='fl'>15</span>, <span class='kw'>replace</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='no'>x2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>NA</span>,<span class='fl'>5</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>15</span>)), <span class='fl'>15</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>k</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>15</span>, <span class='fl'>15</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='fu'>mean_run</span>(<span class='no'>x1</span>)</div><div class='output co'>#&gt;  [1] -0.5910311 -0.2822184 -0.6936633 -0.8609108 -0.4530308 -0.5332176
 #&gt;  [7] -0.2679571 -0.1563477 -0.1440561 -0.2300625 -0.2844599 -0.2897842
 #&gt; [13] -0.3858234 -0.3765192 -0.4280809</div><div class='input'><span class='fu'>mean_run</span>(<span class='no'>x2</span>, <span class='kw'>na_rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;  [1] -0.18760011 -0.09022066 -0.06543317  0.03906450 -0.12188853 -0.13873536
