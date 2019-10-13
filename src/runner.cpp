@@ -85,10 +85,15 @@ NumericVector runner_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVec
 //'
 //' Applies custom function to running windows
 //' @param x Vector of any type
-//' @param k integer vector which specifies window length
-//' @param lag integer vector which specifies window shift
-//' @param idx an optional integer vector containing index of observations.
-//' @param f R function to be applied on `x`
+//' @param k \code{integer} vector or single value denoting size of the running window. If \code{k} is a single
+//' value then window size is constant for all elements, otherwise if \code{length(k) == length(x)} different
+//' window size for each element.
+//' @param lag \code{integer} vector or single value denoting window lag. If \code{lag} is a single
+//' value then window lag is constant for all elements, otherwise if \code{length(lag) == length(x)} different
+//' window size for each element.
+//' @param idx \code{date or integer} an optional integer vector containing index of observation. If specified
+//' then \code{k} and \code{lag} are depending on \code{idx}. Length of \code{idx} should be equal of length \code{x}
+//' @param f \code{function} to be applied on \code{x}
 //' @examples
 //' runner(1:10, f = mean, k = 3)
 //' runner(1:10, k = 3, f = function(x) mean(x, na.rm = TRUE))

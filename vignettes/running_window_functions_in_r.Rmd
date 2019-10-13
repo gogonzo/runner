@@ -13,7 +13,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-"
+  fig.path = "articles/README-"
 )
 ```
 
@@ -31,24 +31,84 @@ install.packages("runner")
 ```
 
 ## Using runner
-The main idea of the package is to provide running operations on R vectors. Running functions are these which are applied to all elements up to actual one. For example implemented already in `base` `cumsum`, `cummin` etc. Functions provided in this package works similar but with extended functionality such as handling `NA`, custom window size. The most functions provided in package are based on the same logic
+`runner` package provides functions applied on running windows. Diagram below illustrates what running windows are - in this case running `k = 4` windows. For each of 15 elements of a vector each window contains current 4 elements (exception are first k - 1 elements where window is not complete).
 
-![](images/runner_api.png)
+![](images/running_windows_explain.png)
 
-### fixed window size
-`k` denotes number of elements in window. For fixed window size `k` should be single value.
+Using `runner` one can apply any R function `f` in running window of length defined by `k`, window `lag`, observation indexes `idx`.
 
-![](images/options_window_size.png)
+![](images/using_runner.png)
 
-### Varying window size
-For varying window size `k` should be of the same length as `x`. Varying window size means that for element `[i]` function will be calculated on window of length `k[i]`.
+### Window size
+`k` denotes number of elements in window. If `k` is a single value then window size is constant for all elements of x. For varying window size one should specify `k` as integer vector of `length(k) == length(x)` where each element of `k` defines window length. If `k` is empty it means that window will be cumulative (like `base::cumsum`). Example below illustrates window of `k = 4` for 10'th element of vector `x`.
+![](images/constant_window.png)
 
-![](images/options_window_size_varying.png)
+
+### Window lag
+`lag` denotes how many observations windows will be lagged by. If `lag` is a single value than it's constant for all elements of x. For varying lag size one should specify `lag` as integer vector of `length(lag) == length(x)` where each element of `lag` defines lag of window. Default value of `lag = 0`. Example below illustrates window of `k = 4` lagged by `lag = 2` for 10'th element of vector `x`.
+
+![](images/lagged_window_k_lag.png)
+
 
 ### Windows depending on date
-Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame.  If one specifies `idx` argument, than running functions are applied on windows depending on date. `idx` should be the same length as `x` of class `Date` or `integer`. Including `idx` can be combined with varying window size, than k will denote number of periods in window different for each data point.
+Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame.  If one specifies `idx` argument, than running functions are applied on windows depending on date. `idx` should be the same length as `x` of class `Date` or `integer`. Including `idx` can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size `k = 4` lagged by `lag = 2` periods for 10'th element of vector `x`. This (10th) element has `idx = 13` which means that window ranges `[8, 11]` - although `k = 4` only two elements of `x` are within this window. 
 
-![](images/options_idx.png)
+![](images/custom_idx_k_lag.png)
+
+### Own runner
+
+Below example of using `base::mean` inside of the `runner` function.
+```{r, echo=TRUE}
+library(runner)
+library(magrittr)
+x <- runif(15)
+k <- sample(1:15, 15, replace = TRUE)
+idx <- cumsum(sample(c(1, 2, 3, 4), 15, replace = TRUE))
+
+# simple call
+simple_mean <- runner(x = x, k = 4, f = mean)
+
+# additional arguments for mean
+trimmed_mean <- runner(x = x, k = 4, f = function(x) mean(x, trim = 0.05))
+
+# varying window size
+varying_window <- runner(x = x, k = k, f = function(x) mean(x, trim = 0.05))
+
+# date windows
+date_windows <- runner(x = x, k = k, idx = idx, f = function(x) mean(x, trim = 0.05))
+
+data.frame(x, k, idx, simple_mean, trimmed_mean, varying_window, date_windows)
+```
+
+
+### Creating windows
+Function creates list of windows. Because `runner` provide limited functionality, one can create running-window-list which can be further processed by user to obtain desired statistic (eg. window sum). `x` is a vector to be 'run on' and `k` is a length of window. In this example window length is varying as specified by `k`. Provide one value to obtain constant window size.
+
+```{r run_window, echo=TRUE}
+set.seed(11)
+window_run(x = 1:5, k = c(1, 2, 3, 3, 2))
+```
+
+Such windows can be used in further calculations, with any R function. Example below shows how to obtain running `sum` in specified, varying window length (specified by `k`).
+
+```{r run_window2, echo=TRUE}
+window_run(x= 1:5, k = c(1, 2, 3, 3, 2)) %>%
+  lapply(sum) %>%
+  unlist
+```
+
+One can also specify window based on a date of other numeric index. To do this date should be passed via `idx` argument and k should be integer denoting date-window span. 
+
+```{r run_window3, echo=TRUE}
+window_run(x = 1:5, k = 3, idx = c(1, 2, 5, 6, 7)) 
+```
+
+
+### Build-in functions
+With `runner` one can use any R functions, but some of them are optimized for speed reasons.
+These functions are:  
+- aggregating functions - `length_run`, `min_run`, `max_run`, `minmax_run`, `sum_run`, `mean_run`, `streak_run`  
+- utility functions - `fill_run`, `lag_run`, `which_run`
 
 
 ### Other options
@@ -56,7 +116,7 @@ Sometimes data points in dataset are not equally spaced (missing weeekends, holi
 
 ![](images/options_na_rm.png)
 
-- `na_pad=T` if window size exceeds number of available elements, than first `k-1` elements are filled with `NA`.  
+- `na_pad = TRUE` if window size exceeds number of available elements, than first `k-1` elements are filled with `NA`.  
 
 ![](images/options_na_pad.png)
 
@@ -133,54 +193,4 @@ data.frame(
   s1 = which_run(x, na_rm = FALSE, k = 5, which = "first"),
   s2 = which_run(x, k = 5, which = "last"))
 
-```
-
-## Apply custom function
-### Own runner
-One can use own function with function `runner` which will be applied in the same way as other build-in functions. 
-
-![](images/custom_runner.png)
-
-Below example of using `base::mean` inside of the `runner` function.
-```{r, echo=TRUE}
-x <- runif(15)
-k <- sample(1:15, 15, replace = TRUE)
-idx <- cumsum(sample(c(1, 2, 3, 4), 15, replace = TRUE))
-
-# simple call
-simple_mean <- runner(x = x, k = 4, f = mean)
-
-# additional arguments for mean
-trimmed_mean <- runner(x = x, k = 4, f = function(x) mean(x, trim = 0.05))
-
-# varying window size
-varying_window <- runner(x = x, k = k, f = function(x) mean(x, trim = 0.05))
-
-# date windows
-date_windows <- runner(x = x, k = k, idx = idx, f = function(x) mean(x, trim = 0.05))
-
-data.frame(x, k, idx, simple_mean, trimmed_mean, varying_window, date_windows)
-```
-
-
-### Creating windows
-Function creates list of windows. Because `runner` provide limited functionality, one can create running-window-list which can be further processed by user to obtain desired statistic (eg. window sum). `x` is a vector to be 'run on' and `k` is a length of window. In this example window length is varying as specified by `k`. Provide one value to obtain constant window size.
-
-```{r run_window, echo=TRUE}
-set.seed(11)
-window_run(x = 1:5, k = c(1, 2, 3, 3, 2))
-```
-
-Such windows can be used in further calculations, with any R function. Example below shows how to obtain running `sum` in specified, varying window length (specified by `k`).
-
-```{r run_window2, echo=TRUE}
-window_run(x= 1:5, k = c(1, 2, 3, 3, 2)) %>%
-  lapply(sum) %>%
-  unlist
-```
-
-One can also specify window based on a date of other numeric index. To do this date should be passed via `idx` argument and k should be integer denoting date-window span. 
-
-```{r run_window3, echo=TRUE}
-window_run(x = 1:5, k = 3, idx = c(1, 2, 5, 6, 7)) 
 ```
