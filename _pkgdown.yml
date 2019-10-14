@@ -21,11 +21,6 @@ reference:
      - lag_run
      - which_run
 
-articles:
-  - title: Using runner
-    contents:
-      - Using runner
-
 
 template:
   params:

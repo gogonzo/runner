@@ -11,11 +11,11 @@ r_packages:
 
 r_github_packages:
   - r-lib/pkgdown
+  - rmarkdown
 
 after_success:
   - Rscript -e 'covr::codecov()'
-  - Rscript -e 'devtools::install()'
-  - Rscript -e 'print(list.files("vignettes", recursive = TRUE))'
+  - R CMD INSTALL .
   - Rscript -e 'pkgdown::build_site()'
 
 deploy:
