@@ -21,11 +21,6 @@ reference:
      - lag_run
      - which_run
 
-articles:
-- title: Running window functions in R
-  contents:
-  - running_window_functions_in_r
-
 
 template:
   params:
