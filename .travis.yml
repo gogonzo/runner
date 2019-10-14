@@ -11,7 +11,7 @@ r_packages:
 
 r_github_packages:
   - r-lib/pkgdown
-  - rmarkdown
+  - rstudio/rmarkdown
 
 after_success:
   - Rscript -e 'covr::codecov()'
