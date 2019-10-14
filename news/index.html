@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Lag dependent on variable — lag_run • runner</title>
+<title>Changelog • runner</title>
 
 
 <!-- jquery -->
@@ -35,9 +35,7 @@
 
 
 
-<meta property="og:title" content="Lag dependent on variable — lag_run" />
-<meta property="og:description" content="Vector of input lagged along integer vector" />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Changelog" />
 
 
 
@@ -56,7 +54,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -115,55 +113,52 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Lag dependent on variable</h1>
-    
-    <div class="hidden name"><code>lag_run.Rd</code></div>
+      <h1>Changelog <small></small></h1>
+      
     </div>
 
-    <div class="ref-description">
-    <p>Vector of input lagged along integer vector</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>lag_run</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>idx</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>nearest</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>x</th>
-      <td><p>Vector of any type</p></td>
-    </tr>
-    <tr>
-      <th>k</th>
-      <td><p><code>integer</code> vector or single value denoting size of the running window. If <code>k</code> is a single
-value then window size is constant for all elements, otherwise if <code>length(k) == length(x)</code> different
-window size for each element.</p></td>
-    </tr>
-    <tr>
-      <th>idx</th>
-      <td><p><code>date or integer</code> an optional integer vector containing index of observation. If specified
-then <code>k</code> and <code>lag</code> are depending on <code>idx</code>. Length of <code>idx</code> should be equal of length <code>x</code></p></td>
-    </tr>
-    <tr>
-      <th>nearest</th>
-      <td><p><code>logical</code> single value. Applied when <code>idx</code> is used, then <code>nearest = FALSE</code> returns
-observation lagged exactly by the specified number of "periods". When <code>nearest = TRUE</code>
-function returns latest observation within lag window.</p></td>
-    </tr>
-    </table>
-
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>lag_run</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt;  [1] NA NA NA  1  2  3  4  5  6  7</div><div class='input'><span class='fu'>lag_run</span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>], <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>idx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>8</span>, <span class='fl'>10</span>))</div><div class='output co'>#&gt;  [1] NA  NA  NA  NA  "c" "d" "f" NA  "g" "i"</div></pre>
+    <div id="runner-0-2-2" class="section level1">
+<h1 class="page-header">
+<a href="#runner-0-2-2" class="anchor"></a>runner 0.2.2<small> Unreleased </small>
+</h1>
+<ul><li>
+</li></ul>
+</div>
+    <div id="runner-0-2-1" class="section level1">
+<h1 class="page-header">
+<a href="#runner-0-2-1" class="anchor"></a>runner 0.2.1<small> 2019-10-01 </small>
+</h1>
+<ul>
+<li>added runner function which allows to apply custom function on running windows - so far returning only numeric</li>
+</ul>
+</div>
+    <div id="runner-0-2-0" class="section level1">
+<h1 class="page-header">
+<a href="#runner-0-2-0" class="anchor"></a>runner 0.2.0<small> 2019-03-08 </small>
+</h1>
+<div id="improvements" class="section level2">
+<h2 class="hasAnchor">
+<a href="#improvements" class="anchor"></a>Improvements</h2>
+<ul>
+<li>all functions have additional <code>idx</code> argument which allows to compute running windows within specified date/time/indexes range.</li>
+<li>added lag_run function - lagged value able to be computed on date/time lag.</li>
+<li>added length_run function to compute number of elements within specified date/time/indexes range.</li>
+</ul>
+</div>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+    <div id="tocnav">
+      <h2>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="#runner-0-2-2">0.2.2</a></li>
+        <li><a href="#runner-0-2-1">0.2.1</a></li>
+        <li><a href="#runner-0-2-0">0.2.0</a></li>
+      </ul>
+    </div>
   </div>
+
 </div>
 
 
