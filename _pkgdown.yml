@@ -1,0 +1,27 @@
+destination: docs
+reference:
+  - title: "R functions in running window"
+    desc: "Using custom R function on running window"
+    contents:
+      - runner
+      - window_run
+  - title: "Running aggregations"
+    desc: "Aggregating functions applied on running windows"
+    contents:
+      - length_run
+      - mean_run
+      - min_run
+      - max_run
+      - streak_run
+      - sum_run
+  - title: "Utility functions"
+    desc: "Functions applied in running window"
+    contents:
+     - fill_run
+     - lag_run
+     - which_run
+
+
+template:
+  params:
+    bootswatch: cerulean

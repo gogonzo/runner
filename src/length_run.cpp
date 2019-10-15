@@ -6,9 +6,8 @@ using namespace Rcpp;
 //' Number of elements in k-long window calculated on idx vector.
 //' If idx is an `as.integer(date)` vector, then k=number of days in window -
 //' then the result is number of observations within k days window.
-//' @param k integer vector which specifies window length
-//' @param lag integer vector which specifies window shift
-//' @param idx an optional integer vector containing index of observations.
+//' @inheritParams runner
+//' @inheritParams sum_run
 //' @examples
 //' length_run(k = 3, idx = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
 //' @export

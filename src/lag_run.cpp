@@ -7,10 +7,9 @@ using namespace Rcpp;
 //' Vector of input lagged along integer vector
 //' @inheritParams runner
 //' @inheritParams sum_run
-//' @param nearest logical value. Applied when \code{idx} is used, then \code{nearest = false} returns
-//' observation lagged exactly by the specified number of "periods". When \code{nearest = true}
+//' @param nearest \code{logical} single value. Applied when \code{idx} is used, then \code{nearest = FALSE} returns
+//' observation lagged exactly by the specified number of "periods". When \code{nearest = TRUE}
 //' function returns latest observation within lag window.
-//' @paeam
 //' @examples
 //' lag_run(1:10, k = 3)
 //' lag_run(letters[1:10], k = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10))

@@ -7,21 +7,21 @@
 fill_run(x, run_for_first = FALSE, only_within = FALSE)
 }
 \arguments{
-\item{x}{Vector of any type where \code{NA} are replaced}
+\item{x}{Vector of any type}
 
 \item{run_for_first}{If first elements are filled with \code{NA}, \code{run_for_first = TRUE } allows to fill all initial \code{NA} with nearest non-NA value. By befault \code{run_for_first = TRUE}}
 
 \item{only_within}{\code{NA} are replaced only if previous and next non-NA values are the same. By befault \code{only_within = TRUE}}
 }
 \value{
-numeric vector of length equals length of \code{x} containing all \code{x} elements with \code{NA} replaced with previous non-NA element.
+vector - \code{x} containing all \code{x} elements with \code{NA} replaced with previous non-NA element.
 }
 \description{
 Fill \code{NA} with last non-NA element.
 }
 \examples{
-fill_run(c(NA,NA,1:10, NA, NA), run_for_first=TRUE)
-fill_run(c(NA,NA,1:10, NA, NA), run_for_first=TRUE)
-fill_run(c(NA,NA,1:10, NA, NA), run_for_first=FALSE)
-fill_run(c(NA,NA,1,2,NA,NA,2,2,NA,NA,1, NA, NA), run_for_first=TRUE,only_within = TRUE)
+fill_run(c(NA, NA,1:10, NA, NA), run_for_first = TRUE)
+fill_run(c(NA, NA,1:10, NA, NA), run_for_first = TRUE)
+fill_run(c(NA, NA,1:10, NA, NA), run_for_first = FALSE)
+fill_run(c(NA, NA, 1, 2, NA, NA, 2, 2, NA, NA, 1, NA, NA), run_for_first = TRUE, only_within = TRUE)
 }

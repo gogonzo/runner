@@ -8,20 +8,25 @@ mean_run(x, k = integer(1), lag = integer(1), na_rm = TRUE,
   na_pad = FALSE, idx = integer(0))
 }
 \arguments{
-\item{x}{vector of any type where running sum is calculated}
+\item{x}{\code{numeric} vector which running function is calculated on}
 
-\item{k}{Running window size.  Not yet implemented.}
+\item{k}{\code{integer} vector or single value denoting size of the running window. If \code{k} is a single
+value then window size is constant for all elements, otherwise if \code{length(k) == length(x)} different
+window size for each element.}
 
-\item{lag}{integer vector which specifies window shift}
+\item{lag}{\code{integer} vector or single value denoting window lag. If \code{lag} is a single
+value then window lag is constant for all elements, otherwise if \code{length(lag) == length(x)} different
+window size for each element.}
 
-\item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.}
+\item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.}
 
-\item{na_pad}{logical (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
+\item{na_pad}{\code{logical} single value (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
 
-\item{idx}{an optional integer vector containing idx numbers of observation.}
+\item{idx}{\code{date or integer} an optional integer vector containing index of observation. If specified
+then \code{k} and \code{lag} are depending on \code{idx}. Length of \code{idx} should be equal of length \code{x}}
 }
 \value{
-numeric vector of length equals length of \code{x} containing running mean in \code{k}-long window.
+mean {numeric} vector of length equals length of \code{x}.
 }
 \description{
 Running mean in specified window of numeric vector.
@@ -29,8 +34,8 @@ Running mean in specified window of numeric vector.
 \examples{
 set.seed(11)
 x1 <- rnorm(15)
-x2 <- sample(c(rep(NA,5), rnorm(15)), 15, replace=TRUE)
-k <- sample(1:15, 15, replace=TRUE)
+x2 <- sample(c(rep(NA,5), rnorm(15)), 15, replace = TRUE)
+k <- sample(1:15, 15, replace = TRUE)
 mean_run(x1)
 mean_run(x2, na_rm = TRUE)
 mean_run(x2, na_rm = FALSE )
