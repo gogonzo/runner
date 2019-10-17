@@ -486,8 +486,9 @@ NumericVector min_run(
 //' Running min/max
 //'
 //'
-//' \code{min_run} calculates running min on given \code{x} numeric vector, specified \code{k} window size.
+//' \code{min_run} calculates running minmax on given \code{x} numeric vector, specified \code{k} window size.
 //' @inheritParams runner
+//' @inheritParams sum_run
 //' @param metric \code{character} what to return, minimum or maximum
 //' @return list.
 //' @export
@@ -506,7 +507,6 @@ NumericVector minmax_run(
   double last_max = x(0);
   double last_min = x(0);
 
-  IntegerVector b(2);
   NumericVector res(n);
   res(0) = x(0);
   NumericVector mins = NumericVector(n);
@@ -529,11 +529,10 @@ NumericVector minmax_run(
         temp_max = cur;
       }
 
-
       if (cur < temp_min) temp_min = cur;
       if (cur > temp_max) temp_max = cur;
 
-      res(i) = (metric == "min") ? temp_min : temp_max;
+      res(i) = (metric == "min") ? last_min : last_max;
     }
   }
 

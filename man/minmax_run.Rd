@@ -9,11 +9,13 @@ minmax_run(x, metric = "min", na_rm = TRUE)
 \arguments{
 \item{x}{Vector of any type}
 
-\item{na_rm}{logical (default \code{na_rm=TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.}
+\item{metric}{\code{character} what to return, minimum or maximum}
+
+\item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.}
 }
 \value{
 list.
 }
 \description{
-\code{min_run} calculates running min on given \code{x} numeric vector, specified \code{k} window size.
+\code{min_run} calculates running minmax on given \code{x} numeric vector, specified \code{k} window size.
 }
