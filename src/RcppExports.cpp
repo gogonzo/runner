@@ -69,6 +69,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// minmax_run
+NumericVector minmax_run(NumericVector x, std::string metric, bool na_rm);
+RcppExport SEXP _runner_minmax_run(SEXP xSEXP, SEXP metricSEXP, SEXP na_rmSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< std::string >::type metric(metricSEXP);
+    Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
+    rcpp_result_gen = Rcpp::wrap(minmax_run(x, metric, na_rm));
+    return rcpp_result_gen;
+END_RCPP
+}
 // which_run
 IntegerVector which_run(LogicalVector x, IntegerVector k, IntegerVector lag, std::string which, bool na_rm, bool na_pad, IntegerVector idx);
 RcppExport SEXP _runner_which_run(SEXP xSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP whichSEXP, SEXP na_rmSEXP, SEXP na_padSEXP, SEXP idxSEXP) {
@@ -177,6 +190,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_runner_mean_run", (DL_FUNC) &_runner_mean_run, 6},
     {"_runner_max_run", (DL_FUNC) &_runner_max_run, 6},
     {"_runner_min_run", (DL_FUNC) &_runner_min_run, 6},
+    {"_runner_minmax_run", (DL_FUNC) &_runner_minmax_run, 3},
     {"_runner_which_run", (DL_FUNC) &_runner_which_run, 7},
     {"_runner_streak_run", (DL_FUNC) &_runner_streak_run, 6},
     {"_runner_fill_run", (DL_FUNC) &_runner_fill_run, 3},
