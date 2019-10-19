@@ -71,17 +71,17 @@ NumericVector sum_run(
       // no lag
     } else if ((k.size() == 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0));
+        b = utils::window_ul(i, k(0), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() > 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(0));
+        b = utils::window_ul(i, k(i), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() == 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i));
+        b = utils::window_ul(i, k(0), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() > 1) && (lag.size() > 1)) {

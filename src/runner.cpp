@@ -11,24 +11,24 @@ NumericVector runner_simple(const Vector<RTYPE>& x, IntegerVector k, IntegerVect
   if (k.size() > 1) {
     if (lag.size() > 1) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_window_idx(i, k(i), lag(i));
+        idx = apply::get_window_idx(i, k(i), lag(i), n);
         res(i) = apply::apply_on_window(x, idx, f);
       }
     } else {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_window_idx(i, k(i), lag(0));
+        idx = apply::get_window_idx(i, k(i), lag(0), n);
         res(i) = apply::apply_on_window(x, idx, f);
       }
     }
   } else {
     if (lag.size() > 1) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_window_idx(i, k(0), lag(i));
+        idx = apply::get_window_idx(i, k(0), lag(i), n);
         res(i) = apply::apply_on_window(x, idx, f);
       }
     } else {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_window_idx(i, k(0), lag(0));
+        idx = apply::get_window_idx(i, k(0), lag(0), n);
         res(i) = apply::apply_on_window(x, idx, f);
       }
     }
@@ -45,35 +45,35 @@ NumericVector runner_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVec
   if (k.size() > 1) {
     if (lag.size() > 1) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(i));
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(i), n);
         res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
       }
     } else if (lag(0) > 0){
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(0));
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(0), n);
         res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
       }
     } else {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx(indexes, i, k(i));
+        idx = apply::get_dwindow_idx(indexes, i, k(i), n);
         res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
       }
     }
   } else {
     if (lag.size() > 1) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(i));
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(i), n);
         res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
 
       }
     } else if (lag(0) > 0) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(0));
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(0), n);
         res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
       }
     } else {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx(indexes, i, k(0));
+        idx = apply::get_dwindow_idx(indexes, i, k(0), n);
         res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
       }
     }
@@ -168,24 +168,24 @@ List window_simple(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag) {
   if (k.size() > 1) {
     if (lag.size() > 1) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_window_idx(i, k(i), lag(i));
+        idx = apply::get_window_idx(i, k(i), lag(i), n);
         res(i) = apply::get_window(x, idx);
       }
     } else {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_window_idx(i, k(i), lag(0));
+        idx = apply::get_window_idx(i, k(i), lag(0), n);
         res(i) = apply::get_window(x, idx);
       }
     }
   } else {
     if (lag.size() > 1) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_window_idx(i, k(0), lag(i));
+        idx = apply::get_window_idx(i, k(0), lag(i), n);
         res(i) = apply::get_window(x, idx);
       }
     } else {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_window_idx(i, k(0), lag(0));
+        idx = apply::get_window_idx(i, k(0), lag(0), n);
         res(i) = apply::get_window(x, idx);
       }
     }
@@ -202,35 +202,35 @@ List window_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, 
   if (k.size() > 1) {
     if (lag.size() > 1) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(i));
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(i), n);
         res(i) = apply::get_window(x, idx);
       }
     } else if (lag(0) > 0){
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(0));
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(0), n);
         res(i) = apply::get_window(x, idx);
       }
     } else {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx(indexes, i, k(i));
+        idx = apply::get_dwindow_idx(indexes, i, k(i), n);
         res(i) = apply::get_window(x, idx);
       }
     }
   } else {
     if (lag.size() > 1) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(i));
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(i), n);
         res(i) = apply::get_window(x, idx);
 
       }
     } else if (lag(0) > 0) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(0));
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(0), n);
         res(i) = apply::get_window(x, idx);
       }
     } else {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx(indexes, i, k(0));
+        idx = apply::get_dwindow_idx(indexes, i, k(0), n);
         res(i) = apply::get_window(x, idx);
       }
     }
