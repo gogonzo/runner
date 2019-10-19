@@ -55,6 +55,7 @@ lines(data$date, data$pred, col = "blue")
 [SO discussion](https://stackoverflow.com/a/58167952/3495076)
 
 ```{r}
+library(dplyr)
 set.seed(3737)
 df <- data.frame(
   user_id = c(rep(27, 7), rep(11, 7)),
@@ -75,8 +76,6 @@ df %>%
 
 ```{r}
 library(runner)
-library(dplyr)
-
 df <- read.table(text = "  user_id       date category
        27 2016-01-01    apple
        27 2016-01-03    apple
