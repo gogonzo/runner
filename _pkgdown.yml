@@ -1,4 +1,7 @@
 destination: docs
+toc:
+  depth: 3
+
 reference:
   - title: "R functions in running window"
     desc: "Using custom R function on running window"
@@ -21,6 +24,7 @@ reference:
      - lag_run
      - which_run
 
+article:
 
 template:
   params:
