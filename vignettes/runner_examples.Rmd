@@ -55,7 +55,6 @@ lines(data$date, data$pred, col = "blue")
 [SO discussion](https://stackoverflow.com/a/58167952/3495076)
 
 ```{r}
-library(dplyr)
 set.seed(3737)
 df <- data.frame(
   user_id = c(rep(27, 7), rep(11, 7)),
@@ -75,8 +74,8 @@ df %>%
 [SO discussion](https://stackoverflow.com/questions/41693081/)
 
 ```{r}
-library(dplyr)
 library(runner)
+library(dplyr)
 
 df <- read.table(text = "  user_id       date category
        27 2016-01-01    apple
@@ -96,9 +95,7 @@ df <- read.table(text = "  user_id       date category
 
 df %>%
   mutate(
-    distinct_7  = runner(category, k = 7, idx = date, f = function(x) length(unique(x))),
-    distinct_14 = runner(category, k = 7, idx = date, f = function(x) length(unique(x)))
+    distinct_7  = runner(category, k =  7, idx = date, f = function(x) length(unique(x))),
+    distinct_14 = runner(category, k = 14, idx = date, f = function(x) length(unique(x)))
   )
 ```
-
-

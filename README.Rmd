@@ -56,3 +56,13 @@ With `runner` one can use any R functions, but some of them are optimized for sp
 These functions are:  
 - aggregating functions - `length_run`, `min_run`, `max_run`, `minmax_run`, `sum_run`, `mean_run`, `streak_run`  
 - utility functions - `fill_run`, `lag_run`, `which_run`
+
+
+## Simple example
+
+14-days trimmed mean
+```{r}
+library(runner)
+x <- rnorm(20)
+runner(x, k = 14, idx = date, f = function(xi) mean(xi, na.rm = TRUE, trim = 0.05))
+```
