@@ -8,13 +8,14 @@ vignette: >
 ---
 
 The most fundamental function in `runner` package is `runner`. With `runner::runner` one can apply any R function on running windows.
-This tutorial presents set of examples expaining how to tackle some tasks. Some of the examples are referenced to original topic on [stackoverflow](www.stackoverflow.com).  
+This tutorial presents set of examples expaining how to tackle some tasks. Some of the examples are referenced to original topic on [stackoverflow](www.stackoverflow.com).
 
 ![](images/using_runner.png)
 
 ### Number of unique elements in 7 days window
 
 ```{r}
+library(runner)
 x <- sample(letters, 20, replace = TRUE)
 date <- as.Date(cumsum(sample(1:5, 20, replace = TRUE)), origin = Sys.Date()) # unequaly spaced time series
 
@@ -55,7 +56,6 @@ lines(data$date, data$pred, col = "blue")
 
 ```{r}
 library(dplyr)
-library(runner)
 set.seed(3737)
 df <- data.frame(
   user_id = c(rep(27, 7), rep(11, 7)),
