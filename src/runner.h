@@ -5,11 +5,11 @@ namespace apply {
     if ((i - lag) < 0 or (i - lag - k + 1) >= n) return IntegerVector(0);
 
     if ((i - k - lag + 1) <= 0) {
-      return Rcpp::seq_len(i + 1 - lag) - 1;
-    } else if ((i - lag) >= n) {
-      return Rcpp::Range(i - k - lag + 1, n - 1);
+      return Rcpp::Range(0, i - lag);
+    } else if (i - lag >= n) {
+      return Rcpp::Range(i - lag - k + 1, n - 1);
     } else {
-      return i - lag - k + Rcpp::seq_len(k);
+      return Rcpp::Range(i - lag - k + 1, i - lag);
     }
   }
 
@@ -26,8 +26,6 @@ namespace apply {
   }
 
   IntegerVector get_dwindow_idx_lag(IntegerVector indexes, int i, int k, int lag, int n) {
-    // indexes[(indexes > i - lag - k) & (indexes <= i - lag)];
-
     if (lag >= 0) {
       for (int u = i; u >= 0; u--) {
         if ((indexes(i) - indexes(u)) < (k + lag)) {
@@ -45,20 +43,35 @@ namespace apply {
         }
       }
     } else if (lag < 0) {
-      for (int u = i; u < n; u++) {
-        if ((indexes(u) - indexes(i)) > (k - lag) &&
-            (indexes(u) - indexes(i)) <= (-lag)) {
-          if ((indexes(i) - indexes(u)) <= lag) {
-            for (int l = u; l >= 0; l--) {
-              if ((indexes(i) - indexes(l) > (k + lag - 1))) {
+      // l <- i -> u
+      if (-lag <= k) {
+        for (int l = i; l >= -1; l--) {
+          if (l == -1 or indexes(l) < (indexes(i) - lag - k + 1)) {
+            for (int u = i; u < n; u++) {
+              if (indexes(u) > (indexes(i) - lag)) {
+                return Rcpp::Range(l + 1, u - 1);
+              } else if (u == (n - 1)) {
                 return Rcpp::Range(l + 1, u);
-              } else if (l == 0) {
-                return Rcpp::Range(0, u);
               }
             }
           }
-        } else {
-          return IntegerVector(0);
+        }
+      // i -> l -> u
+      } else {
+        for (int l = i; l < n; l++) {
+          if (indexes(l) < indexes(i - lag)) {
+            if (indexes(i) >= (indexes(i) - lag - k + 1)) {
+              for (int u = l; u < n; u ++) {
+                if (indexes(u) > (indexes(i) - lag)) {
+                  return Rcpp::Range(l + 1, u - 1);
+                } else if (u == (n - 1)) {
+                  return Rcpp::Range(l + 1, u);
+                }
+              }
+            }
+          } else {
+            return IntegerVector(0);
+          }
         }
       }
     }

@@ -105,7 +105,7 @@ test_that("which with na_rm = TRUE k = k", {
 
   for(i in 1:20)
     expect_equal(
-      which_run(x2, na_rm = T, k=k, which="first")[i] ,
+      which_run(x2, na_rm = T, k = k, which = "first")[i] ,
       ifelse(is.finite(min( idx[idx %in% (pmax(1,i-k[i]+1):i) & x2], na.rm=T)),
              min( idx[idx %in% (pmax(1,i-k[i]+1):i) & x2], na.rm=T),
              NA_integer_)
@@ -137,15 +137,15 @@ test_that("which for indexed window",{
   k <- sample(1:12,12,replace=T)
 
   expect_identical(
-    which_run( x, which="last", idx=i, k=3, na_rm=F),
+    which_run( x, which="last", idx = i, k = 3, na_rm = FALSE),
     as.integer(c(NA, NA, 3, NA, NA, NA, 7, 8, NA, 10, NA, 12))
   )
   expect_identical(
-    which_run( x, which="first", idx=i, k=2, na_rm=F),
+    which_run( x, which="first", idx = i, k = 2, na_rm = FALSE),
     as.integer(c(NA, NA, 3, 3, 3, 3, 7, 8, 8, 8, NA, 12))
   )
   expect_identical(
-    which_run( x, which="last", idx=i, k=2, na_rm=T),
+    which_run( x, which="last", idx = i, k = 2, na_rm = TRUE),
     as.integer(c(NA, NA, 3, 3, 3, 3, 7, 8, 8, 10, NA, 12))
   )
 

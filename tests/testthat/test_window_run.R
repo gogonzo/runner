@@ -95,6 +95,38 @@ test_that("Lagged date window", {
   expect_equal(out, test)
 })
 
+test_that("Negative lagged date window", {
+  x <- sample(c(rep(NA, 20), runif(100)), 100)
+  k <- qbinom(runif(100, 0.2, 0.8), 10, 0.5)
+  lag <- -qbinom(runif(100, 0, 0.5), 10, 0.3)
+  idx <- cumsum(sample(c(1,2,3,4), 100, replace = TRUE))
+
+  out <- window_run(x, k = 5, lag = -3, idx = idx)
+  test <- lapply(seq_along(x), function(i) {
+    lower <- idx[i] + 3 - 5  + 1
+    upper <- idx[i] + 3
+    x[idx %in% seq(lower, upper)]
+  })
+  expect_equal(out, test)
+
+  out <- window_run(x, k = k, lag = -3, idx = idx)
+  test <- lapply(seq_along(x), function(i) {
+    lower <- idx[i] + 3 - k[i]  + 1
+    upper <- idx[i] + 3
+    x[idx %in% seq(lower, upper)]
+  })
+
+  expect_equal(out, test)
+
+  out <- window_run(x, k = k, lag = lag, idx = idx)
+  test <- lapply(seq_along(x), function(i) {
+    lower <- idx[i] - lag[i] - k[i]  + 1
+    upper <- idx[i] - lag[i]
+    x[idx %in% seq(lower, upper)]
+  })
+
+  expect_equal(out, test)
+})
 
 
 test_that("window_run with idx",{

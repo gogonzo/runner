@@ -48,7 +48,7 @@ NumericVector runner_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVec
         idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(i), n);
         res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
       }
-    } else if (lag(0) > 0){
+    } else if (lag(0) != 0){
       for (int i = 0; i < n; i++) {
         idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(0), n);
         res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
@@ -66,7 +66,7 @@ NumericVector runner_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVec
         res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
 
       }
-    } else if (lag(0) > 0) {
+    } else if (lag(0) != 0) {
       for (int i = 0; i < n; i++) {
         idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(0), n);
         res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
@@ -205,7 +205,7 @@ List window_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, 
         idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(i), n);
         res(i) = apply::get_window(x, idx);
       }
-    } else if (lag(0) > 0){
+    } else if (lag(0) != 0){
       for (int i = 0; i < n; i++) {
         idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(0), n);
         res(i) = apply::get_window(x, idx);
@@ -223,7 +223,7 @@ List window_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, 
         res(i) = apply::get_window(x, idx);
 
       }
-    } else if (lag(0) > 0) {
+    } else if (lag(0) != 0) {
       for (int i = 0; i < n; i++) {
         idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(0), n);
         res(i) = apply::get_window(x, idx);

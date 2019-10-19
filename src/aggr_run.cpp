@@ -86,7 +86,7 @@ NumericVector sum_run(
       }
     } else if ((k.size() > 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(i));
+        b = utils::window_ul(i, k(i), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
       }
     }
@@ -95,22 +95,22 @@ NumericVector sum_run(
   } else {
     if ((k.size() == 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(0), lag(0));
+        b = utils::window_ul_dl(idx, i, k(0), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() > 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(i), lag(0));
+        b = utils::window_ul_dl(idx, i, k(i), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() == 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(0), lag(i));
+        b = utils::window_ul_dl(idx, i, k(0), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
       }
     }   else if ((k.size() > 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(i), lag(i));
+        b = utils::window_ul_dl(idx, i, k(i), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
       }
     }
@@ -189,22 +189,22 @@ NumericVector mean_run(
       // no lag
     } else if ((k.size() == 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0));
+        b = utils::window_ul(i, k(0), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() > 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(0));
+        b = utils::window_ul(i, k(i), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() == 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i));
+        b = utils::window_ul(i, k(0), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() > 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(i));
+        b = utils::window_ul(i, k(i), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
       }
     }
@@ -213,22 +213,22 @@ NumericVector mean_run(
   } else {
     if ((k.size() == 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(0), lag(0));
+        b = utils::window_ul_dl(idx, i, k(0), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() > 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(i), lag(0));
+        b = utils::window_ul_dl(idx, i, k(i), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() == 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(0), lag(i));
+        b = utils::window_ul_dl(idx, i, k(0), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
       }
     }   else if ((k.size() > 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(i), lag(i));
+        b = utils::window_ul_dl(idx, i, k(i), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
       }
     }
@@ -311,22 +311,22 @@ NumericVector max_run(
     // no lag
     } else if ((k.size() == 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0));
+        b = utils::window_ul(i, k(0), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() > 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(0));
+        b = utils::window_ul(i, k(i), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() == 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i));
+        b = utils::window_ul(i, k(0), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() > 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(i));
+        b = utils::window_ul(i, k(i), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
       }
     }
@@ -335,22 +335,22 @@ NumericVector max_run(
   } else {
    if ((k.size() == 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(0), lag(0));
+        b = utils::window_ul_dl(idx, i, k(0), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() > 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(i), lag(0));
+        b = utils::window_ul_dl(idx, i, k(i), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() == 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(0), lag(i));
+        b = utils::window_ul_dl(idx, i, k(0), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
       }
     }   else if ((k.size() > 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(i), lag(i));
+        b = utils::window_ul_dl(idx, i, k(i), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
       }
     }
@@ -431,22 +431,22 @@ NumericVector min_run(
       // no lag
     } else if ((k.size() == 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0));
+        b = utils::window_ul(i, k(0), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() > 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(0));
+        b = utils::window_ul(i, k(i), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() == 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i));
+        b = utils::window_ul(i, k(0), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() > 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(i));
+        b = utils::window_ul(i, k(i), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
       }
     }
@@ -455,22 +455,22 @@ NumericVector min_run(
   } else {
     if ((k.size() == 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(0), lag(0));
+        b = utils::window_ul_dl(idx, i, k(0), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() > 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(i), lag(0));
+        b = utils::window_ul_dl(idx, i, k(i), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() == 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(0), lag(i));
+        b = utils::window_ul_dl(idx, i, k(0), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
       }
     }   else if ((k.size() > 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(i), lag(i));
+        b = utils::window_ul_dl(idx, i, k(i), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
       }
     }
@@ -535,7 +535,6 @@ NumericVector minmax_run(
       res(i) = (metric == "min") ? last_min : last_max;
     }
   }
-
   return res;
 }
 
@@ -613,22 +612,22 @@ IntegerVector which_run(
       // no lag
     } else if ((k.size() == 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0));
+        b = utils::window_ul(i, k(0), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
       }
     } else if ((k.size() > 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(0));
+        b = utils::window_ul(i, k(i), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
       }
     } else if ((k.size() == 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i));
+        b = utils::window_ul(i, k(0), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
       }
     } else if ((k.size() > 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(i));
+        b = utils::window_ul(i, k(i), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
       }
     }
@@ -637,22 +636,22 @@ IntegerVector which_run(
   } else {
     if ((k.size() == 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(0), lag(0));
+        b = utils::window_ul_dl(idx, i, k(0), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
       }
     } else if ((k.size() > 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(i), lag(0));
+        b = utils::window_ul_dl(idx, i, k(i), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
       }
     } else if ((k.size() == 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(0), lag(i));
+        b = utils::window_ul_dl(idx, i, k(0), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
       }
     }   else if ((k.size() > 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(idx, i, k(i), lag(i));
+        b = utils::window_ul_dl(idx, i, k(i), lag(i), n);
         res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
       }
     }
@@ -713,22 +712,22 @@ IntegerVector streak_run1(const Vector<RTYPE>& x, IntegerVector k, IntegerVector
     std::fill(res.begin(), res.end() - n + lag(0), NA_INTEGER);
   } else if ((k.size() == 1) && (lag.size() == 1)) {
     for (int i = 0; i < n; ++i) {
-      b = utils::window_ul(i, k(0), lag(0));
+      b = utils::window_ul(i, k(0), lag(0), n);
       res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   } else if ((k.size() > 1) && (lag.size() == 1)) {
     for (int i = 0; i < n; ++i) {
-      b = utils::window_ul(i, k(i), lag(0));
+      b = utils::window_ul(i, k(i), lag(0), n);
       res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   } else if ((k.size() == 1) && (lag.size() > 1)) {
     for (int i = 0; i < n; ++i) {
-      b = utils::window_ul(i, k(0), lag(i));
+      b = utils::window_ul(i, k(0), lag(i), n);
       res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   } else if ((k.size() > 1) && (lag.size() > 1)) {
     for (int i = 0; i < n; ++i) {
-      b = utils::window_ul(i, k(i), lag(i));
+      b = utils::window_ul(i, k(i), lag(i), n);
       res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   }
@@ -749,23 +748,23 @@ IntegerVector streak_run2(const Vector<RTYPE>& x, IntegerVector k, IntegerVector
   // no lag
   if ((k.size() == 1) && (lag.size() == 1)) {
     for (int i = 0; i < n; ++i) {
-      b = utils::window_ul_dl(indexes, i, k(0), lag(0));
+      b = utils::window_ul_dl(indexes, i, k(0), lag(0), n);
       res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   } else if ((k.size() > 1) && (lag.size() == 1)) {
     for (int i = 0; i < n; ++i) {
-      b = utils::window_ul_dl(indexes, i, k(i), lag(0));
+      b = utils::window_ul_dl(indexes, i, k(i), lag(0), n);
       res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
     // multiple lag
   } else if ((k.size() == 1) && (lag.size() > 1)) {
     for (int i = 0; i < n; ++i) {
-      b = utils::window_ul_dl(indexes, i, k(0), lag(i));
+      b = utils::window_ul_dl(indexes, i, k(0), lag(i), n);
       res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   } else if ((k.size() > 1) && (lag.size() > 1)) {
     for (int i = 0; i < n; ++i) {
-      b = utils::window_ul_dl(indexes, i, k(i), lag(i));
+      b = utils::window_ul_dl(indexes, i, k(i), lag(i), n);
       res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   }
@@ -826,10 +825,10 @@ IntegerVector streak_run(
   if (idx.size() == 0) {
     switch (TYPEOF(x)) {
     case INTSXP: return  streak_run1(as<IntegerVector>(x),   k, lag, na_rm, na_pad);
-    case REALSXP: return streak_run1(as<NumericVector>(x),  k, lag, na_rm, na_pad);
+    case REALSXP: return streak_run1(as<NumericVector>(x),   k, lag, na_rm, na_pad);
     case STRSXP: return  streak_run1(as<CharacterVector>(x), k, lag, na_rm, na_pad);
     case LGLSXP: return  streak_run1(as<LogicalVector>(x),   k, lag, na_rm, na_pad);
-    case CPLXSXP: return streak_run1(as<ComplexVector>(x),  k, lag, na_rm, na_pad);
+    case CPLXSXP: return streak_run1(as<ComplexVector>(x),   k, lag, na_rm, na_pad);
     default: {
       stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
       }
@@ -837,10 +836,10 @@ IntegerVector streak_run(
   } else {
     switch (TYPEOF(x)) {
     case INTSXP: return  streak_run2(as<IntegerVector>(x),   k, lag, na_rm, na_pad, idx);
-    case REALSXP: return streak_run2(as<NumericVector>(x),  k, lag, na_rm, na_pad, idx);
+    case REALSXP: return streak_run2(as<NumericVector>(x),   k, lag, na_rm, na_pad, idx);
     case STRSXP: return  streak_run2(as<CharacterVector>(x), k, lag, na_rm, na_pad, idx);
     case LGLSXP: return  streak_run2(as<LogicalVector>(x),   k, lag, na_rm, na_pad, idx);
-    case CPLXSXP: return streak_run2(as<ComplexVector>(x),  k, lag, na_rm, na_pad, idx);
+    case CPLXSXP: return streak_run2(as<ComplexVector>(x),   k, lag, na_rm, na_pad, idx);
     default: {
       stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }

@@ -50,6 +50,21 @@ test_that("Streak lag", {
   )
 })
 
+test_that("Streak negative lag", {
+  expect_identical(
+    streak_run(c(T, T, T, T, F, T), lag = -1),
+    as.integer(c(NA, 1, 2, 3, 4, 1))
+  )
+
+  expect_identical(
+    streak_run(x1, lag = -3),
+    as.integer(c(NA, NA, NA, 1, 2,
+                 1, 1, 2, 1, 1,
+                 2, 1, 1, 2, 1))
+  )
+})
+
+
 test_that("streak_run handles windowing", {
   expect_identical(
     streak_run(x1, k = 2),

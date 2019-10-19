@@ -27,7 +27,6 @@ test_that("mean_run with na_rm = FALSE na_fill = TRUE", {
   )
 })
 
-
 test_that("mean_run with na_rm = FALSE k = 4", {
   expect_identical(
     mean_run(x2, k = 4, na_rm = FALSE),
@@ -94,4 +93,33 @@ test_that("mean_run with idx", {
   )
 })
 
+test_that("Negative mean_run with idx", {
+  expect_equal(
+    mean_run(x2, k = 4, lag = -3, idx = idx),
+    sapply(window_run(x2, k = 4, lag = -3, idx = idx), function(x) {
+      if (all(is.na(x))) NA else mean(x, na.rm = TRUE)
+    })
+  )
+
+  expect_equal(
+    mean_run(x2, k = k, lag = -3, idx = idx),
+    sapply(window_run(x2, k = k, lag = -3, idx = idx), function(x) {
+      if (all(is.na(x))) NA else mean(x, na.rm = TRUE)
+    })
+  )
+
+  expect_equal(
+    mean_run(x2, k = 5, lag = -lag, idx = idx),
+    sapply(window_run(x2, k = 5, lag = -lag, idx = idx), function(x) {
+      if (all(is.na(x))) NA else mean(x, na.rm = TRUE)
+    })
+  )
+
+  expect_equal(
+    mean_run(x2, k = k, lag = -lag, idx = idx),
+    sapply(window_run(x2, k = k, lag = -lag, idx = idx), function(x) {
+      if (all(is.na(x))) NA else mean(x, na.rm = TRUE)
+    })
+  )
+})
 

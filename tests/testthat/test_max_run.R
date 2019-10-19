@@ -21,7 +21,6 @@ test_that("max_run with na_rm = FALSE", {
                runner(x2, f = function(x) max(x, na.rm = FALSE)))
 })
 
-
 test_that("max_run with na_rm=T k=4", {
   expect_equal(max_run(x2, k = 4, na_rm = TRUE),
                runner(x2, k = 4, f = function(x) max(x, na.rm = TRUE)))
@@ -80,6 +79,29 @@ test_that("max_run with idx",{
   expect_equal(
     max_run(x1, k = k, lag = lag, idx = idx),
     runner(x1,  k = k, lag = lag, idx = idx, f = max)
+  )
+})
+
+test_that("max_run with idx negative lag",{
+
+  expect_equal(
+    max_run(x1, k = 4, lag = -3, idx = idx),
+    runner(x1, k = 4, lag = -3, idx = idx, f = max)
+  )
+
+  expect_equal(
+    max_run(x1, k = k, lag = -3, idx = idx),
+    runner(x1,  k = k, lag = -3, idx = idx, f = max)
+  )
+
+  expect_equal(
+    max_run(x1, k = 5, lag = -lag, idx = idx),
+    runner(x1,  k = 5, lag = -lag, idx = idx, f = max)
+  )
+
+  expect_equal(
+    max_run(x1, k = k, lag = -lag, idx = idx),
+    runner(x1,  k = k, lag = -lag, idx = idx, f = max)
   )
 })
 

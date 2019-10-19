@@ -21,7 +21,6 @@ test_that("min_run with na_rm = FALSE", {
                runner(x2, f = function(x) min(x, na.rm = FALSE)))
 })
 
-
 test_that("min_run with na_rm=T k=4", {
   expect_equal(min_run(x2, k = 4, na_rm = TRUE),
                runner(x2, k = 4, f = function(x) min(x, na.rm = TRUE)))
@@ -80,6 +79,28 @@ test_that("min_run with idx",{
   expect_equal(
     min_run(x1, k = k, lag = lag, idx = idx),
     runner(x1,  k = k, lag = lag, idx = idx, f = min)
+  )
+})
+
+test_that("min_run with idx",{
+  expect_equal(
+    min_run(x1, k = 4, lag = -3, idx = idx),
+    runner(x1, k = 4, lag = -3, idx = idx, f = min)
+  )
+
+  expect_equal(
+    min_run(x1, k = k, lag = -3, idx = idx),
+    runner(x1,  k = k, lag = -3, idx = idx, f = min)
+  )
+
+  expect_equal(
+    min_run(x1, k = 5, lag = -lag, idx = idx),
+    runner(x1,  k = 5, lag = -lag, idx = idx, f = min)
+  )
+
+  expect_equal(
+    min_run(x1, k = k, lag = -lag, idx = idx),
+    runner(x1,  k = k, lag = -lag, idx = idx, f = min)
   )
 })
 

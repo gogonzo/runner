@@ -94,4 +94,35 @@ test_that("sum_run with idx", {
   )
 })
 
+test_that("sum_run with idx negative lag", {
+
+  expect_equal(
+    sum_run(x2, k = 4, lag = -3, idx = idx),
+    sapply(window_run(x2, k = 4, lag = -3, idx = idx), function(x) {
+      if (all(is.na(x))) NA else sum(x, na.rm = TRUE)
+    })
+  )
+
+  expect_equal(
+    sum_run(x2, k = k, lag = -3, idx = idx),
+    sapply(window_run(x2, k = k, lag = -3, idx = idx), function(x) {
+      if (all(is.na(x))) NA else sum(x, na.rm = TRUE)
+    })
+  )
+
+  expect_equal(
+    sum_run(x2, k = 5, lag = -lag, idx = idx),
+    sapply(window_run(x2, k = 5, lag = -lag, idx = idx), function(x) {
+      if (all(is.na(x))) NA else sum(x, na.rm = TRUE)
+    })
+  )
+
+  expect_equal(
+    sum_run(x2, k = k, lag = -lag, idx = idx),
+    sapply(window_run(x2, k = k, lag = -lag, idx = idx), function(x) {
+      if (all(is.na(x))) NA else sum(x, na.rm = TRUE)
+    })
+  )
+})
+
 
