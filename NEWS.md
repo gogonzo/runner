@@ -1,10 +1,9 @@
-# runner 0.2.3
-* added minmax_run which calculates running mins and maxes to denote current highs and lows
-
 # runner 0.2.2
-* added lag to all runner functions
-* added runner function which is able to apply any R function on running window
 
+* modified runner to accept any types of input vectors 
+* added lag to all runner functions
+* added minmax_run which calculates running mins and maxes to denote current highs and lows
+* improved vignette
 
 # runner 0.2.1
 * added runner function which allows to apply custom function on running windows - so far returning only numeric
