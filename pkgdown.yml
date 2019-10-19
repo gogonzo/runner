@@ -2,5 +2,7 @@ pandoc: '2.2'
 pkgdown: 1.4.1.9000
 pkgdown_sha: 61c3999702966dd75267b98ce905df22521ebd11
 articles:
-  Using_runner: Using_runner.html
+  built-in_functions: built-in_functions.html
+  runner_examples: runner_examples.html
+  the_runner_package: the_runner_package.html
 
