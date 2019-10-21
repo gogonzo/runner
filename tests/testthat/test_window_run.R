@@ -55,6 +55,7 @@ test_that("window_run with idx same as window_run with windows",{
   expect_identical(window_run(x, k = k) ,
                    window_run(x, k = k, idx = 1:100))
 
+  # fails
   expect_identical(window_run(x, k = k, lag = 5),
                    window_run(x, k = k, lag = 5, idx = 1:100))
 

@@ -210,8 +210,8 @@ length_run <- function(k = integer(1), lag = integer(1), idx = integer(0)) {
 #'        k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5),
 #'        f = function(x) length(unique(x)))
 #' @export
-runner <- function(x, f, k = integer(1), lag = integer(1), idx = integer(0)) {
-    .Call('_runner_runner', PACKAGE = 'runner', x, f, k, lag, idx)
+runner <- function(x, f, k = integer(1), lag = integer(1), idx = integer(0), na_pad = FALSE) {
+    .Call('_runner_runner', PACKAGE = 'runner', x, f, k, lag, idx, na_pad)
 }
 
 #' List of running windows
@@ -222,10 +222,10 @@ runner <- function(x, f, k = integer(1), lag = integer(1), idx = integer(0)) {
 #' @param lag integer vector which specifies window shift
 #' @param idx an optional integer vector containing index of observations.
 #' @examples
-#' window_run(1:10, k = 3)
+#' window_run(k = 3)
 #' window_run(letters[1:10], k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
 #' @export
-window_run <- function(x, k = integer(1), lag = integer(1), idx = integer(0)) {
-    .Call('_runner_window_run', PACKAGE = 'runner', x, k, lag, idx)
+window_run <- function(x, k = integer(1), lag = integer(1), idx = integer(0), omit_incomplete = FALSE) {
+    .Call('_runner_window_run', PACKAGE = 'runner', x, k, lag, idx, omit_incomplete)
 }
 

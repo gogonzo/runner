@@ -53,14 +53,14 @@ test_that("Streak lag", {
 test_that("Streak negative lag", {
   expect_identical(
     streak_run(c(T, T, T, T, F, T), lag = -1),
-    as.integer(c(NA, 1, 2, 3, 4, 1))
+    as.integer(c(2, 3, 4, 1, 1, NA))
   )
 
   expect_identical(
     streak_run(x1, lag = -3),
-    as.integer(c(NA, NA, NA, 1, 2,
+    as.integer(c(1, 2, 1, 1, 2,
                  1, 1, 2, 1, 1,
-                 2, 1, 1, 2, 1))
+                 2, 3,NA,NA,NA))
   )
 })
 

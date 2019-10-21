@@ -27,6 +27,29 @@ test_that("sum_run with na_rm = FALSE na_fill = TRUE", {
   )
 })
 
+test_that("sum_run lagged", {
+  expect_identical(
+    sum_run(x2, lag = 3, na_rm = TRUE),
+    runner(x2, lag = 3, f = function(x) sum(x, na.rm = TRUE))
+  )
+
+  expect_identical(
+    sum_run(x2, lag = -3, na_rm = TRUE),
+    runner(x2, lag = -3, f = function(x) sum(x, na.rm = TRUE))
+  )
+
+  expect_identical(
+    sum_run(x2, k = 4, lag = 3, na_rm = TRUE),
+    runner(x2, k = 4, lag = 3, f = function(x) sum(x, na.rm = TRUE))
+  )
+
+  expect_identical(
+    sum_run(x2, k = 4, lag = -3, na_rm = TRUE),
+    runner(x2, k = 4, lag = -3, f = function(x) sum(x, na.rm = TRUE))
+  )
+
+})
+
 
 test_that("sum_run with na_rm = FALSE k = 4", {
   expect_identical(

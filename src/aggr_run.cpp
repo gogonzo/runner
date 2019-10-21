@@ -61,14 +61,18 @@ NumericVector sum_run(
   /* Simple - no indexes */
   if (idx.size() == 0) {
     /* cum min */
-    if ((k.size() == 1) && (lag.size() == 1) && (k(0) == n)) {
+    if ((k.size() == 1) && (lag.size() == 1) && (lag(0) == 0) && (k(0) == n)) {
       if (lag(0) >= n) {
         std::fill(res.begin(), res.end(), NA_REAL);
         return res;
       }
       res = aggr::cumsum(x, na_rm);
-      std::fill(res.begin(), res.end() - n + lag(0), NA_REAL);
-      // no lag
+      if (lag(0) > 0) {
+        std::fill(res.begin(), res.end() - n + lag(0), NA_REAL);
+      } else if (lag(0) < 0) {
+        std::fill(res.end() + lag(0), res.end(), NA_REAL);
+      }
+    // no lag
     } else if ((k.size() == 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
         b = utils::window_ul(i, k(0), lag(0), n);
@@ -115,11 +119,6 @@ NumericVector sum_run(
       }
     }
   }
-
-
-  /* if padding with NA */
-  if (na_pad)
-    std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_REAL);
 
   return res;
 }
@@ -185,7 +184,11 @@ NumericVector mean_run(
         return res;
       }
       res = aggr::cummean(x, na_rm);
-      std::fill(res.begin(), res.end() - n + lag(0), NA_REAL);
+      if (lag(0) > 0) {
+        std::fill(res.begin(), res.end() - n + lag(0), NA_REAL);
+      } else if (lag(0) < 0) {
+        std::fill(res.end() + lag(0), res.end(), NA_REAL);
+      }
       // no lag
     } else if ((k.size() == 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
@@ -307,7 +310,11 @@ NumericVector max_run(
         return res;
       }
       res = aggr::cummax(x, na_rm);
-      std::fill(res.begin(), res.end() - n + lag(0), NA_REAL);
+      if (lag(0) > 0) {
+        std::fill(res.begin(), res.end() - n + lag(0), NA_REAL);
+      } else if (lag(0) < 0) {
+        std::fill(res.end() + lag(0), res.end(), NA_REAL);
+      }
     // no lag
     } else if ((k.size() == 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
@@ -427,7 +434,11 @@ NumericVector min_run(
         return res;
       }
       res = aggr::cummin(x, na_rm);
-      std::fill(res.begin(), res.end() - n + lag(0), NA_REAL);
+      if (lag(0) > 0) {
+        std::fill(res.begin(), res.end() - n + lag(0), NA_REAL);
+      } else if (lag(0) < 0) {
+        std::fill(res.end() + lag(0), res.end(), NA_REAL);
+      }
       // no lag
     } else if ((k.size() == 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
@@ -608,8 +619,12 @@ IntegerVector which_run(
         return res;
       }
       res = aggr::cumwhicht(x, na_rm, which);
-      std::fill(res.begin(), res.end() - n + lag(0), NA_INTEGER);
-      // no lag
+      if (lag(0) > 0) {
+        std::fill(res.begin(), res.end() - n + lag(0), NA_INTEGER);
+      } else if (lag(0) < 0) {
+        std::fill(res.end() + lag(0), res.end(), NA_INTEGER);
+      }
+
     } else if ((k.size() == 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
         b = utils::window_ul(i, k(0), lag(0), n);
@@ -669,47 +684,45 @@ IntegerVector which_run(
 template <int RTYPE>
 IntegerVector streak_run1(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag,  bool na_rm, bool na_pad) {
   int n = x.size();
-  int j_f = 0;
-  int cur_streak;
+  int l = 0;
+  int cur_streak = 0;
   IntegerVector b(2);
   IntegerVector res(n);
 
   /* streak_run window */
   if ((k.size() == 1) && (lag.size() == 1) && (k(0) == 0 or k(0) == n)) {
     /* streak run full */
-    if (lag(0) >= n) {
+    if ((lag(0) >= n) || (lag(0) <= -n)) {
       std::fill(res.begin(), res.end(), NA_INTEGER);
       return res;
     }
 
-    for(int i = lag(0); i < n ; i++) {
-      if (Vector<RTYPE>::is_na(x(i - lag(0)))) {
-        res(i) = NA_INTEGER;
+    for (int i = 0; i < n ; i++) {
+      if (Vector<RTYPE>::is_na(x(i))) {
+        if (!na_rm) {
+          cur_streak = 0;
+          if (i + lag(0) >= 0 && i + lag(0) < n) {
+            res(i + lag(0)) = NA_INTEGER;
+            continue;
+          }
+        }
+      } else if (x(i) == x(l)) {
+        cur_streak += 1;
       } else {
-        j_f = i;
-        res(i) = cur_streak = 1;
-        break;
+        cur_streak = 1;
+        l = i;
+      }
+      if ((i + lag(0) >= 0) && (i + lag(0) < n)) {
+        res(i + lag(0)) = cur_streak;
       }
     }
 
-    for (int i = j_f; i < n ; i++) {
-      if (i > j_f) {
-        if (x(i - lag(0)) == x(j_f - lag(0))) {
-          cur_streak += 1;
-          j_f = i;
-        } else if (Vector<RTYPE>::is_na(x(i - lag(0)))) {
-          if (!na_rm) {
-            cur_streak = 0;
-            res(i) = NA_INTEGER;
-            continue;}
-        } else {
-          cur_streak = 1;
-          j_f = i;
-        }
-      }
-      res(i) = cur_streak == 0 ? NA_INTEGER : cur_streak;
+    if (lag(0) > 0) {
+      std::fill(res.begin(), res.end() - n + lag(0), NA_INTEGER);
+    } else if (lag(0) < 0) {
+      std::fill(res.end() + lag(0), res.end(), NA_INTEGER);
     }
-    std::fill(res.begin(), res.end() - n + lag(0), NA_INTEGER);
+
   } else if ((k.size() == 1) && (lag.size() == 1)) {
     for (int i = 0; i < n; ++i) {
       b = utils::window_ul(i, k(0), lag(0), n);

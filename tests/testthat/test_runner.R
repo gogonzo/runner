@@ -6,7 +6,7 @@ idx <- cumsum(sample(c(1, 2, 3, 4), 30, replace = TRUE))
 
 test_that("constant window", {
   expect_equal(
-    runner(x1, f = mean),
+    runner(x = x1, f = mean),
     sapply(window_run(x1), mean)
   )
 
@@ -44,49 +44,94 @@ test_that("varying window", {
 })
 
 test_that("lagged window", {
+  out <- runner(x1, lag = 3, f = function(x) mean(x, na.rm = FALSE))
+  test <- vapply(seq_along(x1), function(i) {
+    lower <- 0
+    upper <- i - 3
+    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(NA_real_) else lower
+    upper <- if (upper < 1) return(NA_real_) else if (upper > length(x1)) length(x1) else upper
+    idx <- seq(lower, upper)
+    mean(x1[idx], na.rm = TRUE)
+  }, numeric(1))
+  expect_identical(test, out)
+
+  lag <- qbinom(runif(30, 0, 0.5), 10, 0.3)
+  out <- runner(x1, lag = lag, f = function(x) mean(x, na.rm = FALSE))
+  test <- vapply(seq_along(x1), function(i) {
+    lower <- 0
+    upper <- i - lag[i]
+    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(NA_real_) else lower
+    upper <- if (upper < 1) return(NA_real_) else if (upper > length(x1)) length(x1) else upper
+
+    mean(x1[seq(lower, upper)], na.rm = TRUE)
+  }, numeric(1))
+  expect_identical(test, out)
+
   out <- runner(x1, k = 5, lag = 3, f = function(x) mean(x, na.rm = FALSE))
   test <- vapply(seq_along(x1), function(i) {
     lower <- i - 3 - 5 + 1
     upper <- i - 3
-    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(mean(numeric(0))) else lower
-    upper <- if (upper < 1) return(mean(numeric(0))) else if (upper > length(x1)) length(x1) else upper
-
-    mean(x1[seq(lower, upper)], na.rm = TRUE)
+    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(NA_real_) else lower
+    upper <- if (upper < 1) return(NA_real_) else if (upper > length(x1)) length(x1) else upper
+    idx <- seq(lower, upper)
+    mean(x1[idx], na.rm = TRUE)
   }, numeric(1))
-  expect_equal(test, out)
+  expect_identical(test, out)
 
   lag <- qbinom(runif(30, 0, 0.5), 10, 0.3)
   out <- runner(x1, k = 5, lag = lag, f = function(x) mean(x, na.rm = FALSE))
   test <- vapply(seq_along(x1), function(i) {
     lower <- i - lag[i] - 5 + 1
     upper <- i - lag[i]
-    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(mean(numeric(0))) else lower
-    upper <- if (upper < 1) return(mean(numeric(0))) else if (upper > length(x1)) length(x1) else upper
+    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(NA_real_) else lower
+    upper <- if (upper < 1) return(NA_real_) else if (upper > length(x1)) length(x1) else upper
 
     mean(x1[seq(lower, upper)], na.rm = TRUE)
   }, numeric(1))
-  expect_equal(test, out)
+  expect_identical(test, out)
 })
 
 test_that("negative lagged window", {
+  lag <- -qbinom(runif(30, 0, 0.5), 10, 0.3)
+
+  out <- runner(x1, lag = -3, f = function(x) mean(x, na.rm = FALSE))
+  test <- vapply(seq_along(x1), function(i) {
+    lower <- 0
+    upper <- i + 3
+    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(NA_real_) else lower
+    upper <- if (upper < 1) return(NA_real_) else if (upper > length(x1)) length(x1) else upper
+    mean(x1[seq(lower, upper)], na.rm = TRUE)
+  }, numeric(1))
+  expect_identical(test, out)
+
+  out <- runner(x1, lag = lag, f = function(x) mean(x, na.rm = FALSE))
+  test <- vapply(seq_along(x1), function(i) {
+    lower <- 0
+    upper <- i - lag[i]
+    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(NA_real_) else lower
+    upper <- if (upper < 1) return(NA_real_) else if (upper > length(x1)) length(x1) else upper
+
+    mean(x1[seq(lower, upper)], na.rm = TRUE)
+  }, numeric(1))
+  expect_identical(test, out)
+
   out <- runner(x1, k = 5, lag = -3, f = function(x) mean(x, na.rm = FALSE))
   test <- vapply(seq_along(x1), function(i) {
     lower <- i + 3 - 5 + 1
     upper <- i + 3
-    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(mean(numeric(0))) else lower
-    upper <- if (upper < 1) return(mean(numeric(0))) else if (upper > length(x1)) length(x1) else upper
+    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(NA_real_) else lower
+    upper <- if (upper < 1) return(NA_real_) else if (upper > length(x1)) length(x1) else upper
 
     mean(x1[seq(lower, upper)], na.rm = TRUE)
   }, numeric(1))
-  expect_equal(test, out)
+  expect_identical(test, out)
 
-  lag <- -qbinom(runif(30, 0, 0.5), 10, 0.3)
   out <- runner(x1, k = 5, lag = lag, f = function(x) mean(x, na.rm = FALSE))
   test <- vapply(seq_along(x1), function(i) {
     lower <- i - lag[i] - 5 + 1
     upper <- i - lag[i]
-    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(mean(numeric(0))) else lower
-    upper <- if (upper < 1) return(mean(numeric(0))) else if (upper > length(x1)) length(x1) else upper
+    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(NA_real_) else lower
+    upper <- if (upper < 1) return(NA_real_) else if (upper > length(x1)) length(x1) else upper
 
     mean(x1[seq(lower, upper)], na.rm = TRUE)
   }, numeric(1))

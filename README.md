@@ -41,7 +41,7 @@ Using `runner` one can apply any R function `f` in running window of length defi
 
 ### Window lag
 
-`lag` denotes how many observations windows will be lagged by. If `lag` is a single value than it's constant for all elements of x. For varying lag size one should specify `lag` as integer vector of `length(lag) == length(x)` where each element of `lag` defines lag of window. Default value of `lag = 0`. Example below illustrates window of `k = 4` lagged by `lag = 2` for 10'th element of vector `x`.
+`lag` denotes how many observations windows will be lagged by. If `lag` is a single value than it's constant for all elements of x. For varying lag size one should specify `lag` as integer vector of `length(lag) == length(x)` where each element of `lag` defines lag of window. Default value of `lag = 0`. Example below illustrates window of `k = 4` lagged by `lag = 2` for 10'th element of vector `x`. Lag can also be negative value, which shifts window forward instead of backward.
 
 ![](man/figures/lagged_window_k_lag.png)
 
@@ -56,3 +56,20 @@ Sometimes data points in dataset are not equally spaced (missing weeekends, holi
 With `runner` one can use any R functions, but some of them are optimized for speed reasons. These functions are:
 - aggregating functions - `length_run`, `min_run`, `max_run`, `minmax_run`, `sum_run`, `mean_run`, `streak_run`
 - utility functions - `fill_run`, `lag_run`, `which_run`
+
+Simple example
+--------------
+
+14-days trimmed mean
+
+``` r
+library(runner)
+x <- rnorm(20)
+date <- seq.Date(Sys.Date(), Sys.Date() + 19, by = "1 day")
+runner(x, k = 14, idx = date, f = function(xi) mean(xi, na.rm = TRUE, trim = 0.05))
+```
+
+    ##  [1] -0.1293755 -0.4648944 -0.3256400 -0.2073942 -0.5131102 -0.6672929
+    ##  [7] -0.7305670 -0.5624326 -0.5527821 -0.5268286 -0.5222003 -0.6448387
+    ## [13] -0.6788169 -0.6780393 -0.6077265 -0.6590736 -0.6990439 -0.7927854
+    ## [19] -0.5330058 -0.5263309

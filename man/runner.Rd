@@ -4,7 +4,8 @@
 \alias{runner}
 \title{Custom running function}
 \usage{
-runner(x, f, k = integer(1), lag = integer(1), idx = integer(0))
+runner(x, f, k = integer(1), lag = integer(1), idx = integer(0),
+  na_pad = FALSE)
 }
 \arguments{
 \item{x}{Vector of any type}

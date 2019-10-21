@@ -1,3 +1,6 @@
+# runner 0.2.3
+* allow negative lag
+
 # runner 0.2.2
 
 * modified runner to accept any types of input vectors 
