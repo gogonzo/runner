@@ -182,7 +182,7 @@ List window_simple(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, b
   if (k.size() > 1 && lag.size() > 1) {
       for (int i = 0; i < n; i++) {
         idx = apply::get_window_idx(i, k(i), lag(i), n, omit_incomplete);
-        res(i) = (idx.size() == 0) ? NA_REAL : apply::get_window(x, idx);
+        res(i) = (idx.size() == 0) ? Vector<RTYPE>(0) : apply::get_window(x, idx);
       }
   } else if (k.size() > 1 && lag.size() == 1) {
     for (int i = 0; i < n; i++) {

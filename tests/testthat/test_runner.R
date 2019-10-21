@@ -2,6 +2,7 @@ context("Test Runner")
 x1 <- rnorm(30)
 x2 <- sample(c(rep(NA, 5), rnorm(15)), 30, replace = TRUE)
 k <- sample(1:15, 30, replace = TRUE)
+lag <- sample(-5:5, 30, replace = TRUE)
 idx <- cumsum(sample(c(1, 2, 3, 4), 30, replace = TRUE))
 
 test_that("constant window", {
@@ -55,7 +56,6 @@ test_that("lagged window", {
   }, numeric(1))
   expect_identical(test, out)
 
-  lag <- qbinom(runif(30, 0, 0.5), 10, 0.3)
   out <- runner(x1, lag = lag, f = function(x) mean(x, na.rm = FALSE))
   test <- vapply(seq_along(x1), function(i) {
     lower <- 0
@@ -78,7 +78,6 @@ test_that("lagged window", {
   }, numeric(1))
   expect_identical(test, out)
 
-  lag <- qbinom(runif(30, 0, 0.5), 10, 0.3)
   out <- runner(x1, k = 5, lag = lag, f = function(x) mean(x, na.rm = FALSE))
   test <- vapply(seq_along(x1), function(i) {
     lower <- i - lag[i] - 5 + 1
@@ -92,7 +91,6 @@ test_that("lagged window", {
 })
 
 test_that("negative lagged window", {
-  lag <- -qbinom(runif(30, 0, 0.5), 10, 0.3)
 
   out <- runner(x1, lag = -3, f = function(x) mean(x, na.rm = FALSE))
   test <- vapply(seq_along(x1), function(i) {
@@ -158,7 +156,7 @@ test_that("date window", {
 test_that("Lagged date window", {
   x <- sample(c(rep(NA, 20), runif(100)), 100)
   k <- qbinom(runif(100, 0.2, 0.8), 10, 0.5)
-  lag <- qbinom(runif(100, 0, 0.5), 10, 0.3)
+  lag <- sample(-15:15, 100, replace = TRUE)
   idx <- cumsum(sample(c(1,2,3,4), 100, replace = TRUE))
 
   out <- runner(x, k = 5, lag = 3, idx = idx, f = function(x) mean(x, na.rm = TRUE))
@@ -177,7 +175,6 @@ test_that("Lagged date window", {
     upper <- idx[i] - 3
     mean(x[idx %in% seq(lower, upper)], na.rm = TRUE)
   }, numeric(1))
-
   expect_equal(out, test)
 
   out <- runner(x, k = k, lag = lag, idx = idx, f = function(x) mean(x, na.rm = TRUE))
@@ -190,10 +187,10 @@ test_that("Lagged date window", {
   expect_equal(out, test)
 })
 
-test_that("Negative lag window", {
+test_that("Negative lag date window", {
   x <- sample(c(rep(NA, 20), runif(100)), 100)
   k <- qbinom(runif(100, 0.2, 0.8), 10, 0.5)
-  lag <- -qbinom(runif(100, 0, 0.5), 10, 0.3)
+  lag <- sample(-15:15, 10, replace = TRUE)
   idx <- cumsum(sample(c(1,2,3,4), 100, replace = TRUE))
 
   out <- runner(x, k = 5, lag = -3, idx = idx, f = function(x) mean(x, na.rm = TRUE))

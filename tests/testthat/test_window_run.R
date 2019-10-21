@@ -3,7 +3,7 @@ set.seed(11)
 x1 <- 1:30
 x2 <- letters[1:30]
 k <- sample(1:10, 30, replace = TRUE)
-find_idx <- function(i, k) ifelse((i - k + 1) < 1, 1, i - k + 1)
+find_idx <- function(x, i, lag = 0, k = 1) seq_along(x) %in% seq(i - lag - k + 1, i - lag)
 
 test_that("window_run k = constant",{
   for(i in 1:30)
@@ -15,25 +15,25 @@ test_that("window_run k = constant",{
   for(i in 1:30)
     expect_equal(
      window_run(x1, k = 2)[i][[1]],
-     x1[find_idx(i, 2):i]
+     x1[find_idx(x1, i = i, k = 2)]
     )
 
   for(i in 1:30)
     expect_equal(
       window_run(x2, k = 2)[i][[1]],
-      x2[find_idx(i, 2):i]
+      x2[find_idx(x2, i = i, k = 2)]
     )
 
   for(i in 1:30)
     expect_equal(
       window_run(as.character(x2), k = 2)[i][[1]],
-      as.character(x2[find_idx(i, 2):i])
+      as.character(x2[find_idx(x2, i = i, k = 2)])
     )
 
   for(i in 1:30)
     expect_equal(
       window_run(as.numeric(x1), k = 2)[i][[1]],
-      as.numeric(x1[find_idx(i, 2):i])
+      as.numeric(x1[find_idx(x1, i = i, k = 2)])
     )
 })
 
@@ -41,8 +41,56 @@ test_that("window_run with k varying", {
   for(i in 1:30)
     expect_equal(
       window_run(x2, k = k)[i][[1]],
-      x2[find_idx(i, k[i]):i]
+      x2[find_idx(x2, i = i, k = k[i])]
     )
+})
+
+test_that("window_run with lag", {
+  lag <- sample(-3:3, 30, replace = TRUE)
+
+  for(i in 1:30)
+    expect_equal(
+      window_run(x2, k = 5, lag = 3)[i][[1]],
+      x2[find_idx(x2, i = i, k = 5, lag = 3)]
+    )
+
+  for(i in 1:30)
+    expect_equal(
+      window_run(x2, k = 20, lag = 3)[i][[1]],
+      x2[find_idx(x2, i = i, k = 20, lag = 3)]
+    )
+
+  for(i in 1:30)
+    expect_equal(
+      window_run(x2, k = k, lag = 3)[i][[1]],
+      x2[find_idx(x2, i = i, k = k[i], lag = 3)]
+    )
+
+  for(i in 1:30)
+    expect_equal(
+      window_run(x2, k = 5, lag = -3)[i][[1]],
+      x2[find_idx(x2, i = i, k = 5, lag = -3)]
+    )
+
+  for(i in 1:30)
+    expect_equal(
+      window_run(x2, k = 5, lag = 21)[i][[1]],
+      x2[find_idx(x2, i = i, k = 5, lag = 21)]
+    )
+
+  for(i in 1:30)
+    expect_equal(
+      window_run(x2, k = 5, lag = -21)[i][[1]],
+      x2[find_idx(x2, i = i, k = 5, lag = -21)]
+    )
+
+  for(i in 1:30)
+    expect_equal(
+      window_run(x2, k = k, lag = lag)[i][[1]],
+      x2[find_idx(x2, i = i, k = k[i], lag = lag[i])]
+    )
+
+
 })
 
 test_that("window_run with idx same as window_run with windows",{
@@ -66,7 +114,7 @@ test_that("window_run with idx same as window_run with windows",{
 test_that("Lagged date window", {
   x <- sample(c(rep(NA, 20), runif(100)), 100)
   k <- qbinom(runif(100, 0.2, 0.8), 10, 0.5)
-  lag <- qbinom(runif(100, 0, 0.5), 10, 0.3)
+  lag <- sample(-25:25, 100, replace = TRUE)
   idx <- cumsum(sample(c(1,2,3,4), 100, replace = TRUE))
 
   out <- window_run(x, k = 5, lag = 3, idx = idx)
@@ -99,7 +147,7 @@ test_that("Lagged date window", {
 test_that("Negative lagged date window", {
   x <- sample(c(rep(NA, 20), runif(100)), 100)
   k <- qbinom(runif(100, 0.2, 0.8), 10, 0.5)
-  lag <- -qbinom(runif(100, 0, 0.5), 10, 0.3)
+  lag <- sample(-25:25, 100, replace = TRUE)
   idx <- cumsum(sample(c(1,2,3,4), 100, replace = TRUE))
 
   out <- window_run(x, k = 5, lag = -3, idx = idx)
@@ -128,7 +176,6 @@ test_that("Negative lagged date window", {
 
   expect_equal(out, test)
 })
-
 
 test_that("window_run with idx",{
   x11 <- list()

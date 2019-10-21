@@ -5,13 +5,13 @@ namespace apply {
     // [ |---]-------     |-------[---  ]
     if (na_pad) {
       if (k == n) {
-        if (i - lag >= n or (i - lag) < 0) return IntegerVector(0);
+        if (i - lag >= n or lag > i) return IntegerVector(0);
       } else {
         if ((i - lag - k + 1) < 0 or (i - lag) >= n) return IntegerVector(0);
       }
     // |---------- [ ]    [ ] |----------
     } else {
-      if ((i - lag) < 0 or (i - lag - k + 1) >= n) return IntegerVector(0);
+      if (lag > i or (i - lag - k + 1) >= n) return IntegerVector(0);
     }
 
     // [ |-----]---
@@ -76,13 +76,13 @@ namespace apply {
       // i -> l -> u
       } else {
         for (int l = i; l < n; l++) {
-          if (indexes(l) < indexes(i - lag)) {
-            if (indexes(i) >= (indexes(i) - lag - k + 1)) {
-              for (int u = l; u < n; u ++) {
+          if (indexes(l) <= (indexes(i) - lag)) {
+            if (indexes(l) >= (indexes(i) - lag - k + 1)) {
+              for (int u = l; u < n; u++) {
                 if (indexes(u) > (indexes(i) - lag)) {
-                  return Rcpp::Range(l + 1, u - 1);
+                  return Rcpp::Range(l, u - 1);
                 } else if (u == (n - 1)) {
-                  return Rcpp::Range(l + 1, u);
+                  return Rcpp::Range(l, u);
                 }
               }
             }
