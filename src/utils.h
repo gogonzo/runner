@@ -63,15 +63,15 @@ namespace utils {
         // i -> l -> u
       } else {
         for (int l = i; l < n; l++) {
-          if (indexes(l) < indexes(i - lag)) {
+          if (indexes(l) <= (indexes(i) - lag)) {
             if (indexes(i) >= (indexes(i) - lag - k + 1)) {
               for (int u = l; u < n; u ++) {
                 if (indexes(u) > (indexes(i) - lag)) {
-                  idx_out(0) = l + 1;
+                  idx_out(0) = l;
                   idx_out(1) = u - 1;
                   return idx_out;
                 } else if (u == (n - 1)) {
-                  idx_out(0) = l + 1;
+                  idx_out(0) = l;
                   idx_out(1) = u;
                   return idx_out;
                 }

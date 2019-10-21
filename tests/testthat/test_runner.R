@@ -190,7 +190,7 @@ test_that("Lagged date window", {
 test_that("Negative lag date window", {
   x <- sample(c(rep(NA, 20), runif(100)), 100)
   k <- qbinom(runif(100, 0.2, 0.8), 10, 0.5)
-  lag <- sample(-15:15, 10, replace = TRUE)
+  lag <- sample(-15:15, 100, replace = TRUE)
   idx <- cumsum(sample(c(1,2,3,4), 100, replace = TRUE))
 
   out <- runner(x, k = 5, lag = -3, idx = idx, f = function(x) mean(x, na.rm = TRUE))

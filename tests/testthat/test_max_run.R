@@ -5,7 +5,7 @@ x1 <- sample(c(1,2,3), 15, replace=T)
 x2 <- sample(c(NA,1,2,3), 15, replace=T)
 k  <- sample(1:15,15, replace=T)
 idx <- cumsum(sample(c(1,2,3,4), 15, replace = TRUE))
-lag <- sample(0:3, 15, replace = TRUE)
+lag <- sample(-5:5, 15, replace = TRUE)
 
 test_that("max_run basic",{
   expect_equal(max_run(x1), runner(x1, f = max))
