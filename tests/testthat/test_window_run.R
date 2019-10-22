@@ -1,128 +1,174 @@
 context("Running window")
 set.seed(11)
-x1 <- 1:30
-x2 <- letters[1:30]
-k <- sample(1:30, 30, replace = TRUE)
-find_idx <- function(x, i, lag = 0, k = 1) seq_along(x) %in% seq(i - lag - k + 1, i - lag)
+x1 <- 1:100
+x2 <- as.character(1:100)
+k <- sample(1:100, 100, replace = TRUE)
+lag <- sample(-15:15, 100, replace = TRUE)
+idx <- cumsum(sample(c(1, 2, 3, 4), 100, replace = TRUE))
+find_idx  <- function(x, i, lag = 0, k = 1) seq_along(x) %in% seq(i - lag - k + 1, i - lag)
+find_idx2 <- function(x, i, lag = 0, k = 1) {
+  if ((i - lag - k + 1) < 1 || (i - lag) > length(x)) {
+    return(x[0])
+  } else {
+    return(seq_along(x) %in% seq(i - lag - k + 1, i - lag))
+  }
+}
 
 # add tests with omit_incomplete
 
 test_that("window_run k = constant",{
-  for(i in 1:30)
-    expect_equal(
-      window_run(x1)[i][[1]],
-      x1[seq_len(i)]
-    )
+  expect_identical(
+    window_run(x1),
+    lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 100)])
+  )
 
-  for(i in 1:30)
-    expect_equal(
-      window_run(x2)[i][[1]],
-      x2[seq_len(i)]
-    )
+  expect_identical(
+    window_run(x2),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 100)])
+  )
 
-  for(i in 1:30)
-    expect_equal(
-     window_run(x1, k = 2)[i][[1]],
-     x1[find_idx(x1, i = i, k = 2)]
-    )
+  expect_identical(
+    window_run(x2, k = 2),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 2)])
+  )
 
-  for(i in 1:30)
-    expect_equal(
-      window_run(x2, k = 2)[i][[1]],
-      x2[find_idx(x2, i = i, k = 2)]
-    )
+  expect_identical(
+    window_run(x2, k = 2),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 2)])
+  )
 
-  for(i in 1:30)
-    expect_equal(
-      window_run(as.character(x2), k = 2)[i][[1]],
-      as.character(x2[find_idx(x2, i = i, k = 2)])
-    )
 
-  for(i in 1:30)
-    expect_equal(
-      window_run(as.numeric(x1), k = 2)[i][[1]],
-      as.numeric(x1[find_idx(x1, i = i, k = 2)])
-    )
 
-  for(i in 1:30)
-    expect_equal(
-      window_run(as.character(x2), k = 50)[i][[1]],
-      as.character(x2[find_idx(x2, i = i, k = 50)])
-    )
+})
 
-  for(i in 1:30)
-    expect_equal(
-      window_run(as.character(x2), k = 0)[i][[1]],
-      as.character(x2[find_idx(x2, i = i, k = 50)])
-    )
+test_that("window_run window maximum", {
+
+  expect_identical(
+    window_run(x2, k = 10000),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 10000)])
+  )
+
+  expect_identical(
+    window_run(x2, k = 0),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 10000)])
+  )
 
 })
 
 test_that("window_run with k varying", {
-  for(i in 1:30)
-    expect_equal(
-      window_run(x2, k = k)[i][[1]],
-      x2[find_idx(x2, i = i, k = k[i])]
-    )
+  expect_identical(
+    window_run(x2, k = k),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = k[i])])
+  )
+
 })
 
 test_that("window_run with lag", {
-  lag <- sample(-15:15, 30, replace = TRUE)
 
-  for(i in 1:30)
-    expect_equal(
-      window_run(x2, k = 5, lag = 3)[i][[1]],
-      x2[find_idx(x2, i = i, k = 5, lag = 3)]
-    )
+  expect_identical(
+    window_run(x2, k = 5, lag = 3),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 5, lag = 3)])
+  )
 
-  for(i in 1:30)
-    expect_equal(
-      window_run(x2, k = 20, lag = 3)[i][[1]],
-      x2[find_idx(x2, i = i, k = 20, lag = 3)]
-    )
+  expect_identical(
+    window_run(x2, k = 120, lag = 3),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 120, lag = 3)])
+  )
 
-  for(i in 1:30)
-    expect_equal(
-      window_run(x2, k = 50, lag = 20)[i][[1]],
-      x2[find_idx(x2, i = i, k = 50, lag = 20)]
-    )
+  expect_identical(
+    window_run(x2, k = 1, lag = 30),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 1, lag = 30)])
+  )
 
-  for(i in 1:30)
-    expect_equal(
-      window_run(x2, k = k, lag = 3)[i][[1]],
-      x2[find_idx(x2, i = i, k = k[i], lag = 3)]
-    )
+  expect_identical(
+    window_run(x2, k = 1, lag = -30),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 1, lag = -30)])
+  )
 
-  for(i in 1:30)
-    expect_equal(
-      window_run(x2, k = 5, lag = -3)[i][[1]],
-      x2[find_idx(x2, i = i, k = 5, lag = -3)]
-    )
+  expect_identical(
+    window_run(x2, k = k, lag = 3),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = k[i], lag = 3)])
+  )
 
-  for(i in 1:30)
-    expect_equal(
-      window_run(x2, k = 5, lag = 21)[i][[1]],
-      x2[find_idx(x2, i = i, k = 5, lag = 21)]
-    )
+  expect_identical(
+    window_run(x2, k = k, lag = lag),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = k[i], lag = lag[i])])
+  )
 
-  for(i in 1:30)
-    expect_equal(
-      window_run(x2, k = 5, lag = -21)[i][[1]],
-      x2[find_idx(x2, i = i, k = 5, lag = -21)]
-    )
+  expect_identical(
+    window_run(x2, k = 3, lag = lag),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 3, lag = lag[i])])
+  )
 
-  for(i in 1:30)
-    expect_equal(
-      window_run(x2, k = k, lag = lag)[i][[1]],
-      x2[find_idx(x2, i = i, k = k[i], lag = lag[i])]
-    )
+
+  expect_identical(
+    window_run(x2, k = 300, lag = lag),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 300, lag = lag[i])])
+  )
+
+  expect_identical(
+    window_run(x2, k = 1, lag = lag),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 1, lag = lag[i])])
+  )
+
+  expect_identical(
+    window_run(x2, k = 0, lag = lag),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 5000, lag = lag[i])])
+  )
+
+})
+
+test_that("window_run window omit_incomplete", {
+
+  expect_identical(
+    window_run(x2, k = 5, lag = 3, omit_incomplete = TRUE),
+    lapply(seq_along(x2), function(i) x2[find_idx2(x2, i = i, k = 5, lag = 3)])
+  )
+
+  expect_identical(
+    window_run(x2, k = 120, lag = 3, omit_incomplete = TRUE),
+    lapply(seq_along(x2), function(i) x2[find_idx2(x2, i = i, k = 120, lag = 3)])
+  )
+
+  expect_identical(
+    window_run(x2, k = 1, lag = 30, omit_incomplete = TRUE),
+    lapply(seq_along(x2), function(i) x2[find_idx2(x2, i = i, k = 1, lag = 30)])
+  )
+
+  expect_identical(
+    window_run(x2, k = 1, lag = -30, omit_incomplete = TRUE),
+    lapply(seq_along(x2), function(i) x2[find_idx2(x2, i = i, k = 1, lag = -30)])
+  )
+
+  expect_identical(
+    window_run(x2, k = k, lag = 3, omit_incomplete = TRUE)[16],
+    lapply(seq_along(x2), function(i) x2[find_idx2(x2, i = i, k = k[i], lag = 3)])[16]
+  )
+
+  expect_identical(
+    window_run(x2, k = k, lag = lag, omit_incomplete = TRUE),
+    lapply(seq_along(x2), function(i) x2[find_idx2(x2, i = i, k = k[i], lag = lag[i])])
+  )
+
+  expect_identical(
+    window_run(x2, k = 3, lag = lag, omit_incomplete = TRUE),
+    lapply(seq_along(x2), function(i) x2[find_idx2(x2, i = i, k = 3, lag = lag[i])])
+  )
+
+
+  expect_identical(
+    window_run(x2, k = 300, lag = lag, omit_incomplete = TRUE),
+    lapply(seq_along(x2), function(i) x2[find_idx2(x2, i = i, k = 300, lag = lag[i])])
+  )
+
+  expect_identical(
+    window_run(x2, k = 1, lag = lag, omit_incomplete = TRUE),
+    lapply(seq_along(x2), function(i) x2[find_idx2(x2, i = i, k = 1, lag = lag[i])])
+  )
+
 })
 
 test_that("window_run with idx same as window_run with windows",{
-  x <- sample(c(rep(NA, 20), runif(100)), 100)
-  k <- qbinom(runif(100, 0.2, 0.8), 30, 0.5)
-  lag <- sample(-25:25, 100, replace = TRUE)
-
   expect_identical(window_run(x, k = 3) ,
                    window_run(x, k = 3, idx = 1:100))
   expect_identical(window_run(x, k = k) ,
@@ -136,11 +182,6 @@ test_that("window_run with idx same as window_run with windows",{
 })
 
 test_that("Lagged date window", {
-  x <- sample(c(rep(NA, 20), runif(100)), 100)
-  k <- qbinom(runif(100, 0.2, 0.8), 10, 0.5)
-  lag <- sample(-25:25, 100, replace = TRUE)
-  idx <- cumsum(sample(c(1,2,3,4), 100, replace = TRUE))
-
   out <- window_run(x, k = 5, lag = 3, idx = idx)
   test <- lapply(seq_along(x), function(i) {
     lower <- idx[i] - 3 - 5  + 1
@@ -204,9 +245,9 @@ test_that("Negative lagged date window", {
 test_that("window_run with idx",{
   x11 <- list()
   x22 <- list()
-  idx <- cumsum(sample(c(1, 2, 3, 4), 30, replace = TRUE))
+  idx <- cumsum(sample(c(1, 2, 3, 4), 100, replace = TRUE))
 
-  for(i in 1:30)
+  for(i in 1:100)
     for(j in i:1)
       if(idx[j] >= (idx[i] - 2)){
         x11[[i]] <- x1[j:i]
@@ -214,7 +255,7 @@ test_that("window_run with idx",{
         break;
       }
 
-  for(i in 1:30)
+  for(i in 1:100)
     for(j in i:1)
       if(idx[j] >= (idx[i] - (k[i] - 1))) {
         x22[[i]] <- x1[j:i]

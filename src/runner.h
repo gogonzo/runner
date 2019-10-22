@@ -1,10 +1,11 @@
 using namespace Rcpp;
 
 namespace apply {
-  IntegerVector get_window_idx(int i, int k, int lag, int n, bool na_pad) {
+  IntegerVector get_window_idx(int i, int k, int lag, int n, bool na_pad, bool cum = false) {
+    // Rcout << "i:" << i << " k: " << k << " lag: " << lag << "     " << (i - k - lag + 1) << "-" << (i - lag) <<"\n" ;
     // [ |---]-------     |-------[---  ]
     if (na_pad) {
-      if (k == n) {
+      if (cum) {
         if (i - lag >= n or lag > i) return IntegerVector(0);
       } else {
         if ((i - lag - k + 1) < 0 or (i - lag) >= n) return IntegerVector(0);
@@ -14,8 +15,11 @@ namespace apply {
       if (lag > i or (i - lag - k + 1) >= n) return IntegerVector(0);
     }
 
+    // [ |---------  ]
+    if ((i - k - lag + 1) <= 0 & i - lag >= n) {
+      return Rcpp::Range(0, n - 1);
     // [ |-----]---
-    if ((i - k - lag + 1) <= 0) {
+    } else if ((i - k - lag + 1) <= 0) {
       return Rcpp::Range(0, i - lag);
     //   [---------  ]
     } else if (i - lag >= n & k == n) {

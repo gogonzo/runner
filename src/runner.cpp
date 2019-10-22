@@ -191,12 +191,12 @@ List window_simple(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, b
     }
   } else if (k(0) == 0 && lag.size() > 1) {
     for (int i = 0; i < n; i++) {
-      idx = apply::get_window_idx(i, n, lag(i), n, omit_incomplete);
+      idx = apply::get_window_idx(i, n, lag(i), n, omit_incomplete, true);
       res(i) = (idx.size() == 0) ? Vector<RTYPE>(0) : apply::get_window(x, idx);
     }
   } else if (k(0) == 0 && lag.size() == 1) {
     for (int i = 0; i < n; i++) {
-      idx = apply::get_window_idx(i, n, lag(0), n, omit_incomplete);
+      idx = apply::get_window_idx(i, n, lag(0), n, omit_incomplete, true);
       res(i) = (idx.size() == 0) ? Vector<RTYPE>(0) : apply::get_window(x, idx);
     }
   } else if (k.size() == 1 && lag.size() > 1) {
