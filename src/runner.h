@@ -6,7 +6,7 @@ namespace apply {
     // [ |---]-------     |-------[---  ]
     if (na_pad) {
       if (cum) {
-        if (i - lag >= n or lag > i) return IntegerVector(0);
+        if ((i - lag >= n) or lag > i) return IntegerVector(0);
       } else {
         if ((i - lag - k + 1) < 0 or (i - lag) >= n) return IntegerVector(0);
       }
@@ -65,7 +65,7 @@ namespace apply {
       }
     } else if (lag < 0) {
       // l <- i -> u
-      if (-lag <= k) {
+      if (-lag < k) {
         for (int l = i; l >= -1; l--) {
           if (l == -1 or indexes(l) < (indexes(i) - lag - k + 1)) {
             for (int u = i; u < n; u++) {

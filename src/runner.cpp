@@ -20,12 +20,12 @@ NumericVector runner_simple(const Vector<RTYPE>& x, IntegerVector k, IntegerVect
     }
   } else if (k(0) == 0 && lag.size() > 1) {
     for (int i = 0; i < n; i++) {
-      idx = apply::get_window_idx(i, n, lag(i), n, na_pad);
+      idx = apply::get_window_idx(i, n, lag(i), n, na_pad, true);
       res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
     }
   } else if (k(0) == 0 && lag.size() == 1) {
     for (int i = 0; i < n; i++) {
-      idx = apply::get_window_idx(i, n, lag(0), n, na_pad);
+      idx = apply::get_window_idx(i, n, lag(0), n, na_pad, true);
       res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
     }
   } else if (k.size() == 1 && k(0) == n && lag.size() > 1) {
