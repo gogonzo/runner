@@ -2,21 +2,35 @@ using namespace Rcpp;
 
 namespace utils {
   //' Boundaries of the lagged running window
-  IntegerVector window_ul(int i, int k, int lag, int n) {
+  IntegerVector window_ul(int i, int k, int lag, int n, bool na_pad, bool cum = false) {
     IntegerVector res(2);
-    if ((i - lag) < 0 or (i - lag - k + 1) >= n) {
-      return IntegerVector(0);
-    } else if ((i - lag) < n){
-      res(1) = i - lag;
+
+    // exceptions
+    if (na_pad) {
+      if (cum) {
+        if (i - lag >= n or lag > i) return IntegerVector(0);
+      } else {
+        if ((i - lag - k + 1) < 0 or (i - lag) >= n) return IntegerVector(0);
+      }
+      // |---------- [ ]    [ ] |----------
     } else {
-      res(1) = n - 1;
+      if (lag > i or (i - lag - k + 1) >= n) return IntegerVector(0);
     }
 
-    if ((i - k - lag + 1) < 0) {
+    // upper bound
+    if ((i - lag) >= n){
+      res(1) = n - 1;
+    } else {
+      res(1) = i - lag;
+    }
+
+    // lower bound
+    if (cum || (i - k - lag + 1) <= 0) {
       res(0) = 0;
     } else {
       res(0) = i - k - lag + 1;
     }
+
     return res;
   }
 
@@ -44,7 +58,7 @@ namespace utils {
       }
     } else {
       // l <- i -> u
-      if (-lag <= k) {
+      if (-lag < k) {
         for (int l = i; l >= -1; l--) {
           if (l == -1 or indexes(l) < (indexes(i) - lag - k + 1)) {
             for (int u = i; u < n; u++) {
@@ -64,8 +78,8 @@ namespace utils {
       } else {
         for (int l = i; l < n; l++) {
           if (indexes(l) <= (indexes(i) - lag)) {
-            if (indexes(i) >= (indexes(i) - lag - k + 1)) {
-              for (int u = l; u < n; u ++) {
+            if (indexes(l) >= (indexes(i) - lag - k + 1)) {
+              for (int u = l; u < n; u++) {
                 if (indexes(u) > (indexes(i) - lag)) {
                   idx_out(0) = l;
                   idx_out(1) = u - 1;
@@ -83,6 +97,8 @@ namespace utils {
         }
       }
     }
+
+
 
     return IntegerVector(0);
   }

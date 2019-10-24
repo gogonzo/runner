@@ -33,9 +33,7 @@ NumericVector sum_run(
 
   int n = x.size();
 
-  if (k.size() == 1 && k(0) == 0) {
-    k(0) = n;
-  } else if (k.size() != n and k.size() > 1) {
+  if (k.size() != n and k.size() > 1) {
     stop("length of k and length of x differs. length(k) should be 1 or equal to x");
   } else if (Rcpp::any(Rcpp::is_na(k))) {
     stop("Function doesn't accept NA values in k vector");
@@ -51,8 +49,6 @@ NumericVector sum_run(
     stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
   } else if (Rcpp::any(Rcpp::is_na(lag))) {
     stop("Function doesn't accept NA values in lag vector");
-  } else if ((lag.size() == 1) && (lag(0) >= n) && (idx.size() == 0)) {
-    warning("lag value is greater than length of x");
   }
 
   IntegerVector b(2);
@@ -60,37 +56,34 @@ NumericVector sum_run(
 
   /* Simple - no indexes */
   if (idx.size() == 0) {
-    /* cum min */
-    if ((k.size() == 1) && (lag.size() == 1) && (lag(0) == 0) && (k(0) == n)) {
-      if (lag(0) >= n) {
-        std::fill(res.begin(), res.end(), NA_REAL);
-        return res;
-      }
+    /* cum sum */
+    if ((k.size() == 1) && (lag.size() == 1) && (lag(0) == 0) && (k(0) == 0)) {
       res = aggr::cumsum(x, na_rm);
-      if (lag(0) > 0) {
-        std::fill(res.begin(), res.end() - n + lag(0), NA_REAL);
-      } else if (lag(0) < 0) {
-        std::fill(res.end() + lag(0), res.end(), NA_REAL);
-      }
-    // no lag
-    } else if ((k.size() == 1) && (lag.size() == 1)) {
+    // k.size() > 0
+    } else if ((k.size() > 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0), n);
+        b = utils::window_ul(i, k(i), lag(i), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() > 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(0), n);
+        b = utils::window_ul(i, k(i), lag(0), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
       }
-    } else if ((k.size() == 1) && (lag.size() > 1)) {
+    // k.size() == 1
+    } else if ((k(0) == 0) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i), n);
+        b = utils::window_ul(i, n, lag(0), n, na_pad, true);
         res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
       }
-    } else if ((k.size() > 1) && (lag.size() > 1)) {
+    } else if (lag.size() > 1) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(i), n);
+        b = utils::window_ul(i, k(0), lag(i), n, na_pad);
+        res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
+      }
+    } else if (lag.size() == 1) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, k(0), lag(0), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
       }
     }
@@ -105,6 +98,7 @@ NumericVector sum_run(
     } else if ((k.size() > 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
         b = utils::window_ul_dl(idx, i, k(i), lag(0), n);
+        Rcout << "i:" << i << "  " << b << "\n";
         res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() == 1) && (lag.size() > 1)) {
@@ -150,9 +144,7 @@ NumericVector mean_run(
 
   int n = x.size();
 
-  if ((k.size() == 1) && (k(0) == 0)) {
-    k(0) = n;
-  } else if (k.size() != n and k.size() > 1) {
+  if (k.size() != n and k.size() > 1) {
     stop("length of k and length of x differs. length(k) should be 1 or equal to x");
   } else if (Rcpp::any(Rcpp::is_na(k))) {
     stop("Function doesn't accept NA values in k vector");
@@ -168,8 +160,6 @@ NumericVector mean_run(
     stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
   } else if (Rcpp::any(Rcpp::is_na(lag))) {
     stop("Function doesn't accept NA values in lag vector");
-  } else if ((lag.size() == 1) && (lag(0) >= n) && (idx.size() == 0)) {
-    warning("lag value is greater than length of x");
   }
 
   IntegerVector b(2);
@@ -177,37 +167,34 @@ NumericVector mean_run(
 
   /* Simple - no indexes */
   if (idx.size() == 0) {
-    /* cum min */
-    if ((k.size() == 1) && (lag.size() == 1) && (k(0) == n)) {
-      if (lag(0) >= n) {
-        std::fill(res.begin(), res.end(), NA_REAL);
-        return res;
-      }
+    /* cum mean */
+    if ((k.size() == 1) && (lag.size() == 1) && (lag(0) == 0) && (k(0) == 0)) {
       res = aggr::cummean(x, na_rm);
-      if (lag(0) > 0) {
-        std::fill(res.begin(), res.end() - n + lag(0), NA_REAL);
-      } else if (lag(0) < 0) {
-        std::fill(res.end() + lag(0), res.end(), NA_REAL);
-      }
-      // no lag
-    } else if ((k.size() == 1) && (lag.size() == 1)) {
+      // k.size() > 0
+    } else if ((k.size() > 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0), n);
+        b = utils::window_ul(i, k(i), lag(i), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() > 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(0), n);
+        b = utils::window_ul(i, k(i), lag(0), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
       }
-    } else if ((k.size() == 1) && (lag.size() > 1)) {
+      // k.size() == 1
+    } else if ((k(0) == 0) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i), n);
+        b = utils::window_ul(i, n, lag(0), n, na_pad, true);
         res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
       }
-    } else if ((k.size() > 1) && (lag.size() > 1)) {
+    } else if (lag.size() > 1) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(i), n);
+        b = utils::window_ul(i, k(0), lag(i), n, na_pad);
+        res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
+      }
+    } else if (lag.size() > 1) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, k(0), lag(i), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
       }
     }
@@ -237,14 +224,7 @@ NumericVector mean_run(
     }
   }
 
-
-  /* if padding with NA */
-  if (na_pad)
-    std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_REAL);
-
-
   return res;
-
 }
 
 
@@ -276,9 +256,7 @@ NumericVector max_run(
 
   int n = x.size();
 
-  if (k.size() == 1 && k(0) == 0) {
-    k(0) = n;
-  } else if ((k.size() != n) and (k.size() > 1)) {
+  if ((k.size() != n) and (k.size() > 1)) {
     stop("length of k and length of x differs. length(k) should be 1 or equal to x");
   } else if (Rcpp::any(Rcpp::is_na(k))) {
     stop("Function doesn't accept NA values in k vector");
@@ -294,8 +272,6 @@ NumericVector max_run(
     stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
   } else if (Rcpp::any(Rcpp::is_na(lag))) {
     stop("Function doesn't accept NA values in lag vector");
-  } else if ((lag.size() == 1) && (lag(0) >= n) && (idx.size() == 0)) {
-    warning("lag value is greater than length of x");
   }
 
   IntegerVector b(2);
@@ -304,43 +280,40 @@ NumericVector max_run(
   /* Simple - no indexes */
   if (idx.size() == 0) {
     /* cum max */
-    if ((k.size() == 1) && (lag.size() == 1) && (k(0) == n)) {
-      if (lag(0) >= n) {
-        std::fill(res.begin(), res.end(), NA_REAL);
-        return res;
-      }
+    if ((k.size() == 1) && (lag.size() == 1) && (lag(0) == 0) && (k(0) == 0)) {
       res = aggr::cummax(x, na_rm);
-      if (lag(0) > 0) {
-        std::fill(res.begin(), res.end() - n + lag(0), NA_REAL);
-      } else if (lag(0) < 0) {
-        std::fill(res.end() + lag(0), res.end(), NA_REAL);
-      }
-    // no lag
-    } else if ((k.size() == 1) && (lag.size() == 1)) {
+      // k.size() > 0
+    } else if ((k.size() > 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0), n);
+        b = utils::window_ul(i, k(i), lag(i), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() > 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(0), n);
+        b = utils::window_ul(i, k(i), lag(0), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
       }
-    } else if ((k.size() == 1) && (lag.size() > 1)) {
+      // k.size() == 1
+    } else if ((k(0) == 0) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i), n);
+        b = utils::window_ul(i, n, lag(0), n, na_pad, true);
         res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
       }
-    } else if ((k.size() > 1) && (lag.size() > 1)) {
+    } else if (lag.size() > 1) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(i), n);
+        b = utils::window_ul(i, k(0), lag(i), n, na_pad);
+        res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
+      }
+    } else if (lag.size() > 1) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, k(0), lag(i), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
       }
     }
 
-  /* on indexes */
+    /* on indexes */
   } else {
-   if ((k.size() == 1) && (lag.size() == 1)) {
+    if ((k.size() == 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
         b = utils::window_ul_dl(idx, i, k(0), lag(0), n);
         res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
@@ -362,12 +335,6 @@ NumericVector max_run(
       }
     }
   }
-
-
-  /* if padding with NA */
-  if (na_pad)
-    std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_REAL);
-
 
   return res;
 }
@@ -400,9 +367,7 @@ NumericVector min_run(
 
   int n = x.size();
 
-  if ((k.size() == 1) && (k(0) == 0)) {
-    k(0) = n;
-  } else if ((k.size() != n) and (k.size() > 1)) {
+  if ((k.size() != n) and (k.size() > 1)) {
     stop("length of k and length of x differs. length(k) should be 1 or equal to x");
   } else if (Rcpp::any(Rcpp::is_na(k))) {
     stop("Function doesn't accept NA values in k vector");
@@ -418,8 +383,6 @@ NumericVector min_run(
     stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
   } else if (Rcpp::any(Rcpp::is_na(lag))) {
     stop("Function doesn't accept NA values in lag vector");
-  } else if (lag.size() == 1 && lag(0) >= n && idx.size() == 0) {
-    warning("lag value is greater than length of x");
   }
 
   IntegerVector b(2);
@@ -428,36 +391,33 @@ NumericVector min_run(
   /* Simple - no indexes */
   if (idx.size() == 0) {
     /* cum min */
-    if ((k.size() == 1) && (lag.size() == 1) && (k(0) == n)) {
-      if (lag(0) >= n) {
-        std::fill(res.begin(), res.end(), NA_REAL);
-        return res;
-      }
+    if ((k.size() == 1) && (lag.size() == 1) && (lag(0) == 0) && (k(0) == 0)) {
       res = aggr::cummin(x, na_rm);
-      if (lag(0) > 0) {
-        std::fill(res.begin(), res.end() - n + lag(0), NA_REAL);
-      } else if (lag(0) < 0) {
-        std::fill(res.end() + lag(0), res.end(), NA_REAL);
-      }
-      // no lag
-    } else if ((k.size() == 1) && (lag.size() == 1)) {
+      // k.size() > 0
+    } else if ((k.size() > 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0), n);
+        b = utils::window_ul(i, k(i), lag(i), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
       }
     } else if ((k.size() > 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(0), n);
+        b = utils::window_ul(i, k(i), lag(0), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
       }
-    } else if ((k.size() == 1) && (lag.size() > 1)) {
+      // k.size() == 1
+    } else if ((k(0) == 0) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i), n);
+        b = utils::window_ul(i, n, lag(0), n, na_pad, true);
         res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
       }
-    } else if ((k.size() > 1) && (lag.size() > 1)) {
+    } else if (lag.size() > 1) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(i), n);
+        b = utils::window_ul(i, k(0), lag(i), n, na_pad);
+        res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
+      }
+    } else if (lag.size() > 1) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, k(0), lag(i), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
       }
     }
@@ -486,10 +446,6 @@ NumericVector min_run(
       }
     }
   }
-
-  /* if padding with NA */
-  if (na_pad)
-    std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_REAL);
 
   return res;
 }
@@ -581,9 +537,7 @@ IntegerVector which_run(
 
   int n = x.size();
 
-  if (k.size() == 1 && k(0) == 0) {
-    k(0) = n;
-  } else if (k.size() != n and k.size() > 1) {
+  if (k.size() != n and k.size() > 1) {
     stop("length of k and length of x differs. length(k) should be 1 or equal to x");
   } else if (Rcpp::any(Rcpp::is_na(k))) {
     stop("Function doesn't accept NA values in k vector");
@@ -599,8 +553,6 @@ IntegerVector which_run(
     stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
   } else if (Rcpp::any(Rcpp::is_na(lag))) {
     stop("Function doesn't accept NA values in lag vector");
-  } else if (lag.size() == 1 && lag(0) >= n && idx.size() == 0) {
-    warning("lag value is greater than length of x");
   }
 
   if (which != "last" && which != "first") {
@@ -613,36 +565,36 @@ IntegerVector which_run(
   /* Simple - no indexes */
   if (idx.size() == 0) {
     /* cum whicht */
-    if ((k.size() == 1) && (lag.size() == 1) && (k(0) == n)) {
-      if (lag(0) >= n) {
-        std::fill(res.begin(), res.end(), NA_INTEGER);
-        return res;
-      }
+    if ((k.size() == 1) && (lag.size() == 1) && (k(0) == 0 && lag(0) == 0)) {
       res = aggr::cumwhicht(x, na_rm, which);
-      if (lag(0) > 0) {
-        std::fill(res.begin(), res.end() - n + lag(0), NA_INTEGER);
-      } else if (lag(0) < 0) {
-        std::fill(res.end() + lag(0), res.end(), NA_INTEGER);
-      }
-
-    } else if ((k.size() == 1) && (lag.size() == 1)) {
+    }  else if ((k.size() > 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0), n);
+        b = utils::window_ul(i, k(i), lag(i), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
       }
     } else if ((k.size() > 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(0), n);
+        b = utils::window_ul(i, k(i), lag(0), n, na_pad);
+        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+      }
+    } else if ((k(0) == 0) && (lag.size() > 1)) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, n, lag(i), n, na_pad, true);
+        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+      }
+    } else if ((k(0) == 0) && (lag.size() == 1)) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, n, lag(0), n, na_pad, true);
         res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
       }
     } else if ((k.size() == 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i), n);
+        b = utils::window_ul(i, k(0), lag(i), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
       }
-    } else if ((k.size() > 1) && (lag.size() > 1)) {
+    } else if ((k.size() == 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(i), n);
+        b = utils::window_ul(i, k(0), lag(0), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
       }
     }
@@ -690,12 +642,8 @@ IntegerVector streak_run1(const Vector<RTYPE>& x, IntegerVector k, IntegerVector
   IntegerVector res(n);
 
   /* streak_run window */
-  if ((k.size() == 1) && (lag.size() == 1) && (k(0) == 0 or k(0) == n)) {
+  if ((k.size() == 1) && (lag.size() == 1) && (k(0) == 0) &&  (lag(0) == 0)) {
     /* streak run full */
-    if ((lag(0) >= n) || (lag(0) <= -n)) {
-      std::fill(res.begin(), res.end(), NA_INTEGER);
-      return res;
-    }
 
     for (int i = 0; i < n ; i++) {
       if (Vector<RTYPE>::is_na(x(i))) {
@@ -725,29 +673,25 @@ IntegerVector streak_run1(const Vector<RTYPE>& x, IntegerVector k, IntegerVector
 
   } else if ((k.size() == 1) && (lag.size() == 1)) {
     for (int i = 0; i < n; ++i) {
-      b = utils::window_ul(i, k(0), lag(0), n);
+      b = utils::window_ul(i, k(0), lag(0), n, na_pad);
       res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   } else if ((k.size() > 1) && (lag.size() == 1)) {
     for (int i = 0; i < n; ++i) {
-      b = utils::window_ul(i, k(i), lag(0), n);
+      b = utils::window_ul(i, k(i), lag(0), n, na_pad);
       res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   } else if ((k.size() == 1) && (lag.size() > 1)) {
     for (int i = 0; i < n; ++i) {
-      b = utils::window_ul(i, k(0), lag(i), n);
+      b = utils::window_ul(i, k(0), lag(i), n, na_pad);
       res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   } else if ((k.size() > 1) && (lag.size() > 1)) {
     for (int i = 0; i < n; ++i) {
-      b = utils::window_ul(i, k(i), lag(i), n);
+      b = utils::window_ul(i, k(i), lag(i), n, na_pad);
       res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   }
-
-  /* if padding with NA */
-  if (na_pad)
-    std::fill(res.begin(), res.end() - n + k(0) - 1 , NA_INTEGER);
 
   return res;
 }
