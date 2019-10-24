@@ -4,7 +4,7 @@ x1 <- sample(c(1,2,3), 15, replace=T)
 x2 <- sample(c(NA,1,2,3), 15, replace=T)
 k  <- sample(1:15,15, replace=T)
 idx <- cumsum(sample(c(1,2,3,4), 15, replace = TRUE))
-lag <- sample(0:3, 15, replace = TRUE)
+lag <- sample(-3:3, 15, replace = TRUE)
 
 test_that("sum_run basic",{
   expect_identical(
@@ -48,8 +48,35 @@ test_that("sum_run lagged", {
     runner(x2, k = 4, lag = -3, f = function(x) sum(x, na.rm = TRUE))
   )
 
-})
+  expect_identical(
+    sum_run(x2, k = 4, lag = 15, na_rm = TRUE),
+    runner(x2, k = 4, lag = 15, f = function(x) sum(x, na.rm = TRUE))
+  )
 
+  expect_identical(
+    sum_run(x2, k = 4, lag = -30, na_rm = TRUE),
+    runner(x2, k = 4, lag = -30, f = function(x) sum(x, na.rm = TRUE))
+  )
+
+  expect_identical(
+    sum_run(x2, k = 4, lag = 30, na_rm = TRUE),
+    runner(x2, k = 4, lag = 30, f = function(x) sum(x, na.rm = TRUE))
+  )
+
+
+
+
+
+  expect_equal(
+    sum_run(x2, lag = 3, na_rm = TRUE, na_pad = TRUE),
+    runner(x2, lag = 3, f = function(x) sum(x, na.rm = TRUE), na_pad = TRUE)
+  )
+
+  expect_equal(
+    sum_run(x2, lag = -3, na_rm = TRUE, na_pad = TRUE),
+    runner(x2, lag = -3, f = function(x) sum(x, na.rm = TRUE), na_pad = TRUE)
+  )
+})
 
 test_that("sum_run with na_rm = FALSE k = 4", {
   expect_identical(
@@ -118,7 +145,6 @@ test_that("sum_run with idx", {
 })
 
 test_that("sum_run with idx negative lag", {
-
   expect_equal(
     sum_run(x2, k = 4, lag = -3, idx = idx),
     sapply(window_run(x2, k = 4, lag = -3, idx = idx), function(x) {
@@ -140,6 +166,7 @@ test_that("sum_run with idx negative lag", {
     })
   )
 
+  #### FAILS
   expect_equal(
     sum_run(x2, k = k, lag = -lag, idx = idx),
     sapply(window_run(x2, k = k, lag = -lag, idx = idx), function(x) {

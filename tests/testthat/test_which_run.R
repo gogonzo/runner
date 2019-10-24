@@ -3,33 +3,53 @@ set.seed(11)
 x1 <- sample(c(TRUE, FALSE, NA), 20, replace = TRUE)
 x2 <- sample(c(TRUE, FALSE, NA), 20, replace = TRUE)
 k <- sample(seq_len(20), 20, replace = TRUE)
-which_test <- function(x, arg_which, na_rm) {
-  if (!na_rm) {
+idx <- cumsum(rpois(20, 4))
+lag <- sample(seq(-5, 5), 20, replace = TRUE)
+which_test <- function(x, arg_which, na_rm, i, k, lag = 0) {
+  x <- if (!na_rm) {
     if (arg_which == "last") {
       ifelse(
-        max(which(x)) > max(c(0, which(is.na(x)))),
-        max(which(x)), NA
+        tail(which(x), 1) > tail(c(0, which(is.na(x))), 1),
+        tail(which(x), 1), NA
       )
     } else if (arg_which == "first") {
       ifelse(
-        min(which(x)) > min(c(0, which(is.na(x)))),
-        min(which(x)), NA
+        head(which(x), 1) > head(c(0, which(is.na(x))), 1),
+        head(which(x), 1), NA
       )
     }
   } else {
     if (arg_which == "last") {
-      max(which(x))
+      tail(which(x), 1)
     } else if (arg_which == "first") {
-      min(which(x))
+      head(which(x), 1)
+    }
+  }
+  if(length(x) == 0) {
+    x <- NA_integer_
+  }
+  if (!missing(k)) {
+    if (!missing(i)) {
+      return(as.integer(x + (i - 1) - k - lag + 1))
+    } else {
+      return(as.integer(x - k - lag + 1))
+    }
+  } else {
+    if (!missing(i)) {
+      return(as.integer(x + (i - 1) - lag))
+    } else {
+      return(as.integer(x - lag))
     }
   }
 
-
-
 }
 
-
 test_that("which_run first and last", {
+  expect_identical(
+    which_run(x1),
+    sapply(window_run(x1), function(x) which_test(x, "last", TRUE))
+  )
+
   expect_identical(
     which_run(x1, which = "first"),
     sapply(window_run(x1), function(x) which_test(x, "first", TRUE))
@@ -39,12 +59,11 @@ test_that("which_run first and last", {
     which_run(x1, which = "last"),
     sapply(window_run(x1), function(x) which_test(x, "last", TRUE))
   )
-
 })
 
 test_that("which with na_rm = FALSE", {
   expect_identical(
-    which_run(x2, na_rm = FALSE),
+    which_run(x2, na_rm = FALSE, which = "last"),
     sapply(window_run(x2), function(x) which_test(x, "last", FALSE))
   )
   expect_identical(
@@ -53,82 +72,38 @@ test_that("which with na_rm = FALSE", {
   )
 })
 
-test_that("which with na_rm = TRUE k = 4", {
-  idx <- as.integer(1:20)
+test_that("which with na_rm = TRUE k = 4 + idx", {
+  expect_identical(
+    which_run(x2, na_rm = TRUE, which = "first"),
+    sapply(window_run(x2), function(x) which_test(x, "first", TRUE))
+  )
+
+  expect_identical(
+    which_run(x2, na_rm = TRUE, which = "last"),
+    sapply(window_run(x2), function(x) which_test(x, "last", TRUE))
+  )
+
+  expect_identical(
+    which_run(x2, na_rm = TRUE, which = "first", idx = idx),
+    sapply(window_run(x2, idx = idx), function(x) which_test(x, "first", TRUE))
+  )
+
+  expect_identical(
+    which_run(x2, na_rm = TRUE, which = "last", idx = idx),
+    sapply(seq_along(x2), function(i) which_test(window_run(x2, idx = idx)[[i]], arg_which = "last", na_rm = TRUE))
+  )
+})
+
+test_that("which with na_rm = FALSE k = 4", {
   expect_identical(
     which_run(x2, na_rm = FALSE, which = "first", idx = idx),
     sapply(window_run(x2, idx = idx), function(x) which_test(x, "first", FALSE))
   )
 
-  for(i in 1:20)
-    expect_equal(
-      which_run(x2, na_rm = T, k = 4, which = "first")[i] ,
-      ifelse(is.finite(min( idx[idx %in% (pmax(1,i-4+1):i) & x2], na.rm=T)),
-             min( idx[idx %in% (pmax(1,i-4+1):i) & x2], na.rm=T),
-             NA_integer_)
-    )
-})
-
-test_that("which with na_rm = FALSE k = 4", {
-  idx <- 1:20
-  for(i in 1:20)
-    expect_equal(
-      which_run(x2, na_rm = FALSE, k = 4)[i] ,
-      ifelse(
-        max( idx[ idx %in% (pmax(1,i-3):i) & x2], na.rm=T) >
-        max( c(0,idx[ idx %in% (pmax(1,i-3):i) & is.na(x2) ]), na.rm=T),
-        max( idx[ idx %in% (pmax(1,i-3):i) & x2], na.rm=T), NA_integer_
-      )
-    )
-
-  for(i in 1:20)
-    expect_equal(
-      which_run(x2, na_rm = FALSE, k = 4, which = "first")[i] ,
-      ifelse(
-        min( idx[ idx %in% (pmax(1,i-3):i) & x2], na.rm=T) <
-        min( c(Inf,idx[ idx %in% (pmax(1,i-3):i) & is.na(x2)]), na.rm=T),
-        min( idx[ idx %in% (pmax(1,i-3):i) & x2], na.rm=T), NA_integer_
-      )
-    )
-})
-
-test_that("which with na_rm = TRUE k = k", {
-  idx <- as.integer(1:20)
-  for(i in 1:20)
-    expect_equal(
-      which_run(x2, na_rm = T, k=k)[i] ,
-      ifelse(is.finite(max( idx[idx %in% (pmax(1,i-k[i]+1):i) & x2], na.rm=T)),
-         max( idx[idx %in% (pmax(1,i-k[i]+1):i) & x2], na.rm=T),
-         NA_integer_)
-    )
-
-
-  for(i in 1:20)
-    expect_equal(
-      which_run(x2, na_rm = T, k = k, which = "first")[i] ,
-      ifelse(is.finite(min( idx[idx %in% (pmax(1,i-k[i]+1):i) & x2], na.rm=T)),
-             min( idx[idx %in% (pmax(1,i-k[i]+1):i) & x2], na.rm=T),
-             NA_integer_)
-    )
-})
-
-test_that("which with sequential indexes equals non-indexed",{
-  x <- sample(c(NA, F, T), 10, replace = TRUE)
-  k <- sample(seq_len(10), 10, replace = TRUE)
-
   expect_identical(
-    which_run(x, which = "last", idx = seq_len(10)),
-    which_run(x, which = "last")
+    which_run(x2, na_rm = FALSE, which = "last", idx = idx),
+    sapply(window_run(x2, idx = idx), function(x) which_test(x, "last", FALSE))
   )
-  expect_identical(
-    which_run(x, which = "last", k = 4, idx = seq_len(10) * 2 ),
-    which_run(x, which = "last", k = 2)
-  )
-  expect_identical(
-    which_run(x, which = "last", k = k * 2, idx = seq_len(10) * 2 ),
-    which_run(x, which = "last", k = k )
-  )
-
 })
 
 test_that("which for indexed window",{
@@ -137,20 +112,19 @@ test_that("which for indexed window",{
   k <- sample(1:12,12,replace=T)
 
   expect_identical(
-    which_run( x, which="last", idx = i, k = 3, na_rm = FALSE),
+    which_run(x, which = "last", idx = i, k = 3, na_rm = FALSE),
     as.integer(c(NA, NA, 3, NA, NA, NA, 7, 8, NA, 10, NA, 12))
   )
   expect_identical(
-    which_run( x, which="first", idx = i, k = 2, na_rm = FALSE),
+    which_run(x, which = "first", idx = i, k = 2, na_rm = FALSE),
     as.integer(c(NA, NA, 3, 3, 3, 3, 7, 8, 8, 8, NA, 12))
   )
   expect_identical(
-    which_run( x, which="last", idx = i, k = 2, na_rm = TRUE),
+    which_run(x, which = "last", idx = i, k = 2, na_rm = TRUE),
     as.integer(c(NA, NA, 3, 3, 3, 3, 7, 8, 8, 10, NA, 12))
   )
 
 })
-
 
 test_that("Errors", {
 

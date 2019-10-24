@@ -1,139 +1,158 @@
 context("Test Runner")
-x1 <- rnorm(30)
-x2 <- sample(c(rep(NA, 5), rnorm(15)), 30, replace = TRUE)
-k <- sample(1:15, 30, replace = TRUE)
-lag <- sample(-5:5, 30, replace = TRUE)
-idx <- cumsum(sample(c(1, 2, 3, 4), 30, replace = TRUE))
+x1 <- rnorm(100)
+x2 <- sample(c(rep(NA, 5), rnorm(15)), 100, replace = TRUE)
+k <- sample(1:100, 100, replace = TRUE)
+lag <- sample(-15:15, 100, replace = TRUE)
+idx <- cumsum(sample(c(1, 2, 3, 4), 100, replace = TRUE))
+find_idx  <- function(x, i, lag = 0, k = 1) seq_along(x) %in% seq(i - lag - k + 1, i - lag)
+find_idx2 <- function(x, i, lag = 0, k = i) {
+  if ((i - lag - k + 1) < 1 || (i - lag) > length(x)) {
+    return(x[0])
+  } else {
+    return(seq_along(x) %in% seq(i - lag - k + 1, i - lag))
+  }
+}
 
 test_that("constant window", {
-  expect_equal(
-    runner(x = x1, f = mean),
-    sapply(window_run(x1), mean)
-  )
+  expect_identical(
+    runner(x1, f = mean),
+    sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = 100)])))
 
-  expect_equal(
-    runner(x1, k = 5, f = mean),
-    sapply(window_run(x1, k = 5), mean)
-  )
+  expect_identical(
+    runner(x2, f = mean),
+    sapply(seq_along(x2), function(i) mean(x2[find_idx(x2, i = i, k = 100)])))
 
-  expect_equal(
-    runner(x2, k = 5, f = function(x) mean(x, na.rm = FALSE)),
-    sapply(window_run(x2, k = 5), mean, na.rm = FALSE)
-  )
 
-  expect_equal(
+  expect_identical(
+    runner(x2, f = function(x) mean(x, na.rm = FALSE)),
+    sapply(seq_along(x2), function(i) mean(x2[find_idx(x2, i = i, k = 100)], na.rm = FALSE)))
+
+  expect_identical(
     runner(x2, k = 5, f = function(x) mean(x, na.rm = TRUE)),
-    sapply(window_run(x2, k = 5), mean, na.rm = TRUE)
-  )
+    sapply(seq_along(x2), function(i) mean(x2[find_idx(x2, i = i, k = 5)], na.rm = TRUE)))
+
+  expect_identical(
+    runner(x2, k = 5, f = function(x) mean(x, na.rm = FALSE)),
+    sapply(seq_along(x2), function(i) mean(x2[find_idx(x2, i = i, k = 5)], na.rm = FALSE)))
+
+  expect_identical(
+    runner(x2, k = 1, f = function(x) mean(x, na.rm = FALSE)),
+    sapply(seq_along(x2), function(i) mean(x2[find_idx(x2, i = i, k = 1)], na.rm = FALSE)))
+
+  expect_identical(
+    runner(x2, k = 101, f = function(x) mean(x, na.rm = FALSE)),
+    sapply(seq_along(x2), function(i) mean(x2[find_idx(x2, i = i, k = 101)], na.rm = FALSE)))
+
+  expect_identical(
+    runner(x2, k = 0, f = function(x) mean(x, na.rm = FALSE)),
+    sapply(seq_along(x2), function(i) mean(x2[find_idx(x2, i = i, k = 101)], na.rm = FALSE)))
+
 })
 
 test_that("varying window", {
-  expect_equal(
+  expect_identical(
     runner(x1, k = k, f = mean),
-    sapply(window_run(x1, k = k), mean)
-  )
+    sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = k[i])])))
 
-  expect_equal(
+
+  expect_identical(
     runner(x2, k = k, f = mean),
-    sapply(window_run(x2, k = k), mean)
-  )
+    sapply(seq_along(x2), function(i) mean(x2[find_idx(x2, i = i, k = k[i])])))
+
+  expect_identical(
+    runner(x1, k = k, f = function(x) mean(x, na.rm = FALSE)),
+    sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = k[i])], na.rm = FALSE)))
+
+
+  expect_identical(
+    runner(x2, k = k, f = function(x) mean(x, na.rm = FALSE)),
+    sapply(seq_along(x2), function(i) mean(x2[find_idx(x2, i = i, k = k[i])], na.rm = FALSE)))
+})
+
+test_that("varying window na_pad", {
+  expect_equal(
+    runner(x2, k = k, f = mean, na_pad = TRUE),
+    sapply(seq_along(x2), function(i) mean(x2[find_idx2(x2, i = i, k = k[i])])))
 
   expect_equal(
-    runner(x2, k = k, f = function(x) mean(x, na.rm = TRUE)),
-    sapply(window_run(x2, k = k), mean, na.rm = TRUE)
-  )
+    runner(x2, k = k, f = mean, na_pad = TRUE),
+    sapply(seq_along(x2), function(i) mean(x2[find_idx2(x2, i = i, k = k[i])])))
+
+  expect_equal(
+    runner(x2, k = k, f = function(x) mean(x, na.rm = FALSE), na_pad = TRUE),
+    sapply(seq_along(x2), function(i) mean(x2[find_idx2(x2, i = i, k = k[i])], na.rm = FALSE)))
 })
 
 test_that("lagged window", {
-  out <- runner(x1, lag = 3, f = function(x) mean(x, na.rm = FALSE))
-  test <- vapply(seq_along(x1), function(i) {
-    lower <- 0
-    upper <- i - 3
-    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(NA_real_) else lower
-    upper <- if (upper < 1) return(NA_real_) else if (upper > length(x1)) length(x1) else upper
-    idx <- seq(lower, upper)
-    mean(x1[idx], na.rm = TRUE)
-  }, numeric(1))
-  expect_identical(test, out)
+  expect_equal(
+    runner(x1, k = 5, lag = 3, f = function(x) mean(x, na.rm = FALSE)),
+    sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = 5, lag = 3)], na.rm = FALSE)))
 
-  out <- runner(x1, lag = lag, f = function(x) mean(x, na.rm = FALSE))
-  test <- vapply(seq_along(x1), function(i) {
-    lower <- 0
-    upper <- i - lag[i]
-    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(NA_real_) else lower
-    upper <- if (upper < 1) return(NA_real_) else if (upper > length(x1)) length(x1) else upper
+  expect_equal(
+    runner(x1, k = 5, lag = -3, f = function(x) mean(x, na.rm = FALSE)),
+    sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = 5, lag = -3)], na.rm = FALSE)))
 
-    mean(x1[seq(lower, upper)], na.rm = TRUE)
-  }, numeric(1))
-  expect_identical(test, out)
+  expect_equal(
+    runner(x1, k = k, lag = 3, f = function(x) mean(x, na.rm = FALSE)),
+    sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = k[i], lag = 3)], na.rm = FALSE)))
 
-  out <- runner(x1, k = 5, lag = 3, f = function(x) mean(x, na.rm = FALSE))
-  test <- vapply(seq_along(x1), function(i) {
-    lower <- i - 3 - 5 + 1
-    upper <- i - 3
-    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(NA_real_) else lower
-    upper <- if (upper < 1) return(NA_real_) else if (upper > length(x1)) length(x1) else upper
-    idx <- seq(lower, upper)
-    mean(x1[idx], na.rm = TRUE)
-  }, numeric(1))
-  expect_identical(test, out)
+  expect_equal(
+    runner(x1, k = k, lag = -3, f = function(x) mean(x, na.rm = FALSE)),
+    sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = k[i], lag = -3)], na.rm = FALSE)))
 
-  out <- runner(x1, k = 5, lag = lag, f = function(x) mean(x, na.rm = FALSE))
-  test <- vapply(seq_along(x1), function(i) {
-    lower <- i - lag[i] - 5 + 1
-    upper <- i - lag[i]
-    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(NA_real_) else lower
-    upper <- if (upper < 1) return(NA_real_) else if (upper > length(x1)) length(x1) else upper
+  expect_equal(
+    runner(x1, k = 5, lag = lag, f = function(x) mean(x, na.rm = FALSE)),
+    sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = 5, lag = lag[i])], na.rm = FALSE)))
 
-    mean(x1[seq(lower, upper)], na.rm = TRUE)
-  }, numeric(1))
-  expect_identical(test, out)
+  expect_equal(
+    runner(x1, k = 101, lag = lag, f = function(x) mean(x, na.rm = FALSE)),
+    sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = 101, lag = lag[i])], na.rm = FALSE)))
+
 })
 
-test_that("negative lagged window", {
+test_that("lagged window na_pad", {
 
-  out <- runner(x1, lag = -3, f = function(x) mean(x, na.rm = FALSE))
-  test <- vapply(seq_along(x1), function(i) {
-    lower <- 0
-    upper <- i + 3
-    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(NA_real_) else lower
-    upper <- if (upper < 1) return(NA_real_) else if (upper > length(x1)) length(x1) else upper
-    mean(x1[seq(lower, upper)], na.rm = TRUE)
-  }, numeric(1))
-  expect_identical(test, out)
+  expect_equal(
+    runner(x2, lag = 3, f = function(x) mean(x, na.rm = TRUE), na_pad = TRUE),
+    sapply(seq_along(x2), function(i) mean(x2[find_idx(x2, i = i, lag = 3, k = i)], na.rm = TRUE)))
 
-  out <- runner(x1, lag = lag, f = function(x) mean(x, na.rm = FALSE))
-  test <- vapply(seq_along(x1), function(i) {
-    lower <- 0
-    upper <- i - lag[i]
-    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(NA_real_) else lower
-    upper <- if (upper < 1) return(NA_real_) else if (upper > length(x1)) length(x1) else upper
+  expect_equal(
+    runner(x2, lag = 15, f = function(x) mean(x, na.rm = TRUE), na_pad = TRUE),
+    sapply(seq_along(x2), function(i) mean(x2[find_idx(x2, i = i, lag = 15, k = i)], na.rm = TRUE)))
 
-    mean(x1[seq(lower, upper)], na.rm = TRUE)
-  }, numeric(1))
-  expect_identical(test, out)
+  expect_equal(
+    runner(x2, lag = 101, f = function(x) mean(x, na.rm = TRUE), na_pad = TRUE),
+    sapply(seq_along(x2), function(i) mean(x2[find_idx(x2, i = i, lag = 101, k = i)], na.rm = TRUE)))
 
-  out <- runner(x1, k = 5, lag = -3, f = function(x) mean(x, na.rm = FALSE))
-  test <- vapply(seq_along(x1), function(i) {
-    lower <- i + 3 - 5 + 1
-    upper <- i + 3
-    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(NA_real_) else lower
-    upper <- if (upper < 1) return(NA_real_) else if (upper > length(x1)) length(x1) else upper
+  expect_equal(
+    runner(x2, lag = -3, f = function(x) mean(x, na.rm = TRUE), na_pad = TRUE),
+    sapply(seq_along(x2), function(i) mean(x2[find_idx(x2, i = i, lag = -3, k = i + 3)], na.rm = TRUE)))
 
-    mean(x1[seq(lower, upper)], na.rm = TRUE)
-  }, numeric(1))
-  expect_identical(test, out)
 
-  out <- runner(x1, k = 5, lag = lag, f = function(x) mean(x, na.rm = FALSE))
-  test <- vapply(seq_along(x1), function(i) {
-    lower <- i - lag[i] - 5 + 1
-    upper <- i - lag[i]
-    lower <- if (lower < 1) 1 else if (lower > length(x1)) return(NA_real_) else lower
-    upper <- if (upper < 1) return(NA_real_) else if (upper > length(x1)) length(x1) else upper
 
-    mean(x1[seq(lower, upper)], na.rm = TRUE)
-  }, numeric(1))
-  expect_equal(test, out)
+  expect_equal(
+    runner(x1, k = 5, lag = 3, f = function(x) mean(x, na.rm = FALSE), na_pad = TRUE),
+    sapply(seq_along(x1), function(i) mean(x1[find_idx2(x1, i = i, k = 5, lag = 3)], na.rm = FALSE)))
+
+  expect_equal(
+    runner(x1, k = 5, lag = -3, f = function(x) mean(x, na.rm = FALSE), na_pad = TRUE),
+    sapply(seq_along(x1), function(i) mean(x1[find_idx2(x1, i = i, k = 5, lag = -3)], na.rm = FALSE)))
+
+  expect_equal(
+    runner(x1, k = k, lag = 3, f = function(x) mean(x, na.rm = FALSE), na_pad = TRUE),
+    sapply(seq_along(x1), function(i) mean(x1[find_idx2(x1, i = i, k = k[i], lag = 3)], na.rm = FALSE)))
+
+  expect_equal(
+    runner(x1, k = k, lag = -3, f = function(x) mean(x, na.rm = FALSE), na_pad = TRUE),
+    sapply(seq_along(x1), function(i) mean(x1[find_idx2(x1, i = i, k = k[i], lag = -3)], na.rm = FALSE)))
+
+  expect_equal(
+    runner(x1, k = 5, lag = lag, f = function(x) mean(x, na.rm = FALSE), na_pad = TRUE),
+    sapply(seq_along(x1), function(i) mean(x1[find_idx2(x1, i = i, k = 5, lag = lag[i])], na.rm = FALSE)))
+
+  expect_equal(
+    runner(x1, k = 101, lag = lag, f = function(x) mean(x, na.rm = FALSE), na_pad = TRUE),
+    sapply(seq_along(x1), function(i) mean(x1[find_idx2(x1, i = i, k = 101, lag = lag[i])], na.rm = FALSE)))
 })
 
 test_that("date window", {
@@ -211,21 +230,21 @@ test_that("Negative lag date window", {
 })
 
 test_that("Function applied on other types", {
-    expect_silent(runner(as.integer(1:30), k = 5, f = length))
-    expect_silent(runner(as.integer(1:30), k = k, f = length))
-    expect_silent(runner(as.integer(1:30), k = k, idx, f = length))
+    expect_silent(runner(as.integer(1:100), k = 5, f = length))
+    expect_silent(runner(as.integer(1:100), k = k, f = length))
+    expect_silent(runner(as.integer(1:100), k = k, idx, f = length))
 
-    expect_silent(runner(letters[1:30], k = 5, f = length))
-    expect_silent(runner(letters[1:30], k = k, f = length))
-    expect_silent(runner(letters[1:30], k = k, idx, f = length))
+    expect_silent(runner(sample(letters, 100, replace = TRUE), k = 5, f = length))
+    expect_silent(runner(sample(letters, 100, replace = TRUE), k = k, f = length))
+    expect_silent(runner(sample(letters, 100, replace = TRUE), k = k, idx, f = length))
 
-    expect_silent(runner(as.factor(letters[1:30]), k = 5, f = length))
-    expect_silent(runner(as.factor(letters[1:30]), k = k, f = length))
-    expect_silent(runner(as.factor(letters[1:30]), k = k, idx, f = length))
+    expect_silent(runner(as.factor(sample(letters, 100, replace = TRUE)), k = 5, f = length))
+    expect_silent(runner(as.factor(sample(letters, 100, replace = TRUE)), k = k, f = length))
+    expect_silent(runner(as.factor(sample(letters, 100, replace = TRUE)), k = k, idx, f = length))
 
-    expect_silent(runner(as.Date(1:30, origin = "1970-01-01"), k = 5, f = length))
-    expect_silent(runner(as.Date(1:30, origin = "1970-01-01"), k = k, f = length))
-    expect_silent(runner(as.Date(1:30, origin = "1970-01-01"), k = k, idx, f = length))
+    expect_silent(runner(as.Date(1:100, origin = "1970-01-01"), k = 5, f = length))
+    expect_silent(runner(as.Date(1:100, origin = "1970-01-01"), k = k, f = length))
+    expect_silent(runner(as.Date(1:100, origin = "1970-01-01"), k = k, idx, f = length))
 })
 
 test_that("Errors", {

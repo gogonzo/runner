@@ -37,8 +37,6 @@ test_that("window_run k = constant",{
     lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 2)])
   )
 
-
-
 })
 
 test_that("window_run window maximum", {
@@ -86,6 +84,36 @@ test_that("window_run with lag", {
   )
 
   expect_identical(
+    window_run(x2, k = 1, lag = -1),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 1, lag = -1)])
+  )
+
+  expect_identical(
+    window_run(x2, k = 1, lag = -1),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 1, lag = -1)])
+  )
+
+  expect_identical(
+    window_run(x2, k = 1, lag = -100),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 1, lag = -100)])
+  )
+
+  expect_identical(
+    window_run(x2, k = 1, lag = -100),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 1, lag = -100)])
+  )
+
+  expect_identical(
+    window_run(x2, k = 1, lag = 101),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 1, lag = 101)])
+  )
+
+  expect_identical(
+    window_run(x2, k = 1, lag = 101),
+    lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = 1, lag = 101)])
+  )
+
+  expect_identical(
     window_run(x2, k = k, lag = 3),
     lapply(seq_along(x2), function(i) x2[find_idx(x2, i = i, k = k[i], lag = 3)])
   )
@@ -121,8 +149,8 @@ test_that("window_run with lag", {
 test_that("window_run window omit_incomplete", {
 
   expect_identical(
-    window_run(x2, k = 5, lag = 3, omit_incomplete = TRUE),
-    lapply(seq_along(x2), function(i) x2[find_idx2(x2, i = i, k = 5, lag = 3)])
+    window_run(x2, k = 5, lag = 3, omit_incomplete = TRUE)[4],
+    lapply(seq_along(x2), function(i) x2[find_idx2(x2, i = i, k = 5, lag = 3)])[4]
   )
 
   expect_identical(
@@ -182,28 +210,28 @@ test_that("window_run with idx same as window_run with windows",{
 })
 
 test_that("Lagged date window", {
-  out <- window_run(x, k = 5, lag = 3, idx = idx)
-  test <- lapply(seq_along(x), function(i) {
+  out <- window_run(x2, k = 5, lag = 3, idx = idx)
+  test <- lapply(seq_along(x2), function(i) {
     lower <- idx[i] - 3 - 5  + 1
     upper <- idx[i] - 3
-    x[idx %in% seq(lower, upper)]
+    x2[idx %in% seq(lower, upper)]
   })
   expect_equal(out, test)
 
-  out <- window_run(x, k = k, lag = 3, idx = idx)
-  test <- lapply(seq_along(x), function(i) {
+  out <- window_run(x2, k = k, lag = 3, idx = idx)
+  test <- lapply(seq_along(x2), function(i) {
     lower <- idx[i] - 3 - k[i]  + 1
     upper <- idx[i] - 3
-    x[idx %in% seq(lower, upper)]
+    x2[idx %in% seq(lower, upper)]
   })
 
   expect_equal(out, test)
 
-  out <- window_run(x, k = k, lag = lag, idx = idx)
-  test <- lapply(seq_along(x), function(i) {
+  out <- window_run(x2, k = k, lag = lag, idx = idx)
+  test <- lapply(seq_along(x2), function(i) {
     lower <- idx[i] - lag[i] - k[i]  + 1
     upper <- idx[i] - lag[i]
-    x[idx %in% seq(lower, upper)]
+    x2[idx %in% seq(lower, upper)]
   })
 
   expect_equal(out, test)
