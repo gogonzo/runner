@@ -288,3 +288,13 @@ test_that("date window", {
 })
 
 
+test_that("Errors", {
+  expect_error(sum_run(x1, k = (1:999)), "length of k and length of x differs")
+  expect_error(sum_run(x1, k = c(NA, k[-1])), "Function doesn't accept NA values in k vector")
+
+  expect_error(sum_run(x1, lag = (1:99)), "length of lag and length of x differs")
+  expect_error(sum_run(x1, lag = c(NA, lag[-1])), "Function doesn't accept NA values in lag vector")
+
+  expect_error(sum_run(x1, idx = (1:99)), "length of idx and length of x differs")
+  expect_error(sum_run(x1, idx = c(NA, 1:99)), "Function doesn't accept NA values in idx vector")
+})

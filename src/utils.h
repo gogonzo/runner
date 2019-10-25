@@ -40,8 +40,53 @@ namespace utils {
   }
 
   //' Boundaries of the lagged running window based on indexes
-  IntegerVector window_ul_dl(IntegerVector indexes, int i, int k, int lag, int n) {
+  IntegerVector window_ul_dl(IntegerVector indexes, int i, int k, int lag, int n, bool na_pad, bool cum = false) {
+    if (na_pad) {
+      if (cum) {
+        if ((indexes(i) - lag > indexes(n - 1)) or (indexes(i) - lag < indexes(0))) return IntegerVector(0);
+      } else {
+        if (((indexes(i) - lag - k + 1) < indexes(0)) or ((indexes(i) - lag) > indexes(n - 1))) return IntegerVector(0);
+      }
+      // |---------- [ ]    [ ] |----------
+    } else {
+      if (cum) {
+        if (indexes(i) - lag < indexes(0)) return IntegerVector(0);
+      } else {
+        if (((indexes(i) - lag) < indexes(0)) or ((indexes(i) - lag - k + 1) > indexes(n - 1)))
+          return IntegerVector(0);
+      }
+    }
+
     IntegerVector idx_out(2);
+    // cumulative ========================================================================
+    if (cum) {
+      // [-------]-+-->
+      if (lag >= 0) {
+        for (int u = i; u >= 0; u--) {
+          if ((indexes(i) - indexes(u)) >= lag) {
+            idx_out(0) = 0;
+            idx_out(1) = u;
+            return idx_out;
+          } else if (u == 0) {
+            return IntegerVector(0);
+          }
+        }
+        // [-------+-]-->
+      } else {
+        for (int u = i; u < n; u++) {
+          if ((indexes(i) - indexes(u)) < lag) {
+            idx_out(0) = 0;
+            idx_out(1) = u - 1;
+            return idx_out;
+          } else if (u == (n - 1)) {
+            idx_out(0) = 0;
+            idx_out(1) = u;
+            return idx_out;
+          }
+        }
+      }
+    }
+
     if (lag >= 0) {
       for (int u = i; u >= 0; u--) {
         if ((indexes(i) - indexes(u)) < (k + lag)) {
