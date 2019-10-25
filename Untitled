@@ -1,0 +1,36 @@
+1.  k = null, lag = null     0      |--------]------->       n
+2.  k = null, lag = 3       -3  [...|----]---+------->       n-3
+3.  k = null, lag = -3       0      |--------+---]--->       n+3
+4.  k = null, lag = n       -n [...]|--------+------->       0
+5.  k = null, lag = -n       n      |--------+------->[...]  n+n
+6.  k = 3,    lag = null    -2      |----[...]------->       n-3
+7.  k = 15,   lag = null    -14 [...|--------+------->       n
+8.  k = 5,    lag = 3       -8  [...|----]---+------->       n-3
+9.  k = 5,    lag = -3      -1      |-----[--+---]--->       n+3
+10. k = 5,    lag = -7       3      |--------+-[---]->       n+7
+11. k = 1,    lag = -1       1      |--------+[]----->       n+1
+
+
+if (is.null(k)) cumul = true
+if <any window part of window is out or range>  na_pad
+
+1. cumulative window, na_pad not relevant
+
+2. cumulative window shifted backwards by lag, if na_pad = true|false [NA, NA, NA, s(1), s(2), ..., s(n-3)]
+
+3. cumulative window shifted forward by lag, if na_pad = true [s3, s4, ..., s(n), NA, NA, NA]
+
+4. cumulative window lag = n, na_pad = true|false [NA, NA, ..., NA]
+
+5. cumulative window lag = -n, na_pad = true [NA, NA, ..., NA], na_pad = false [s(n), s(n), ..., s(n)]
+
+6. Moving window k=3, na_pad = true [NA, NA, s(1-3), s(2-4), ..., s({n-2}-n)], na_pad = false [s(1), s(1-2), s(1-3), s(1-4), ..., s({n-2}-n)]
+
+7. Moving window k=15, [NA, NA, ..., NA] 
+
+8.
+
+9.
+
+10.
+

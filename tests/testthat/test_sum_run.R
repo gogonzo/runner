@@ -1,178 +1,290 @@
 context("Running sum")
 set.seed(11)
-x1 <- sample(c(1,2,3), 15, replace=T)
-x2 <- sample(c(NA,1,2,3), 15, replace=T)
-k  <- sample(1:15,15, replace=T)
-idx <- cumsum(sample(c(1,2,3,4), 15, replace = TRUE))
-lag <- sample(-3:3, 15, replace = TRUE)
+x1 <- sample(c(1, 2, 3), 100, replace = TRUE)
+x2 <- sample(c(NA, 1, 2, 3), 100, replace = TRUE)
+k <- sample(1:100, 100, replace = TRUE)
+lag <- sample(-15:15, 100, replace = TRUE)
+idx <- cumsum(sample(c(1, 2, 3, 4), 100, replace = TRUE))
+sum2 <- function(x) {
+  if (all(is.na(x))) return(NA) else sum(x, na.rm = TRUE)
+}
 
-test_that("sum_run basic",{
+test_that("       |--------]------->", {
   expect_identical(
-    sum_run(x1),
-    runner(x1, f = sum)
+    sum_run(x2),
+    runner(x2, f = sum2)
+  )
+
+  expect_identical(
+    sum_run(x2, na_pad = TRUE),
+    runner(x2, f = sum2, na_pad = TRUE)
   )
 })
 
-test_that("sum_run with na_rm = TRUE", {
-  expect_identical(
-    sum_run(x2, na_rm = TRUE),
-    runner(x2, f = function(x) sum(x, na.rm = TRUE))
-  )
+test_that("   [...|----]---+------->", {
+  expect_equal(
+    sum_run(x2, lag = 3),
+    runner(x2, lag = 3, f = sum2))
+
+  expect_equal(
+    sum_run(x2, lag = 3, na_pad = TRUE),
+    runner(x2, lag = 3, f = sum2, na_pad = TRUE))
 })
 
-test_that("sum_run with na_rm = FALSE na_fill = TRUE", {
-  expect_identical(
-    sum_run(x2, na_rm = FALSE),
-    runner(x2, f = function(x) sum(x, na.rm = FALSE))
-  )
+test_that("       |--------+---]--->", {
+  expect_equal(
+    sum_run(x2, lag = -3),
+    runner(x2, lag = -3, f = sum2))
+
+  expect_equal(
+    sum_run(x2, lag = -3, na_pad = TRUE),
+    runner(x2, lag = -3, f = sum2, na_pad = TRUE))
 })
 
-test_that("sum_run lagged", {
-  expect_identical(
-    sum_run(x2, lag = 3, na_rm = TRUE),
-    runner(x2, lag = 3, f = function(x) sum(x, na.rm = TRUE))
-  )
+test_that("  [...]|--------+------->", {
+  expect_equal(
+    sum_run(x2, lag = 100),
+    runner(x2, lag = 100, f = sum2))
 
-  expect_identical(
-    sum_run(x2, lag = -3, na_rm = TRUE),
-    runner(x2, lag = -3, f = function(x) sum(x, na.rm = TRUE))
-  )
-
-  expect_identical(
-    sum_run(x2, k = 4, lag = 3, na_rm = TRUE),
-    runner(x2, k = 4, lag = 3, f = function(x) sum(x, na.rm = TRUE))
-  )
-
-  expect_identical(
-    sum_run(x2, k = 4, lag = -3, na_rm = TRUE),
-    runner(x2, k = 4, lag = -3, f = function(x) sum(x, na.rm = TRUE))
-  )
-
-  expect_identical(
-    sum_run(x2, k = 4, lag = 15, na_rm = TRUE),
-    runner(x2, k = 4, lag = 15, f = function(x) sum(x, na.rm = TRUE))
-  )
-
-  expect_identical(
-    sum_run(x2, k = 4, lag = -30, na_rm = TRUE),
-    runner(x2, k = 4, lag = -30, f = function(x) sum(x, na.rm = TRUE))
-  )
-
-  expect_identical(
-    sum_run(x2, k = 4, lag = 30, na_rm = TRUE),
-    runner(x2, k = 4, lag = 30, f = function(x) sum(x, na.rm = TRUE))
-  )
-
-
-
+  expect_equal(
+    sum_run(x2, lag = 100, na_pad = TRUE),
+    runner(x2, lag = 100, f = sum2, na_pad = TRUE))
 
 
   expect_equal(
-    sum_run(x2, lag = 3, na_rm = TRUE, na_pad = TRUE),
-    runner(x2, lag = 3, f = function(x) sum(x, na.rm = TRUE), na_pad = TRUE)
-  )
+    sum_run(x2, lag = -100),
+    runner(x2, lag = -100, f = sum2))
 
   expect_equal(
-    sum_run(x2, lag = -3, na_rm = TRUE, na_pad = TRUE),
-    runner(x2, lag = -3, f = function(x) sum(x, na.rm = TRUE), na_pad = TRUE)
-  )
+    sum_run(x2, lag = -100, na_pad = TRUE),
+    runner(x2, lag = -100, f = sum2, na_pad = TRUE))
 })
 
-test_that("sum_run with na_rm = FALSE k = 4", {
-  expect_identical(
-    sum_run(x2, k = 4, na_rm = FALSE),
-    runner(x2, k = 4, f = function(x) sum(x, na.rm = FALSE))
-  )
+test_that("       |----[...]------->", {
+  expect_equal(
+    sum_run(x2, k = 3),
+    runner(x2, k = 3, f = sum2))
+
+  expect_equal(
+    sum_run(x2, k = 3, na_pad = TRUE),
+    runner(x2, k = 3, f = sum2, na_pad = TRUE))
+
 })
 
-test_that("sum_run with na_rm = TRUE k = 4", {
-  expect_identical(
-    sum_run(x2, k = 4, na_rm = TRUE),
-    runner(x2, k = 4, f = function(x) sum(x, na.rm = TRUE))
-  )
+test_that("       [...|--------+-------[...]", {
+  expect_equal(
+    sum_run(x2, k = 1),
+    runner(x2, k = 1, f = sum2))
+
+  expect_equal(
+    sum_run(x2, k = 1, na_pad = TRUE),
+    runner(x2, k = 1, f = sum2, na_pad = TRUE))
+
+  expect_equal(
+    sum_run(x2, k = 99),
+    runner(x2, k = 99, f = sum2))
+
+  expect_equal(
+    sum_run(x2, k = 99, na_pad = TRUE),
+    runner(x2, k = 99, f = sum2, na_pad = TRUE))
+
+  expect_equal(
+    sum_run(x2, k = 100),
+    runner(x2, k = 100, f = sum2))
+
+  expect_equal(
+    sum_run(x2, k = 100, na_pad = TRUE),
+    runner(x2, k = 100, f = sum2, na_pad = TRUE))
 })
 
-test_that("sum_run with idx++ same as sum_run with windows",{
-  expect_identical(sum_run(x1, k = 3),
-                   sum_run(x1, k = 3, idx = 0:14))
+test_that("       [...|----]---+------->", {
+  expect_equal(
+    sum_run(x2, k = 5, lag = 3),
+    runner(x2, k = 5, lag = 3, f = sum2))
 
-  expect_identical(sum_run(x1, k = k),
-                   sum_run(x1, k = k, idx = 1:15))
+  expect_equal(
+    sum_run(x2, k = 5, lag = 3, na_pad = TRUE),
+    runner(x2, k = 5, lag = 3, f = sum2, na_pad = TRUE))
+
+  expect_equal(
+    sum_run(x2, k = 5, lag = 3, na_rm = FALSE),
+    runner(x2, k = 5, lag = 3, f = sum))
+
+  expect_equal(
+    sum_run(x2, k = 5, lag = 3, na_pad = TRUE, na_rm = FALSE),
+    runner(x2, k = 5, lag = 3, f = sum, na_pad = TRUE))
 })
 
-test_that("sum_run with idx", {
-  expect_identical(
-    sum_run(x2, k = 4, idx = idx),
-    sapply(window_run(x2, k = 4, idx = idx), function(x) {
-     if (all(is.na(x))) NA else sum(x, na.rm = TRUE)
-    })
-  )
-
-  expect_identical(
-    sum_run(x2, k = k, idx = idx),
-    sapply(window_run(x2, k = k, idx = idx), function(x) {
-      if (all(is.na(x))) NA else sum(x, na.rm = TRUE)
-    })
-  )
+test_that("       |-----[--+---]--->", {
+  expect_equal(
+    sum_run(x2, k = 5, lag = -3),
+    runner(x2, k = 5, lag = -3, f = sum2))
 
   expect_equal(
-    sum_run(x2, k = 4, lag = 3, idx = idx),
-    sapply(window_run(x2, k = 4, lag = 3, idx = idx), function(x) {
-      if (all(is.na(x))) NA else sum(x, na.rm = TRUE)
-    })
-  )
+    sum_run(x2, k = 5, lag = -3, na_pad = TRUE),
+    runner(x2, k = 5, lag = -3, f = sum2, na_pad = TRUE))
 
   expect_equal(
-    sum_run(x2, k = k, lag = 3, idx = idx),
-    sapply(window_run(x2, k = k, lag = 3, idx = idx), function(x) {
-      if (all(is.na(x))) NA else sum(x, na.rm = TRUE)
-    })
-  )
+    sum_run(x2, k = 5, lag = -3, na_rm = FALSE),
+    runner(x2, k = 5, lag = -3, f = sum))
 
   expect_equal(
-    sum_run(x2, k = 5, lag = lag, idx = idx),
-    sapply(window_run(x2, k = 5, lag = lag, idx = idx), function(x) {
-      if (all(is.na(x))) NA else sum(x, na.rm = TRUE)
-    })
-  )
-
-  expect_equal(
-    sum_run(x2, k = k, lag = lag, idx = idx),
-    sapply(window_run(x2, k = k, lag = lag, idx = idx), function(x) {
-      if (all(is.na(x))) NA else sum(x, na.rm = TRUE)
-    })
-  )
+    sum_run(x2, k = 5, lag = -3, na_pad = TRUE, na_rm = FALSE),
+    runner(x2, k = 5, lag = -3, f = sum, na_pad = TRUE))
 })
 
-test_that("sum_run with idx negative lag", {
+test_that("       |--------+-[---]->", {
   expect_equal(
-    sum_run(x2, k = 4, lag = -3, idx = idx),
-    sapply(window_run(x2, k = 4, lag = -3, idx = idx), function(x) {
-      if (all(is.na(x))) NA else sum(x, na.rm = TRUE)
-    })
-  )
+    sum_run(x2, k = 5, lag = -7),
+    runner(x2, k = 5, lag = -7, f = sum2))
 
   expect_equal(
-    sum_run(x2, k = k, lag = -3, idx = idx),
-    sapply(window_run(x2, k = k, lag = -3, idx = idx), function(x) {
-      if (all(is.na(x))) NA else sum(x, na.rm = TRUE)
-    })
-  )
+    sum_run(x2, k = 5, lag = -7, na_pad = TRUE),
+    runner(x2, k = 5, lag = -7, f = sum2, na_pad = TRUE))
+
+})
+
+test_that("       |--------+[]----->", {
+  expect_equal(
+    sum_run(x2, k = 1, lag = -1),
+    runner(x2, k = 1, lag = -1, f = sum2))
 
   expect_equal(
-    sum_run(x2, k = 5, lag = -lag, idx = idx),
-    sapply(window_run(x2, k = 5, lag = -lag, idx = idx), function(x) {
-      if (all(is.na(x))) NA else sum(x, na.rm = TRUE)
-    })
-  )
+    sum_run(x2, k = 1, lag = -1, na_pad = TRUE),
+    runner(x2, k = 1, lag = -1, f = sum2, na_pad = TRUE))
+})
 
-  #### FAILS
+test_that("       |------[]+------->", {
   expect_equal(
-    sum_run(x2, k = k, lag = -lag, idx = idx),
-    sapply(window_run(x2, k = k, lag = -lag, idx = idx), function(x) {
-      if (all(is.na(x))) NA else sum(x, na.rm = TRUE)
-    })
-  )
+    sum_run(x2, k = 1, lag = 1),
+    runner(x2, k = 1, lag = 1, f = sum2))
+
+  expect_equal(
+    sum_run(x2, k = 1, lag = 1, na_pad = TRUE),
+    runner(x2, k = 1, lag = 1, f = sum2, na_pad = TRUE))
+})
+
+test_that("various", {
+  expect_equal(
+    sum_run(x2, k = k, lag = 1),
+    runner(x2, k = k, lag = 1, f = sum2))
+
+  expect_equal(
+    sum_run(x2, k = k, lag = 1, na_pad = TRUE),
+    runner(x2, k = k, lag = 1, f = sum2, na_pad = TRUE))
+
+
+  expect_equal(
+    sum_run(x2, k = 3, lag = lag),
+    runner(x2, k = 3, lag = lag, f = sum2))
+
+  expect_equal(
+    sum_run(x2, k = 3, lag = lag, na_pad = TRUE),
+    runner(x2, k = 3, lag = lag, f = sum2, na_pad = TRUE))
+
+  expect_equal(
+    sum_run(x2, k = k, lag = lag),
+    runner(x2, k = k, lag = lag, f = sum2))
+
+  expect_equal(
+    sum_run(x2, k = k, lag = lag, na_pad = TRUE),
+    runner(x2, k = k, lag = lag, f = sum2, na_pad = TRUE))
+
+})
+
+test_that("date window", {
+  expect_equal(
+    sum_run(x2, lag = 3, idx = idx, na_pad = FALSE),
+    runner(x2, lag = 3, idx = idx, f = sum2, na_pad = FALSE))
+
+  expect_equal(
+    sum_run(x2, lag = 3, idx = idx, na_pad = TRUE),
+    runner(x2, lag = 3, idx = idx, f = sum2, na_pad = TRUE))
+
+  expect_equal(
+    sum_run(x2, lag = -3, idx = idx, na_pad = FALSE),
+    runner(x2, lag = -3, idx = idx, f = sum2, na_pad = FALSE))
+
+  expect_equal(
+    sum_run(x2, lag = -3, idx = idx, na_pad = TRUE),
+    runner(x2, lag = -3, idx = idx, f = sum2, na_pad = TRUE))
+
+  expect_equal(
+    sum_run(x2, k = 3, idx = idx, na_pad = FALSE),
+    runner(x2, k = 3, idx = idx, f = sum2, na_pad = FALSE))
+
+  expect_equal(
+    sum_run(x2, k = 3, idx = idx, na_pad = TRUE),
+    runner(x2, k = 3, idx = idx, f = sum2, na_pad = TRUE))
+
+
+  expect_equal(
+    sum_run(x2, lag = -1, idx = idx, na_pad = FALSE),
+    runner(x2, lag = -1, idx = idx, f = sum2, na_pad = FALSE))
+
+  expect_equal(
+    sum_run(x2, lag = -1, idx = idx, na_pad = TRUE),
+    runner(x2, lag = -1, idx = idx, f = sum2, na_pad = TRUE))
+
+  expect_equal(
+    sum_run(x2, lag = 100, idx = idx, na_pad = FALSE),
+    runner(x2, lag = 100, idx = idx, f = sum2, na_pad = FALSE))
+
+  expect_equal(
+    sum_run(x2, lag = 100, idx = idx, na_pad = TRUE),
+    runner(x2, lag = 100, idx = idx, f = sum2, na_pad = TRUE))
+
+  expect_equal(
+    sum_run(x2, lag = -100, idx = idx, na_pad = FALSE),
+    runner(x2, lag = -100, idx = idx, f = sum2, na_pad = FALSE))
+
+  expect_equal(
+    sum_run(x2, lag = -100, idx = idx, na_pad = TRUE),
+    runner(x2, lag = -100, idx = idx, f = sum2, na_pad = TRUE))
+
+
+  expect_equal(
+    sum_run(x2, lag = lag, idx = idx, na_pad = FALSE),
+    runner(x2, lag = lag, idx = idx, f = sum2, na_pad = FALSE))
+
+  expect_equal(
+    sum_run(x2, lag = lag, idx = idx, na_pad = TRUE),
+    runner(x2, lag = lag, idx = idx, f = sum2, na_pad = TRUE))
+
+  expect_equal(
+    sum_run(x2, k = 3, lag = 4, idx = idx, na_pad = FALSE),
+    runner(x2, k = 3, lag = 4, idx = idx, f = sum2, na_pad = FALSE))
+
+  expect_equal(
+    sum_run(x2, k = 3, lag = 4, idx = idx, na_pad = TRUE),
+    runner(x2, k = 3, lag = 4, idx = idx, f = sum2, na_pad = TRUE))
+
+
+  expect_equal(
+    sum_run(x2, k = 3, lag = -4, idx = idx, na_pad = FALSE),
+    runner(x2, k = 3, lag = -4, idx = idx, f = sum2, na_pad = FALSE))
+
+  expect_equal(
+    sum_run(x2, k = 3, lag = -4, idx = idx, na_pad = TRUE),
+    runner(x2, k = 3, lag = -4, idx = idx, f = sum2, na_pad = TRUE))
+
+
+  expect_equal(
+    sum_run(x2, k = k, lag = -4, idx = idx, na_pad = FALSE),
+    runner(x2, k = k, lag = -4, idx = idx, f = sum2, na_pad = FALSE))
+
+  expect_equal(
+    sum_run(x2, k = k, lag = -4, idx = idx, na_pad = TRUE),
+    runner(x2, k = k, lag = -4, idx = idx, f = sum2, na_pad = TRUE))
+
+
+  expect_equal(
+    sum_run(x2, k = 4, lag = lag, idx = idx, na_pad = FALSE),
+    runner(x2, k = 4, lag = lag, idx = idx, f = sum2, na_pad = FALSE))
+
+  expect_equal(
+    sum_run(x2, k = 4, lag = lag, idx = idx, na_pad = TRUE),
+    runner(x2, k = 4, lag = lag, idx = idx, f = sum2, na_pad = TRUE))
 })
 
 

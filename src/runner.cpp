@@ -54,47 +54,66 @@ NumericVector runner_simple(const Vector<RTYPE>& x, IntegerVector k, IntegerVect
 }
 
 template <int RTYPE>
-NumericVector runner_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, IntegerVector indexes, Function f) {
+NumericVector runner_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, IntegerVector indexes, Function f, bool na_pad) {
   int n = x.size();
   IntegerVector idx;
   NumericVector res(n);
 
+
   if (k.size() > 1) {
     if (lag.size() > 1) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(i), n);
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(i), n, na_pad, false);
         res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
       }
-    } else if (lag(0) != 0) {
+    } else if (lag(0) != 0){
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(0), n);
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(0), n, na_pad, false);
         res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
       }
     } else {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx(indexes, i, k(i), n);
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), 0, n, na_pad, false);
+        res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
+      }
+    }
+  } else if (k(0) == 0) {
+    if (lag.size() > 1) {
+      for (int i = 0; i < n; i++) {
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(i), n, na_pad, true);
+        res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
+      }
+    } else if (lag(0) != 0){
+      for (int i = 0; i < n; i++) {
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(0), n, na_pad, true);
+        res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
+      }
+    } else {
+      for (int i = 0; i < n; i++) {
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), 0, n, na_pad, true);
         res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
       }
     }
   } else {
     if (lag.size() > 1) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(i), n);
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(i), n, na_pad, false);
         res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
 
       }
     } else if (lag(0) != 0) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(0), n);
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(0), n, na_pad, false);
         res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
       }
     } else {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx(indexes, i, k(0), n);
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), 0, n, na_pad, false);
         res(i) = (idx.size() == 0) ? NA_REAL : apply::apply_on_window(x, idx, f);
       }
     }
   }
+
   return res;
 }
 
@@ -148,11 +167,11 @@ SEXP runner(SEXP x,
 
   if (idx.size() > 0) {
     switch (TYPEOF(x)) {
-      case INTSXP:  return runner_on_date(as<IntegerVector>(x),   k, lag, idx, f);
-      case REALSXP: return runner_on_date(as<NumericVector>(x),   k, lag, idx, f);
-      case STRSXP:  return runner_on_date(as<CharacterVector>(x), k, lag, idx, f);
-      case LGLSXP: return runner_on_date(as<LogicalVector>(x),    k, lag, idx, f);
-      case CPLXSXP: return runner_on_date(as<ComplexVector>(x),   k, lag, idx, f);
+      case INTSXP:  return runner_on_date(as<IntegerVector>(x),   k, lag, idx, f, na_pad);
+      case REALSXP: return runner_on_date(as<NumericVector>(x),   k, lag, idx, f, na_pad);
+      case STRSXP:  return runner_on_date(as<CharacterVector>(x), k, lag, idx, f, na_pad);
+      case LGLSXP: return runner_on_date(as<LogicalVector>(x),    k, lag, idx, f, na_pad);
+      case CPLXSXP: return runner_on_date(as<ComplexVector>(x),   k, lag, idx, f, na_pad);
     default: {
       stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }
@@ -180,10 +199,10 @@ List window_simple(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, b
   List res(n);
 
   if (k.size() > 1 && lag.size() > 1) {
-      for (int i = 0; i < n; i++) {
-        idx = apply::get_window_idx(i, k(i), lag(i), n, omit_incomplete);
-        res(i) = (idx.size() == 0) ? Vector<RTYPE>(0) : apply::get_window(x, idx);
-      }
+    for (int i = 0; i < n; i++) {
+      idx = apply::get_window_idx(i, k(i), lag(i), n, omit_incomplete);
+      res(i) = (idx.size() == 0) ? Vector<RTYPE>(0) : apply::get_window(x, idx);
+    }
   } else if (k.size() > 1 && lag.size() == 1) {
     for (int i = 0; i < n; i++) {
       idx = apply::get_window_idx(i, k(i), lag(0), n, omit_incomplete);
@@ -214,7 +233,7 @@ List window_simple(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, b
 }
 
 template <int RTYPE>
-List window_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, IntegerVector indexes) {
+List window_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, IntegerVector indexes, bool omit_incomplete) {
   int n = x.size();
   IntegerVector idx;
   List res(n);
@@ -222,35 +241,52 @@ List window_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, 
   if (k.size() > 1) {
     if (lag.size() > 1) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(i), n);
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(i), n, omit_incomplete, false);
         res(i) = apply::get_window(x, idx);
       }
     } else if (lag(0) != 0){
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(0), n);
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), lag(0), n, omit_incomplete, false);
         res(i) = apply::get_window(x, idx);
       }
     } else {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx(indexes, i, k(i), n);
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(i), 0, n, omit_incomplete, false);
+        res(i) = apply::get_window(x, idx);
+      }
+    }
+  } else if (k(0) == 0) {
+    if (lag.size() > 1) {
+      for (int i = 0; i < n; i++) {
+        idx = apply::get_dwindow_idx_lag(indexes, i, n, lag(i), n, omit_incomplete, true);
+        res(i) = apply::get_window(x, idx);
+      }
+    } else if (lag(0) != 0){
+      for (int i = 0; i < n; i++) {
+        idx = apply::get_dwindow_idx_lag(indexes, i, n, lag(0), n, omit_incomplete, true);
+        res(i) = apply::get_window(x, idx);
+      }
+    } else {
+      for (int i = 0; i < n; i++) {
+        idx = apply::get_dwindow_idx_lag(indexes, i, n, 0, n, omit_incomplete, true);
         res(i) = apply::get_window(x, idx);
       }
     }
   } else {
     if (lag.size() > 1) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(i), n);
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(i), n, omit_incomplete, false);
         res(i) = apply::get_window(x, idx);
 
       }
     } else if (lag(0) != 0) {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(0), n);
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), lag(0), n, omit_incomplete, false);
         res(i) = apply::get_window(x, idx);
       }
     } else {
       for (int i = 0; i < n; i++) {
-        idx = apply::get_dwindow_idx(indexes, i, k(0), n);
+        idx = apply::get_dwindow_idx_lag(indexes, i, k(0), 0, n, omit_incomplete, false);
         res(i) = apply::get_window(x, idx);
       }
     }
@@ -297,11 +333,11 @@ SEXP window_run(SEXP x,
 
   if(idx.size() > 1) {
     switch (TYPEOF(x)) {
-      case INTSXP:  return window_on_date(as<IntegerVector>(x),   k, lag, idx);
-      case REALSXP: return window_on_date(as<NumericVector>(x),   k, lag, idx);
-      case STRSXP:  return window_on_date(as<CharacterVector>(x), k, lag, idx);
-      case LGLSXP:  return window_on_date(as<LogicalVector>(x),   k, lag, idx);
-      case CPLXSXP: return window_on_date(as<ComplexVector>(x),   k, lag, idx);
+      case INTSXP:  return window_on_date(as<IntegerVector>(x),   k, lag, idx, omit_incomplete);
+      case REALSXP: return window_on_date(as<NumericVector>(x),   k, lag, idx, omit_incomplete);
+      case STRSXP:  return window_on_date(as<CharacterVector>(x), k, lag, idx, omit_incomplete);
+      case LGLSXP:  return window_on_date(as<LogicalVector>(x),   k, lag, idx, omit_incomplete);
+      case CPLXSXP: return window_on_date(as<ComplexVector>(x),   k, lag, idx, omit_incomplete);
       default: {
         stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
       }

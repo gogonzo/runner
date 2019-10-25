@@ -14,7 +14,12 @@ namespace utils {
       }
       // |---------- [ ]    [ ] |----------
     } else {
-      if (lag > i or (i - lag - k + 1) >= n) return IntegerVector(0);
+      if (cum) {
+        if (lag > i) return IntegerVector(0);
+      } else {
+        if (lag > i or (i - lag - k + 1) >= n) return IntegerVector(0);
+      }
+
     }
 
     // upper bound
