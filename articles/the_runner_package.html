@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The runner package • runner</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="The runner package">
 <meta property="og:description" content="">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.9000</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@
       <h1>The runner package</h1>
                         <h4 class="author">Dawid Kałędkowski</h4>
             
-            <h4 class="date">2019-10-19</h4>
+            <h4 class="date">2019-10-26</h4>
       
       
       <div class="hidden name"><code>the_runner_package.Rmd</code></div>
@@ -119,7 +119,7 @@
 <div id="window-lag" class="section level3">
 <h3 class="hasAnchor">
 <a href="#window-lag" class="anchor"></a>Window lag</h3>
-<p><code>lag</code> denotes how many observations windows will be lagged by. If <code>lag</code> is a single value than it’s constant for all elements of x. For varying lag size one should specify <code>lag</code> as integer vector of <code>length(lag) == length(x)</code> where each element of <code>lag</code> defines lag of window. Default value of <code>lag = 0</code>. Example below illustrates window of <code>k = 4</code> lagged by <code>lag = 2</code> for 10’th element of vector <code>x</code>.</p>
+<p><code>lag</code> denotes how many observations windows will be lagged by. If <code>lag</code> is a single value than it’s constant for all elements of x. For varying lag size one should specify <code>lag</code> as integer vector of <code>length(lag) == length(x)</code> where each element of <code>lag</code> defines lag of window. Default value of <code>lag = 0</code>. Example below illustrates window of <code>k = 4</code> lagged by <code>lag = 2</code> for 10’th element of vector <code>x</code>. Lag can also be negative value, which shifts window forward instead of backward.</p>
 <p><img src="images/lagged_window_k_lag.png"></p>
 </div>
 <div id="windows-depending-on-date" class="section level3">
@@ -158,21 +158,21 @@
 <a class="sourceLine" id="cb2-17" data-line-number="17"></a>
 <a class="sourceLine" id="cb2-18" data-line-number="18"><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(x, k, idx, simple_mean, trimmed_mean, varying_window, date_windows)</a></code></pre></div>
 <pre><code>##             x  k idx simple_mean trimmed_mean varying_window date_windows
-## 1  0.62673146  7   1   0.6267315    0.6267315      0.6267315    0.6267315
-## 2  0.70358115  8   2   0.6651563    0.6651563      0.6651563    0.6651563
-## 3  0.28763154  1   5   0.5393147    0.5393147      0.2876315    0.2876315
-## 4  0.59047037  8   8   0.5521036    0.5521036      0.5521036    0.5521036
-## 5  0.32099514  7   9   0.4756696    0.4756696      0.5058819    0.3996990
-## 6  0.01988551 15  11   0.3047456    0.3047456      0.4248825    0.4248825
-## 7  0.75688388  4  13   0.4220587    0.4220587      0.4220587    0.3883847
-## 8  0.65468928 13  16   0.4381135    0.4381135      0.4951085    0.4384260
-## 9  0.30607925  4  19   0.4343845    0.4343845      0.4343845    0.4803843
-## 10 0.60123557  3  22   0.5797220    0.5797220      0.5206680    0.6012356
-## 11 0.81450813  3  24   0.5941281    0.5941281      0.5739410    0.7078718
-## 12 0.30851767  8  27   0.5075852    0.5075852      0.4728493    0.5747538
-## 13 0.30402906  5  29   0.5070726    0.5070726      0.4668739    0.3062734
-## 14 0.71846200  6  31   0.5363792    0.5363792      0.5088053    0.4436696
-## 15 0.19087261 10  35   0.3804703    0.3804703      0.4675163    0.3804703</code></pre>
+## 1  0.50850136  9   2   0.5085014    0.5085014      0.5085014   0.50850136
+## 2  0.07898978  3   3   0.2937456    0.2937456      0.2937456   0.29374557
+## 3  0.24591241  5   4   0.2778012    0.2778012      0.2778012   0.27780118
+## 4  0.78415913  9   6   0.4043907    0.4043907      0.4043907   0.40439067
+## 5  0.82191175 13  10   0.4827433    0.4827433      0.4878949   0.48789489
+## 6  0.37952509  6  13   0.5578771    0.5578771      0.4698333   0.60071842
+## 7  0.94129121  7  16   0.7317218    0.7317218      0.5371844   0.71424268
+## 8  0.65338567  7  19   0.6990284    0.6990284      0.5578821   0.65806732
+## 9  0.86115377  5  21   0.7088389    0.7088389      0.7314535   0.75726972
+## 10 0.47194482 10  22   0.7319439    0.7319439      0.5746775   0.66146011
+## 11 0.16617478  9  23   0.5381648    0.5381648      0.5917176   0.61879005
+## 12 0.30488066  7  24   0.4510385    0.4510385      0.5397651   0.49150794
+## 13 0.15191617 10  28   0.2737291    0.2737291      0.5536343   0.43490931
+## 14 0.01547989  7  31   0.1596129    0.1596129      0.3749908   0.08369803
+## 15 0.67604393  6  33   0.2870802    0.2870802      0.2977400   0.28114666</code></pre>
 </div>
 <div id="builtin-functions" class="section level3">
 <h3 class="hasAnchor">
