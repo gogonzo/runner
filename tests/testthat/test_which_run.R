@@ -1,11 +1,11 @@
 context("Running min")
 set.seed(11)
-x1 <- sample(c(1, 2, 3), 100, replace = TRUE)
-x2 <- sample(c(NA, 1, 2, 3), 100, replace = TRUE)
+x1 <- sample(c(T, F), 100, replace = TRUE)
+x2 <- sample(c(NA, T, F), 100, replace = TRUE)
 k <- sample(1:100, 100, replace = TRUE)
 lag <- sample(-15:15, 100, replace = TRUE)
 idx <- cumsum(sample(c(1, 2, 3, 4), 100, replace = TRUE))
-which2 <- function(x, arg_which, na_rm, i, k, lag = 0, which) {
+which2 <- function(x, arg_which = "last", na_rm = TRUE) {
   x <- if (!na_rm) {
     if (arg_which == "last") {
       ifelse(
@@ -28,298 +28,204 @@ which2 <- function(x, arg_which, na_rm, i, k, lag = 0, which) {
   if(length(x) == 0) {
     x <- NA_integer_
   }
-  if (!missing(k)) {
-    if (!missing(i)) {
-      return(as.integer(x + (i - 1) - k - lag + 1))
-    } else {
-      return(as.integer(x - k - lag + 1))
-    }
-  } else {
-    if (!missing(i)) {
-      return(as.integer(x + (i - 1) - lag))
-    } else {
-      return(as.integer(x - lag))
-    }
-  }
-
+  return(x)
 }
 
 test_that("       |--------]------->", {
   expect_identical(
     which_run(x2),
-    runner(x2, f = which2)
+    as.integer(runner(x2, f = which2))
   )
 
   expect_identical(
     which_run(x2, na_pad = TRUE),
-    runner(x2, f = which2, na_pad = TRUE)
+    as.integer(runner(x2, f = which2, na_pad = TRUE))
   )
 })
 
 test_that("   [...|----]---+------->", {
   expect_equal(
     which_run(x2, lag = 3),
-    runner(x2, lag = 3, f = which2))
+    as.integer(runner(x2, lag = 3, f = which2)))
 
   expect_equal(
     which_run(x2, lag = 3, na_pad = TRUE),
-    runner(x2, lag = 3, f = which2, na_pad = TRUE))
+    as.integer(runner(x2, lag = 3, f = which2, na_pad = TRUE)))
 })
 
 test_that("       |--------+---]--->", {
   expect_equal(
     which_run(x2, lag = -3),
-    runner(x2, lag = -3, f = which2))
+    as.integer(runner(x2, lag = -3, f = which2)))
 
   expect_equal(
     which_run(x2, lag = -3, na_pad = TRUE),
-    runner(x2, lag = -3, f = which2, na_pad = TRUE))
+    as.integer(runner(x2, lag = -3, f = which2, na_pad = TRUE)))
 })
 
 test_that("  [...]|--------+------->", {
   expect_equal(
     which_run(x2, lag = 100),
-    runner(x2, lag = 100, f = which2))
+    as.integer(runner(x2, lag = 100, f = which2)))
 
   expect_equal(
     which_run(x2, lag = 100, na_pad = TRUE),
-    runner(x2, lag = 100, f = which2, na_pad = TRUE))
+    as.integer(runner(x2, lag = 100, f = which2, na_pad = TRUE)))
 
 
   expect_equal(
     which_run(x2, lag = -100),
-    runner(x2, lag = -100, f = which2))
+    as.integer(runner(x2, lag = -100, f = which2)))
 
   expect_equal(
     which_run(x2, lag = -100, na_pad = TRUE),
-    runner(x2, lag = -100, f = which2, na_pad = TRUE))
+    as.integer(runner(x2, lag = -100, f = which2, na_pad = TRUE)))
 })
 
 test_that("       |----[...]------->", {
-  expect_equal(
-    which_run(x2, k = 3),
-    runner(x2, k = 3, f = which2))
+  out <- which_run(x2, k = 10)
+  test <- runner(x2, k = 10, f = which2)
+  test[10:100] <- test[10:100] + 10:100L - 10L
+  expect_equal(out, test)
 
-  expect_equal(
-    which_run(x2, k = 3, na_pad = TRUE),
-    runner(x2, k = 3, f = which2, na_pad = TRUE))
+  out <- which_run(x2, k = 10, na_pad = TRUE)
+  test <- runner(x2, k = 10, f = which2, na_pad = TRUE)
+  test[10:100] <- test[10:100] + 10:100L - 10L
+  expect_equal(out, test)
 
+
+  out <- which_run(x2, k = 10, which = "first")
+  test <- runner(x2, k = 10, f = function(x) which2(x = x, arg_which = "first"))
+  test[10:100] <- test[10:100] + 10:100L - 10L
+  expect_equal(out, test)
+
+  out <- which_run(x2, k = 10, na_pad = TRUE, which = "first")
+  test <- runner(x2, k = 10, f = function(x) which2(x = x, arg_which = "first"), na_pad = TRUE)
+  test[10:100] <- test[10:100] + 10:100L - 10L
+  expect_equal(out, test)
 })
 
 test_that("       [...|--------+-------[...]", {
-  expect_equal(
-    which_run(x2, k = 1),
-    runner(x2, k = 1, f = which2))
+  out <- which_run(x2, k = 1)
+  test <- runner(x2, k = 1, f = which2)
+  test[1:100] <- test[1:100] + 1:100L - 1L
+  expect_equal(out, test)
 
-  expect_equal(
-    which_run(x2, k = 1, na_pad = TRUE),
-    runner(x2, k = 1, f = which2, na_pad = TRUE))
-
-  expect_equal(
-    which_run(x2, k = 99),
-    runner(x2, k = 99, f = which2))
-
-  expect_equal(
-    which_run(x2, k = 99, na_pad = TRUE),
-    runner(x2, k = 99, f = which2, na_pad = TRUE))
-
-  expect_equal(
-    which_run(x2, k = 100),
-    runner(x2, k = 100, f = which2))
-
-  expect_equal(
-    which_run(x2, k = 100, na_pad = TRUE),
-    runner(x2, k = 100, f = which2, na_pad = TRUE))
+  out <- which_run(x2, k = 1, na_pad = TRUE)
+  test <- runner(x2, k = 1, f = which2, na_pad = TRUE)
+  test[1:100] <- test[1:100] + 1:100L - 1L
+  expect_equal(out, test)
 })
 
 test_that("       [...|----]---+------->", {
-  expect_equal(
-    which_run(x2, k = 5, lag = 3),
-    runner(x2, k = 5, lag = 3, f = which2))
+  out <- which_run(x2, k = 5, lag = 3)
+  test <- runner(x2, k = 5, lag = 3, f = which2)
+  test[(5 + 3):100] <- test[(5 + 3):100] + (5 + 3):100L - (5L + 3)
+  expect_equal(out, test)
 
-  expect_equal(
-    which_run(x2, k = 5, lag = 3, na_pad = TRUE),
-    runner(x2, k = 5, lag = 3, f = which2, na_pad = TRUE))
+  out <- which_run(x2, k = 5, lag = 3, na_pad = TRUE)
+  test <- runner(x2, k = 5, lag = 3, f = which2, na_pad = TRUE)
+  test[(5 + 3):100] <- test[(5 + 3):100] + (5 + 3):100L - (5L + 3)
+  expect_equal(out, test)
 
-  expect_equal(
-    which_run(x2, k = 5, lag = 3, na_rm = FALSE),
-    runner(x2, k = 5, lag = 3, f = which))
-
-  expect_equal(
-    which_run(x2, k = 5, lag = 3, na_pad = TRUE, na_rm = FALSE),
-    runner(x2, k = 5, lag = 3, f = which, na_pad = TRUE))
+  out <- which_run(x2, k = 5, lag = 3, na_pad = TRUE, na_rm = FALSE)
+  test <- runner(x2, k = 5, lag = 3, f = function(x) which2(x, na_rm = FALSE), na_pad = TRUE)
+  test[(5 + 3):100] <- test[(5 + 3):100] + (5 + 3):100L - (5L + 3)
+  expect_equal(out, test)
 })
 
 test_that("       |-----[--+---]--->", {
-  expect_equal(
-    which_run(x2, k = 5, lag = -3),
-    runner(x2, k = 5, lag = -3, f = which2))
+  out <- which_run(x2, k = 5, lag = -3)
+  test <- runner(x2, k = 5, lag = -3, f = which2)
+  test[(5 - 3):100] <- test[(5 - 3):100] + (5 - 3):100L - (5L - 3)
+  expect_equal(out, test)
 
-  expect_equal(
-    which_run(x2, k = 5, lag = -3, na_pad = TRUE),
-    runner(x2, k = 5, lag = -3, f = which2, na_pad = TRUE))
+  out <- which_run(x2, k = 5, lag = -3, na_pad = TRUE)
+  test <- runner(x2, k = 5, lag = -3, f = which2, na_pad = TRUE)
+  test[(5 - 3):100] <- test[(5 - 3):100] + (5 - 3):100L - (5L - 3)
+  expect_equal(out, test)
 
-  expect_equal(
-    which_run(x2, k = 5, lag = -3, na_rm = FALSE),
-    runner(x2, k = 5, lag = -3, f = which))
-
-  expect_equal(
-    which_run(x2, k = 5, lag = -3, na_pad = TRUE, na_rm = FALSE),
-    runner(x2, k = 5, lag = -3, f = which, na_pad = TRUE))
+  out <- which_run(x2, k = 5, lag = -3, na_pad = TRUE, na_rm = FALSE)
+  test <- runner(x2, k = 5, lag = -3, f = function(x) which2(x, na_rm = FALSE), na_pad = TRUE)
+  test[(5 - 3):100] <- test[(5 - 3):100] + (5 - 3):100L - (5L - 3)
+  expect_equal(out, test)
 })
 
-test_that("       |--------+-[---]->", {
+test_that("idx", {
   expect_equal(
-    which_run(x2, k = 5, lag = -7),
-    runner(x2, k = 5, lag = -7, f = which2))
-
-  expect_equal(
-    which_run(x2, k = 5, lag = -7, na_pad = TRUE),
-    runner(x2, k = 5, lag = -7, f = which2, na_pad = TRUE))
-
-})
-
-test_that("       |--------+[]----->", {
-  expect_equal(
-    which_run(x2, k = 1, lag = -1),
-    runner(x2, k = 1, lag = -1, f = which2))
+    which_run(x2, lag = 3, idx = 1:100),
+    which_run(x2, lag = 3))
 
   expect_equal(
-    which_run(x2, k = 1, lag = -1, na_pad = TRUE),
-    runner(x2, k = 1, lag = -1, f = which2, na_pad = TRUE))
-})
-
-test_that("       |------[]+------->", {
-  expect_equal(
-    which_run(x2, k = 1, lag = 1),
-    runner(x2, k = 1, lag = 1, f = which2))
+    which_run(x2, lag = 3, idx = 1:100, na_pad = TRUE),
+    which_run(x2, lag = 3, na_pad = TRUE))
 
   expect_equal(
-    which_run(x2, k = 1, lag = 1, na_pad = TRUE),
-    runner(x2, k = 1, lag = 1, f = which2, na_pad = TRUE))
-})
-
-test_that("various", {
-  expect_equal(
-    which_run(x2, k = k, lag = 1),
-    runner(x2, k = k, lag = 1, f = which2))
+    which_run(x2, lag = -3, idx = 1:100),
+    which_run(x2, lag = -3))
 
   expect_equal(
-    which_run(x2, k = k, lag = 1, na_pad = TRUE),
-    runner(x2, k = k, lag = 1, f = which2, na_pad = TRUE))
-
-
-  expect_equal(
-    which_run(x2, k = 3, lag = lag),
-    runner(x2, k = 3, lag = lag, f = which2))
+    which_run(x2, lag = -3, idx = 1:100, na_pad = TRUE),
+    which_run(x2, lag = -3, na_pad = TRUE))
 
   expect_equal(
-    which_run(x2, k = 3, lag = lag, na_pad = TRUE),
-    runner(x2, k = 3, lag = lag, f = which2, na_pad = TRUE))
+    which_run(x2, k = 5, lag = 3, idx = 1:100),
+    which_run(x2, k = 5, lag = 3))
 
   expect_equal(
-    which_run(x2, k = k, lag = lag),
-    runner(x2, k = k, lag = lag, f = which2))
+    which_run(x2, k = 5, lag = 3, idx = 1:100, na_pad = TRUE),
+    which_run(x2, k = 5, lag = 3, na_pad = TRUE))
 
   expect_equal(
-    which_run(x2, k = k, lag = lag, na_pad = TRUE),
-    runner(x2, k = k, lag = lag, f = which2, na_pad = TRUE))
-
-})
-
-test_that("date window", {
-  expect_equal(
-    which_run(x2, lag = 3, idx = idx, na_pad = FALSE),
-    runner(x2, lag = 3, idx = idx, f = which2, na_pad = FALSE))
+    which_run(x2, k = 5, lag = -3, idx = 1:100),
+    which_run(x2, k = 5, lag = -3))
 
   expect_equal(
-    which_run(x2, lag = 3, idx = idx, na_pad = TRUE),
-    runner(x2, lag = 3, idx = idx, f = which2, na_pad = TRUE))
+    which_run(x2, k = 5, lag = -3, idx = 1:100, na_pad = TRUE),
+    which_run(x2, k = 5, lag = -3, na_pad = TRUE))
 
   expect_equal(
-    which_run(x2, lag = -3, idx = idx, na_pad = FALSE),
-    runner(x2, lag = -3, idx = idx, f = which2, na_pad = FALSE))
+    which_run(x2, k = 5, lag = -3, idx = 1:100),
+    which_run(x2, k = 5, lag = -3))
 
   expect_equal(
-    which_run(x2, lag = -3, idx = idx, na_pad = TRUE),
-    runner(x2, lag = -3, idx = idx, f = which2, na_pad = TRUE))
-
-  expect_equal(
-    which_run(x2, k = 3, idx = idx, na_pad = FALSE),
-    runner(x2, k = 3, idx = idx, f = which2, na_pad = FALSE))
-
-  expect_equal(
-    which_run(x2, k = 3, idx = idx, na_pad = TRUE),
-    runner(x2, k = 3, idx = idx, f = which2, na_pad = TRUE))
+    which_run(x2, k = 5, lag = -3, idx = 1:100, na_pad = TRUE),
+    which_run(x2, k = 5, lag = -3, na_pad = TRUE))
 
 
   expect_equal(
-    which_run(x2, lag = -1, idx = idx, na_pad = FALSE),
-    runner(x2, lag = -1, idx = idx, f = which2, na_pad = FALSE))
+    which_run(x2, k = 5, idx = 1:100),
+    which_run(x2, k = 5))
 
   expect_equal(
-    which_run(x2, lag = -1, idx = idx, na_pad = TRUE),
-    runner(x2, lag = -1, idx = idx, f = which2, na_pad = TRUE))
+    which_run(x2, k = 5, idx = 1:100, na_pad = TRUE),
+    which_run(x2, k = 5, na_pad = TRUE))
 
   expect_equal(
-    which_run(x2, lag = 100, idx = idx, na_pad = FALSE),
-    runner(x2, lag = 100, idx = idx, f = which2, na_pad = FALSE))
+    which_run(x2, k = k, lag = lag, idx = 1:100),
+    which_run(x2, k = k, lag = lag))
 
   expect_equal(
-    which_run(x2, lag = 100, idx = idx, na_pad = TRUE),
-    runner(x2, lag = 100, idx = idx, f = which2, na_pad = TRUE))
+    which_run(x2, k = k, lag = lag, idx = 1:100, na_pad = TRUE),
+    which_run(x2, k = k, lag = lag, na_pad = TRUE))
 
   expect_equal(
-    which_run(x2, lag = -100, idx = idx, na_pad = FALSE),
-    runner(x2, lag = -100, idx = idx, f = which2, na_pad = FALSE))
+    which_run(x2, k = k, lag = lag, idx = 1:100, na_rm = FALSE),
+    which_run(x2, k = k, lag = lag, na_rm = FALSE))
 
   expect_equal(
-    which_run(x2, lag = -100, idx = idx, na_pad = TRUE),
-    runner(x2, lag = -100, idx = idx, f = which2, na_pad = TRUE))
-
-
-  expect_equal(
-    which_run(x2, lag = lag, idx = idx, na_pad = FALSE),
-    runner(x2, lag = lag, idx = idx, f = which2, na_pad = FALSE))
+    which_run(x2, k = k, lag = lag, idx = 1:100, na_pad = TRUE, na_rm = FALSE),
+    which_run(x2, k = k, lag = lag, na_pad = TRUE, na_rm = FALSE))
 
   expect_equal(
-    which_run(x2, lag = lag, idx = idx, na_pad = TRUE),
-    runner(x2, lag = lag, idx = idx, f = which2, na_pad = TRUE))
+    which_run(x2, k = k, lag = lag, idx = 1:100, na_rm = FALSE),
+    which_run(x2, k = k, lag = lag, na_rm = FALSE))
 
   expect_equal(
-    which_run(x2, k = 3, lag = 4, idx = idx, na_pad = FALSE),
-    runner(x2, k = 3, lag = 4, idx = idx, f = which2, na_pad = FALSE))
-
-  expect_equal(
-    which_run(x2, k = 3, lag = 4, idx = idx, na_pad = TRUE),
-    runner(x2, k = 3, lag = 4, idx = idx, f = which2, na_pad = TRUE))
+    which_run(x2, k = k, lag = lag, idx = 1:100, na_pad = TRUE, na_rm = FALSE),
+    which_run(x2, k = k, lag = lag, na_pad = TRUE, na_rm = FALSE))
 
 
-  expect_equal(
-    which_run(x2, k = 3, lag = -4, idx = idx, na_pad = FALSE),
-    runner(x2, k = 3, lag = -4, idx = idx, f = which2, na_pad = FALSE))
-
-  expect_equal(
-    which_run(x2, k = 3, lag = -4, idx = idx, na_pad = TRUE),
-    runner(x2, k = 3, lag = -4, idx = idx, f = which2, na_pad = TRUE))
-
-
-  expect_equal(
-    which_run(x2, k = k, lag = -4, idx = idx, na_pad = FALSE),
-    runner(x2, k = k, lag = -4, idx = idx, f = which2, na_pad = FALSE))
-
-  expect_equal(
-    which_run(x2, k = k, lag = -4, idx = idx, na_pad = TRUE),
-    runner(x2, k = k, lag = -4, idx = idx, f = which2, na_pad = TRUE))
-
-
-  expect_equal(
-    which_run(x2, k = 4, lag = lag, idx = idx, na_pad = FALSE),
-    runner(x2, k = 4, lag = lag, idx = idx, f = which2, na_pad = FALSE))
-
-  expect_equal(
-    which_run(x2, k = 4, lag = lag, idx = idx, na_pad = TRUE),
-    runner(x2, k = 4, lag = lag, idx = idx, f = which2, na_pad = TRUE))
 })
 
 test_that("Errors", {

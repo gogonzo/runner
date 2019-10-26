@@ -39,7 +39,7 @@ test_that("   [...|----]---+------->", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = 3)]))
 
   expect_identical(
-    window_run(x1, lag = 3, omit_incomplete = TRUE),
+    window_run(x1, lag = 3, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = 3, na_pad = TRUE)]))
 })
 
@@ -49,7 +49,7 @@ test_that("       |--------+---]--->", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = -3)]))
 
   expect_identical(
-    window_run(x1, lag = -3, omit_incomplete = TRUE),
+    window_run(x1, lag = -3, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = -3, na_pad = TRUE)]))
 
   expect_identical(
@@ -57,7 +57,7 @@ test_that("       |--------+---]--->", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = lag[i])]))
 
   expect_identical(
-    window_run(x1, lag = lag, omit_incomplete = TRUE),
+    window_run(x1, lag = lag, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = lag[i], na_pad = TRUE)]))
 })
 
@@ -67,7 +67,7 @@ test_that("  [...]|--------+------->", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = 100)]))
 
   expect_identical(
-    window_run(x1, lag = 100, omit_incomplete = TRUE),
+    window_run(x1, lag = 100, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = 100, na_pad = TRUE)]))
 
 
@@ -76,7 +76,7 @@ test_that("  [...]|--------+------->", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = -100)]))
 
   expect_identical(
-    window_run(x1, lag = -100, omit_incomplete = TRUE),
+    window_run(x1, lag = -100, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = -100, na_pad = TRUE)]))
 
 })
@@ -87,7 +87,7 @@ test_that("       |----[...]------->", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 3)]))
 
   expect_identical(
-    window_run(x1, k = 3, omit_incomplete = TRUE),
+    window_run(x1, k = 3, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 3, na_pad = TRUE)]))
 })
 
@@ -97,7 +97,7 @@ test_that("       [...|--------+-------[...]", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 1)]))
 
   expect_identical(
-    window_run(x1, k = 1, omit_incomplete = TRUE),
+    window_run(x1, k = 1, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 1, na_pad = TRUE)]))
 
   expect_identical(
@@ -105,7 +105,7 @@ test_that("       [...|--------+-------[...]", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 99)]))
 
   expect_identical(
-    window_run(x1, k = 99, omit_incomplete = TRUE),
+    window_run(x1, k = 99, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 99, na_pad = TRUE)]))
 
   expect_identical(
@@ -113,7 +113,7 @@ test_that("       [...|--------+-------[...]", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 100)]))
 
   expect_identical(
-    window_run(x1, k = 100, omit_incomplete = TRUE),
+    window_run(x1, k = 100, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 100, na_pad = TRUE)]))
 
   expect_equal(
@@ -131,7 +131,7 @@ test_that("       [...|----]---+------->", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 5, lag = 3)]))
 
   expect_identical(
-    window_run(x1, k = 5, lag = 3, omit_incomplete = TRUE),
+    window_run(x1, k = 5, lag = 3, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 5, lag = 3, na_pad = TRUE)]))
 })
 
@@ -141,7 +141,7 @@ test_that("       |-----[--+---]--->", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 5, lag = -3)]))
 
   expect_identical(
-    window_run(x1, k = 5, lag = -3, omit_incomplete = TRUE),
+    window_run(x1, k = 5, lag = -3, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 5, lag = -3, na_pad = TRUE)]))
 })
 
@@ -151,7 +151,7 @@ test_that("       |--------+-[---]->", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 5, lag = -7)]))
 
   expect_identical(
-    window_run(x1, k = 5, lag = -7, omit_incomplete = TRUE),
+    window_run(x1, k = 5, lag = -7, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 5, lag = -7, na_pad = TRUE)]))
 })
 
@@ -161,7 +161,7 @@ test_that("       |--------+[]----->", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 1, lag = -1)]))
 
   expect_identical(
-    window_run(x1, k = 1, lag = -1, omit_incomplete = TRUE),
+    window_run(x1, k = 1, lag = -1, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 1, lag = -1, na_pad = TRUE)]))
 })
 
@@ -171,7 +171,7 @@ test_that("       |------[]+------->", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 1, lag = 1)]))
 
   expect_identical(
-    window_run(x1, k = 1, lag = 1, omit_incomplete = TRUE),
+    window_run(x1, k = 1, lag = 1, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 1, lag = 1, na_pad = TRUE)]))
 })
 
@@ -181,7 +181,7 @@ test_that("various", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = k[i], lag = 1)]))
 
   expect_identical(
-    window_run(x1, k = k, lag = 1, omit_incomplete = TRUE),
+    window_run(x1, k = k, lag = 1, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = k[i], lag = 1, na_pad = TRUE)]))
 
   expect_equal(
@@ -189,7 +189,7 @@ test_that("various", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 3, lag = lag[i])]))
 
   expect_equal(
-    window_run(x1, k = 3, lag = lag, omit_incomplete = TRUE),
+    window_run(x1, k = 3, lag = lag, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 3, lag = lag[i], na_pad = TRUE)]))
 
   expect_equal(
@@ -197,7 +197,7 @@ test_that("various", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = k[i], lag = lag[i])]))
 
   expect_equal(
-    window_run(x1, k = k, lag = lag, omit_incomplete = TRUE),
+    window_run(x1, k = k, lag = lag, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = k[i], lag = lag[i], na_pad = TRUE)]))
 
   expect_equal(
@@ -205,7 +205,7 @@ test_that("various", {
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = k[i], lag = 4)]))
 
   expect_equal(
-    window_run(x1, k = k, lag = 4, omit_incomplete = TRUE),
+    window_run(x1, k = k, lag = 4, na_pad = TRUE),
     lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = k[i], lag = 4, na_pad = TRUE)]))
 
 })
@@ -223,100 +223,100 @@ test_that("window_run with idx same as window_run with windows",{
   expect_identical(window_run(x1, k = k, lag = lag),
                    window_run(x1, k = k, lag = lag, idx = 1:100))
 
-  expect_identical(window_run(x1, k = 3, omit_incomplete = TRUE) ,
-                   window_run(x1, k = 3, idx = 1:100, omit_incomplete = TRUE))
+  expect_identical(window_run(x1, k = 3, na_pad = TRUE) ,
+                   window_run(x1, k = 3, idx = 1:100, na_pad = TRUE))
 
-  expect_identical(window_run(x1, k = k, omit_incomplete = TRUE) ,
-                   window_run(x1, k = k, idx = 1:100, omit_incomplete = TRUE))
+  expect_identical(window_run(x1, k = k, na_pad = TRUE) ,
+                   window_run(x1, k = k, idx = 1:100, na_pad = TRUE))
 
-  expect_identical(window_run(x1, k = k, lag = 5, omit_incomplete = TRUE),
-                   window_run(x1, k = k, lag = 5, idx = 1:100, omit_incomplete = TRUE))
+  expect_identical(window_run(x1, k = k, lag = 5, na_pad = TRUE),
+                   window_run(x1, k = k, lag = 5, idx = 1:100, na_pad = TRUE))
 
-  expect_identical(window_run(x1, k = k, lag = lag, omit_incomplete = TRUE),
-                   window_run(x1, k = k, lag = lag, idx = 1:100, omit_incomplete = TRUE))
+  expect_identical(window_run(x1, k = k, lag = lag, na_pad = TRUE),
+                   window_run(x1, k = k, lag = lag, idx = 1:100, na_pad = TRUE))
 
 })
 
 test_that("date - only lag", {
-  out <- window_run(x2, lag = 3, idx = idx, omit_incomplete = FALSE)
+  out <- window_run(x2, lag = 3, idx = idx, na_pad = FALSE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, lag = 3, idx = idx, na_pad = FALSE))
   expect_identical(out, test)
 
-  out <- window_run(x2, lag = 3, idx = idx, omit_incomplete = TRUE)
+  out <- window_run(x2, lag = 3, idx = idx, na_pad = TRUE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, lag = 3, idx = idx, na_pad = TRUE))
   expect_identical(out, test)
 
-  out <- window_run(x2, lag = -3, idx = idx, omit_incomplete = FALSE)
+  out <- window_run(x2, lag = -3, idx = idx, na_pad = FALSE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, lag = -3, idx = idx, na_pad = FALSE))
   expect_identical(out, test)
 
-  out <- window_run(x2, lag = -3, idx = idx, omit_incomplete = TRUE)
+  out <- window_run(x2, lag = -3, idx = idx, na_pad = TRUE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, lag = -3, idx = idx, na_pad = TRUE))
   expect_identical(out, test)
 
-  out <- window_run(x2, lag = lag, idx = idx, omit_incomplete = FALSE)
+  out <- window_run(x2, lag = lag, idx = idx, na_pad = FALSE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, lag = lag[i], idx = idx, na_pad = FALSE))
   expect_identical(out, test)
 
-  out <- window_run(x2, lag = lag, idx = idx, omit_incomplete = TRUE)
+  out <- window_run(x2, lag = lag, idx = idx, na_pad = TRUE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, lag = lag[i], idx = idx, na_pad = TRUE))
   expect_identical(out, test)
 })
 
 test_that("date - lag + k", {
-  out <- window_run(x2, k = 3, lag = 3, idx = idx, omit_incomplete = FALSE)
+  out <- window_run(x2, k = 3, lag = 3, idx = idx, na_pad = FALSE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, k = 3, lag = 3, idx = idx, na_pad = FALSE))
   expect_identical(out, test)
 
-  out <- window_run(x2, k = 3, lag = 3, idx = idx, omit_incomplete = TRUE)
+  out <- window_run(x2, k = 3, lag = 3, idx = idx, na_pad = TRUE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, k = 3, lag = 3, idx = idx, na_pad = TRUE))
   expect_identical(out, test)
 
-  out <- window_run(x2, k = 3, lag = -3, idx = idx, omit_incomplete = FALSE)
+  out <- window_run(x2, k = 3, lag = -3, idx = idx, na_pad = FALSE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, k = 3, lag = -3, idx = idx, na_pad = FALSE))
   expect_identical(out, test)
 
-  out <- window_run(x2, k = 3, lag = -3, idx = idx, omit_incomplete = TRUE)
+  out <- window_run(x2, k = 3, lag = -3, idx = idx, na_pad = TRUE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, k = 3, lag = -3, idx = idx, na_pad = TRUE))
   expect_identical(out, test)
 
-  out <- window_run(x2, k = 4, lag = -3, idx = idx, omit_incomplete = FALSE)
+  out <- window_run(x2, k = 4, lag = -3, idx = idx, na_pad = FALSE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, k = 4, lag = -3, idx = idx, na_pad = FALSE))
   expect_identical(out, test)
 
-  out <- window_run(x2, k = 4, lag = -3, idx = idx, omit_incomplete = TRUE)
+  out <- window_run(x2, k = 4, lag = -3, idx = idx, na_pad = TRUE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, k = 4, lag = -3, idx = idx, na_pad = TRUE))
   expect_identical(out, test)
 
-  out <- window_run(x2, k = 3, lag = -4, idx = idx, omit_incomplete = FALSE)
+  out <- window_run(x2, k = 3, lag = -4, idx = idx, na_pad = FALSE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, k = 3, lag = -4, idx = idx, na_pad = FALSE))
   expect_identical(out, test)
 
-  out <- window_run(x2, k = 3, lag = -4, idx = idx, omit_incomplete = TRUE)
+  out <- window_run(x2, k = 3, lag = -4, idx = idx, na_pad = TRUE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, k = 3, lag = -4, idx = idx, na_pad = TRUE))
   expect_identical(out, test)
 
-  out <- window_run(x2, k = 3, lag = -1, idx = idx, omit_incomplete = FALSE)
+  out <- window_run(x2, k = 3, lag = -1, idx = idx, na_pad = FALSE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, k = 3, lag = -1, idx = idx, na_pad = FALSE))
   expect_identical(out, test)
 
-  out <- window_run(x2, k = 3, lag = -1, idx = idx, omit_incomplete = TRUE)
+  out <- window_run(x2, k = 3, lag = -1, idx = idx, na_pad = TRUE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, k = 3, lag = -1, idx = idx, na_pad = TRUE))
   expect_identical(out, test)
 
-  out <- window_run(x2, k = 1, lag = -1, idx = idx, omit_incomplete = FALSE)
+  out <- window_run(x2, k = 1, lag = -1, idx = idx, na_pad = FALSE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, k = 1, lag = -1, idx = idx, na_pad = FALSE))
   expect_identical(out, test)
 
-  out <- window_run(x2, k = 1, lag = -1, idx = idx, omit_incomplete = TRUE)
+  out <- window_run(x2, k = 1, lag = -1, idx = idx, na_pad = TRUE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, k = 1, lag = -1, idx = idx, na_pad = TRUE))
   expect_identical(out, test)
 
-  out <- window_run(x2, k = k, lag = lag, idx = idx, omit_incomplete = FALSE)
+  out <- window_run(x2, k = k, lag = lag, idx = idx, na_pad = FALSE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, k = k[i], lag = lag[i], idx = idx, na_pad = FALSE))
   expect_identical(out, test)
 
-  out <- window_run(x2, k = k, lag = lag, idx = idx, omit_incomplete = TRUE)
+  out <- window_run(x2, k = k, lag = lag, idx = idx, na_pad = TRUE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, k = k[i], lag = lag[i], idx = idx, na_pad = TRUE))
   expect_identical(out, test)
 })

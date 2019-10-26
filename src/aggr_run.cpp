@@ -9,7 +9,6 @@ using namespace Rcpp;
 //' @inheritParams runner
 //' @param x \code{numeric} vector which running function is calculated on
 //' @param na_rm \code{logical} single value (default \code{na_rm = TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.
-//' @param na_pad \code{logical} single value (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 //' @inheritParams runner
 //' @return sum \code{code} vector of length equals length of \code{x}.
 //' @examples

@@ -172,8 +172,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // window_run
-SEXP window_run(SEXP x, IntegerVector k, IntegerVector lag, IntegerVector idx, bool omit_incomplete);
-RcppExport SEXP _runner_window_run(SEXP xSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP idxSEXP, SEXP omit_incompleteSEXP) {
+SEXP window_run(SEXP x, IntegerVector k, IntegerVector lag, IntegerVector idx, bool na_pad);
+RcppExport SEXP _runner_window_run(SEXP xSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP idxSEXP, SEXP na_padSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -181,8 +181,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type lag(lagSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP);
-    Rcpp::traits::input_parameter< bool >::type omit_incomplete(omit_incompleteSEXP);
-    rcpp_result_gen = Rcpp::wrap(window_run(x, k, lag, idx, omit_incomplete));
+    Rcpp::traits::input_parameter< bool >::type na_pad(na_padSEXP);
+    rcpp_result_gen = Rcpp::wrap(window_run(x, k, lag, idx, na_pad));
     return rcpp_result_gen;
 END_RCPP
 }
