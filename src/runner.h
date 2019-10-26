@@ -2,7 +2,6 @@ using namespace Rcpp;
 
 namespace apply {
   IntegerVector get_window_idx(int i, int k, int lag, int n, bool na_pad, bool cum = false) {
-    // Rcout << "i:" << i << " k: " << k << " lag: " << lag << "     " << (i - k - lag + 1) << "-" << (i - lag) <<"\n" ;
     // [ |---]-------     |-------[---  ]
     if (na_pad) {
       if (cum) {

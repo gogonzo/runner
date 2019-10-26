@@ -4,7 +4,7 @@ output:
     pandoc_args: --webtex
 ---
 
-# `runner` a R package for running operations.
+# `runner` an R package for running operations.
 
 # <img src="man/figures/hexlogo.png" align="right" />
 
