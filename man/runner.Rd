@@ -4,7 +4,8 @@
 \alias{runner}
 \title{Custom running function}
 \usage{
-runner(x, f, k = integer(1), lag = integer(1), idx = integer(0))
+runner(x, f, k = integer(1), lag = integer(1), idx = integer(0),
+  na_pad = FALSE)
 }
 \arguments{
 \item{x}{Vector of any type}
@@ -21,6 +22,9 @@ window size for each element.}
 
 \item{idx}{\code{date or integer} an optional integer vector containing index of observation. If specified
 then \code{k} and \code{lag} are depending on \code{idx}. Length of \code{idx} should be equal of length \code{x}}
+
+\item{na_pad}{\code{logical} single value (default \code{na_pad=FALSE}) - if \code{TRUE} calculation on
+incomplete window will return \code{NA}. Incomplete window is when some parts of the window are out of range}
 }
 \description{
 Applies custom function to running windows

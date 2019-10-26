@@ -3,33 +3,32 @@ using namespace Rcpp;
 namespace aggr {
     template <int RTYPE>
     int calc_actual_streak(const Vector<RTYPE>& x, int u, int l, bool na_rm) {
-      int j_f = NA_INTEGER;
-      int cur_streak = 1;
-      // run for first finite
-      for (int j = u; j >= l ; --j) {
-        if (Vector<RTYPE>::is_na(x(j))) {
-          if (!na_rm) {
-            return NA_INTEGER;
+      int uu = u;
+      int cur_streak = 0;
+
+      if (na_rm) {
+        for (int j = u; j >= l ; --j) {
+          if (Vector<RTYPE>::is_na(x(j))) continue;
+          if (Vector<RTYPE>::is_na(x(uu))) uu = j;
+          if (x(j) == x(uu)) {
+            cur_streak += 1L;
+          } else {
+            break;
           }
-        } else {
-          j_f = j;
-          break;
+        }
+      } else {
+        for (int j = u; j >= l ; --j) {
+          if (Vector<RTYPE>::is_na(x(j))) return NA_INTEGER;
+          if (Vector<RTYPE>::is_na(x(uu))) uu = j;
+          if (x(j) == x(uu)) {
+            cur_streak += 1L;
+          } else {
+            break;
+          }
         }
       }
 
-      if (IntegerVector::is_na(j_f)) return NA_INTEGER;
-      for (int j = j_f; j >= l ; --j) {
-        if (j < j_f) {
-          if (x(j) == x(j_f)) {
-            cur_streak += 1;
-            j_f = j;
-          } else if (!Vector<RTYPE>::is_na(x(j))) {
-            return cur_streak;
-          } else {
-            if (!na_rm) return cur_streak;
-          }
-        }
-      }
+      if (cur_streak == 0) return NA_INTEGER;
       return cur_streak;
     }
 

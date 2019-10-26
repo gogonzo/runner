@@ -20,7 +20,8 @@ window size for each element.}
 
 \item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.}
 
-\item{na_pad}{\code{logical} single value (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.}
+\item{na_pad}{\code{logical} single value (default \code{na_pad=FALSE}) - if \code{TRUE} calculation on
+incomplete window will return \code{NA}. Incomplete window is when some parts of the window are out of range}
 
 \item{idx}{\code{date or integer} an optional integer vector containing index of observation. If specified
 then \code{k} and \code{lag} are depending on \code{idx}. Length of \code{idx} should be equal of length \code{x}}

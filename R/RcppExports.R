@@ -7,7 +7,6 @@
 #' @inheritParams runner
 #' @param x \code{numeric} vector which running function is calculated on
 #' @param na_rm \code{logical} single value (default \code{na_rm = TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.
-#' @param na_pad \code{logical} single value (default \code{na_pad=FALSE}) - if \code{TRUE} first k-results will be filled by \code{NA}. If k is not specified na_pad=F by default.
 #' @inheritParams runner
 #' @return sum \code{code} vector of length equals length of \code{x}.
 #' @examples
@@ -203,6 +202,8 @@ length_run <- function(k = integer(1), lag = integer(1), idx = integer(0)) {
 #' @param idx \code{date or integer} an optional integer vector containing index of observation. If specified
 #' then \code{k} and \code{lag} are depending on \code{idx}. Length of \code{idx} should be equal of length \code{x}
 #' @param f \code{function} to be applied on \code{x}
+#' @param na_pad \code{logical} single value (default \code{na_pad=FALSE}) - if \code{TRUE} calculation on
+#' incomplete window will return \code{NA}. Incomplete window is when some parts of the window are out of range
 #' @examples
 #' runner(1:10, f = mean, k = 3)
 #' runner(1:10, k = 3, f = function(x) mean(x, na.rm = TRUE))
@@ -210,22 +211,19 @@ length_run <- function(k = integer(1), lag = integer(1), idx = integer(0)) {
 #'        k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5),
 #'        f = function(x) length(unique(x)))
 #' @export
-runner <- function(x, f, k = integer(1), lag = integer(1), idx = integer(0)) {
-    .Call('_runner_runner', PACKAGE = 'runner', x, f, k, lag, idx)
+runner <- function(x, f, k = integer(1), lag = integer(1), idx = integer(0), na_pad = FALSE) {
+    .Call('_runner_runner', PACKAGE = 'runner', x, f, k, lag, idx, na_pad)
 }
 
 #' List of running windows
 #'
 #' Creates list of windows
-#' @param x Vector of any type
-#' @param k integer vector which specifies window length
-#' @param lag integer vector which specifies window shift
-#' @param idx an optional integer vector containing index of observations.
+#' @inheritParams runner
 #' @examples
-#' window_run(1:10, k = 3)
+#' window_run(1:10, k = 3, lag = -1)
 #' window_run(letters[1:10], k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
 #' @export
-window_run <- function(x, k = integer(1), lag = integer(1), idx = integer(0)) {
-    .Call('_runner_window_run', PACKAGE = 'runner', x, k, lag, idx)
+window_run <- function(x, k = integer(1), lag = integer(1), idx = integer(0), na_pad = FALSE) {
+    .Call('_runner_window_run', PACKAGE = 'runner', x, k, lag, idx, na_pad)
 }
 

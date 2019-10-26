@@ -1,3 +1,7 @@
+# runner 0.2.3
+* allow negative lag
+* na_pad in all functions with lag or k
+
 # runner 0.2.2
 
 * modified runner to accept any types of input vectors 
