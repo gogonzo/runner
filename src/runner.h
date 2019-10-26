@@ -38,23 +38,6 @@ namespace apply {
 
   }
 
-  IntegerVector get_dwindow_idx(IntegerVector idx, int i, int k, int n, bool na_pad) {
-    if (na_pad) {
-      if ((idx(i) - k + 1) < idx(0)) return IntegerVector(0);
-      // |---------- [ ]    [ ] |----------
-    }
-
-    IntegerVector idx_out;
-    for (int j = i; j >= 0; j--) {
-      if ((idx(i) - idx(j) > (k - 1))) {
-        return j + Rcpp::seq_len(i - j);
-      } else if (j == 0) {
-        return Rcpp::seq_len(i + 1) - 1;
-      }
-    }
-    return IntegerVector(0);
-  }
-
   IntegerVector get_dwindow_idx_lag(IntegerVector indexes, int i, int k, int lag, int n, bool na_pad, bool cum) {
     if (na_pad) {
       if (cum) {

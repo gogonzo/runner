@@ -5,7 +5,7 @@
 <img src="man/figures/hexlogo.png" align="right" />
 ===================================================
 
-[![Cran badge](https://cranlogs.r-pkg.org/badges/runner)](https://CRAN.R-project.org/package=runner) [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner) ![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)
+[![Cran badge](https://cranlogs.r-pkg.org/badges/runner)](https://CRAN.R-project.org/package=runner) [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner) [![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)](https://codecov.io/gh/gogonzo/runner/branch/master)
 
 About
 -----
@@ -51,6 +51,10 @@ Sometimes data points in dataset are not equally spaced (missing weeekends, holi
 
 ![](man/figures/custom_idx_k_lag.png)
 
+### `NA` padding
+
+Using `runner` one can also specify `na_pad = TRUE` which would return `NA` for any window which is partialy out of range - meaning that there is no sufficient number of observations to fill the window. By default `na_pad = FALSE`, which means that incomplete windows are calculated anyway. `na_pad` is applied on normal cumulative windows and on windows depending on date.
+
 ### Build-in functions
 
 With `runner` one can use any R functions, but some of them are optimized for speed reasons. These functions are:
@@ -69,7 +73,7 @@ date <- seq.Date(Sys.Date(), Sys.Date() + 19, by = "1 day")
 runner(x, k = 14, idx = date, f = function(xi) mean(xi, na.rm = TRUE, trim = 0.05))
 ```
 
-    ##  [1] -0.1293755 -0.4648944 -0.3256400 -0.2073942 -0.5131102 -0.6672929
-    ##  [7] -0.7305670 -0.5624326 -0.5527821 -0.5268286 -0.5222003 -0.6448387
-    ## [13] -0.6788169 -0.6780393 -0.6077265 -0.6590736 -0.6990439 -0.7927854
-    ## [19] -0.5330058 -0.5263309
+    ##  [1] -0.46163458 -1.22097869 -0.83163581 -0.71461941 -0.48555670
+    ##  [6] -0.39057625 -0.60815580 -0.51232431 -0.38441084 -0.28917747
+    ## [11] -0.10552041 -0.16373239 -0.16088805 -0.14689262 -0.07015531
+    ## [16]  0.02738390  0.02109792  0.16636076  0.22251916  0.16307232

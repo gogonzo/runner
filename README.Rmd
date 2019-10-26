@@ -11,7 +11,7 @@ output:
 [![Cran badge](https://cranlogs.r-pkg.org/badges/runner)](https://CRAN.R-project.org/package=runner)
 [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner)
-![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)
+[![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)](https://codecov.io/gh/gogonzo/runner/branch/master)
 
 ## About
 Package contains standard running functions (aka. windowed, rolling, cumulative) with additional options. `runner` provides extended functionality like date windows, handling missings and varying window size. `runner` brings also rolling streak and rollin which, what extends beyond range of functions already implemented in R packages.
@@ -50,6 +50,10 @@ Using `runner` one can apply any R function `f` in running window of length defi
 Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame.  If one specifies `idx` argument, than running functions are applied on windows depending on date. `idx` should be the same length as `x` of class `Date` or `integer`. Including `idx` can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size `k = 4` lagged by `lag = 2` periods for 10'th element of vector `x`. This (10th) element has `idx = 13` which means that window ranges `[8, 11]` - although `k = 4` only two elements of `x` are within this window.  
 
 ![](man/figures/custom_idx_k_lag.png)
+
+### `NA` padding  
+Using `runner` one can also specify `na_pad = TRUE` which would return `NA` for any window which 
+is partialy out of range - meaning that there is no sufficient number of observations to fill the window. By default `na_pad = FALSE`, which means that incomplete windows are calculated anyway. `na_pad` is applied on normal cumulative windows and on windows depending on date.
 
 ### Build-in functions
 With `runner` one can use any R functions, but some of them are optimized for speed reasons.
