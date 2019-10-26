@@ -168,7 +168,7 @@ test_that("date window", {
 
   expect_equal(
     runner(x2, lag = 3, idx = idx, f = mean, na_pad = TRUE),
-    sapply(window_run(x2, lag = 3, idx = idx, omit_incomplete = TRUE), mean)
+    sapply(window_run(x2, lag = 3, idx = idx, na_pad = TRUE), mean)
   )
 
   expect_equal(
@@ -178,7 +178,7 @@ test_that("date window", {
 
   expect_equal(
     runner(x2, lag = -3, idx = idx, f = mean, na_pad = TRUE),
-    sapply(window_run(x2, lag = -3, idx = idx, omit_incomplete = TRUE), mean)
+    sapply(window_run(x2, lag = -3, idx = idx, na_pad = TRUE), mean)
   )
 
   expect_equal(
@@ -188,7 +188,7 @@ test_that("date window", {
 
   expect_equal(
     runner(x2, lag = -1, idx = idx, f = mean, na_pad = TRUE),
-    sapply(window_run(x2, lag = -1, idx = idx, omit_incomplete = TRUE), mean)
+    sapply(window_run(x2, lag = -1, idx = idx, na_pad = TRUE), mean)
   )
 
   expect_equal(
@@ -198,7 +198,7 @@ test_that("date window", {
 
   expect_equal(
     runner(x2, lag = -100, idx = idx, f = mean, na_pad = TRUE),
-    sapply(window_run(x2, lag = -100, idx = idx, omit_incomplete = TRUE), mean)
+    sapply(window_run(x2, lag = -100, idx = idx, na_pad = TRUE), mean)
   )
 
   expect_equal(
@@ -208,7 +208,7 @@ test_that("date window", {
 
   expect_equal(
     runner(x2, lag = -lag, idx = idx, f = mean, na_pad = TRUE),
-    sapply(window_run(x2, lag = -lag, idx = idx, omit_incomplete = TRUE), mean)
+    sapply(window_run(x2, lag = -lag, idx = idx, na_pad = TRUE), mean)
   )
 
   expect_equal(
@@ -218,7 +218,7 @@ test_that("date window", {
 
   expect_equal(
     runner(x2, k = 3, lag = 3, idx = idx, f = mean, na_pad = TRUE),
-    sapply(window_run(x2, k = 3, lag = 3, idx = idx, omit_incomplete = TRUE), mean)
+    sapply(window_run(x2, k = 3, lag = 3, idx = idx, na_pad = TRUE), mean)
   )
 
   expect_equal(
@@ -228,7 +228,7 @@ test_that("date window", {
 
   expect_equal(
     runner(x2, k = 3, lag = -3, idx = idx, f = mean, na_pad = TRUE),
-    sapply(window_run(x2, k = 3, lag = -3, idx = idx, omit_incomplete = TRUE), mean)
+    sapply(window_run(x2, k = 3, lag = -3, idx = idx, na_pad = TRUE), mean)
   )
 
 
@@ -239,7 +239,7 @@ test_that("date window", {
 
   expect_equal(
     runner(x2, k = 3, lag = lag, idx = idx, f = mean, na_pad = TRUE),
-    sapply(window_run(x2, k = 3, lag = lag, idx = idx, omit_incomplete = TRUE), mean)
+    sapply(window_run(x2, k = 3, lag = lag, idx = idx, na_pad = TRUE), mean)
   )
 
   expect_equal(
@@ -249,7 +249,7 @@ test_that("date window", {
 
   expect_equal(
     runner(x2, k = k, lag = lag, idx = idx, f = mean, na_pad = TRUE),
-    sapply(window_run(x2, k = k, lag = lag, idx = idx, omit_incomplete = TRUE), mean)
+    sapply(window_run(x2, k = k, lag = lag, idx = idx, na_pad = TRUE), mean)
   )
 
   expect_equal(
@@ -259,7 +259,7 @@ test_that("date window", {
 
   expect_equal(
     runner(x2, k = k, lag = 3, idx = idx, f = mean, na_pad = TRUE),
-    sapply(window_run(x2, k = k, lag = 3, idx = idx, omit_incomplete = TRUE), mean)
+    sapply(window_run(x2, k = k, lag = 3, idx = idx, na_pad = TRUE), mean)
   )
 })
 
