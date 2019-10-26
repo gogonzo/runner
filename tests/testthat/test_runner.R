@@ -154,10 +154,9 @@ test_that("various", {
     runner(x1, k = 3, lag = lag, f = mean),
     sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = 3, lag = lag[i])])))
 
-
   expect_equal(
     runner(x1, k = k, lag = lag, f = mean),
-    sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = k[i], lag = lag[i])])))
+    sapply(window_run(x1, k = k, lag = lag), mean))
 })
 
 test_that("date window", {

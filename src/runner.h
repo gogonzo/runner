@@ -20,13 +20,13 @@ namespace apply {
     }
 
     // [ |---------  ]
-    if ((i - k - lag + 1) <= 0 & i - lag >= n) {
+    if (((i - k - lag + 1) <= 0) & (i - lag >= n)) {
       return Rcpp::Range(0, n - 1);
     // [ |-----]---
     } else if ((i - k - lag + 1) <= 0) {
       return Rcpp::Range(0, i - lag);
     //   [---------  ]
-    } else if (i - lag >= n & k == n) {
+    } else if ((i - lag >= n) & (k == n)) {
       return Rcpp::Range(0, n - 1);
     // |--[--------  ]
     } else if (i - lag >= n) {
