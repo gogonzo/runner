@@ -6,26 +6,25 @@ k <- sample(1:100, 100, replace = TRUE)
 lag <- sample(-15:15, 100, replace = TRUE)
 idx <- cumsum(sample(c(1, 2, 3, 4), 100, replace = TRUE))
 streak2 <- function(x, na_rm = TRUE) {
-  astreak <- NA
-  xx <- x[i]
+  if (all(is.na(x))) return(NA)
+  xx <- x[length(x)]
+  astreak <- 0L
   if (na_rm) {
     for (i in length(x):1) {
       if (is.na(x[i])) next
-      if (is.na(xx)){ xx <- x[i]; astreak <- 0 }
-      if (x[i] != xx) return(astreak)
+      if (is.na(xx)) xx <- x[i]
+      if (x[i] != xx) break
       astreak <- astreak + 1L
     }
   } else {
-    astreak <- 0L
     for (i in length(x):1) {
-      if (is.na(x[i])) return(NA_integer_)
-      if (x[i] != xx) return(astreak)
-      if (x[i] == xx) astreak + 1L
-
+      if (is.na(x[i])) return(NA)
+      if (x[i] != xx) break
+      astreak <- astreak + 1L
     }
   }
 
-  if (astreak == 0) return(NA_integer_)
+  if (astreak == 0) return(NA)
   return(astreak)
 }
 
@@ -128,11 +127,11 @@ test_that("       [...|----]---+------->", {
 
   expect_equal(
     streak_run(x2, k = 5, lag = 3, na_rm = FALSE),
-    runner(x2, k = 5, lag = 3, f = streak))
+    runner(x2, k = 5, lag = 3, f = function(x) streak2(x, na_rm = FALSE)))
 
   expect_equal(
     streak_run(x2, k = 5, lag = 3, na_pad = TRUE, na_rm = FALSE),
-    runner(x2, k = 5, lag = 3, f = streak, na_pad = TRUE))
+    runner(x2, k = 5, lag = 3, f = function(x) streak2(x, na_rm = FALSE), na_pad = TRUE))
 })
 
 test_that("       |-----[--+---]--->", {
@@ -146,11 +145,11 @@ test_that("       |-----[--+---]--->", {
 
   expect_equal(
     streak_run(x2, k = 5, lag = -3, na_rm = FALSE),
-    runner(x2, k = 5, lag = -3, f = streak))
+    runner(x2, k = 5, lag = -3, f = function(x) streak2(x, na_rm = FALSE)))
 
   expect_equal(
     streak_run(x2, k = 5, lag = -3, na_pad = TRUE, na_rm = FALSE),
-    runner(x2, k = 5, lag = -3, f = streak, na_pad = TRUE))
+    runner(x2, k = 5, lag = -3, f = function(x) streak2(x, na_rm = FALSE), na_pad = TRUE))
 })
 
 test_that("       |--------+-[---]->", {
@@ -210,6 +209,13 @@ test_that("various", {
     streak_run(x2, k = k, lag = lag, na_pad = TRUE),
     runner(x2, k = k, lag = lag, f = streak2, na_pad = TRUE))
 
+  expect_equal(
+    streak_run(x2, k = k, lag = lag, na_rm = FALSE),
+    runner(x2, k = k, lag = lag, f = function(x) streak2(x, na_rm = FALSE)))
+
+  expect_equal(
+    streak_run(x2, k = k, lag = lag, na_rm = FALSE, na_pad = TRUE),
+    runner(x2, k = k, lag = lag, f = function(x) streak2(x, na_rm = FALSE), na_pad = TRUE))
 })
 
 test_that("date window", {

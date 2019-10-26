@@ -746,10 +746,7 @@ IntegerVector streak_run1(const Vector<RTYPE>& x, IntegerVector k, IntegerVector
   IntegerVector b(2);
   IntegerVector res(n);
 
-  /* streak_run window */
   if ((k.size() == 1) && (lag.size() == 1) && (k(0) == 0) &&  (lag(0) == 0)) {
-    /* streak run full */
-
     for (int i = 0; i < n ; i++) {
       if (Vector<RTYPE>::is_na(x(i))) {
         if (!na_rm) {
@@ -776,9 +773,9 @@ IntegerVector streak_run1(const Vector<RTYPE>& x, IntegerVector k, IntegerVector
       std::fill(res.end() + lag(0), res.end(), NA_INTEGER);
     }
 
-  } else if ((k.size() == 1) && (lag.size() == 1)) {
+  } else if ((k.size() > 1) && (lag.size() > 1)) {
     for (int i = 0; i < n; ++i) {
-      b = utils::window_ul(i, k(0), lag(0), n, na_pad);
+      b = utils::window_ul(i, k(i), lag(i), n, na_pad);
       res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   } else if ((k.size() > 1) && (lag.size() == 1)) {
@@ -786,14 +783,24 @@ IntegerVector streak_run1(const Vector<RTYPE>& x, IntegerVector k, IntegerVector
       b = utils::window_ul(i, k(i), lag(0), n, na_pad);
       res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
-  } else if ((k.size() == 1) && (lag.size() > 1)) {
+  } else if ((k(0) == 0) && (lag.size() > 1)) {
+    for (int i = 0; i < n; ++i) {
+      b = utils::window_ul(i, k(0), lag(i), n, na_pad, true);
+      res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+    }
+  } else if ((k(0) == 0) && (lag.size() == 1)) {
+    for (int i = 0; i < n; ++i) {
+      b = utils::window_ul(i, k(0), lag(0), n, na_pad, true);
+      res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+    }
+  } else if ((lag.size() > 1)) {
     for (int i = 0; i < n; ++i) {
       b = utils::window_ul(i, k(0), lag(i), n, na_pad);
       res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
-  } else if ((k.size() > 1) && (lag.size() > 1)) {
+  } else if ((lag.size() == 1)) {
     for (int i = 0; i < n; ++i) {
-      b = utils::window_ul(i, k(i), lag(i), n, na_pad);
+      b = utils::window_ul(i, k(0), lag(0), n, na_pad);
       res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   }
@@ -878,9 +885,7 @@ IntegerVector streak_run(
 
   int n = Rf_length(x);
 
-  if(k.size() == 1 && k(0) == 0) {
-    k(0) = n;
-  } else if ((k.size() != n) and (k.size() > 1)) {
+  if ((k.size() != n) and (k.size() > 1)) {
     stop("length of k and length of x differs. length(k) should be 1 or equal to x");
   } else if (Rcpp::any(Rcpp::is_na(k))) {
     stop("Function doesn't accept NA values in k vector");
@@ -896,8 +901,6 @@ IntegerVector streak_run(
     stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
   } else if (Rcpp::any(Rcpp::is_na(lag))) {
     stop("Function doesn't accept NA values in lag vector");
-  } else if ((lag.size() == 1) && (lag(0) >= n) && (idx.size() == 0)) {
-    warning("lag value is greater than length of x");
   }
 
   if (idx.size() == 0) {
