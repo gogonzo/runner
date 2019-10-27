@@ -25,7 +25,7 @@ install.packages("runner")
 Using runner
 ------------
 
-`runner` package provides functions applied on running windows. Diagram below illustrates what running windows are - in this case running `k = 4` windows. For each of 15 elements of a vector each window contains current 4 elements (exception are first k - 1 elements where window is not complete).
+`runner` package provides functions applied on running windows. Diagram below illustrates what running windows are - in this case running `k = 4` windows. For each of 15 elements of a vector each window contains current 4 elements.
 
 ![](man/figures/running_windows_explain.png)
 
@@ -47,9 +47,9 @@ Using `runner` one can apply any R function `f` in running window of length defi
 
 ### Windows depending on date
 
-Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies `idx` argument, than running functions are applied on windows depending on date. `idx` should be the same length as `x` of class `Date` or `integer`. Including `idx` can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size `k = 4` lagged by `lag = 2` periods for 10'th element of vector `x`. This (10th) element has `idx = 13` which means that window ranges `[8, 11]` - although `k = 4` only two elements of `x` are within this window.
+Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies `idx` argument, than running functions are applied on windows depending on date. `idx` should be the same length as `x` of class `Date` or `integer`. Including `idx` can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size `k = 5` lagged by `lag = 2`. In parentheses ranges for each window.
 
-![](man/figures/custom_idx_k_lag.png)
+![](man/figures/running_date_windows_explain.png)
 
 ### `NA` padding
 
@@ -73,7 +73,7 @@ date <- seq.Date(Sys.Date(), Sys.Date() + 19, by = "1 day")
 runner(x, k = 14, idx = date, f = function(xi) mean(xi, na.rm = TRUE, trim = 0.05))
 ```
 
-    ##  [1]  0.38658886 -0.46383763 -0.53587404 -0.47331193 -0.61612365
-    ##  [6] -0.58982820 -0.37681532 -0.45218701 -0.30096485 -0.32548422
-    ## [11] -0.29951552 -0.19572312 -0.15455211 -0.12480240 -0.24052094
-    ## [16] -0.07100171  0.07755226  0.15013007  0.20600439  0.31470763
+    ##  [1] -0.23324284  0.55241525  0.78370705  0.35494726  0.19641839
+    ##  [6]  0.33355874  0.06932771  0.10942293 -0.06643426 -0.19545265
+    ## [11] -0.24160405 -0.19285332 -0.31204085 -0.30473856 -0.29599952
+    ## [16] -0.42316415 -0.48083248 -0.47543853 -0.32983559 -0.29291759
