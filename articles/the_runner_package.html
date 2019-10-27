@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@
       <h1>The runner package</h1>
                         <h4 class="author">Dawid Kałędkowski</h4>
             
-            <h4 class="date">2019-10-26</h4>
+            <h4 class="date">2019-10-27</h4>
       
       
       <div class="hidden name"><code>the_runner_package.Rmd</code></div>
@@ -108,7 +108,7 @@
 <div id="running-windows" class="section level2">
 <h2 class="hasAnchor">
 <a href="#running-windows" class="anchor"></a>Running windows</h2>
-<p><code>runner</code> functionality revolves around time series and running windows. Diagram below illustrates what running windows are - in this case running <code>k = 4</code> windows. For each of 15 elements of a vector each window contains current 4 elements (exception are first k - 1 elements where window is not complete).</p>
+<p><code>runner</code> functionality revolves around time series and running windows. Diagram below illustrates what running windows are - in this case running <code>k = 4</code> windows. For each of 15 elements of a vector each window contains current 4 elements.</p>
 <p><img src="images/running_windows_explain.png"></p>
 <p>Windows are defined by several parameters, like size, lag and indexes of observation (or date).</p>
 <div id="window-size" class="section level3">
@@ -125,8 +125,13 @@
 <div id="windows-depending-on-date" class="section level3">
 <h3 class="hasAnchor">
 <a href="#windows-depending-on-date" class="anchor"></a>Windows depending on date</h3>
-<p>Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies <code>idx</code> argument, than running functions are applied on windows depending on time. <code>idx</code> should be the same length as <code>x</code> of class <code>integer</code> (or <code>Date</code>, <code>POSIXlt</code> etc.). Including <code>idx</code> can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size <code>k = 4</code> lagged by <code>lag = 2</code> periods for 10’th element of vector <code>x</code>. This (10th) element has <code>idx = 13</code> which means that window ranges <code>[8, 11]</code> - although <code>k = 4</code> only two elements of <code>x</code> are within this window.</p>
-<p><img src="images/custom_idx_k_lag.png"></p>
+<p>Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies <code>idx</code> argument, than running functions are applied on windows depending on date. <code>idx</code> should be the same length as <code>x</code> of class <code>Date</code> or <code>integer</code>. Including <code>idx</code> can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size <code>k = 5</code> lagged by <code>lag = 2</code>. In parentheses ranges for each window.</p>
+<p><img src="images/running_date_windows_explain.png"></p>
+</div>
+<div id="na-padding" class="section level3">
+<h3 class="hasAnchor">
+<a href="#na-padding" class="anchor"></a><code>NA</code> padding</h3>
+<p>Using <code>runner</code> one can also specify <code>na_pad = TRUE</code> which would return <code>NA</code> for any window which is partialy out of range - meaning that there is no sufficient number of observations to fill the window. By default <code>na_pad = FALSE</code>, which means that incomplete windows are calculated anyway. <code>na_pad</code> is applied on normal cumulative windows and on windows depending on date.</p>
 </div>
 </div>
 <div id="using-package" class="section level2">
@@ -158,21 +163,21 @@
 <a class="sourceLine" id="cb2-17" data-line-number="17"></a>
 <a class="sourceLine" id="cb2-18" data-line-number="18"><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(x, k, idx, simple_mean, trimmed_mean, varying_window, date_windows)</a></code></pre></div>
 <pre><code>##             x  k idx simple_mean trimmed_mean varying_window date_windows
-## 1  0.50850136  9   2   0.5085014    0.5085014      0.5085014   0.50850136
-## 2  0.07898978  3   3   0.2937456    0.2937456      0.2937456   0.29374557
-## 3  0.24591241  5   4   0.2778012    0.2778012      0.2778012   0.27780118
-## 4  0.78415913  9   6   0.4043907    0.4043907      0.4043907   0.40439067
-## 5  0.82191175 13  10   0.4827433    0.4827433      0.4878949   0.48789489
-## 6  0.37952509  6  13   0.5578771    0.5578771      0.4698333   0.60071842
-## 7  0.94129121  7  16   0.7317218    0.7317218      0.5371844   0.71424268
-## 8  0.65338567  7  19   0.6990284    0.6990284      0.5578821   0.65806732
-## 9  0.86115377  5  21   0.7088389    0.7088389      0.7314535   0.75726972
-## 10 0.47194482 10  22   0.7319439    0.7319439      0.5746775   0.66146011
-## 11 0.16617478  9  23   0.5381648    0.5381648      0.5917176   0.61879005
-## 12 0.30488066  7  24   0.4510385    0.4510385      0.5397651   0.49150794
-## 13 0.15191617 10  28   0.2737291    0.2737291      0.5536343   0.43490931
-## 14 0.01547989  7  31   0.1596129    0.1596129      0.3749908   0.08369803
-## 15 0.67604393  6  33   0.2870802    0.2870802      0.2977400   0.28114666</code></pre>
+## 1  0.58607318 12   2   0.5860732    0.5860732      0.5860732    0.5860732
+## 2  0.91838509  6   6   0.7522291    0.7522291      0.7522291    0.7522291
+## 3  0.28749643 14   8   0.5973182    0.5973182      0.5973182    0.5973182
+## 4  0.09956624  5  11   0.4728802    0.4728802      0.4728802    0.1935313
+## 5  0.91877942  7  14   0.5560568    0.5560568      0.5620601    0.4352807
+## 6  0.30642436 11  18   0.4030666    0.4030666      0.5194541    0.4030666
+## 7  0.15939541  7  20   0.3710414    0.3710414      0.4680172    0.4615331
+## 8  0.05499683  4  21   0.3598990    0.3598990      0.3598990    0.1736055
+## 9  0.14738170 11  23   0.1670496    0.1670496      0.3864999    0.3173955
+## 10 0.82293662  8  27   0.2961776    0.2961776      0.3496221    0.2961776
+## 11 0.07655340  3  31   0.2754671    0.2754671      0.3489572    0.0765534
+## 12 0.76239631  2  35   0.4523170    0.4523170      0.4194749    0.7623963
+## 13 0.84280056 12  38   0.6261717    0.6261717      0.4497594    0.6261717
+## 14 0.51724588  7  41   0.5497490    0.5497490      0.4606159    0.7074809
+## 15 0.26698703  4  44   0.5973574    0.5973574      0.5973574    0.3921165</code></pre>
 </div>
 <div id="builtin-functions" class="section level3">
 <h3 class="hasAnchor">
@@ -198,6 +203,7 @@
 <li><a href="#window-size">Window size</a></li>
       <li><a href="#window-lag">Window lag</a></li>
       <li><a href="#windows-depending-on-date">Windows depending on date</a></li>
+      <li><a href="#na-padding"><code>NA</code> padding</a></li>
       </ul>
 </li>
       <li>

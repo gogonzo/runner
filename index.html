@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
       </span>
     </div>
 
@@ -83,15 +83,15 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="runner-a-r-package-for-running-operations-" class="section level1">
+<div id="runner-an-r-package-for-running-operations-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#runner-a-r-package-for-running-operations-" class="anchor"></a><code>runner</code> a R package for running operations.</h1></div>
+<a href="#runner-an-r-package-for-running-operations-" class="anchor"></a><code>runner</code> an R package for running operations.</h1></div>
 </div>
 <div id="section" class="section level1">
 <h1 class="hasAnchor">
 <a href="#section" class="anchor"></a><img src="reference/figures/hexlogo.png" align="right">
 </h1>
-<p><a href="https://CRAN.R-project.org/package=runner"><img src="https://cranlogs.r-pkg.org/badges/runner" alt="Cran badge"></a> <a href="https://travis-ci.org/gogonzo/runner"><img src="https://travis-ci.org/gogonzo/runner.svg?branch=master" alt="Travis-CI Build Status"></a> <a href="https://ci.appveyor.com/project/gogonzo/runner"><img src="https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a> <img src="https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg" alt="Coverage status"></p>
+
 <div id="about" class="section level2">
 <h2 class="hasAnchor">
 <a href="#about" class="anchor"></a>About</h2>
@@ -107,7 +107,7 @@
 <div id="using-runner" class="section level2">
 <h2 class="hasAnchor">
 <a href="#using-runner" class="anchor"></a>Using runner</h2>
-<p><code>runner</code> package provides functions applied on running windows. Diagram below illustrates what running windows are - in this case running <code>k = 4</code> windows. For each of 15 elements of a vector each window contains current 4 elements (exception are first k - 1 elements where window is not complete).</p>
+<p><code>runner</code> package provides functions applied on running windows. Diagram below illustrates what running windows are - in this case running <code>k = 4</code> windows. For each of 15 elements of a vector each window contains current 4 elements.</p>
 <p><img src="reference/figures/running_windows_explain.png"></p>
 <p>Using <code>runner</code> one can apply any R function <code>f</code> in running window of length defined by <code>k</code>, window <code>lag</code>, observation indexes <code>idx</code>.</p>
 <p><img src="reference/figures/using_runner.png"></p>
@@ -126,8 +126,13 @@
 <div id="windows-depending-on-date" class="section level3">
 <h3 class="hasAnchor">
 <a href="#windows-depending-on-date" class="anchor"></a>Windows depending on date</h3>
-<p>Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies <code>idx</code> argument, than running functions are applied on windows depending on date. <code>idx</code> should be the same length as <code>x</code> of class <code>Date</code> or <code>integer</code>. Including <code>idx</code> can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size <code>k = 4</code> lagged by <code>lag = 2</code> periods for 10’th element of vector <code>x</code>. This (10th) element has <code>idx = 13</code> which means that window ranges <code>[8, 11]</code> - although <code>k = 4</code> only two elements of <code>x</code> are within this window.</p>
-<p><img src="reference/figures/custom_idx_k_lag.png"></p>
+<p>Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies <code>idx</code> argument, than running functions are applied on windows depending on date. <code>idx</code> should be the same length as <code>x</code> of class <code>Date</code> or <code>integer</code>. Including <code>idx</code> can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size <code>k = 5</code> lagged by <code>lag = 2</code>. In parentheses ranges for each window.</p>
+<p><img src="reference/figures/running_date_windows_explain.png"></p>
+</div>
+<div id="na-padding" class="section level3">
+<h3 class="hasAnchor">
+<a href="#na-padding" class="anchor"></a><code>NA</code> padding</h3>
+<p>Using <code>runner</code> one can also specify <code>na_pad = TRUE</code> which would return <code>NA</code> for any window which is partialy out of range - meaning that there is no sufficient number of observations to fill the window. By default <code>na_pad = FALSE</code>, which means that incomplete windows are calculated anyway. <code>na_pad</code> is applied on normal cumulative windows and on windows depending on date.</p>
 </div>
 <div id="build-in-functions" class="section level3">
 <h3 class="hasAnchor">
@@ -149,10 +154,10 @@
 <a class="sourceLine" id="cb2-2" data-line-number="2">x &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="dv">20</span>)</a>
 <a class="sourceLine" id="cb2-3" data-line-number="3">date &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/seq.Date.html">seq.Date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>(), <span class="kw"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>() <span class="op">+</span><span class="st"> </span><span class="dv">19</span>, <span class="dt">by =</span> <span class="st">"1 day"</span>)</a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw"><a href="reference/runner.html">runner</a></span>(x, <span class="dt">k =</span> <span class="dv">14</span>, <span class="dt">idx =</span> date, <span class="dt">f =</span> <span class="cf">function</span>(xi) <span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(xi, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>, <span class="dt">trim =</span> <span class="fl">0.05</span>))</a></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">##  [1] -0.1293755 -0.4648944 -0.3256400 -0.2073942 -0.5131102 -0.6672929</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">##  [7] -0.7305670 -0.5624326 -0.5527821 -0.5268286 -0.5222003 -0.6448387</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">## [13] -0.6788169 -0.6780393 -0.6077265 -0.6590736 -0.6990439 -0.7927854</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">## [19] -0.5330058 -0.5263309</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">##  [1] -0.23324284  0.55241525  0.78370705  0.35494726  0.19641839</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">##  [6]  0.33355874  0.06932771  0.10942293 -0.06643426 -0.19545265</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">## [11] -0.24160405 -0.19285332 -0.31204085 -0.30473856 -0.29599952</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">## [16] -0.42316415 -0.48083248 -0.47543853 -0.32983559 -0.29291759</a></code></pre></div>
 </div>
 </div>
 
@@ -181,7 +186,16 @@
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://CRAN.R-project.org/package=runner"><img src="https://cranlogs.r-pkg.org/badges/runner" alt="Cran badge"></a></li>
+<li><a href="https://travis-ci.org/gogonzo/runner"><img src="https://travis-ci.org/gogonzo/runner.svg?branch=master" alt="Travis-CI Build Status"></a></li>
+<li><a href="https://ci.appveyor.com/project/gogonzo/runner"><img src="https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
+<li><a href="https://codecov.io/gh/gogonzo/runner/branch/master"><img src="https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg" alt="Coverage status"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 
