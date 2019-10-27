@@ -1,11 +1,11 @@
 
-`runner` a R package for running operations.
-============================================
+`runner` an R package for running operations.
+=============================================
 
 <img src="man/figures/hexlogo.png" align="right" />
 ===================================================
 
-[![Cran badge](https://cranlogs.r-pkg.org/badges/runner)](https://CRAN.R-project.org/package=runner) [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner) ![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)
+[![Cran badge](https://cranlogs.r-pkg.org/badges/runner)](https://CRAN.R-project.org/package=runner) [![Travis-CI Build Status](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner) [![Coverage status](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)](https://codecov.io/gh/gogonzo/runner/branch/master)
 
 About
 -----
@@ -25,7 +25,7 @@ install.packages("runner")
 Using runner
 ------------
 
-`runner` package provides functions applied on running windows. Diagram below illustrates what running windows are - in this case running `k = 4` windows. For each of 15 elements of a vector each window contains current 4 elements (exception are first k - 1 elements where window is not complete).
+`runner` package provides functions applied on running windows. Diagram below illustrates what running windows are - in this case running `k = 4` windows. For each of 15 elements of a vector each window contains current 4 elements.
 
 ![](man/figures/running_windows_explain.png)
 
@@ -47,9 +47,13 @@ Using `runner` one can apply any R function `f` in running window of length defi
 
 ### Windows depending on date
 
-Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies `idx` argument, than running functions are applied on windows depending on date. `idx` should be the same length as `x` of class `Date` or `integer`. Including `idx` can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size `k = 4` lagged by `lag = 2` periods for 10'th element of vector `x`. This (10th) element has `idx = 13` which means that window ranges `[8, 11]` - although `k = 4` only two elements of `x` are within this window.
+Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies `idx` argument, than running functions are applied on windows depending on date. `idx` should be the same length as `x` of class `Date` or `integer`. Including `idx` can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size `k = 5` lagged by `lag = 2`. In parentheses ranges for each window.
 
-![](man/figures/custom_idx_k_lag.png)
+![](man/figures/running_date_windows_explain.png)
+
+### `NA` padding
+
+Using `runner` one can also specify `na_pad = TRUE` which would return `NA` for any window which is partialy out of range - meaning that there is no sufficient number of observations to fill the window. By default `na_pad = FALSE`, which means that incomplete windows are calculated anyway. `na_pad` is applied on normal cumulative windows and on windows depending on date.
 
 ### Build-in functions
 
@@ -69,7 +73,7 @@ date <- seq.Date(Sys.Date(), Sys.Date() + 19, by = "1 day")
 runner(x, k = 14, idx = date, f = function(xi) mean(xi, na.rm = TRUE, trim = 0.05))
 ```
 
-    ##  [1] -0.1293755 -0.4648944 -0.3256400 -0.2073942 -0.5131102 -0.6672929
-    ##  [7] -0.7305670 -0.5624326 -0.5527821 -0.5268286 -0.5222003 -0.6448387
-    ## [13] -0.6788169 -0.6780393 -0.6077265 -0.6590736 -0.6990439 -0.7927854
-    ## [19] -0.5330058 -0.5263309
+    ##  [1] -0.23324284  0.55241525  0.78370705  0.35494726  0.19641839
+    ##  [6]  0.33355874  0.06932771  0.10942293 -0.06643426 -0.19545265
+    ## [11] -0.24160405 -0.19285332 -0.31204085 -0.30473856 -0.29599952
+    ## [16] -0.42316415 -0.48083248 -0.47543853 -0.32983559 -0.29291759

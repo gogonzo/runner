@@ -147,9 +147,6 @@ namespace utils {
         }
       }
     }
-
-
-
     return IntegerVector(0);
   }
 }

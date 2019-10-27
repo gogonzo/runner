@@ -22,7 +22,7 @@ install.packages("runner")
 ```
 
 ## Running windows
-`runner` functionality revolves around time series and running windows. Diagram below illustrates what running windows are - in this case running `k = 4` windows. For each of 15 elements of a vector each window contains current 4 elements (exception are first k - 1 elements where window is not complete).
+`runner` functionality revolves around time series and running windows. Diagram below illustrates what running windows are - in this case running `k = 4` windows. For each of 15 elements of a vector each window contains current 4 elements.
 
 ![](images/running_windows_explain.png)
 
@@ -40,9 +40,13 @@ Windows are defined by several parameters, like size, lag and indexes of observa
 
 ### Windows depending on date
 
-Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame.  If one specifies `idx` argument, than running functions are applied on windows depending on time. `idx` should be the same length as `x` of class `integer` (or `Date`, `POSIXlt` etc.). Including `idx` can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size `k = 4` lagged by `lag = 2` periods for 10'th element of vector `x`. This (10th) element has `idx = 13` which means that window ranges `[8, 11]` - although `k = 4` only two elements of `x` are within this window. 
+Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame.  If one specifies `idx` argument, than running functions are applied on windows depending on date. `idx` should be the same length as `x` of class `Date` or `integer`. Including `idx` can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size `k = 5` lagged by `lag = 2`. In parentheses ranges for each window.
 
-![](images/custom_idx_k_lag.png)
+![](images/running_date_windows_explain.png)
+  
+### `NA` padding  
+Using `runner` one can also specify `na_pad = TRUE` which would return `NA` for any window which 
+is partialy out of range - meaning that there is no sufficient number of observations to fill the window. By default `na_pad = FALSE`, which means that incomplete windows are calculated anyway. `na_pad` is applied on normal cumulative windows and on windows depending on date.
 
 ## Using package
 
