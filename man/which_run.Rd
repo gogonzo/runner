@@ -21,7 +21,8 @@ window size for each element.}
 \item{which}{\code{character} value "first" or "last" denoting if the first or last \code{TRUE}
 index is returned from the window.}
 
-\item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.}
+\item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) -
+if \code{TRUE} sum is calculating excluding \code{NA}.}
 
 \item{na_pad}{\code{logical} single value (default \code{na_pad=FALSE}) - if \code{TRUE} calculation on
 incomplete window will return \code{NA}. Incomplete window is when some parts of the window are out of range}

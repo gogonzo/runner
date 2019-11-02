@@ -8,7 +8,8 @@ using namespace Rcpp;
 //' Running sum in specified window of numeric vector.
 //' @inheritParams runner
 //' @param x \code{numeric} vector which running function is calculated on
-//' @param na_rm \code{logical} single value (default \code{na_rm = TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.
+//' @param na_rm \code{logical} single value (default \code{na_rm = TRUE}) -
+//' if \code{TRUE} sum is calculating excluding \code{NA}.
 //' @inheritParams runner
 //' @return sum \code{code} vector of length equals length of \code{x}.
 //' @examples
@@ -275,7 +276,8 @@ NumericVector mean_run(
 //' Running maximum
 //'
 //'
-//' \code{min_run} calculates running max on given \code{x} numeric vector, specified \code{k} window size.
+//' \code{min_run} calculates running max on given \code{x} numeric vector,
+//' specified \code{k} window size.
 //' @inheritParams runner
 //' @inheritParams sum_run
 //' @return max {numeric} vector of length equals length of \code{x}.
@@ -542,7 +544,8 @@ NumericVector min_run(
 //' Running min/max
 //'
 //'
-//' \code{min_run} calculates running minmax on given \code{x} numeric vector, specified \code{k} window size.
+//' \code{min_run} calculates running minimum-maximum on given \code{x} numeric
+//'  vector, specified \code{k} window size.
 //' @inheritParams runner
 //' @inheritParams sum_run
 //' @param metric \code{character} what to return, minimum or maximum
@@ -862,7 +865,8 @@ IntegerVector streak_run2(const Vector<RTYPE>& x, IntegerVector k, IntegerVector
 //' @param x {any type} vector which running function is calculated on
 //' @inheritParams runner
 //' @inheritParams sum_run
-//' @return streak [numeric] vector of length equals length of \code{x} containing number of consecutive occurences.
+//' @return streak [numeric] vector of length equals length of \code{x} containing
+//' number of consecutive occurrences.
 //' @examples
 //' set.seed(11)
 //' x1 <- sample(c("a","b"), 15, replace = TRUE)

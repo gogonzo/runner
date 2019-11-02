@@ -3,6 +3,7 @@ Title: Running Operations for Vectors
 Type: Package
 Version: 0.2.3
 Depends: R (>= 3.0)
+Language: en-US
 Authors@R: person("Dawid", "Kałędkowski", email = "dawid.kaledkowski@gmail.com", role = c("aut", "cre"))
 Maintainer: Dawid Kałędkowski <dawid.kaledkowski@gmail.com>
 Description: Calculates running functions  with varying window size and missing handling options. 
@@ -19,5 +20,6 @@ Suggests:
   knitr,
   magrittr,
   rmarkdown,
-  testthat
+  spelling,
+  testthat,
 VignetteBuilder: knitr

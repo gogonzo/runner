@@ -4,7 +4,7 @@ namespace aggr {
     template <int RTYPE>
     int calc_actual_streak(const Vector<RTYPE>& x, int u, int l, bool na_rm) {
       int uu = u;
-      int cur_streak = 0;
+      int cur_streak {0};
 
       if (na_rm) {
         for (int j = u; j >= l ; --j) {

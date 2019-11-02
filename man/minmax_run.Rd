@@ -11,11 +11,13 @@ minmax_run(x, metric = "min", na_rm = TRUE)
 
 \item{metric}{\code{character} what to return, minimum or maximum}
 
-\item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.}
+\item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) -
+if \code{TRUE} sum is calculating excluding \code{NA}.}
 }
 \value{
 list.
 }
 \description{
-\code{min_run} calculates running minmax on given \code{x} numeric vector, specified \code{k} window size.
+\code{min_run} calculates running minimum-maximum on given \code{x} numeric
+ vector, specified \code{k} window size.
 }

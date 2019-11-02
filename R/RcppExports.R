@@ -6,7 +6,8 @@
 #' Running sum in specified window of numeric vector.
 #' @inheritParams runner
 #' @param x \code{numeric} vector which running function is calculated on
-#' @param na_rm \code{logical} single value (default \code{na_rm = TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.
+#' @param na_rm \code{logical} single value (default \code{na_rm = TRUE}) -
+#' if \code{TRUE} sum is calculating excluding \code{NA}.
 #' @inheritParams runner
 #' @return sum \code{code} vector of length equals length of \code{x}.
 #' @examples
@@ -46,7 +47,8 @@ mean_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad =
 #' Running maximum
 #'
 #'
-#' \code{min_run} calculates running max on given \code{x} numeric vector, specified \code{k} window size.
+#' \code{min_run} calculates running max on given \code{x} numeric vector,
+#' specified \code{k} window size.
 #' @inheritParams runner
 #' @inheritParams sum_run
 #' @return max {numeric} vector of length equals length of \code{x}.
@@ -88,7 +90,8 @@ min_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad = 
 #' Running min/max
 #'
 #'
-#' \code{min_run} calculates running minmax on given \code{x} numeric vector, specified \code{k} window size.
+#' \code{min_run} calculates running minimum-maximum on given \code{x} numeric
+#'  vector, specified \code{k} window size.
 #' @inheritParams runner
 #' @inheritParams sum_run
 #' @param metric \code{character} what to return, minimum or maximum
@@ -127,7 +130,8 @@ which_run <- function(x, k = integer(1), lag = integer(1), which = "last", na_rm
 #' @param x {any type} vector which running function is calculated on
 #' @inheritParams runner
 #' @inheritParams sum_run
-#' @return streak [numeric] vector of length equals length of \code{x} containing number of consecutive occurences.
+#' @return streak [numeric] vector of length equals length of \code{x} containing
+#' number of consecutive occurrences.
 #' @examples
 #' set.seed(11)
 #' x1 <- sample(c("a","b"), 15, replace = TRUE)
@@ -146,9 +150,13 @@ streak_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad
 #'
 #' Fill \code{NA} with last non-NA element.
 #' @inheritParams runner
-#' @param run_for_first If first elements are filled with \code{NA}, \code{run_for_first = TRUE } allows to fill all initial \code{NA} with nearest non-NA value. By befault \code{run_for_first = TRUE}
-#' @param only_within \code{NA} are replaced only if previous and next non-NA values are the same. By befault \code{only_within = TRUE}
-#' @return vector - \code{x} containing all \code{x} elements with \code{NA} replaced with previous non-NA element.
+#' @param run_for_first If first elements are filled with \code{NA}, \code{run_for_first = TRUE}
+#' allows to fill all initial \code{NA} with nearest non-NA value. By default
+#' \code{run_for_first = TRUE}
+#' @param only_within \code{NA} are replaced only if previous and next non-NA
+#' values are the same. By default \code{only_within = TRUE}
+#' @return vector - \code{x} containing all \code{x} elements with \code{NA}
+#' replaced with previous non-NA element.
 #' @examples
 #' fill_run(c(NA, NA,1:10, NA, NA), run_for_first = TRUE)
 #' fill_run(c(NA, NA,1:10, NA, NA), run_for_first = TRUE)
@@ -177,8 +185,8 @@ lag_run <- function(x, k = 1L, idx = 1L, nearest = FALSE) {
 
 #' Length of running windows
 #'
-#' Number of elements in k-long window calculated on idx vector.
-#' If idx is an `as.integer(date)` vector, then k=number of days in window -
+#' Number of elements in k-long window calculated on \code{idx} vector.
+#' If \code{idx} is an `as.integer(date)` vector, then k=number of days in window -
 #' then the result is number of observations within k days window.
 #' @inheritParams runner
 #' @inheritParams sum_run
