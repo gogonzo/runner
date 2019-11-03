@@ -13,8 +13,7 @@ License: GPL (>= 2)
 Encoding: UTF-8
 BugReports: https://github.com/gogonzo/runner/issues
 LinkingTo: Rcpp
-Imports: Rcpp
-RoxygenNote: 6.1.0
+Depends: Rcpp
 Suggests:
   dplyr,
   knitr,
@@ -23,3 +22,4 @@ Suggests:
   spelling,
   testthat
 VignetteBuilder: knitr
+RoxygenNote: 6.1.0
