@@ -47,7 +47,7 @@ Using `runner` one can apply any R function `f` in running window of length defi
 
 ### Windows depending on date
 
-Sometimes data points in dataset are not equally spaced (missing weekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies `idx` argument, than running functions are applied on windows depending on date. `idx` should be the same length as `x` of class `Date` or `integer`. Including `idx` can be combined with varying window size, than k will denote number of periods in window different for eaceh data point. Example below illustrates window of size `k = 5` lagged by `lag = 2`. In parentheses ranges for each window.
+Sometimes data points in dataset are not equally spaced (missing weekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies `idx` argument, than running functions are applied on windows depending on date. `idx` should be the same length as `x` of class `Date` or `integer`. Including `idx` can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size `k = 5` lagged by `lag = 2`. In parentheses ranges for each window.
 
 ![](man/figures/running_date_windows_explain.png)
 
