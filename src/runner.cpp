@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 #include "runner.h"
+// [[Rcpp::plugins(cpp14)]]
 
 template <int RTYPE>
 NumericVector runner_simple(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, Function f, bool na_pad) {
