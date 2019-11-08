@@ -18,7 +18,8 @@ window size for each element.}
 value then window lag is constant for all elements, otherwise if \code{length(lag) == length(x)} different
 window size for each element.}
 
-\item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.}
+\item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) -
+if \code{TRUE} sum is calculating excluding \code{NA}.}
 
 \item{na_pad}{\code{logical} single value (default \code{na_pad=FALSE}) - if \code{TRUE} calculation on
 incomplete window will return \code{NA}. Incomplete window is when some parts of the window are out of range}
@@ -27,7 +28,8 @@ incomplete window will return \code{NA}. Incomplete window is when some parts of
 then \code{k} and \code{lag} are depending on \code{idx}. Length of \code{idx} should be equal of length \code{x}}
 }
 \value{
-streak [numeric] vector of length equals length of \code{x} containing number of consecutive occurences.
+streak [numeric] vector of length equals length of \code{x} containing
+number of consecutive occurrences.
 }
 \description{
 Calculates running series of consecutive elements

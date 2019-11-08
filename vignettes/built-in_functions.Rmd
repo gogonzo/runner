@@ -30,8 +30,13 @@ data.frame(
   narm_f  = min_run(x, na_rm = FALSE))
 ```
 
-In above example constant `k = 5` has been used which means that for each element, current minimum is calculated on last 5-elements. It may happen that ona can have time series where elements are not equaly spaced in time, which effects in `k = 5` not constant. In example below 5-days sum is calculated. To achive this, one should put date variable to `idx` argument. 
-Illustration below shows two sums calculated in 5-days window span. In both cases 5-days fit in 3-elements windows. Equivalent R code below.
+In above example constant `k = 5` has been used which means that for each element, 
+current minimum is calculated on last 5-elements. It may happen that one can have
+time series where elements are not equally spaced in time, which effects in `k = 5`
+not constant. In example below 5-days sum is calculated. To achieve this, one should
+put date variable to `idx` argument.  
+Illustration below shows two sums calculated in 5-days window span. In both cases
+5-days fit in 3-elements windows. Equivalent R code below.
 
 ![](images/options_idx.png)
 
@@ -43,7 +48,8 @@ idx <- as.Date(c("1970-01-03", "1970-01-06", "1970-01-09", "1970-01-12",
 sum_run(x, k = 5, idx = idx)
 ```
 
-Specifying `lag` argument shift of the window by number of elements or time periods (if `idx` is specified). 
+Specifying `lag` argument shift of the window by number of elements or time periods
+(if `idx` is specified). 
 
 ```{r lag_run_example, echo=TRUE}
 x <- c(-0.5910, 0.0266, -1.5166, -1.3627, 1.1785, -0.9342, 1.3236, 0.6249)
@@ -56,7 +62,12 @@ sum_run(x, k = 5, lag = 2, idx = idx)
 
 ### Running streak
 
-To count consecutive elements in specified window one can use `streak_run`. Following figure illustrates how streak is calculated with three different options setup for 9th element of the input vector `x`. First shows default configuration, with full window and `na_rm = TRUE`. Second example count within `k = 4` window with count reset on `NA`. Last example counting streak with continuation after `NA`. Visualization also supported with corresponding R code.
+To count consecutive elements in specified window one can use `streak_run`. Following 
+figure illustrates how streak is calculated with three different options setup for
+9th element of the input vector `x`. First shows default configuration, with full
+window and `na_rm = TRUE`. Second example count within `k = 4` window with count
+reset on `NA`. Last example counting streak with continuation after `NA`. 
+Visualization also supported with corresponding R code.
 
 ![](images/running_streaks.png)
 
@@ -69,7 +80,10 @@ data.frame(
   s2 = streak_run(x, k = 4))
 ```
 
-Streak is often used in sports to count number of wins or loses of the team/player. To count consecutive wins or loses in 5-days period, one have to specify `k = 5` and include dates into `idx` argument. Specifying `lag` shifts window bounds by number of elements or time periods (if `idx` is specified).
+Streak is often used in sports to count number of wins or loses of the team/player.
+To count consecutive wins or loses in 5-days period, one have to specify `k = 5` 
+and include dates into `idx` argument. Specifying `lag` shifts window bounds by 
+number of elements or time periods (if `idx` is specified).
 
 ```{r}
 x <- c("W", "W", "L", "L", "L", "W", "L", "L")
@@ -87,7 +101,10 @@ data.frame(
 
 ### Improved lag
 
-Idea of `lag_run` is the same as well known `stats::lag`, with distinction that `lag_run` can depend on time or any other indexes passed to `idx` argument. This means that `lag_run` can shift by `k` elements of the vector or by `k` time periods (if `idx` is specified).  
+Idea of `lag_run` is the same as well known `stats::lag`, with distinction that
+`lag_run` can depend on time or any other indexes passed to `idx` argument. 
+This means that `lag_run` can shift by `k` elements of the vector or by `k` time 
+periods (if `idx` is specified).  
 
 ```{r}
 x <- c(-0.5910, 0.0266, -1.5166, -1.3627, 1.1785, -0.9342, 1.3236, 0.6249)
@@ -99,7 +116,16 @@ lag_run(x, k = 3, idx = idx)
 
 ### Filling missing values
 
-Function used to replace `NA` with previous non-NA element. To understand how `fill_run` works, take a look on illustration. Row 'x' represents input, and another rows represent output with `NA` replaced by `fill_run` with different options setup (`run_for_first = TRUE` and `only_within = TRUE` respectively). By default, `fill_run` replaces all `NA` if they were preceded by any value. If `NA` appeared in the beginning of the vector then it would not be replaced. But if user specify `run_for_first = TRUE` initial empty values values will be replaced by next non-empty value. Option `only_within = TRUE` means that `NA` values would be replaced if they were surrounded by pair of identical values. No windows provided in this functionality.
+Function used to replace `NA` with previous non-NA element. To understand how 
+`fill_run` works, take a look on illustration. Row 'x' represents input, and
+another rows represent output with `NA` replaced by `fill_run` with different 
+options setup (`run_for_first = TRUE` and `only_within = TRUE` respectively). 
+By default, `fill_run` replaces all `NA` if they were preceded by any value. If 
+`NA` appeared in the beginning of the vector then it would not be replaced. But 
+if user specify `run_for_first = TRUE` initial empty values values will be 
+replaced by next non-empty value. Option `only_within = TRUE` means that `NA` 
+values would be replaced if they were surrounded by pair of identical values. No 
+windows provided in this functionality.
 
 ![](images/fill_run.png)
 
@@ -113,7 +139,13 @@ data.frame(x,
 
 ### Running which  
 
-To obtain index number of element matching some condition in window, one can use `which_run`, which returns index of  `TRUE` element appeared before n-th element of a vector. If `na_rm = TRUE` is specified, missing is treated as `FALSE`, and is ignored while searching for `TRUE`. While user set `na_rm = FALSE` like in second example, function returns `NA`, because in following window `TRUE` appears after missing and it's impossible to be certain which is first (missing is an element of unknown value - could be `TRUE` or `FALSE`).
+To obtain index number of element matching some condition in window, one can use 
+`which_run`, which returns index of  `TRUE` element appeared before n-th element 
+of a vector. If `na_rm = TRUE` is specified, missing is treated as `FALSE`, and
+is ignored while searching for `TRUE`. While user set `na_rm = FALSE` like in
+second example, function returns `NA`, because in following window `TRUE` appears
+after missing and it's impossible to be certain which is first (missing is an
+element of unknown value - could be `TRUE` or `FALSE`).
 
 
 ![](images/running_which_more.png)
@@ -129,7 +161,10 @@ data.frame(
 ```
 
 
-`which` argument ('first' or 'last') used with `which_run` determines which index of matching element should be returned from window. In below illustration in `k = 4` elements window there are two `TRUE` values, and depending on `which` argument output is equal `2`  or `4`. 
+`which` argument ('first' or 'last') used with `which_run` determines which index
+of matching element should be returned from window. In below illustration in 
+`k = 4` elements window there are two `TRUE` values, and depending on `which`
+argument output is equal `2`  or `4`. 
 
 ![](images/options_which_first_last.png)
 
