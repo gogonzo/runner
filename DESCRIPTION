@@ -22,5 +22,4 @@ Suggests:
   spelling,
   testthat
 VignetteBuilder: knitr
-SystemRequirements: C++14
 RoxygenNote: 6.1.0
