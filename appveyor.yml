@@ -10,6 +10,8 @@ init:
 install:
   ps: Bootstrap
 
+os: Visual Studio 2015 CTP 6
+
 cache:
   - C:\RLibrary
 
