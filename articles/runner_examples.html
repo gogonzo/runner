@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3.9000</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
 
     
     
-<p>The most fundamental function in <code>runner</code> package is <code>runner</code>. With <code><a href="../reference/runner.html">runner::runner</a></code> one can apply any R function on running windows. This tutorial presents set of examples expaining how to tackle some tasks. Some of the examples are referenced to original topic on <a href="https://stackoverflow.com">stackoverflow</a>.</p>
+<p>The most fundamental function in <code>runner</code> package is <code>runner</code>. With <code><a href="../reference/runner.html">runner::runner</a></code> one can apply any R function on running windows. This tutorial presents set of examples explaining how to tackle some tasks. Some of the examples are referenced to original topic on <a href="https://stackoverflow.com">stack-overflow</a>.</p>
 <p><img src="images/using_runner.png"></p>
 <div id="number-of-unique-elements-in-7-days-window" class="section level3">
 <h3 class="hasAnchor">
@@ -101,7 +101,7 @@
 <a class="sourceLine" id="cb1-3" data-line-number="3">date &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">20</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)), <span class="dt">origin =</span> <span class="kw"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>()) <span class="co"># unequaly spaced time series</span></a>
 <a class="sourceLine" id="cb1-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="../reference/runner.html">runner</a></span>(x, <span class="dt">k =</span> <span class="dv">7</span>, <span class="dt">idx =</span> date, <span class="dt">f =</span> <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(x)))</a></code></pre></div>
-<pre><code>##  [1] 1 2 2 3 2 3 3 2 2 3 3 3 2 2 3 3 4 5 3 3</code></pre>
+<pre><code>##  [1] 1 2 2 2 3 3 2 2 3 3 2 2 2 3 2 2 2 2 2 3</code></pre>
 </div>
 <div id="weekly-trimmed-mean" class="section level3">
 <h3 class="hasAnchor">
@@ -110,10 +110,9 @@
 <a class="sourceLine" id="cb3-2" data-line-number="2">date &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">20</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)), <span class="dt">origin =</span> <span class="kw"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>()) <span class="co"># unequaly spaced time series</span></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb3-4" data-line-number="4"><span class="kw"><a href="../reference/runner.html">runner</a></span>(x, <span class="dt">k =</span> <span class="dv">7</span>, <span class="dt">idx =</span> date, <span class="dt">f =</span> <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(x, <span class="dt">trim =</span> <span class="fl">0.05</span>))</a></code></pre></div>
-<pre><code>##  [1] -0.65556068 -0.07258204  0.08120707  0.44250025  1.59591613
-##  [6]  2.85262992  3.00858613  2.93699652  2.64001578  2.77296074
-## [11]  2.65046072  3.04706669  3.56219554  5.41347636  6.40385921
-## [16]  5.72441930  5.20739755  5.11052246  5.07066390  5.15690103</code></pre>
+<pre><code>##  [1] 1.927500 2.098593 2.363944 3.127405 4.691207 5.142185 4.846758
+##  [8] 5.048709 5.472283 6.363416 7.203289 7.579423 7.259898 6.758595
+## [15] 6.380674 5.489000 5.576724 6.372548 6.493234 6.772454</code></pre>
 </div>
 <div id="weeks-regression" class="section level3">
 <h3 class="hasAnchor">

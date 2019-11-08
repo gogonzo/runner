@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3.9000</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@
       <h1>The runner package</h1>
                         <h4 class="author">Dawid Kałędkowski</h4>
             
-            <h4 class="date">2019-10-27</h4>
+            <h4 class="date">2019-11-08</h4>
       
       
       <div class="hidden name"><code>the_runner_package.Rmd</code></div>
@@ -96,12 +96,12 @@
 <div id="about" class="section level2">
 <h2 class="hasAnchor">
 <a href="#about" class="anchor"></a>About</h2>
-<p>Package contains running functions (rolling or sliding window) with additional options. <code>runner</code> provides extended functionality like varying windows size, windows dependent on date, handling missing value. <code>runner</code> brings also other utility functions like filling missing values, rolling streak and rollin which.</p>
+<p>Package contains running functions (rolling or sliding window) with additional options. <code>runner</code> provides extended functionality like varying windows size, windows dependent on date, handling missing value. <code>runner</code> brings also other utility functions like filling missing values, rolling streak and rolling which.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>Install package from from github or from CRAN.</p>
+<p>Install package from from GitHub or from CRAN.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># devtools::install_github("gogonzo/runner")</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"runner"</span>)</a></code></pre></div>
 </div>
@@ -125,13 +125,13 @@
 <div id="windows-depending-on-date" class="section level3">
 <h3 class="hasAnchor">
 <a href="#windows-depending-on-date" class="anchor"></a>Windows depending on date</h3>
-<p>Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies <code>idx</code> argument, than running functions are applied on windows depending on date. <code>idx</code> should be the same length as <code>x</code> of class <code>Date</code> or <code>integer</code>. Including <code>idx</code> can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size <code>k = 5</code> lagged by <code>lag = 2</code>. In parentheses ranges for each window.</p>
+<p>Sometimes data points in dataset are not equally spaced (missing weekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies <code>idx</code> argument, than running functions are applied on windows depending on date. <code>idx</code> should be the same length as <code>x</code> of class <code>Date</code> or <code>integer</code>. Including <code>idx</code> can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size <code>k = 5</code> lagged by <code>lag = 2</code>. In parentheses ranges for each window.</p>
 <p><img src="images/running_date_windows_explain.png"></p>
 </div>
 <div id="na-padding" class="section level3">
 <h3 class="hasAnchor">
 <a href="#na-padding" class="anchor"></a><code>NA</code> padding</h3>
-<p>Using <code>runner</code> one can also specify <code>na_pad = TRUE</code> which would return <code>NA</code> for any window which is partialy out of range - meaning that there is no sufficient number of observations to fill the window. By default <code>na_pad = FALSE</code>, which means that incomplete windows are calculated anyway. <code>na_pad</code> is applied on normal cumulative windows and on windows depending on date.</p>
+<p>Using <code>runner</code> one can also specify <code>na_pad = TRUE</code> which would return <code>NA</code> for any window which is partially out of range - meaning that there is no sufficient number of observations to fill the window. By default <code>na_pad = FALSE</code>, which means that incomplete windows are calculated anyway. <code>na_pad</code> is applied on normal cumulative windows and on windows depending on date.</p>
 </div>
 </div>
 <div id="using-package" class="section level2">
@@ -163,21 +163,21 @@
 <a class="sourceLine" id="cb2-17" data-line-number="17"></a>
 <a class="sourceLine" id="cb2-18" data-line-number="18"><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(x, k, idx, simple_mean, trimmed_mean, varying_window, date_windows)</a></code></pre></div>
 <pre><code>##             x  k idx simple_mean trimmed_mean varying_window date_windows
-## 1  0.42788230  8   1   0.4278823    0.4278823     0.42788230   0.42788230
-## 2  0.69478686  6   2   0.5613346    0.5613346     0.56133458   0.56133458
-## 3  0.71623903  5   6   0.6129694    0.6129694     0.61296940   0.70551294
-## 4  0.33819863  2   7   0.5442767    0.5442767     0.52721883   0.52721883
-## 5  0.08474434  1   8   0.4584922    0.4584922     0.08474434   0.08474434
-## 6  0.90381816 14  11   0.5107500    0.5107500     0.52761155   0.52761155
-## 7  0.28814068  7  15   0.4037255    0.4037255     0.49340143   0.59597942
-## 8  0.44053253  6  18   0.4293089    0.4293089     0.46194556   0.36433661
-## 9  0.99035058 12  21   0.6557105    0.6557105     0.54274368   0.65571049
-## 10 0.57903989  5  23   0.5745159    0.5745159     0.64037637   0.78469524
-## 11 0.16390043 12  24   0.5434559    0.5434559     0.51160304   0.49239282
-## 12 0.50475056  6  26   0.5595104    0.5595104     0.49445245   0.55951037
-## 13 0.28355607  6  30   0.3828117    0.3828117     0.49368834   0.39415331
-## 14 0.87113851 14  33   0.4558364    0.4558364     0.52050561   0.56545601
-## 15 0.84427673  8  34   0.6259305    0.6259305     0.58469316   0.66632377</code></pre>
+## 1  0.55447359 12   4   0.5544736    0.5544736      0.5544736    0.5544736
+## 2  0.27722829 11   7   0.4158509    0.4158509      0.4158509    0.4158509
+## 3  0.02681791 11   9   0.2861733    0.2861733      0.2861733    0.2861733
+## 4  0.45217760  4  13   0.3276743    0.3276743      0.3276743    0.4521776
+## 5  0.69905138  7  17   0.3638188    0.3638188      0.4019498    0.5756145
+## 6  0.81959138 13  20   0.4994096    0.4994096      0.4715567    0.4994096
+## 7  0.37231289 11  24   0.5857833    0.5857833      0.4573790    0.6303185
+## 8  0.47834821  1  28   0.5923260    0.5923260      0.4783482    0.4783482
+## 9  0.11903575 15  32   0.4473221    0.4473221      0.4221152    0.4473221
+## 10 0.39334337  3  33   0.3407601    0.3407601      0.3302424    0.2561896
+## 11 0.17398586 12  37   0.2911783    0.2911783      0.3969424    0.2911783
+## 12 0.09144316  5  40   0.1944520    0.1944520      0.2512313    0.1327145
+## 13 0.73618145  8  44   0.3487385    0.3487385      0.3980303    0.3338702
+## 14 0.38669492  4  47   0.3470763    0.3470763      0.3470763    0.5614382
+## 15 0.17493994  5  50   0.3473149    0.3473149      0.3126491    0.2808174</code></pre>
 </div>
 <div id="builtin-functions" class="section level3">
 <h3 class="hasAnchor">
