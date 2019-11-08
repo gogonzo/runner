@@ -1,0 +1,2 @@
+CXX_STD = CXX13
+PKG_CPPFLAGS = -I../inst/include
