@@ -3,8 +3,8 @@ using namespace Rcpp;
 
 //' Length of running windows
 //'
-//' Number of elements in k-long window calculated on idx vector.
-//' If idx is an `as.integer(date)` vector, then k=number of days in window -
+//' Number of elements in k-long window calculated on \code{idx} vector.
+//' If \code{idx} is an `as.integer(date)` vector, then k=number of days in window -
 //' then the result is number of observations within k days window.
 //' @inheritParams runner
 //' @inheritParams sum_run

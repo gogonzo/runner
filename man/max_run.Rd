@@ -18,7 +18,8 @@ window size for each element.}
 value then window lag is constant for all elements, otherwise if \code{length(lag) == length(x)} different
 window size for each element.}
 
-\item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) - if \code{TRUE} sum is calulating excluding \code{NA}.}
+\item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) -
+if \code{TRUE} sum is calculating excluding \code{NA}.}
 
 \item{na_pad}{\code{logical} single value (default \code{na_pad=FALSE}) - if \code{TRUE} calculation on
 incomplete window will return \code{NA}. Incomplete window is when some parts of the window are out of range}
@@ -30,7 +31,8 @@ then \code{k} and \code{lag} are depending on \code{idx}. Length of \code{idx} s
 max {numeric} vector of length equals length of \code{x}.
 }
 \description{
-\code{min_run} calculates running max on given \code{x} numeric vector, specified \code{k} window size.
+\code{min_run} calculates running max on given \code{x} numeric vector,
+specified \code{k} window size.
 }
 \examples{
 set.seed(11)

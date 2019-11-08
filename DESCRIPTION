@@ -1,23 +1,25 @@
 Package: runner
 Title: Running Operations for Vectors
 Type: Package
-Version: 0.2.3
+Version: 0.2.3.9000
 Depends: R (>= 3.0)
+Language: en-US
+Encoding: UTF-8
 Authors@R: person("Dawid", "Kałędkowski", email = "dawid.kaledkowski@gmail.com", role = c("aut", "cre"))
 Maintainer: Dawid Kałędkowski <dawid.kaledkowski@gmail.com>
 Description: Calculates running functions  with varying window size and missing handling options. 
   Package brings also running streak and running which, what extends beyond range of functions 
   already implemented in R packages. Calculating on windows depending on date also available.
 License: GPL (>= 2)
-Encoding: UTF-8
 BugReports: https://github.com/gogonzo/runner/issues
 LinkingTo: Rcpp
 Imports: Rcpp
-RoxygenNote: 6.1.0
 Suggests:
   dplyr,
   knitr,
   magrittr,
   rmarkdown,
+  spelling,
   testthat
 VignetteBuilder: knitr
+RoxygenNote: 6.1.0

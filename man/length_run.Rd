@@ -19,8 +19,8 @@ window size for each element.}
 then \code{k} and \code{lag} are depending on \code{idx}. Length of \code{idx} should be equal of length \code{x}}
 }
 \description{
-Number of elements in k-long window calculated on idx vector.
-If idx is an `as.integer(date)` vector, then k=number of days in window -
+Number of elements in k-long window calculated on \code{idx} vector.
+If \code{idx} is an `as.integer(date)` vector, then k=number of days in window -
 then the result is number of observations within k days window.
 }
 \examples{

@@ -10,11 +10,11 @@ vignette: >
 ---
 
 ## About
-Package contains running functions (rolling or sliding window) with additional options. `runner` provides extended functionality like varying windows size, windows dependent on date, handling missing value. `runner` brings also other utility functions like filling missing values, rolling streak and rollin which.
+Package contains running functions (rolling or sliding window) with additional options. `runner` provides extended functionality like varying windows size, windows dependent on date, handling missing value. `runner` brings also other utility functions like filling missing values, rolling streak and rolling which.
 
 ## Installation
 
-Install package from from github or from CRAN.
+Install package from from GitHub or from CRAN.
 
 ```{r gh-installation, eval=FALSE}
 # devtools::install_github("gogonzo/runner")
@@ -40,13 +40,13 @@ Windows are defined by several parameters, like size, lag and indexes of observa
 
 ### Windows depending on date
 
-Sometimes data points in dataset are not equally spaced (missing weeekends, holidays, other missings) and thus window size should vary to keep expected time frame.  If one specifies `idx` argument, than running functions are applied on windows depending on date. `idx` should be the same length as `x` of class `Date` or `integer`. Including `idx` can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size `k = 5` lagged by `lag = 2`. In parentheses ranges for each window.
+Sometimes data points in dataset are not equally spaced (missing weekends, holidays, other missings) and thus window size should vary to keep expected time frame.  If one specifies `idx` argument, than running functions are applied on windows depending on date. `idx` should be the same length as `x` of class `Date` or `integer`. Including `idx` can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size `k = 5` lagged by `lag = 2`. In parentheses ranges for each window.
 
 ![](images/running_date_windows_explain.png)
   
 ### `NA` padding  
 Using `runner` one can also specify `na_pad = TRUE` which would return `NA` for any window which 
-is partialy out of range - meaning that there is no sufficient number of observations to fill the window. By default `na_pad = FALSE`, which means that incomplete windows are calculated anyway. `na_pad` is applied on normal cumulative windows and on windows depending on date.
+is partially out of range - meaning that there is no sufficient number of observations to fill the window. By default `na_pad = FALSE`, which means that incomplete windows are calculated anyway. `na_pad` is applied on normal cumulative windows and on windows depending on date.
 
 ## Using package
 
