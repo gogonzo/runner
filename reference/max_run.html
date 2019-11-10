@@ -150,9 +150,10 @@ window size for each element.</p></td>
     </tr>
     <tr>
       <th>lag</th>
-      <td><p><code>integer</code> vector or single value denoting window lag. If <code>lag</code> is a single
-value then window lag is constant for all elements, otherwise if <code>length(lag) == length(x)</code> different
-window size for each element.</p></td>
+      <td><p><code>integer</code> vector or single value denoting window lag.
+If <code>lag</code> is a single value then window lag is constant for all elements,
+otherwise if <code>length(lag) == length(x)</code> different window size for each
+element. Negative value shifts window forward.</p></td>
     </tr>
     <tr>
       <th>na_rm</th>
