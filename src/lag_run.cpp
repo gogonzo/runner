@@ -20,7 +20,7 @@ using namespace Rcpp;
 //' @export
 // [[Rcpp::export]]
 SEXP lag_run(SEXP x,
-             IntegerVector k = IntegerVector::create(1),
+             IntegerVector k = 1,
              IntegerVector idx = IntegerVector(0),
              bool nearest = false) {
   int n = Rf_length(x);

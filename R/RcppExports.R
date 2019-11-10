@@ -183,7 +183,7 @@ fill_run <- function(x, run_for_first = FALSE, only_within = FALSE) {
 #' lag_run(letters[1:10], k = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10))
 #' lag_run(letters[1:10], k = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10), nearest = TRUE)
 #' @export
-lag_run <- function(x, k = as.integer( c(1)), idx = integer(0), nearest = FALSE) {
+lag_run <- function(x, k = 1L, idx = integer(0), nearest = FALSE) {
     .Call('_runner_lag_run', PACKAGE = 'runner', x, k, idx, nearest)
 }
 

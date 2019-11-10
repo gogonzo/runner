@@ -4,7 +4,7 @@
 \alias{lag_run}
 \title{Lag dependent on variable}
 \usage{
-lag_run(x, k = 1L, idx = 1L, nearest = FALSE)
+lag_run(x, k = 1L, idx = integer(0), nearest = FALSE)
 }
 \arguments{
 \item{x}{Vector of any type}

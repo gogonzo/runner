@@ -1,3 +1,8 @@
+# current development version
+
+* switch to c++11 compiler
+* fix lag
+
 # runner 0.2.3
 
 * allow negative lag
