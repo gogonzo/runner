@@ -130,7 +130,7 @@
     <p>Vector of input lagged along integer vector</p>
     </div>
 
-    <pre class="usage"><span class='fu'>lag_run</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>idx</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>nearest</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>lag_run</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>idx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0</span>), <span class='kw'>nearest</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,9 +141,8 @@
     </tr>
     <tr>
       <th>k</th>
-      <td><p><code>integer</code> vector or single value denoting size of the running window. If <code>k</code> is a single
-value then window size is constant for all elements, otherwise if <code>length(k) == length(x)</code> different
-window size for each element.</p></td>
+      <td><p><code>integer</code> single value or vector of the same length as <code>x</code>.
+Denoting shift. Negative value shifts window forward.</p></td>
     </tr>
     <tr>
       <th>idx</th>
@@ -152,15 +151,16 @@ then <code>k</code> and <code>lag</code> are depending on <code>idx</code>. Leng
     </tr>
     <tr>
       <th>nearest</th>
-      <td><p><code>logical</code> single value. Applied when <code>idx</code> is used, then <code>nearest = FALSE</code> returns
-observation lagged exactly by the specified number of "periods". When <code>nearest = TRUE</code>
+      <td><p><code>logical</code> single value. Applied when <code>idx</code> is used,
+then <code>nearest = FALSE</code> returns observation lagged exactly by the
+specified number of "periods". When <code>nearest = TRUE</code>
 function returns latest observation within lag window.</p></td>
     </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>lag_run</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt;  [1] NA NA NA  1  2  3  4  5  6  7</div><div class='input'><span class='fu'>lag_run</span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>], <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>idx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>8</span>, <span class='fl'>10</span>))</div><div class='output co'>#&gt;  [1] NA  NA  NA  NA  "c" "d" "f" NA  "g" "i"</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>lag_run</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt;  [1] NA NA NA  1  2  3  4  5  6  7</div><div class='input'><span class='fu'>lag_run</span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>], <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>idx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>8</span>, <span class='fl'>10</span>))</div><div class='output co'>#&gt;  [1] NA  NA  NA  NA  "a" "d" "f" NA  "g" "i"</div><div class='input'><span class='fu'>lag_run</span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>], <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>idx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>8</span>, <span class='fl'>10</span>), <span class='kw'>nearest</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;  [1] NA  "a" "a" "a" "a" "d" "f" "g" "g" "i"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
