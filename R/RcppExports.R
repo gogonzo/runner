@@ -172,19 +172,17 @@ fill_run <- function(x, run_for_first = FALSE, only_within = FALSE) {
 #' Vector of input lagged along integer vector
 #' @inheritParams runner
 #' @inheritParams sum_run
-#' @param k \code{integer} single value or vector of the same length as \code{x}.
-#' Denoting shift. Negative value shifts window forward.
 #' @param nearest \code{logical} single value. Applied when \code{idx} is used,
 #' then \code{nearest = FALSE} returns observation lagged exactly by the
 #' specified number of "periods". When \code{nearest = TRUE}
 #' function returns latest observation within lag window.
 #' @examples
-#' lag_run(1:10, k = 3)
-#' lag_run(letters[1:10], k = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10))
-#' lag_run(letters[1:10], k = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10), nearest = TRUE)
+#' lag_run(1:10, lag = 3)
+#' lag_run(letters[1:10], lag = -2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10))
+#' lag_run(letters[1:10], lag = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10), nearest = TRUE)
 #' @export
-lag_run <- function(x, k = 1L, idx = integer(0), nearest = FALSE) {
-    .Call('_runner_lag_run', PACKAGE = 'runner', x, k, idx, nearest)
+lag_run <- function(x, lag = 1L, idx = integer(0), nearest = FALSE) {
+    .Call('_runner_lag_run', PACKAGE = 'runner', x, lag, idx, nearest)
 }
 
 #' Length of running windows
@@ -208,9 +206,10 @@ length_run <- function(k = integer(1), lag = integer(1), idx = integer(0)) {
 #' @param k \code{integer} vector or single value denoting size of the running window. If \code{k} is a single
 #' value then window size is constant for all elements, otherwise if \code{length(k) == length(x)} different
 #' window size for each element.
-#' @param lag \code{integer} vector or single value denoting window lag. If \code{lag} is a single
-#' value then window lag is constant for all elements, otherwise if \code{length(lag) == length(x)} different
-#' window size for each element.
+#' @param lag \code{integer} vector or single value denoting window lag.
+#' If \code{lag} is a single value then window lag is constant for all elements,
+#' otherwise if \code{length(lag) == length(x)} different window size for each
+#' element. Negative value shifts window forward.
 #' @param idx \code{date or integer} an optional integer vector containing index of observation. If specified
 #' then \code{k} and \code{lag} are depending on \code{idx}. Length of \code{idx} should be equal of length \code{x}
 #' @param f \code{function} to be applied on \code{x}

@@ -1,5 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
+#include "checks.h"
 #include "utils.h"
 #include "aggregations.h"
 
@@ -33,23 +34,9 @@ NumericVector sum_run(
 
   int n = x.size();
 
-  if (k.size() != n and k.size() > 1) {
-    stop("length of k and length of x differs. length(k) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(k))) {
-    stop("Function doesn't accept NA values in k vector");
-  }
-
-  if (idx.size() != n and idx.size() > 1) {
-    stop("length of idx and length of x differs. length(idx) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(idx))) {
-    stop("Function doesn't accept NA values in idx vector");
-  }
-
-  if (lag.size() != n and lag.size() > 1) {
-    stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(lag))) {
-    stop("Function doesn't accept NA values in lag vector");
-  }
+  checks::check_k(k, n);
+  checks::check_idx(idx, n);
+  checks::check_lag(lag, n);
 
   IntegerVector b(2);
   NumericVector res(n);
@@ -166,23 +153,9 @@ NumericVector mean_run(
 
   int n = x.size();
 
-  if (k.size() != n and k.size() > 1) {
-    stop("length of k and length of x differs. length(k) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(k))) {
-    stop("Function doesn't accept NA values in k vector");
-  }
-
-  if ((idx.size() != n) and (idx.size() > 1)) {
-    stop("length of idx and length of x differs. length(idx) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(idx))) {
-    stop("Function doesn't accept NA values in idx vector");
-  }
-
-  if ((lag.size() != n) and (lag.size() > 1)) {
-    stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(lag))) {
-    stop("Function doesn't accept NA values in lag vector");
-  }
+  checks::check_k(k, n);
+  checks::check_idx(idx, n);
+  checks::check_lag(lag, n);
 
   IntegerVector b(2);
   NumericVector res(n);
@@ -302,23 +275,10 @@ NumericVector max_run(
 
   int n = x.size();
 
-  if ((k.size() != n) and (k.size() > 1)) {
-    stop("length of k and length of x differs. length(k) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(k))) {
-    stop("Function doesn't accept NA values in k vector");
-  }
+  checks::check_k(k, n);
+  checks::check_idx(idx, n);
+  checks::check_lag(lag, n);
 
-  if ((idx.size() != n) and (idx.size() > 1)) {
-    stop("length of idx and length of x differs. length(idx) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(idx))) {
-    stop("Function doesn't accept NA values in idx vector");
-  }
-
-  if ((lag.size() != n) and (lag.size() > 1)) {
-    stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(lag))) {
-    stop("Function doesn't accept NA values in lag vector");
-  }
 
   IntegerVector b(2);
   NumericVector res(n);
@@ -436,23 +396,9 @@ NumericVector min_run(
 
   int n = x.size();
 
-  if ((k.size() != n) and (k.size() > 1)) {
-    stop("length of k and length of x differs. length(k) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(k))) {
-    stop("Function doesn't accept NA values in k vector");
-  }
-
-  if (idx.size() != n and idx.size() > 1) {
-    stop("length of idx and length of x differs. length(idx) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(idx))) {
-    stop("Function doesn't accept NA values in idx vector");
-  }
-
-  if (lag.size() != n and lag.size() > 1) {
-    stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(lag))) {
-    stop("Function doesn't accept NA values in lag vector");
-  }
+  checks::check_k(k, n);
+  checks::check_idx(idx, n);
+  checks::check_lag(lag, n);
 
   IntegerVector b(2);
   NumericVector res(n);
@@ -629,23 +575,9 @@ IntegerVector which_run(
 
   int n = x.size();
 
-  if (k.size() != n and k.size() > 1) {
-    stop("length of k and length of x differs. length(k) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(k))) {
-    stop("Function doesn't accept NA values in k vector");
-  }
-
-  if (idx.size() != n and idx.size() > 1) {
-    stop("length of idx and length of x differs. length(idx) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(idx))) {
-    stop("Function doesn't accept NA values in idx vector");
-  }
-
-  if (lag.size() != n and lag.size() > 1) {
-    stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(lag))) {
-    stop("Function doesn't accept NA values in lag vector");
-  }
+  checks::check_k(k, n);
+  checks::check_idx(idx, n);
+  checks::check_lag(lag, n);
 
   if (which != "last" && which != "first") {
     stop("which value should be either 'first' or 'last'");
@@ -888,23 +820,9 @@ IntegerVector streak_run(
 
   int n = Rf_length(x);
 
-  if ((k.size() != n) and (k.size() > 1)) {
-    stop("length of k and length of x differs. length(k) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(k))) {
-    stop("Function doesn't accept NA values in k vector");
-  }
-
-  if ((idx.size() != n) and (idx.size() > 1)) {
-    stop("length of idx and length of x differs. length(idx) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(idx))) {
-    stop("Function doesn't accept NA values in idx vector");
-  }
-
-  if ((lag.size() != n) and (lag.size() > 1)) {
-    stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(lag))) {
-    stop("Function doesn't accept NA values in lag vector");
-  }
+  checks::check_k(k, n);
+  checks::check_idx(idx, n);
+  checks::check_lag(lag, n);
 
   if (idx.size() == 0) {
     switch (TYPEOF(x)) {

@@ -14,9 +14,10 @@ window_run(x, k = integer(1), lag = integer(1), idx = integer(0),
 value then window size is constant for all elements, otherwise if \code{length(k) == length(x)} different
 window size for each element.}
 
-\item{lag}{\code{integer} vector or single value denoting window lag. If \code{lag} is a single
-value then window lag is constant for all elements, otherwise if \code{length(lag) == length(x)} different
-window size for each element.}
+\item{lag}{\code{integer} vector or single value denoting window lag.
+If \code{lag} is a single value then window lag is constant for all elements,
+otherwise if \code{length(lag) == length(x)} different window size for each
+element. Negative value shifts window forward.}
 
 \item{idx}{\code{date or integer} an optional integer vector containing index of observation. If specified
 then \code{k} and \code{lag} are depending on \code{idx}. Length of \code{idx} should be equal of length \code{x}}

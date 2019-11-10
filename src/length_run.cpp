@@ -1,4 +1,5 @@
 #include <Rcpp.h>
+#include "checks.h"
 using namespace Rcpp;
 
 //' Length of running windows
@@ -20,17 +21,9 @@ IntegerVector length_run(IntegerVector k = IntegerVector(1),
     stop("idx should be of length > 0");
   }
 
-  if(k.size() != n and k.size() > 1){
-    stop("length of k and length of idx differs. length(k) should be 1 or equal to idx");
-  } else if( Rcpp::any(Rcpp::is_na(k)) ){
-    stop("Function doesn't accept NA values in k vector");
-  }
-
-  if(lag.size() != n and lag.size() > 1){
-    stop("length of lag and length of lag differs. length(lag) should be 1 or equal to lag");
-  } else if( Rcpp::any(Rcpp::is_na(lag)) ){
-    stop("Function doesn't accept NA values in lag vector");
-  }
+  checks::check_k(k, n);
+  checks::check_idx(idx, n);
+  checks::check_lag(lag, n);
 
   IntegerVector res(n);
   if ((k.size() == 1)) {

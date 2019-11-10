@@ -1,7 +1,8 @@
 # current development version
 
 * switch to c++11 compiler
-* fix lag
+* fix lag to get latest value within window instead of outside of the window
+* change argument in lag from k to lag
 
 # runner 0.2.3
 

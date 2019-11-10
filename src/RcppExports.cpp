@@ -129,16 +129,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // lag_run
-SEXP lag_run(SEXP x, IntegerVector k, IntegerVector idx, bool nearest);
-RcppExport SEXP _runner_lag_run(SEXP xSEXP, SEXP kSEXP, SEXP idxSEXP, SEXP nearestSEXP) {
+SEXP lag_run(SEXP x, IntegerVector lag, IntegerVector idx, bool nearest);
+RcppExport SEXP _runner_lag_run(SEXP xSEXP, SEXP lagSEXP, SEXP idxSEXP, SEXP nearestSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type lag(lagSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP);
     Rcpp::traits::input_parameter< bool >::type nearest(nearestSEXP);
-    rcpp_result_gen = Rcpp::wrap(lag_run(x, k, idx, nearest));
+    rcpp_result_gen = Rcpp::wrap(lag_run(x, lag, idx, nearest));
     return rcpp_result_gen;
 END_RCPP
 }

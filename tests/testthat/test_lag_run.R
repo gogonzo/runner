@@ -1,9 +1,9 @@
 context("Running lag")
 set.seed(1)
 x <- 1:30
-k  <- sample(-10:10, 30, replace = TRUE)
+lag  <- sample(-10:10, 30, replace = TRUE)
 idx <- cumsum(sample(seq_len(5), 30, replace = TRUE))
-lag_run2 <- function(x, k = 1, idx = seq_along(x), nearest = FALSE) {
+lag_run2 <- function(x, lag = 1, idx = seq_along(x), nearest = FALSE) {
   fun <- function(x, k, idx, nearest, i) {
     res <- if (nearest) {
       window <- if (k > 0) {
@@ -33,10 +33,10 @@ lag_run2 <- function(x, k = 1, idx = seq_along(x), nearest = FALSE) {
     return(res)
   }
   sapply(seq_along(x), function(i) {
-    if (length(k) == 1) {
-      fun(x, k[1], idx, nearest, i)
+    if (length(lag) == 1) {
+      fun(x, lag[1], idx, nearest, i)
     } else {
-      fun(x, k[i], idx, nearest, i)
+      fun(x, lag[i], idx, nearest, i)
     }
 
   })
@@ -75,40 +75,41 @@ test_that("lag_run basic - different types", {
 })
 
 test_that("lag_run constant window", {
-  expect_identical(lag_run(x, k = 3), c(rep(NA, 3), head(x, -3)))
+  expect_identical(lag_run(x, lag = 3), c(rep(NA, 3), head(x, -3)))
 })
 
 test_that("lag_run moving window", {
-  expect_identical(lag_run(x, k = k), lag_run2(x, k = k))
-  expect_identical(lag_run(x, k = k, nearest = FALSE),
-                   lag_run2(x, k = k, nearest = FALSE))
+  expect_identical(lag_run(x, lag = lag), lag_run2(x, lag = lag))
+  expect_identical(lag_run(x, lag = lag, nearest = FALSE),
+                   lag_run2(x, lag = lag, nearest = FALSE))
 })
 
 test_that("lag_run date idx window (nearest end)", {
-  expect_identical(lag_run(x, k = 3, idx = idx, nearest = TRUE),
-                   lag_run2(x, k = 3, idx = idx, nearest = TRUE))
+  expect_identical(lag_run(x, lag = 3, idx = idx, nearest = TRUE),
+                   lag_run2(x, lag = 3, idx = idx, nearest = TRUE))
 
-  expect_identical(lag_run(x, k = 3, idx = idx, nearest = FALSE),
-                   lag_run2(x, k = 3, idx = idx, nearest = FALSE))
+  expect_identical(lag_run(x, lag = 3, idx = idx, nearest = FALSE),
+                   lag_run2(x, lag = 3, idx = idx, nearest = FALSE))
 
-  expect_identical(lag_run(x, k = -3, idx = idx, nearest = TRUE),
-                   lag_run2(x, k = -3, idx = idx, nearest = TRUE))
+  expect_identical(lag_run(x, lag = -3, idx = idx, nearest = TRUE),
+                   lag_run2(x, lag = -3, idx = idx, nearest = TRUE))
 
-  expect_identical(lag_run(x, k = -3, idx = idx, nearest = FALSE),
-                   lag_run2(x, k = -3, idx = idx, nearest = FALSE))
+  expect_identical(lag_run(x, lag = -3, idx = idx, nearest = FALSE),
+                   lag_run2(x, lag = -3, idx = idx, nearest = FALSE))
 
-  expect_identical(lag_run(x, k = k, idx = idx, nearest = TRUE),
-                   lag_run2(x, k = k, idx = idx, nearest = TRUE))
+  expect_identical(lag_run(x, lag = lag, idx = idx, nearest = TRUE),
+                   lag_run2(x, lag = lag, idx = idx, nearest = TRUE))
 
-  expect_identical(lag_run(x, k = k, idx = idx, nearest = FALSE),
-                   lag_run2(x, k = k, idx = idx, nearest = FALSE))
+  expect_identical(lag_run(x, lag = lag, idx = idx, nearest = FALSE),
+                   lag_run2(x, lag = lag, idx = idx, nearest = FALSE))
 })
 
 test_that("Errors", {
-  expect_error(lag_run(x, k = (1:9)), "length of k and length of x differs")
-  expect_error(min_run(x, k = c(NA, k[-1])), "Function doesn't accept NA values in k vector")
+  expect_error(lag_run(x, lag = (1:9)), "length of lag and length of x differs")
+  expect_error(min_run(x, lag = c(NA, lag[-1])), "Function doesn't accept NA values in lag vector")
 
   expect_error(lag_run(x, idx = (1:9)), "length of idx and length of x differs")
   expect_error(lag_run(x, idx = c(NA, 1:29)), "Function doesn't accept NA values in idx vector")
+  expect_error(lag_run(x, idx = sample(1:30)), "idx have to be in descending order")
 })
 

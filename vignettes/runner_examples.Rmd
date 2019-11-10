@@ -95,6 +95,7 @@ df <- read.table(text = "  user_id       date category
        11 2016-01-16    apple", header = TRUE)
 
 df %>%
+  group_by(user_id) %>%
   mutate(
     distinct_7  = runner(category, k =  7, idx = date, f = function(x) length(unique(x))),
     distinct_14 = runner(category, k = 14, idx = date, f = function(x) length(unique(x)))
