@@ -172,14 +172,18 @@ fill_run <- function(x, run_for_first = FALSE, only_within = FALSE) {
 #' Vector of input lagged along integer vector
 #' @inheritParams runner
 #' @inheritParams sum_run
-#' @param nearest \code{logical} single value. Applied when \code{idx} is used, then \code{nearest = FALSE} returns
-#' observation lagged exactly by the specified number of "periods". When \code{nearest = TRUE}
+#' @param k \code{integer} single value or vector of the same length as \code{x}.
+#' Denoting shift. Negative value shifts window forward.
+#' @param nearest \code{logical} single value. Applied when \code{idx} is used,
+#' then \code{nearest = FALSE} returns observation lagged exactly by the
+#' specified number of "periods". When \code{nearest = TRUE}
 #' function returns latest observation within lag window.
 #' @examples
 #' lag_run(1:10, k = 3)
 #' lag_run(letters[1:10], k = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10))
+#' lag_run(letters[1:10], k = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10), nearest = TRUE)
 #' @export
-lag_run <- function(x, k = 1L, idx = 1L, nearest = FALSE) {
+lag_run <- function(x, k = as.integer( c(1)), idx = integer(0), nearest = FALSE) {
     .Call('_runner_lag_run', PACKAGE = 'runner', x, k, idx, nearest)
 }
 
