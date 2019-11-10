@@ -103,15 +103,15 @@ data.frame(
 
 Idea of `lag_run` is the same as well known `stats::lag`, with distinction that
 `lag_run` can depend on time or any other indexes passed to `idx` argument. 
-This means that `lag_run` can shift by `k` elements of the vector or by `k` time 
-periods (if `idx` is specified).  
+This means that `lag_run` can shift by `lag` elements of the vector or by `lag` 
+time periods (if `idx` is specified).  
 
 ```{r}
 x <- c(-0.5910, 0.0266, -1.5166, -1.3627, 1.1785, -0.9342, 1.3236, 0.6249)
 idx <- as.Date(c("1970-01-03", "1970-01-06", "1970-01-09", "1970-01-12", 
                  "1970-01-13", "1970-01-16", "1970-01-17", "1970-01-19"))
 
-lag_run(x, k = 3, idx = idx)
+lag_run(x, lag = 3, idx = idx)
 ```
 
 ### Filling missing values

@@ -4,13 +4,15 @@
 \alias{lag_run}
 \title{Lag dependent on variable}
 \usage{
-lag_run(x, k = 1L, idx = integer(0), nearest = FALSE)
+lag_run(x, lag = 1L, idx = integer(0), nearest = FALSE)
 }
 \arguments{
 \item{x}{Vector of any type}
 
-\item{k}{\code{integer} single value or vector of the same length as \code{x}.
-Denoting shift. Negative value shifts window forward.}
+\item{lag}{\code{integer} vector or single value denoting window lag.
+If \code{lag} is a single value then window lag is constant for all elements,
+otherwise if \code{length(lag) == length(x)} different window size for each
+element. Negative value shifts window forward.}
 
 \item{idx}{\code{date or integer} an optional integer vector containing index of observation. If specified
 then \code{k} and \code{lag} are depending on \code{idx}. Length of \code{idx} should be equal of length \code{x}}
@@ -24,7 +26,7 @@ function returns latest observation within lag window.}
 Vector of input lagged along integer vector
 }
 \examples{
-lag_run(1:10, k = 3)
-lag_run(letters[1:10], k = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10))
-lag_run(letters[1:10], k = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10), nearest = TRUE)
+lag_run(1:10, lag = 3)
+lag_run(letters[1:10], lag = -2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10))
+lag_run(letters[1:10], lag = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10), nearest = TRUE)
 }

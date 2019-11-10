@@ -285,6 +285,7 @@ test_that("Errors", {
   expect_error(runner(x = letters[1:5], f = ""))
 
   expect_error(runner(list(1:10), k = 5, f = mean), "Invalid data type")
+  expect_error(runner(1:10, k = -5, f = mean), "k can't be negative")
 
   expect_error(runner(1:10, k = (1:9), f = mean), "length of k and length of x differs")
   expect_error(runner(1:10, k = c(NA, 1:9), f = mean), "Function doesn't accept NA values in k vector")
@@ -294,4 +295,5 @@ test_that("Errors", {
 
   expect_error(runner(1:10, idx = (1:9), f = mean), "length of idx and length of x differs")
   expect_error(runner(1:10, idx = c(NA, 1:9), f = mean), "Function doesn't accept NA values in idx vector")
+  expect_error(runner(1:10, idx = sample(1:10), f = mean), "idx have to be in descending order")
 })

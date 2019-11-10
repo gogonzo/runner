@@ -14,9 +14,10 @@ which_run(x, k = integer(1), lag = integer(1), which = "last",
 value then window size is constant for all elements, otherwise if \code{length(k) == length(x)} different
 window size for each element.}
 
-\item{lag}{\code{integer} vector or single value denoting window lag. If \code{lag} is a single
-value then window lag is constant for all elements, otherwise if \code{length(lag) == length(x)} different
-window size for each element.}
+\item{lag}{\code{integer} vector or single value denoting window lag.
+If \code{lag} is a single value then window lag is constant for all elements,
+otherwise if \code{length(lag) == length(x)} different window size for each
+element. Negative value shifts window forward.}
 
 \item{which}{\code{character} value "first" or "last" denoting if the first or last \code{TRUE}
 index is returned from the window.}

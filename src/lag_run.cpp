@@ -1,5 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
+#include "checks.h"
 #include "lag_run.h"
 
 //' Lag dependent on variable
@@ -7,76 +8,66 @@ using namespace Rcpp;
 //' Vector of input lagged along integer vector
 //' @inheritParams runner
 //' @inheritParams sum_run
-//' @param k \code{integer} single value or vector of the same length as \code{x}.
-//' Denoting shift. Negative value shifts window forward.
 //' @param nearest \code{logical} single value. Applied when \code{idx} is used,
 //' then \code{nearest = FALSE} returns observation lagged exactly by the
 //' specified number of "periods". When \code{nearest = TRUE}
 //' function returns latest observation within lag window.
 //' @examples
-//' lag_run(1:10, k = 3)
-//' lag_run(letters[1:10], k = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10))
-//' lag_run(letters[1:10], k = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10), nearest = TRUE)
+//' lag_run(1:10, lag = 3)
+//' lag_run(letters[1:10], lag = -2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10))
+//' lag_run(letters[1:10], lag = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10), nearest = TRUE)
 //' @export
 // [[Rcpp::export]]
 SEXP lag_run(SEXP x,
-             IntegerVector k = 1,
+             IntegerVector lag = 1,
              IntegerVector idx = IntegerVector(0),
              bool nearest = false) {
   int n = Rf_length(x);
 
-  if (k.size() != n and k.size() > 1) {
-    stop("length of k and length of x differs. length(k) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(k))) {
-    stop("Function doesn't accept NA values in k vector");
-  }
+  checks::check_idx(idx, n);
+  checks::check_lag(lag, n);
 
-  if (idx.size() != n and idx.size() > 1) {
-    stop("length of idx and length of x differs. length(idx) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(idx))) {
-    stop("Function doesn't accept NA values in idx vector");
-  }
 
-  if ((idx.size() == 0) & (k.size() == 1)) {
+  if ((idx.size() == 0) & (lag.size() == 1)) {
     switch (TYPEOF(x)) {
-    case INTSXP:  return lag::lag_run11(as<IntegerVector>(x),   k(0));
-    case REALSXP: return lag::lag_run11(as<NumericVector>(x),   k(0));
-    case STRSXP:  return lag::lag_run11(as<CharacterVector>(x), k(0));
-    case LGLSXP:  return  lag::lag_run11(as<LogicalVector>(x),  k(0));
-    case CPLXSXP: return lag::lag_run11(as<ComplexVector>(x),   k(0));
+    case INTSXP:  return lag::lag_run11(as<IntegerVector>(x),   lag(0));
+    case REALSXP: return lag::lag_run11(as<NumericVector>(x),   lag(0));
+    case STRSXP:  return lag::lag_run11(as<CharacterVector>(x), lag(0));
+    case LGLSXP:  return  lag::lag_run11(as<LogicalVector>(x),  lag(0));
+    case CPLXSXP: return lag::lag_run11(as<ComplexVector>(x),   lag(0));
     default: {
       stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }
     }
-  } else if ((idx.size() == 0) & (k.size() > 1)) {
+  } else if ((idx.size() == 0) & (lag.size() > 1)) {
     switch (TYPEOF(x)) {
-    case INTSXP:  return lag::lag_run12(as<IntegerVector>(x),   k);
-    case REALSXP: return lag::lag_run12(as<NumericVector>(x),   k);
-    case STRSXP:  return lag::lag_run12(as<CharacterVector>(x), k);
-    case LGLSXP:  return  lag::lag_run12(as<LogicalVector>(x),  k);
-    case CPLXSXP: return lag::lag_run12(as<ComplexVector>(x),   k);
+    case INTSXP:  return lag::lag_run12(as<IntegerVector>(x),   lag);
+    case REALSXP: return lag::lag_run12(as<NumericVector>(x),   lag);
+    case STRSXP:  return lag::lag_run12(as<CharacterVector>(x), lag);
+    case LGLSXP:  return  lag::lag_run12(as<LogicalVector>(x),  lag);
+    case CPLXSXP: return lag::lag_run12(as<ComplexVector>(x),   lag);
     default: {
       stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }
     }
-  } else if ((idx.size() == n) & (k.size() == 1)) {
+  } else if ((idx.size() == n) & (lag.size() == 1)) {
     switch (TYPEOF(x)) {
-    case INTSXP:  return lag::lag_run21(as<IntegerVector>(x),   k(0), idx, nearest);
-    case REALSXP: return lag::lag_run21(as<NumericVector>(x),   k(0), idx, nearest);
-    case STRSXP:  return lag::lag_run21(as<CharacterVector>(x), k(0), idx, nearest);
-    case LGLSXP:  return  lag::lag_run21(as<LogicalVector>(x),  k(0), idx, nearest);
-    case CPLXSXP: return lag::lag_run21(as<ComplexVector>(x),   k(0), idx, nearest);
+    case INTSXP:  return lag::lag_run21(as<IntegerVector>(x),   lag(0), idx, nearest);
+    case REALSXP: return lag::lag_run21(as<NumericVector>(x),   lag(0), idx, nearest);
+    case STRSXP:  return lag::lag_run21(as<CharacterVector>(x), lag(0), idx, nearest);
+    case LGLSXP:  return  lag::lag_run21(as<LogicalVector>(x),  lag(0), idx, nearest);
+    case CPLXSXP: return lag::lag_run21(as<ComplexVector>(x),   lag(0), idx, nearest);
     default: {
       stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }
     }
-  } else if ((idx.size() == n) & (k.size() > 1)) {
+  } else if ((idx.size() == n) & (lag.size() > 1)) {
     switch (TYPEOF(x)) {
-      case INTSXP:  return lag::lag_run22(as<IntegerVector>(x),   k, idx, nearest);
-      case REALSXP: return lag::lag_run22(as<NumericVector>(x),   k, idx, nearest);
-      case STRSXP:  return lag::lag_run22(as<CharacterVector>(x), k, idx, nearest);
-      case LGLSXP:  return lag::lag_run22(as<LogicalVector>(x),   k, idx, nearest);
-      case CPLXSXP: return lag::lag_run22(as<ComplexVector>(x),   k, idx, nearest);
+      case INTSXP:  return lag::lag_run22(as<IntegerVector>(x),   lag, idx, nearest);
+      case REALSXP: return lag::lag_run22(as<NumericVector>(x),   lag, idx, nearest);
+      case STRSXP:  return lag::lag_run22(as<CharacterVector>(x), lag, idx, nearest);
+      case LGLSXP:  return lag::lag_run22(as<LogicalVector>(x),   lag, idx, nearest);
+      case CPLXSXP: return lag::lag_run22(as<ComplexVector>(x),   lag, idx, nearest);
       default: {
         stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
       }

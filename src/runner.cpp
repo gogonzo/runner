@@ -1,7 +1,8 @@
 #include <Rcpp.h>
 using namespace Rcpp;
+#include "checks.h"
 #include "runner.h"
-// [[Rcpp::plugins(cpp14)]]
+// [[Rcpp::plugins(cpp11)]]
 
 template <int RTYPE>
 NumericVector runner_simple(const Vector<RTYPE>& x, IntegerVector k, IntegerVector lag, Function f, bool na_pad) {
@@ -125,9 +126,10 @@ NumericVector runner_on_date(const Vector<RTYPE>& x, IntegerVector k, IntegerVec
 //' @param k \code{integer} vector or single value denoting size of the running window. If \code{k} is a single
 //' value then window size is constant for all elements, otherwise if \code{length(k) == length(x)} different
 //' window size for each element.
-//' @param lag \code{integer} vector or single value denoting window lag. If \code{lag} is a single
-//' value then window lag is constant for all elements, otherwise if \code{length(lag) == length(x)} different
-//' window size for each element.
+//' @param lag \code{integer} vector or single value denoting window lag.
+//' If \code{lag} is a single value then window lag is constant for all elements,
+//' otherwise if \code{length(lag) == length(x)} different window size for each
+//' element. Negative value shifts window forward.
 //' @param idx \code{date or integer} an optional integer vector containing index of observation. If specified
 //' then \code{k} and \code{lag} are depending on \code{idx}. Length of \code{idx} should be equal of length \code{x}
 //' @param f \code{function} to be applied on \code{x}
@@ -150,23 +152,9 @@ SEXP runner(SEXP x,
 
   int n = Rf_length(x);
 
-  if (k.size() != n and k.size() > 1) {
-    stop("length of k and length of x differs. length(k) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(k))) {
-    stop("Function doesn't accept NA values in k vector");
-  }
-
-  if (idx.size() != n and idx.size() > 1) {
-    stop("length of idx and length of x differs. length(idx) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(idx))) {
-    stop("Function doesn't accept NA values in idx vector");
-  }
-
-  if (lag.size() != n and lag.size() > 1) {
-    stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
-  } else if (Rcpp::any(Rcpp::is_na(lag))) {
-    stop("Function doesn't accept NA values in lag vector");
-  }
+  checks::check_k(k, n);
+  checks::check_idx(idx, n);
+  checks::check_lag(lag, n);
 
   if (idx.size() > 0) {
     switch (TYPEOF(x)) {
@@ -312,24 +300,9 @@ SEXP window_run(SEXP x,
                 IntegerVector idx = IntegerVector(0),
                 bool na_pad = false) {
   int n = Rf_length(x);
-  if (k.size() != n and k.size() > 1) {
-    stop("length of k and length of x differs. length(k) should be 1 or equal to x");
-  } else if ( Rcpp::any(Rcpp::is_na(k)) ) {
-    stop("Function doesn't accept NA values in k vector");
-  }
-
-  if(idx.size() != n and idx.size() > 1) {
-    stop("length of idx and length of x differs. length(idx) should be 1 or equal to x");
-  } else if( Rcpp::any(Rcpp::is_na(idx)) ){
-    stop("Function doesn't accept NA values in idx vector");
-  }
-
-  if(lag.size() != n and lag.size() > 1) {
-    stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
-  } else if( Rcpp::any(Rcpp::is_na(lag))) {
-    stop("Function doesn't accept NA values in lag vector");
-  }
-
+  checks::check_k(k, n);
+  checks::check_idx(idx, n);
+  checks::check_lag(lag, n);
 
   if(idx.size() > 1) {
     switch (TYPEOF(x)) {

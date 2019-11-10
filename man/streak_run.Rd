@@ -14,9 +14,10 @@ streak_run(x, k = integer(1), lag = integer(1), na_rm = TRUE,
 value then window size is constant for all elements, otherwise if \code{length(k) == length(x)} different
 window size for each element.}
 
-\item{lag}{\code{integer} vector or single value denoting window lag. If \code{lag} is a single
-value then window lag is constant for all elements, otherwise if \code{length(lag) == length(x)} different
-window size for each element.}
+\item{lag}{\code{integer} vector or single value denoting window lag.
+If \code{lag} is a single value then window lag is constant for all elements,
+otherwise if \code{length(lag) == length(x)} different window size for each
+element. Negative value shifts window forward.}
 
 \item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) -
 if \code{TRUE} sum is calculating excluding \code{NA}.}
