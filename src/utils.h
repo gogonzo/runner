@@ -1,23 +1,24 @@
-using namespace Rcpp;
+#ifndef utils_h
+#define utils_h
 
 namespace utils {
   //' Boundaries of the lagged running window
-  IntegerVector window_ul(int i, int k, int lag, int n, bool na_pad, bool cum = false) {
-    IntegerVector res(2);
+  Rcpp::IntegerVector window_ul(int i, int k, int lag, int n, bool na_pad, bool cum = false) {
+    Rcpp::IntegerVector res(2);
 
     // exceptions
     if (na_pad) {
       if (cum) {
-        if (i - lag >= n or lag > i) return IntegerVector(0);
+        if (i - lag >= n or lag > i) return Rcpp::IntegerVector(0);
       } else {
-        if ((i - lag - k + 1) < 0 or (i - lag) >= n) return IntegerVector(0);
+        if ((i - lag - k + 1) < 0 or (i - lag) >= n) return Rcpp::IntegerVector(0);
       }
       // |---------- [ ]    [ ] |----------
     } else {
       if (cum) {
-        if (lag > i) return IntegerVector(0);
+        if (lag > i) return Rcpp::IntegerVector(0);
       } else {
-        if (lag > i or (i - lag - k + 1) >= n) return IntegerVector(0);
+        if (lag > i or (i - lag - k + 1) >= n) return Rcpp::IntegerVector(0);
       }
 
     }
@@ -40,24 +41,24 @@ namespace utils {
   }
 
   //' Boundaries of the lagged running window based on indexes
-  IntegerVector window_ul_dl(IntegerVector indexes, int i, int k, int lag, int n, bool na_pad, bool cum = false) {
+  Rcpp::IntegerVector window_ul_dl(Rcpp::IntegerVector indexes, int i, int k, int lag, int n, bool na_pad, bool cum = false) {
     if (na_pad) {
       if (cum) {
-        if ((indexes(i) - lag > indexes(n - 1)) or (indexes(i) - lag < indexes(0))) return IntegerVector(0);
+        if ((indexes(i) - lag > indexes(n - 1)) or (indexes(i) - lag < indexes(0))) return Rcpp::IntegerVector(0);
       } else {
-        if (((indexes(i) - lag - k + 1) < indexes(0)) or ((indexes(i) - lag) > indexes(n - 1))) return IntegerVector(0);
+        if (((indexes(i) - lag - k + 1) < indexes(0)) or ((indexes(i) - lag) > indexes(n - 1))) return Rcpp::IntegerVector(0);
       }
       // |---------- [ ]    [ ] |----------
     } else {
       if (cum) {
-        if (indexes(i) - lag < indexes(0)) return IntegerVector(0);
+        if (indexes(i) - lag < indexes(0)) return Rcpp::IntegerVector(0);
       } else {
         if (((indexes(i) - lag) < indexes(0)) or ((indexes(i) - lag - k + 1) > indexes(n - 1)))
-          return IntegerVector(0);
+          return Rcpp::IntegerVector(0);
       }
     }
 
-    IntegerVector idx_out(2);
+    Rcpp::IntegerVector idx_out(2);
     // cumulative ========================================================================
     if (cum) {
       // [-------]-+-->
@@ -68,7 +69,7 @@ namespace utils {
             idx_out(1) = u;
             return idx_out;
           } else if (u == 0) {
-            return IntegerVector(0);
+            return Rcpp::IntegerVector(0);
           }
         }
         // [-------+-]-->
@@ -103,7 +104,7 @@ namespace utils {
             }
           }
         } else {
-          return IntegerVector(0);
+          return Rcpp::IntegerVector(0);
         }
       }
     } else {
@@ -142,11 +143,14 @@ namespace utils {
               }
             }
           } else {
-            return IntegerVector(0);
+            return Rcpp::IntegerVector(0);
           }
         }
       }
     }
-    return IntegerVector(0);
+    return Rcpp::IntegerVector(0);
   }
+
 }
+
+#endif

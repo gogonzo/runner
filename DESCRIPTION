@@ -12,7 +12,7 @@ Description: Calculates running functions  with varying window size and missing 
   already implemented in R packages. Calculating on windows depending on date also available.
 License: GPL (>= 2)
 BugReports: https://github.com/gogonzo/runner/issues
-LinkingTo: Rcpp
+LinkingTo: Rcpp, BH
 Imports: Rcpp
 Suggests:
   dplyr,

@@ -5,6 +5,63 @@
 
 using namespace Rcpp;
 
+// fill_run
+SEXP fill_run(SEXP x, bool run_for_first, bool only_within);
+RcppExport SEXP _runner_fill_run(SEXP xSEXP, SEXP run_for_firstSEXP, SEXP only_withinSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< bool >::type run_for_first(run_for_firstSEXP);
+    Rcpp::traits::input_parameter< bool >::type only_within(only_withinSEXP);
+    rcpp_result_gen = Rcpp::wrap(fill_run(x, run_for_first, only_within));
+    return rcpp_result_gen;
+END_RCPP
+}
+// lag_run
+SEXP lag_run(SEXP x, IntegerVector lag, IntegerVector idx, bool nearest);
+RcppExport SEXP _runner_lag_run(SEXP xSEXP, SEXP lagSEXP, SEXP idxSEXP, SEXP nearestSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type lag(lagSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP);
+    Rcpp::traits::input_parameter< bool >::type nearest(nearestSEXP);
+    rcpp_result_gen = Rcpp::wrap(lag_run(x, lag, idx, nearest));
+    return rcpp_result_gen;
+END_RCPP
+}
+// length_run
+IntegerVector length_run(IntegerVector k, IntegerVector lag, IntegerVector idx);
+RcppExport SEXP _runner_length_run(SEXP kSEXP, SEXP lagSEXP, SEXP idxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type lag(lagSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP);
+    rcpp_result_gen = Rcpp::wrap(length_run(k, lag, idx));
+    return rcpp_result_gen;
+END_RCPP
+}
+// runner
+SEXP runner(const SEXP x, const Function f, const IntegerVector k, const IntegerVector lag, const IntegerVector idx, bool na_pad, std::string type);
+RcppExport SEXP _runner_runner(SEXP xSEXP, SEXP fSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP idxSEXP, SEXP na_padSEXP, SEXP typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Function >::type f(fSEXP);
+    Rcpp::traits::input_parameter< const IntegerVector >::type k(kSEXP);
+    Rcpp::traits::input_parameter< const IntegerVector >::type lag(lagSEXP);
+    Rcpp::traits::input_parameter< const IntegerVector >::type idx(idxSEXP);
+    Rcpp::traits::input_parameter< bool >::type na_pad(na_padSEXP);
+    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(runner(x, f, k, lag, idx, na_pad, type));
+    return rcpp_result_gen;
+END_RCPP
+}
 // sum_run
 NumericVector sum_run(NumericVector x, IntegerVector k, IntegerVector lag, bool na_rm, bool na_pad, IntegerVector idx);
 RcppExport SEXP _runner_sum_run(SEXP xSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP na_rmSEXP, SEXP na_padSEXP, SEXP idxSEXP) {
@@ -115,62 +172,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// fill_run
-SEXP fill_run(SEXP x, bool run_for_first, bool only_within);
-RcppExport SEXP _runner_fill_run(SEXP xSEXP, SEXP run_for_firstSEXP, SEXP only_withinSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
-    Rcpp::traits::input_parameter< bool >::type run_for_first(run_for_firstSEXP);
-    Rcpp::traits::input_parameter< bool >::type only_within(only_withinSEXP);
-    rcpp_result_gen = Rcpp::wrap(fill_run(x, run_for_first, only_within));
-    return rcpp_result_gen;
-END_RCPP
-}
-// lag_run
-SEXP lag_run(SEXP x, IntegerVector lag, IntegerVector idx, bool nearest);
-RcppExport SEXP _runner_lag_run(SEXP xSEXP, SEXP lagSEXP, SEXP idxSEXP, SEXP nearestSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type lag(lagSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP);
-    Rcpp::traits::input_parameter< bool >::type nearest(nearestSEXP);
-    rcpp_result_gen = Rcpp::wrap(lag_run(x, lag, idx, nearest));
-    return rcpp_result_gen;
-END_RCPP
-}
-// length_run
-IntegerVector length_run(IntegerVector k, IntegerVector lag, IntegerVector idx);
-RcppExport SEXP _runner_length_run(SEXP kSEXP, SEXP lagSEXP, SEXP idxSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type lag(lagSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP);
-    rcpp_result_gen = Rcpp::wrap(length_run(k, lag, idx));
-    return rcpp_result_gen;
-END_RCPP
-}
-// runner
-SEXP runner(SEXP x, Function f, IntegerVector k, IntegerVector lag, IntegerVector idx, bool na_pad);
-RcppExport SEXP _runner_runner(SEXP xSEXP, SEXP fSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP idxSEXP, SEXP na_padSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Function >::type f(fSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type lag(lagSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP);
-    Rcpp::traits::input_parameter< bool >::type na_pad(na_padSEXP);
-    rcpp_result_gen = Rcpp::wrap(runner(x, f, k, lag, idx, na_pad));
-    return rcpp_result_gen;
-END_RCPP
-}
 // window_run
 SEXP window_run(SEXP x, IntegerVector k, IntegerVector lag, IntegerVector idx, bool na_pad);
 RcppExport SEXP _runner_window_run(SEXP xSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP idxSEXP, SEXP na_padSEXP) {
@@ -188,6 +189,10 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_runner_fill_run", (DL_FUNC) &_runner_fill_run, 3},
+    {"_runner_lag_run", (DL_FUNC) &_runner_lag_run, 4},
+    {"_runner_length_run", (DL_FUNC) &_runner_length_run, 3},
+    {"_runner_runner", (DL_FUNC) &_runner_runner, 7},
     {"_runner_sum_run", (DL_FUNC) &_runner_sum_run, 6},
     {"_runner_mean_run", (DL_FUNC) &_runner_mean_run, 6},
     {"_runner_max_run", (DL_FUNC) &_runner_max_run, 6},
@@ -195,10 +200,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_runner_minmax_run", (DL_FUNC) &_runner_minmax_run, 3},
     {"_runner_which_run", (DL_FUNC) &_runner_which_run, 7},
     {"_runner_streak_run", (DL_FUNC) &_runner_streak_run, 6},
-    {"_runner_fill_run", (DL_FUNC) &_runner_fill_run, 3},
-    {"_runner_lag_run", (DL_FUNC) &_runner_lag_run, 4},
-    {"_runner_length_run", (DL_FUNC) &_runner_length_run, 3},
-    {"_runner_runner", (DL_FUNC) &_runner_runner, 6},
     {"_runner_window_run", (DL_FUNC) &_runner_window_run, 5},
     {NULL, NULL, 0}
 };
