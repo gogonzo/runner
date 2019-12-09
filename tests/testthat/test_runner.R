@@ -1,4 +1,5 @@
 context("Test Runner")
+set.seed(as.integer(Sys.Date()))
 x1 <- rnorm(100)
 x2 <- sample(c(rep(NA, 5), rnorm(15)), 100, replace = TRUE)
 k <- sample(1:100, 100, replace = TRUE)
