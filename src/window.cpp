@@ -4,7 +4,6 @@ using namespace Rcpp;
 #include "window.h"
 // [[Rcpp::plugins(cpp11)]]
 
-
 template <int RTYPE>
 List window_simple(const Vector<RTYPE>& x,
                    const IntegerVector k,
