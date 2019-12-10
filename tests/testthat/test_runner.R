@@ -1,4 +1,5 @@
 context("Test Runner")
+set.seed(as.integer(Sys.Date()))
 x1 <- rnorm(100)
 x2 <- sample(c(rep(NA, 5), rnorm(15)), 100, replace = TRUE)
 k <- sample(1:100, 100, replace = TRUE)
@@ -279,6 +280,104 @@ test_that("Function applied on other types", {
     expect_silent(runner(as.Date(1:100, origin = "1970-01-01"), k = k, f = length))
     expect_silent(runner(as.Date(1:100, origin = "1970-01-01"), k = k, idx, f = length))
 })
+
+
+test_that("i/o type", {
+  log_input <- c(T, T, F, F)
+  int_input <- as.integer(1:4)
+  num_input <- as.numeric(1:4) + 0.5
+  cha_input <- letters[1:4]
+  cpl_input <- complex(real = 1:4, imaginary = 1:4)
+
+  log_function <- function(x) any(duplicated(x))
+  int_function  <- function(x) as.integer(length(x))
+  num_function  <- function(x) as.double(sum(x))
+  char_function <- function(x) paste(x, collapse = "-")
+
+  # <logical>
+  expect_identical(
+    as.logical(c(FALSE, TRUE, TRUE, TRUE)),
+    runner(log_input, f = log_function, type = "logical"))
+
+  expect_identical(
+    as.logical(c(FALSE, FALSE, FALSE, FALSE)),
+    runner(int_input, f = log_function, type = "logical"))
+
+  expect_identical(
+    as.logical(c(FALSE, FALSE, FALSE, FALSE)),
+    runner(num_input, f = log_function, type = "logical"))
+
+  expect_identical(
+    as.logical(c(FALSE, FALSE, FALSE, FALSE)),
+    runner(cha_input, f = log_function, type = "logical"))
+
+  expect_identical(
+    as.logical(c(FALSE, FALSE, FALSE, FALSE)),
+    runner(cpl_input, f = log_function, type = "logical"))
+
+  # <integer>
+  expect_identical(
+    as.integer(c(1, 2, 3, 4)),
+    runner(log_input, f = int_function, type = "integer"))
+
+  expect_identical(
+    as.integer(c(1, 2, 3, 4)),
+    runner(int_input, f = int_function, type = "integer"))
+
+  expect_identical(
+    as.integer(c(1, 2, 3, 4)),
+    runner(num_input, f = int_function, type = "integer"))
+
+  expect_identical(
+    as.integer(c(1, 2, 3, 4)),
+    runner(cha_input, f = int_function, type = "integer"))
+
+  expect_identical(
+    as.integer(c(1, 2, 3, 4)),
+    runner(cpl_input, f = int_function, type = "integer"))
+
+  # <numeric>
+  expect_identical(
+    as.numeric(c(1, 2, 2, 2)),
+    runner(log_input, f = num_function, type = "numeric"))
+
+  expect_identical(
+    as.numeric(c(1, 3, 6, 10)),
+    runner(int_input, f = num_function, type = "numeric"))
+
+  expect_identical(
+    as.numeric(c(1.5, 4, 7.5, 12)),
+    runner(num_input, f = num_function, type = "numeric"))
+
+  expect_error(runner(cha_input, f = num_function, type = "numeric"))
+
+  expect_warning(runner(cpl_input, f = num_function, type = "numeric"))
+
+  # <character>
+  expect_identical(
+    c("TRUE", "TRUE-TRUE", "TRUE-TRUE-FALSE", "TRUE-TRUE-FALSE-FALSE"),
+    runner(log_input, f = char_function, type = "character"))
+
+  expect_identical(
+    c("1", "1-2", "1-2-3", "1-2-3-4"),
+    runner(int_input, f = char_function, type = "character"))
+
+  expect_identical(
+    c("1.5", "1.5-2.5", "1.5-2.5-3.5", "1.5-2.5-3.5-4.5"),
+    runner(num_input, f = char_function, type = "character"))
+
+  expect_identical(
+    c("a", "a-b", "a-b-c", "a-b-c-d"),
+    runner(cha_input, f = char_function, type = "character"))
+
+  expect_identical(
+    c("1+1i", "1+1i-2+2i", "1+1i-2+2i-3+3i", "1+1i-2+2i-3+3i-4+4i"),
+    runner(cpl_input, f = char_function, type = "character"))
+
+
+})
+
+
 
 test_that("Errors", {
   expect_error(runner(x = letters[1:5]))

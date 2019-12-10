@@ -10,12 +10,12 @@ mean2 <- function(x) {
 }
 
 test_that("       |--------]------->", {
-  expect_identical(
+  expect_equal(
     mean_run(x2),
     runner(x2, f = mean2)
   )
 
-  expect_identical(
+  expect_equal(
     mean_run(x2, na_pad = TRUE),
     runner(x2, f = mean2, na_pad = TRUE)
   )
