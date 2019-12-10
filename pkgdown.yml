@@ -1,6 +1,6 @@
 pandoc: '2.2'
 pkgdown: 1.4.1.9000
-pkgdown_sha: dfae44ecfcc5b0ac51f9489993ddd79ad6c707c3
+pkgdown_sha: 24ef1bbdec0de44fe11eb1d58b40dba961525d43
 articles:
   built-in_functions: built-in_functions.html
   runner_examples: runner_examples.html

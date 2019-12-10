@@ -70,7 +70,7 @@ specified k window size." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -183,7 +183,7 @@ then <code>k</code> and <code>lag</code> are depending on <code>idx</code>. Leng
 <span class='no'>k</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>( <span class='fl'>1</span>:<span class='fl'>4</span>, <span class='fl'>15</span>, <span class='kw'>replace</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='fu'>max_run</span>(<span class='no'>x1</span>) <span class='co'># simple cumulative maximum</span></div><div class='output co'>#&gt;  [1] 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3</div><div class='input'><span class='fu'>max_run</span>(<span class='no'>x2</span>, <span class='kw'>na_rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='co'># cumulative maximum with removing NA.</span></div><div class='output co'>#&gt;  [1] 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3</div><div class='input'><span class='fu'>max_run</span>(<span class='no'>x2</span>, <span class='kw'>na_rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='fl'>4</span>) <span class='co'># maximum in 4-element window</span></div><div class='output co'>#&gt;  [1] 2 2 2 2 2 2 3 3 3 3 2 2 2 2 2</div><div class='input'><span class='fu'>max_run</span>(<span class='no'>x2</span>, <span class='kw'>na_rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>k</span><span class='kw'>=</span><span class='no'>k</span>) <span class='co'># maximum in varying k window size</span></div><div class='output co'>#&gt;  [1]  2  2 NA NA NA NA  3  3  2  1  2  2  2  2  2</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
