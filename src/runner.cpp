@@ -1,4 +1,5 @@
 #include <Rcpp.h>
+#include <functional>
 #include <RcppCommon.h>
 using namespace Rcpp;
 #include "checks.h"
@@ -220,6 +221,206 @@ SEXP runner(const SEXP x,
 }
 
 
+template <int ITYPE, typename ftype>
+Rcpp::Vector<Rcpp::traits::r_sexptype_traits<ftype>::rtype>
+runner_cpp(Rcpp::Vector<ITYPE>& x,
+            ftype fun,
+            Rcpp::IntegerVector k = Rcpp::IntegerVector(1),
+            Rcpp::IntegerVector lag = Rcpp::IntegerVector(1),
+            bool na_rm = true,
+            bool na_pad = false,
+            Rcpp::IntegerVector idx = Rcpp::IntegerVector(0)) {
+
+  int n = x.size();
+
+  checks::check_k(k, n);
+  checks::check_idx(idx, n);
+  checks::check_lag(lag, n);
+
+  Rcpp::Rcout << typeid(ftype).name() << std::endl;
+  const int OTYPE = Rcpp::traits::r_sexptype_traits<ftype>::rtype;
+  Rcpp::Rcout << OTYPE << std::endl;
+
+
+  IntegerVector b;
+  Rcpp::Vector<OTYPE> res(n);
+
+
+  // Simple windows-------
+  if (idx.size() == 0) {
+
+    if (k.size() > 1 && lag.size() > 1) {
+      for (int i = 0; i < n; i++) {
+        b = utils::window_ul(i, k(i), lag(i), n, na_pad);
+        if (b.size() == 0) {
+          res(i) = Rcpp::Vector<OTYPE>::get_na();
+        } else {
+          res(i) = fun(x, b(1), b(0), na_rm);
+        }
+      }
+    } else if (k.size() > 1 && lag.size() == 1) {
+      for (int i = 0; i < n; i++) {
+        idx = utils::window_ul(i, k(i), lag(0), n, na_pad);
+        if (b.size() == 0) {
+          res(i) = Rcpp::Vector<OTYPE>::get_na();
+        } else {
+          res(i) = fun(x, b(1), b(0), na_rm);
+        }
+      }
+    } else if (k(0) == 0 && lag.size() > 1) {
+      for (int i = 0; i < n; i++) {
+        b = utils::window_ul(i, n, lag(i), n, na_pad, true);
+        if (b.size() == 0) {
+          res(i) = Rcpp::Vector<OTYPE>::get_na();
+        } else {
+          res(i) = fun(x, b(1), b(0), na_rm);
+        }
+      }
+    } else if (k(0) == 0 && lag.size() == 1) {
+      for (int i = 0; i < n; i++) {
+        b = utils::window_ul(i, n, lag(0), n, na_pad, true);
+        if (b.size() == 0) {
+          res(i) = Rcpp::Vector<OTYPE>::get_na();
+        } else {
+          res(i) = fun(x, b(1), b(0), na_rm);
+        }
+      }
+    } else if (k.size() == 1 && k(0) == n && lag.size() > 1) {
+      for (int i = 0; i < n; i++) {
+        b = utils::window_ul(i, n, lag(i), n, na_pad);
+        if (b.size() == 0) {
+          res(i) = Rcpp::Vector<OTYPE>::get_na();
+        } else {
+          res(i) = fun(x, b(1), b(0), na_rm);
+        }
+      }
+    } else if (k.size() == 1 && k(0) == n && lag.size() == 1) {
+      Rcpp::Rcout << "Here:" << std::endl;
+      for (int i = 0; i < n; i++) {
+        b = utils::window_ul(i, n, lag(0), n, na_pad);
+        Rcpp::Rcout << "b:" << b << std::endl;
+        if (b.size() == 0) {
+          res(i) = Rcpp::Vector<OTYPE>::get_na();
+        } else {
+          res(i) = fun(x, b(1), b(0), na_rm);
+        }
+      }
+    } else if (k.size() == 1 && lag.size() > 1) {
+      for (int i = 0; i < n; i++) {
+        b = utils::window_ul(i, k(0), lag(i), n, na_pad);
+        if (b.size() == 0) {
+          res(i) = Rcpp::Vector<OTYPE>::get_na();
+        } else {
+          res(i) = fun(x, b(1), b(0), na_rm);
+        }
+      }
+    } else if (k.size() == 1 && lag.size() == 1) {
+      for (int i = 0; i < n; i++) {
+        b = utils::window_ul(i, k(0), lag(0), n, na_pad);
+        if (b.size() == 0) {
+          res(i) = Rcpp::Vector<OTYPE>::get_na();
+        } else {
+          res(i) = fun(x, b(1), b(0), na_rm);
+        }
+      }
+    }
+
+  } else {
+    if (k.size() > 1) {
+      if (lag.size() > 1) {
+        for (int i = 0; i < n; i++) {
+          b = utils::window_ul_dl(idx, i, k(i), lag(i), n, na_pad, false);
+          if (b.size() == 0) {
+            res(i) = Rcpp::Vector<OTYPE>::get_na();
+          } else {
+            res(i) = fun(x, b(1), b(0), na_rm);
+          }
+        }
+      } else if (lag(0) != 0){
+        for (int i = 0; i < n; i++) {
+          b = utils::window_ul_dl(idx, i, k(i), lag(0), n, na_pad, false);
+          if (b.size() == 0) {
+            res(i) = Rcpp::Vector<OTYPE>::get_na();
+          } else {
+            res(i) = fun(x, b(1), b(0), na_rm);
+          }
+        }
+      } else {
+        for (int i = 0; i < n; i++) {
+          b = utils::window_ul_dl(idx, i, k(i), 0, n, na_pad, false);
+          if (b.size() == 0) {
+            res(i) = Rcpp::Vector<OTYPE>::get_na();
+          } else {
+            res(i) = fun(x, b(1), b(0), na_rm);
+          }
+        }
+      }
+    } else if (k(0) == 0) {
+      if (lag.size() > 1) {
+        for (int i = 0; i < n; i++) {
+          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad, true);
+          if (b.size() == 0) {
+            res(i) = Rcpp::Vector<OTYPE>::get_na();
+          } else {
+            res(i) = fun(x, b(1), b(0), na_rm);
+          }
+        }
+      } else if (lag(0) != 0){
+        for (int i = 0; i < n; i++) {
+          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad, true);
+          if (b.size() == 0) {
+            res(i) = Rcpp::Vector<OTYPE>::get_na();
+          } else {
+            res(i) = fun(x, b(1), b(0), na_rm);
+          }
+        }
+      } else {
+        for (int i = 0; i < n; i++) {
+          b = utils::window_ul_dl(idx, i, k(0), 0, n, na_pad, true);
+          if (b.size() == 0) {
+            res(i) = Rcpp::Vector<OTYPE>::get_na();
+          } else {
+            res(i) = fun(x, b(1), b(0), na_rm);
+          }
+        }
+      }
+    } else {
+      if (lag.size() > 1) {
+        for (int i = 0; i < n; i++) {
+          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad, false);
+          if (b.size() == 0) {
+            res(i) = Rcpp::Vector<OTYPE>::get_na();
+          } else {
+            res(i) = fun(x, b(1), b(0), na_rm);
+          }
+        }
+      } else if (lag(0) != 0) {
+        for (int i = 0; i < n; i++) {
+          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad, false);
+          if (b.size() == 0) {
+            res(i) = Rcpp::Vector<OTYPE>::get_na();
+          } else {
+            res(i) = fun(x, b(1), b(0), na_rm);
+          }
+        }
+      } else {
+        for (int i = 0; i < n; i++) {
+          b = utils::window_ul_dl(idx, i, k(0), 0, n, na_pad, false);
+          if (b.size() == 0) {
+            res(i) = Rcpp::Vector<OTYPE>::get_na();
+          } else {
+            res(i) = fun(x, b(1), b(0), na_rm);
+          }
+        }
+      }
+    }
+  }
+
+  return res;
+
+}
+
+
 //' Running sum
 //'
 //' Running sum in specified window of numeric vector.
@@ -240,7 +441,7 @@ SEXP runner(const SEXP x,
 //' sum_run(x2, na_rm = TRUE, k = 4)
 //' @export
 // [[Rcpp::export]]
-NumericVector sum_run(
+SEXP sum_run(
     NumericVector x,
     IntegerVector k = IntegerVector(1),
     IntegerVector lag = IntegerVector(1),
@@ -248,98 +449,7 @@ NumericVector sum_run(
     bool na_pad = false,
     IntegerVector idx = IntegerVector(0)) {
 
-  int n = x.size();
-
-  checks::check_k(k, n);
-  checks::check_idx(idx, n);
-  checks::check_lag(lag, n);
-
-  IntegerVector b(2);
-  NumericVector res(n);
-
-  /* Simple - no indexes */
-  if (idx.size() == 0) {
-    /* cum sum */
-    if ((k.size() == 1) && (lag.size() == 1) && (lag(0) == 0) && (k(0) == 0)) {
-      res = aggr::cumsum(x, na_rm);
-    // k.size() > 0
-    } else if ((k.size() > 1) && (lag.size() > 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(i), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    } else if ((k.size() > 1) && (lag.size() == 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(0), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    // k(0) == 0
-    } else if ((k(0) == 0) && (lag.size() == 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0), n, na_pad, true);
-        res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    } else if ((k(0) == 0) && (lag.size() > 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i), n, na_pad, true);
-        res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    // k.size() == 1
-    } else if (lag.size() > 1) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    } else if (lag.size() == 1) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    }
-
-    /* on indexes */
-  } else {
-    if (k.size() > 1) {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(i), lag(i), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(i), lag(0), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      }
-    } else if (k(0) == 0) {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad, true);
-          res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad, true);
-          res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      }
-    } else {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_sum(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      }
-    }
-  }
-
-  return res;
+  return runner_cpp(x, aggr::calc_sum<double>, k, lag, na_rm, na_pad, idx);
 }
 
 //' Running mean
