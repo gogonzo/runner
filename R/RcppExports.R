@@ -187,6 +187,28 @@ minmax_run <- function(x, metric = "min", na_rm = TRUE) {
     .Call('_runner_minmax_run', PACKAGE = 'runner', x, metric, na_rm)
 }
 
+#' Running streak length
+#'
+#' Calculates running series of consecutive elements
+#' @param x {any type} vector which running function is calculated on
+#' @inheritParams runner
+#' @inheritParams sum_run
+#' @return streak [numeric] vector of length equals length of \code{x} containing
+#' number of consecutive occurrences.
+#' @examples
+#' set.seed(11)
+#' x1 <- sample(c("a","b"), 15, replace = TRUE)
+#' x2 <- sample(c(NA_character_, "a", "b"), 15, replace = TRUE)
+#' k <- sample(1:4, 15, replace = TRUE)
+#' streak_run(x1) # simple streak run
+#' streak_run(x1, k = 2) # streak run within 2-element window
+#' streak_run(x2, na_pad = TRUE, k = 3) # streak run within k=3 with padding NA
+#' streak_run(x1, k = k) # streak run within varying window size specified by vector k
+#' @export
+streak_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad = FALSE, idx = integer(0)) {
+    .Call('_runner_streak_run', PACKAGE = 'runner', x, k, lag, na_rm, na_pad, idx)
+}
+
 #' Running which
 #'
 #'
@@ -208,28 +230,6 @@ minmax_run <- function(x, metric = "min", na_rm = TRUE) {
 #' @export
 which_run <- function(x, k = integer(1), lag = integer(1), which = "last", na_rm = TRUE, na_pad = FALSE, idx = integer(0)) {
     .Call('_runner_which_run', PACKAGE = 'runner', x, k, lag, which, na_rm, na_pad, idx)
-}
-
-#' Running streak length
-#'
-#' Calculates running series of consecutive elements
-#' @param x {any type} vector which running function is calculated on
-#' @inheritParams runner
-#' @inheritParams sum_run
-#' @return streak [numeric] vector of length equals length of \code{x} containing
-#' number of consecutive occurrences.
-#' @examples
-#' set.seed(11)
-#' x1 <- sample(c("a","b"), 15, replace = TRUE)
-#' x2 <- sample(c(NA_character_, "a", "b"), 15, replace = TRUE)
-#' k <- sample(1:4, 15, replace = TRUE)
-#' streak_run(x1) # simple streak run
-#' streak_run(x1, k = 2) # streak run within 2-element window
-#' streak_run(x2, na_pad = TRUE, k = 3) # streak run within k=3 with padding NA
-#' streak_run(x1, k = k) # streak run within varying window size specified by vector k
-#' @export
-streak_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad = FALSE, idx = integer(0)) {
-    .Call('_runner_streak_run', PACKAGE = 'runner', x, k, lag, na_rm, na_pad, idx)
 }
 
 #' List of running windows
