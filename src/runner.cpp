@@ -640,67 +640,40 @@ NumericVector minmax_run(
 template <int ITYPE>
 IntegerVector streak_run1(const Vector<ITYPE>& x, IntegerVector k, IntegerVector lag,  bool na_rm, bool na_pad) {
   int n = x.size();
-  int l = 0;
-  int cur_streak = 0;
   IntegerVector b(2);
   IntegerVector res(n);
 
   if ((k.size() == 1) && (lag.size() == 1) && (k(0) == 0) &&  (lag(0) == 0)) {
-    for (int i = 0; i < n ; i++) {
-      if (Vector<ITYPE>::is_na(x(i))) {
-        if (!na_rm) {
-          cur_streak = 0;
-          if (i + lag(0) >= 0 && i + lag(0) < n) {
-            res(i + lag(0)) = NA_INTEGER;
-            continue;
-          }
-        }
-      } else if (x(i) == x(l)) {
-        cur_streak += 1;
-      } else {
-        cur_streak = 1;
-        l = i;
-      }
-      if ((i + lag(0) >= 0) && (i + lag(0) < n)) {
-        res(i + lag(0)) = cur_streak;
-      }
-    }
-
-    if (lag(0) > 0) {
-      std::fill(res.begin(), res.end() - n + lag(0), NA_INTEGER);
-    } else if (lag(0) < 0) {
-      std::fill(res.end() + lag(0), res.end(), NA_INTEGER);
-    }
-
+    res = aggr::cumstreak(x, lag(0), na_rm);
   } else if ((k.size() > 1) && (lag.size() > 1)) {
     for (int i = 0; i < n; ++i) {
       b = utils::window_ul(i, k(i), lag(i), n, na_pad);
-      res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+      res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   } else if ((k.size() > 1) && (lag.size() == 1)) {
     for (int i = 0; i < n; ++i) {
       b = utils::window_ul(i, k(i), lag(0), n, na_pad);
-      res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+      res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   } else if ((k(0) == 0) && (lag.size() > 1)) {
     for (int i = 0; i < n; ++i) {
       b = utils::window_ul(i, k(0), lag(i), n, na_pad, true);
-      res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+      res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   } else if ((k(0) == 0) && (lag.size() == 1)) {
     for (int i = 0; i < n; ++i) {
       b = utils::window_ul(i, k(0), lag(0), n, na_pad, true);
-      res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+      res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   } else if ((lag.size() > 1)) {
     for (int i = 0; i < n; ++i) {
       b = utils::window_ul(i, k(0), lag(i), n, na_pad);
-      res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+      res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   } else if ((lag.size() == 1)) {
     for (int i = 0; i < n; ++i) {
       b = utils::window_ul(i, k(0), lag(0), n, na_pad);
-      res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+      res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
     }
   }
 
@@ -718,36 +691,36 @@ IntegerVector streak_run2(const Vector<ITYPE>& x, IntegerVector k, IntegerVector
     if (lag.size() > 1) {
       for (int i = 0; i < n; ++i) {
         b = utils::window_ul_dl(indexes, i, k(i), lag(i), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+        res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
       }
     } else {
       for (int i = 0; i < n; ++i) {
         b = utils::window_ul_dl(indexes, i, k(i), lag(0), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+        res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
       }
     }
   } else if (k(0) == 0) {
     if (lag.size() > 1) {
       for (int i = 0; i < n; ++i) {
         b = utils::window_ul_dl(indexes, i, k(0), lag(i), n, na_pad, true);
-        res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+        res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
       }
     } else {
       for (int i = 0; i < n; ++i) {
         b = utils::window_ul_dl(indexes, i, k(0), lag(0), n, na_pad, true);
-        res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+        res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
       }
     }
   } else {
     if (lag.size() > 1) {
       for (int i = 0; i < n; ++i) {
         b = utils::window_ul_dl(indexes, i, k(0), lag(i), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+        res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
       }
     } else {
       for (int i = 0; i < n; ++i) {
         b = utils::window_ul_dl(indexes, i, k(0), lag(0), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_actual_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+        res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
       }
     }
   }
@@ -856,88 +829,24 @@ IntegerVector which_run(
   IntegerVector b(2);
   IntegerVector res(n);
 
-  /* Simple - no indexes */
-  if (idx.size() == 0) {
-    /* cum whicht */
-    if ((k.size() == 1) && (lag.size() == 1) && (lag(0) == 0) && (k(0) == 0)) {
-      res = aggr::cumwhicht(x, na_rm, which);
-      // k.size() > 0
-    } else if ((k.size() > 1) && (lag.size() > 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(i), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-      }
-    } else if ((k.size() > 1) && (lag.size() == 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(0), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-      }
-      // k(0) == 0
-    } else if ((k(0) == 0) && (lag.size() == 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0), n, na_pad, true);
-        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-      }
-    } else if ((k(0) == 0) && (lag.size() > 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i), n, na_pad, true);
-        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-      }
-      // k.size() == 1
-    } else if (lag.size() > 1) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-      }
-    } else if (lag.size() == 1) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-      }
+  if (which == "first") {
+    if ((k.size() == 1) &&
+        (lag.size() == 1) &&
+        ((k(0) == 0) && lag(0) == 0)) {
+      return aggr::cumwhichf(x, na_rm);
+    } else {
+      return runner_cpp<int>(x, aggr::calc_whichf, k, lag, na_rm, na_pad, idx);
     }
 
-    /* on indexes */
   } else {
-    if (k.size() > 1) {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(i), lag(i), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-        }
-
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(i), lag(0), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-        }
-      }
-    } else if (k(0) == 0) {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad, true);
-          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-        }
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad, true);
-          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-        }
-      }
+    if ((k.size() == 1) &&
+        (lag.size() == 1) &&
+        ((k(0) == 0) && lag(0) == 0)) {
+      return aggr::cumwhichl(x, na_rm);
     } else {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-        }
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-        }
-      }
+      return runner_cpp<int>(x, aggr::calc_whichl, k, lag, na_rm, na_pad, idx);
     }
   }
-
 
   return res;
 }

@@ -1,6 +1,6 @@
 namespace aggr {
     template <int RTYPE>
-    int calc_actual_streak(Rcpp::Vector<RTYPE> const& x, int u, int l, bool na_rm) {
+    int calc_streak(Rcpp::Vector<RTYPE> const& x, int u, int l, bool na_rm) {
       int uu = u;
       int cur_streak {0};
 
@@ -132,44 +132,83 @@ namespace aggr {
       return cur_sum/nonna;
     }
 
-    int calc_whicht(Rcpp::LogicalVector const& x, int u, int l, bool na_rm, std::string which) {
+    int calc_whichf(Rcpp::LogicalVector const& x, int u, int l, bool na_rm) {
 
-      if (which == "last") {
-        if (na_rm) {
-          for (int i = u; i >= l ; --i) {
-            if (x(i) == TRUE) {
-              return i + 1;
-            }
-          }
-        } else {
-          for (int i = u; i >= l; --i) {
-            if (Rcpp::LogicalVector::is_na(x(i))) {
-              return NA_INTEGER;
-            } else if (x(i) == TRUE) {
-              return i + 1;
-            }
+      if (na_rm) {
+        for (int i = l; i <= u ; ++i) {
+          if (x(i) == TRUE) {
+            return i + 1;
           }
         }
-      } else if (which == "first") {
-        if (na_rm) {
-          for (int i = l; i <= u ; ++i) {
-            if (x(i) == TRUE) {
-              return i + 1;
-            }
-          }
-        } else {
-          for (int i = l; i <= u; ++i) {
-            if (Rcpp::LogicalVector::is_na(x(i))) {
-              return NA_INTEGER;
-            } else if (x(i) == TRUE) {
-              return i + 1;
-            }
+      } else {
+        for (int i = l; i <= u; ++i) {
+          if (Rcpp::LogicalVector::is_na(x(i))) {
+            return NA_INTEGER;
+          } else if (x(i) == TRUE) {
+            return i + 1;
           }
         }
       }
+
       return NA_INTEGER;
     }
 
+    int calc_whichl(Rcpp::LogicalVector const& x, int u, int l, bool na_rm) {
+      if (na_rm) {
+        for (int i = u; i >= l ; --i) {
+          if (x(i) == TRUE) {
+            return i + 1;
+          }
+        }
+      } else {
+        for (int i = u; i >= l; --i) {
+          if (Rcpp::LogicalVector::is_na(x(i))) {
+            return NA_INTEGER;
+          } else if (x(i) == TRUE) {
+            return i + 1;
+          }
+        }
+      }
+
+      return NA_INTEGER;
+    }
+
+
+    template <int ITYPE>
+    Rcpp::IntegerVector cumstreak(Rcpp::Vector<ITYPE> const& x, int lag, bool na_rm) {
+      int n = x.size();
+      Rcpp::IntegerVector res(n);
+      int cur_streak = 0, l = 0;
+
+      for (int i = 0; i < n ; i++) {
+        if (Rcpp::Vector<ITYPE>::is_na(x(i))) {
+          if (!na_rm) {
+            cur_streak = 0;
+            if (i + lag >= 0 && i + lag < n) {
+              res(i + lag) = NA_INTEGER;
+              continue;
+            }
+          }
+        } else if (x(i) == x(l)) {
+          cur_streak += 1;
+        } else {
+          cur_streak = 1;
+          l = i;
+        }
+
+        if ((i + lag >= 0) && (i + lag < n)) {
+          res(i + lag) = cur_streak;
+        }
+      }
+
+      if (lag > 0) {
+        std::fill(res.begin(), res.end() - n + lag, NA_INTEGER);
+      } else if (lag < 0) {
+        std::fill(res.end() + lag, res.end(), NA_INTEGER);
+      }
+
+      return res;
+    }
     Rcpp::NumericVector cummax(Rcpp::NumericVector const& x, bool na_rm) {
       int n = x.size();
       Rcpp::NumericVector res(n);
@@ -291,49 +330,55 @@ namespace aggr {
       return res;
     }
 
-    Rcpp::IntegerVector cumwhicht(Rcpp::LogicalVector const& x, bool na_rm, std::string which) {
+    Rcpp::IntegerVector cumwhichf(Rcpp::LogicalVector const& x, bool na_rm) {
       int n = x.size();
       Rcpp::IntegerVector res(n);
       double whicht = NA_INTEGER;
 
-      if (which == "last") {
-        if (na_rm) {
-          for (int i = 0; i < n ; ++i) {
-            if (x(i) == TRUE) {
-              whicht = i + 1;
-            }
-            res(i) = whicht;
+      if (na_rm) {
+        for (int i = 0; i < n ; ++i) {
+          if (x(i) == TRUE) {
+            std::fill(res.begin() + i, res.end(), i + 1);
+            return res;
           }
-        } else {
-          for (int i = 0; i < n ; ++i) {
-            if (Rcpp::LogicalVector::is_na(x(i))) {
-              whicht = NA_INTEGER;
-            } else if (x(i) == TRUE) {
-              whicht = i + 1;
-            }
-            res(i) = whicht;
-          }
+          res(i) = whicht;
         }
-      } else if (which == "first") {
-        if (na_rm) {
-          for (int i = 0; i < n ; ++i) {
-            if (x(i) == TRUE) {
-              std::fill(res.begin() + i, res.end(), i + 1);
-              return res;
-            }
-            res(i) = whicht;
+      } else {
+        for (int i = 0; i < n ; ++i) {
+          if (Rcpp::LogicalVector::is_na(x(i))) {
+            std::fill(res.begin() + i, res.end(), NA_INTEGER);
+            return res;
+          } else if (x(i) == TRUE) {
+            std::fill(res.begin() + i, res.end(), i + 1);
+            return res;
           }
-        } else {
-          for (int i = 0; i < n ; ++i) {
-            if (Rcpp::LogicalVector::is_na(x(i))) {
-              std::fill(res.begin() + i, res.end(), NA_INTEGER);
-              return res;
-            } else if (x(i) == TRUE) {
-              std::fill(res.begin() + i, res.end(), i + 1);
-              return res;
-            }
-            res(i) = whicht;
+          res(i) = whicht;
+        }
+      }
+      return res;
+    }
+
+    Rcpp::IntegerVector cumwhichl(Rcpp::LogicalVector const& x, bool na_rm) {
+      int n = x.size();
+      Rcpp::IntegerVector res(n);
+      double whicht = NA_INTEGER;
+
+
+      if (na_rm) {
+        for (int i = 0; i < n ; ++i) {
+          if (x(i) == TRUE) {
+            whicht = i + 1;
           }
+          res(i) = whicht;
+        }
+      } else {
+        for (int i = 0; i < n ; ++i) {
+          if (Rcpp::LogicalVector::is_na(x(i))) {
+            whicht = NA_INTEGER;
+          } else if (x(i) == TRUE) {
+            whicht = i + 1;
+          }
+          res(i) = whicht;
         }
       }
       return res;
