@@ -1,6 +1,8 @@
 namespace apply {
   template <typename otype, int OTYPE>
-  otype apply(const Rcpp::Vector<OTYPE>& x, Rcpp::IntegerVector idx, Rcpp::Function& f) {
+  otype apply(Rcpp::Vector<OTYPE> const& x,
+              Rcpp::IntegerVector const& idx,
+              Rcpp::Function& f) {
     Rcpp::Vector<OTYPE> window(idx(1) - idx(0) + 1);
     std::copy(x.begin() + idx(0), x.begin() + idx(1) + 1, window.begin());
 
@@ -9,7 +11,8 @@ namespace apply {
 
 
   template <int OTYPE>
-  Rcpp::Vector<OTYPE> subset_window(const Rcpp::Vector<OTYPE>& x, Rcpp::IntegerVector idx) {
+  Rcpp::Vector<OTYPE> subset_window(Rcpp::Vector<OTYPE>const& x,
+                                    Rcpp::IntegerVector const& idx) {
     Rcpp::Vector<OTYPE> window(idx(1) - idx(0) + 1);
     std::copy(x.begin() + idx(0), x.begin() + idx(1) + 1, window.begin());
 

@@ -63,7 +63,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // sum_run
-SEXP sum_run(NumericVector x, IntegerVector k, IntegerVector lag, bool na_rm, bool na_pad, IntegerVector idx);
+Rcpp::NumericVector sum_run(NumericVector x, IntegerVector k, IntegerVector lag, bool na_rm, bool na_pad, IntegerVector idx);
 RcppExport SEXP _runner_sum_run(SEXP xSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP na_rmSEXP, SEXP na_padSEXP, SEXP idxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

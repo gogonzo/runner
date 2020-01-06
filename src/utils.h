@@ -41,7 +41,7 @@ namespace utils {
   }
 
   //' Boundaries of the lagged running window based on indexes
-  Rcpp::IntegerVector window_ul_dl(Rcpp::IntegerVector indexes, int i, int k, int lag, int n, bool na_pad, bool cum = false) {
+  Rcpp::IntegerVector window_ul_dl(Rcpp::IntegerVector const& indexes, int i, int k, int lag, int n, bool na_pad, bool cum = false) {
     if (na_pad) {
       if (cum) {
         if ((indexes(i) - lag > indexes(n - 1)) or (indexes(i) - lag < indexes(0))) return Rcpp::IntegerVector(0);

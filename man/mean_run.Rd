@@ -4,8 +4,14 @@
 \alias{mean_run}
 \title{Running mean}
 \usage{
-mean_run(x, k = integer(1), lag = integer(1), na_rm = TRUE,
-  na_pad = FALSE, idx = integer(0))
+mean_run(
+  x,
+  k = integer(1),
+  lag = integer(1),
+  na_rm = TRUE,
+  na_pad = FALSE,
+  idx = integer(0)
+)
 }
 \arguments{
 \item{x}{\code{numeric} vector which running function is calculated on}

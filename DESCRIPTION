@@ -5,11 +5,15 @@ Version: 0.3.0
 Depends: R (>= 3.0)
 Language: en-US
 Encoding: UTF-8
-Authors@R: person("Dawid", "Kałędkowski", email = "dawid.kaledkowski@gmail.com", role = c("aut", "cre"))
+Authors@R: person("Dawid", "Kałędkowski", 
+                  email = "dawid.kaledkowski@gmail.com",
+                  comment = c(ORCID = "0000-0001-9533-457X"),
+                  role = c("aut", "cre"))
 Maintainer: Dawid Kałędkowski <dawid.kaledkowski@gmail.com>
-Description: Calculates running functions  with varying window size and missing handling options. 
-  Package brings also running streak and running which, what extends beyond range of functions 
-  already implemented in R packages. Calculating on windows depending on date also available.
+Description: Calculates running functions  with varying window size and missing 
+  handling options. Package brings also running streak and running which, what 
+  extends beyond range of functions already implemented in R packages. Calculating 
+  on windows depending on date also available.
 License: GPL (>= 2)
 BugReports: https://github.com/gogonzo/runner/issues
 LinkingTo: Rcpp
@@ -22,4 +26,4 @@ Suggests:
   spelling,
   testthat
 VignetteBuilder: knitr
-RoxygenNote: 6.1.0
+RoxygenNote: 7.0.2

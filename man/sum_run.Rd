@@ -4,8 +4,14 @@
 \alias{sum_run}
 \title{Running sum}
 \usage{
-sum_run(x, k = integer(1), lag = integer(1), na_rm = TRUE,
-  na_pad = FALSE, idx = integer(0))
+sum_run(
+  x,
+  k = integer(1),
+  lag = integer(1),
+  na_rm = TRUE,
+  na_pad = FALSE,
+  idx = integer(0)
+)
 }
 \arguments{
 \item{x}{\code{numeric} vector which running function is calculated on}

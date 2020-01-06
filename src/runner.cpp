@@ -10,10 +10,10 @@ using namespace Rcpp;
 
 template <typename otype, int ITYPE>
 Rcpp::Vector<Rcpp::traits::r_sexptype_traits<otype>::rtype>
-run_(const Vector<ITYPE>& x,
-     const IntegerVector k,
-     const IntegerVector lag,
-     const IntegerVector indexes,
+run_(Rcpp::Vector<ITYPE> const& x,
+     Rcpp::IntegerVector const& k,
+     Rcpp::IntegerVector const& lag,
+     Rcpp::IntegerVector const& indexes,
      Function f,
      bool na_pad) {
 
@@ -221,30 +221,25 @@ SEXP runner(const SEXP x,
 }
 
 
-template <int ITYPE, typename ftype>
-Rcpp::Vector<Rcpp::traits::r_sexptype_traits<ftype>::rtype>
-runner_cpp(Rcpp::Vector<ITYPE>& x,
-            ftype fun,
-            Rcpp::IntegerVector k = Rcpp::IntegerVector(1),
-            Rcpp::IntegerVector lag = Rcpp::IntegerVector(1),
-            bool na_rm = true,
-            bool na_pad = false,
-            Rcpp::IntegerVector idx = Rcpp::IntegerVector(0)) {
+template <typename T>
+using RcppVec = Rcpp::Vector<Rcpp::traits::r_sexptype_traits<T>::rtype>;
+
+template <typename otype, int ITYPE, typename ftype>
+Rcpp::Vector<Rcpp::traits::r_sexptype_traits<otype>::rtype>
+runner_cpp(Rcpp::Vector<ITYPE> const& x,
+           ftype fun,
+           Rcpp::IntegerVector const& k = Rcpp::IntegerVector(1),
+           Rcpp::IntegerVector const& lag = Rcpp::IntegerVector(1),
+           bool const& na_rm = true,
+           bool const& na_pad = false,
+           Rcpp::IntegerVector const& idx = Rcpp::IntegerVector(0)) {
 
   int n = x.size();
 
-  checks::check_k(k, n);
-  checks::check_idx(idx, n);
-  checks::check_lag(lag, n);
+  const int OTYPE = Rcpp::traits::r_sexptype_traits<otype>::rtype;
 
-  Rcpp::Rcout << typeid(ftype).name() << std::endl;
-  const int OTYPE = Rcpp::traits::r_sexptype_traits<ftype>::rtype;
-  Rcpp::Rcout << OTYPE << std::endl;
-
-
-  IntegerVector b;
   Rcpp::Vector<OTYPE> res(n);
-
+  IntegerVector b(2);
 
   // Simple windows-------
   if (idx.size() == 0) {
@@ -260,7 +255,7 @@ runner_cpp(Rcpp::Vector<ITYPE>& x,
       }
     } else if (k.size() > 1 && lag.size() == 1) {
       for (int i = 0; i < n; i++) {
-        idx = utils::window_ul(i, k(i), lag(0), n, na_pad);
+        b = utils::window_ul(i, k(i), lag(0), n, na_pad);
         if (b.size() == 0) {
           res(i) = Rcpp::Vector<OTYPE>::get_na();
         } else {
@@ -295,10 +290,8 @@ runner_cpp(Rcpp::Vector<ITYPE>& x,
         }
       }
     } else if (k.size() == 1 && k(0) == n && lag.size() == 1) {
-      Rcpp::Rcout << "Here:" << std::endl;
       for (int i = 0; i < n; i++) {
         b = utils::window_ul(i, n, lag(0), n, na_pad);
-        Rcpp::Rcout << "b:" << b << std::endl;
         if (b.size() == 0) {
           res(i) = Rcpp::Vector<OTYPE>::get_na();
         } else {
@@ -441,7 +434,7 @@ runner_cpp(Rcpp::Vector<ITYPE>& x,
 //' sum_run(x2, na_rm = TRUE, k = 4)
 //' @export
 // [[Rcpp::export]]
-SEXP sum_run(
+Rcpp::NumericVector sum_run(
     NumericVector x,
     IntegerVector k = IntegerVector(1),
     IntegerVector lag = IntegerVector(1),
@@ -449,7 +442,19 @@ SEXP sum_run(
     bool na_pad = false,
     IntegerVector idx = IntegerVector(0)) {
 
-  return runner_cpp(x, aggr::calc_sum<double>, k, lag, na_rm, na_pad, idx);
+  int n = x.size();
+  checks::check_k(k, n);
+  checks::check_idx(idx, n);
+  checks::check_lag(lag, n);
+
+  if ((k.size() == 1) &&
+      (lag.size() == 1) &&
+      ((k(0) == 0) && lag(0) == 0)) {
+    return aggr::cumsum(x, na_rm);
+  } else {
+    return runner_cpp<double>(x, aggr::calc_sum, k, lag, na_rm, na_pad, idx);
+  }
+
 }
 
 //' Running mean
@@ -477,98 +482,19 @@ NumericVector mean_run(
     bool na_pad = false,
     IntegerVector idx = IntegerVector(0)) {
 
-  int n = x.size();
 
+  int n = x.size();
   checks::check_k(k, n);
   checks::check_idx(idx, n);
   checks::check_lag(lag, n);
 
-  IntegerVector b(2);
-  NumericVector res(n);
-
-  /* Simple - no indexes */
-  if (idx.size() == 0) {
-    /* cum mean */
-    if ((k.size() == 1) && (lag.size() == 1) && (lag(0) == 0) && (k(0) == 0)) {
-      res = aggr::cummean(x, na_rm);
-      // k.size() > 0
-    } else if ((k.size() > 1) && (lag.size() > 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(i), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    } else if ((k.size() > 1) && (lag.size() == 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(0), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-      // k(0) == 0
-    } else if ((k(0) == 0) && (lag.size() == 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0), n, na_pad, true);
-        res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    } else if ((k(0) == 0) && (lag.size() > 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i), n, na_pad, true);
-        res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-      // k.size() == 1
-    } else if (lag.size() > 1) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    } else if (lag.size() == 1) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    }
-
-    /* on indexes */
+  if ((k.size() == 1) &&
+      (lag.size() == 1) &&
+      ((k(0) == 0) && lag(0) == 0)) {
+    return aggr::cummean(x, na_rm);
   } else {
-    if (k.size() > 1) {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(i), lag(i), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(i), lag(0), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      }
-    } else if (k(0) == 0) {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad, true);
-          res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad, true);
-          res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      }
-    } else {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_mean(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      }
-    }
+    return runner_cpp<double>(x, aggr::calc_mean, k, lag, na_rm, na_pad, idx);
   }
-
-  return res;
 }
 
 
@@ -599,99 +525,19 @@ NumericVector max_run(
     bool na_pad = false,
     IntegerVector idx = IntegerVector(0)) {
 
-  int n = x.size();
 
+  int n = x.size();
   checks::check_k(k, n);
   checks::check_idx(idx, n);
   checks::check_lag(lag, n);
 
-
-  IntegerVector b(2);
-  NumericVector res(n);
-
-  /* Simple - no indexes */
-  if (idx.size() == 0) {
-    /* cum max */
-    if ((k.size() == 1) && (lag.size() == 1) && (lag(0) == 0) && (k(0) == 0)) {
-      res = aggr::cummax(x, na_rm);
-      // k.size() > 0
-    } else if ((k.size() > 1) && (lag.size() > 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(i), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    } else if ((k.size() > 1) && (lag.size() == 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(0), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-      // k(0) == 0
-    } else if ((k(0) == 0) && (lag.size() == 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0), n, na_pad, true);
-        res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    } else if ((k(0) == 0) && (lag.size() > 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i), n, na_pad, true);
-        res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-      // k.size() == 1
-    } else if (lag.size() > 1) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    } else if (lag.size() == 1) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    }
-
-    /* on indexes */
+  if ((k.size() == 1) &&
+      (lag.size() == 1) &&
+      ((k(0) == 0) && lag(0) == 0)) {
+    return aggr::cummax(x, na_rm);
   } else {
-    if (k.size() > 1) {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(i), lag(i), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(i), lag(0), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      }
-    } else if (k(0) == 0) {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad, true);
-          res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad, true);
-          res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      }
-    } else {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_max(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      }
-    }
+    return runner_cpp<double>(x, aggr::calc_max, k, lag, na_rm, na_pad, idx);
   }
-
-  return res;
 }
 
 //' Running minimum
@@ -721,96 +567,17 @@ NumericVector min_run(
     IntegerVector idx = IntegerVector(0)) {
 
   int n = x.size();
-
   checks::check_k(k, n);
   checks::check_idx(idx, n);
   checks::check_lag(lag, n);
 
-  IntegerVector b(2);
-  NumericVector res(n);
-
-  /* Simple - no indexes */
-  if (idx.size() == 0) {
-    /* cum min */
-    if ((k.size() == 1) && (lag.size() == 1) && (lag(0) == 0) && (k(0) == 0)) {
-      res = aggr::cummin(x, na_rm);
-      // k.size() > 0
-    } else if ((k.size() > 1) && (lag.size() > 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(i), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    } else if ((k.size() > 1) && (lag.size() == 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(0), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-      // k(0) == 0
-    } else if ((k(0) == 0) && (lag.size() == 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0), n, na_pad, true);
-        res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    } else if ((k(0) == 0) && (lag.size() > 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i), n, na_pad, true);
-        res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-      // k.size() == 1
-    } else if (lag.size() > 1) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    } else if (lag.size() == 1) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
-      }
-    }
-    /* on indexes */
+  if ((k.size() == 1) &&
+      (lag.size() == 1) &&
+      ((k(0) == 0) && lag(0) == 0)) {
+    return aggr::cummin(x, na_rm);
   } else {
-    if (k.size() > 1) {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(i), lag(i), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(i), lag(0), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      }
-    } else if (k(0) == 0) {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad, true);
-          res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad, true);
-          res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      }
-    } else {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_min(x, b(1), b(0), na_rm) : NA_REAL;
-        }
-      }
-    }
+    return runner_cpp<double>(x, aggr::calc_min, k, lag, na_rm, na_pad, idx);
   }
-
-  return res;
 }
 
 //' Running min/max
@@ -869,134 +636,6 @@ NumericVector minmax_run(
   return res;
 }
 
-
-//' Running which
-//'
-//'
-//' \code{min_run} calculates running which - returns index of element where \code{x == TRUE}.
-//' @inheritParams runner
-//' @inheritParams sum_run
-//' @param which \code{character} value "first" or "last" denoting if the first or last \code{TRUE}
-//' index is returned from the window.
-//' @return integer vector of indexes of the same length as \code{x}.
-//' @examples
-//' set.seed(11)
-//' x1 <- sample(c(1, 2, 3), 15, replace = TRUE)
-//' x2 <- sample(c(NA, 1, 2, 3), 15, replace = TRUE)
-//' k  <- sample(1:4, 15, replace = TRUE)
-//' which_run(x1)
-//' which_run(x2, na_rm = TRUE)
-//' which_run(x2, na_rm = TRUE, k = 4)
-//' which_run(x2, na_rm = FALSE, k = k)
-//' @export
-// [[Rcpp::export]]
-IntegerVector which_run(
-    LogicalVector x,
-    IntegerVector k = IntegerVector(1),
-    IntegerVector lag = IntegerVector(1),
-    std::string which = "last",
-    bool na_rm = true,
-    bool na_pad = false,
-    IntegerVector idx = IntegerVector(0)) {
-
-  int n = x.size();
-
-  checks::check_k(k, n);
-  checks::check_idx(idx, n);
-  checks::check_lag(lag, n);
-
-  if (which != "last" && which != "first") {
-    stop("which value should be either 'first' or 'last'");
-  }
-
-  IntegerVector b(2);
-  IntegerVector res(n);
-
-  /* Simple - no indexes */
-  if (idx.size() == 0) {
-    /* cum whicht */
-    if ((k.size() == 1) && (lag.size() == 1) && (lag(0) == 0) && (k(0) == 0)) {
-      res = aggr::cumwhicht(x, na_rm, which);
-      // k.size() > 0
-    } else if ((k.size() > 1) && (lag.size() > 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(i), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-      }
-    } else if ((k.size() > 1) && (lag.size() == 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(i), lag(0), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-      }
-      // k(0) == 0
-    } else if ((k(0) == 0) && (lag.size() == 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0), n, na_pad, true);
-        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-      }
-    } else if ((k(0) == 0) && (lag.size() > 1)) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i), n, na_pad, true);
-        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-      }
-      // k.size() == 1
-    } else if (lag.size() > 1) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(i), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-      }
-    } else if (lag.size() == 1) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul(i, k(0), lag(0), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-      }
-    }
-
-    /* on indexes */
-  } else {
-    if (k.size() > 1) {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(i), lag(i), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-        }
-
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(i), lag(0), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-        }
-      }
-    } else if (k(0) == 0) {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad, true);
-          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-        }
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad, true);
-          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-        }
-      }
-    } else {
-      if (lag.size() > 1) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-        }
-      } else if ((lag.size() == 1)) {
-        for (int i = 0; i < n; ++i) {
-          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad);
-          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
-        }
-      }
-    }
-  }
-
-
-  return res;
-}
 
 template <int ITYPE>
 IntegerVector streak_run1(const Vector<ITYPE>& x, IntegerVector k, IntegerVector lag,  bool na_rm, bool na_pad) {
@@ -1175,3 +814,130 @@ IntegerVector streak_run(
   }
 }
 
+//' Running which
+//'
+//'
+//' \code{min_run} calculates running which - returns index of element where \code{x == TRUE}.
+//' @inheritParams runner
+//' @inheritParams sum_run
+//' @param which \code{character} value "first" or "last" denoting if the first or last \code{TRUE}
+//' index is returned from the window.
+//' @return integer vector of indexes of the same length as \code{x}.
+//' @examples
+//' set.seed(11)
+//' x1 <- sample(c(1, 2, 3), 15, replace = TRUE)
+//' x2 <- sample(c(NA, 1, 2, 3), 15, replace = TRUE)
+//' k  <- sample(1:4, 15, replace = TRUE)
+//' which_run(x1)
+//' which_run(x2, na_rm = TRUE)
+//' which_run(x2, na_rm = TRUE, k = 4)
+//' which_run(x2, na_rm = FALSE, k = k)
+//' @export
+// [[Rcpp::export]]
+IntegerVector which_run(
+    LogicalVector x,
+    IntegerVector k = IntegerVector(1),
+    IntegerVector lag = IntegerVector(1),
+    std::string which = "last",
+    bool na_rm = true,
+    bool na_pad = false,
+    IntegerVector idx = IntegerVector(0)) {
+
+  int n = x.size();
+
+  checks::check_k(k, n);
+  checks::check_idx(idx, n);
+  checks::check_lag(lag, n);
+
+  if (which != "last" && which != "first") {
+    stop("which value should be either 'first' or 'last'");
+  }
+
+  IntegerVector b(2);
+  IntegerVector res(n);
+
+  /* Simple - no indexes */
+  if (idx.size() == 0) {
+    /* cum whicht */
+    if ((k.size() == 1) && (lag.size() == 1) && (lag(0) == 0) && (k(0) == 0)) {
+      res = aggr::cumwhicht(x, na_rm, which);
+      // k.size() > 0
+    } else if ((k.size() > 1) && (lag.size() > 1)) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, k(i), lag(i), n, na_pad);
+        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+      }
+    } else if ((k.size() > 1) && (lag.size() == 1)) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, k(i), lag(0), n, na_pad);
+        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+      }
+      // k(0) == 0
+    } else if ((k(0) == 0) && (lag.size() == 1)) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, k(0), lag(0), n, na_pad, true);
+        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+      }
+    } else if ((k(0) == 0) && (lag.size() > 1)) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, k(0), lag(i), n, na_pad, true);
+        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+      }
+      // k.size() == 1
+    } else if (lag.size() > 1) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, k(0), lag(i), n, na_pad);
+        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+      }
+    } else if (lag.size() == 1) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, k(0), lag(0), n, na_pad);
+        res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+      }
+    }
+
+    /* on indexes */
+  } else {
+    if (k.size() > 1) {
+      if (lag.size() > 1) {
+        for (int i = 0; i < n; ++i) {
+          b = utils::window_ul_dl(idx, i, k(i), lag(i), n, na_pad);
+          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+        }
+
+      } else if ((lag.size() == 1)) {
+        for (int i = 0; i < n; ++i) {
+          b = utils::window_ul_dl(idx, i, k(i), lag(0), n, na_pad);
+          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+        }
+      }
+    } else if (k(0) == 0) {
+      if (lag.size() > 1) {
+        for (int i = 0; i < n; ++i) {
+          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad, true);
+          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+        }
+      } else if ((lag.size() == 1)) {
+        for (int i = 0; i < n; ++i) {
+          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad, true);
+          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+        }
+      }
+    } else {
+      if (lag.size() > 1) {
+        for (int i = 0; i < n; ++i) {
+          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad);
+          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+        }
+      } else if ((lag.size() == 1)) {
+        for (int i = 0; i < n; ++i) {
+          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad);
+          res(i) = (b.size() == 2) ? aggr::calc_whicht(x, b(1), b(0), na_rm, which) : NA_INTEGER;
+        }
+      }
+    }
+  }
+
+
+  return res;
+}

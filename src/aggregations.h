@@ -1,6 +1,6 @@
 namespace aggr {
     template <int RTYPE>
-    inline int calc_actual_streak(const Rcpp::Vector<RTYPE>& x, int u, int l, bool na_rm) {
+    int calc_actual_streak(Rcpp::Vector<RTYPE> const& x, int u, int l, bool na_rm) {
       int uu = u;
       int cur_streak {0};
 
@@ -29,22 +29,23 @@ namespace aggr {
       if (cur_streak == 0) return NA_INTEGER;
       return cur_streak;
     }
-    inline double calc_max(Rcpp::NumericVector x, int u, int l, bool na_rm) {
-      double cur_max = NA_REAL;
+
+    double calc_max(Rcpp::NumericVector const& x, int u, int l, bool na_rm) {
+      double cur_max = NAN;
 
       if (na_rm) {
         for (int i = l; i <= u ; ++i) {
-          if (x(i) > cur_max or Rcpp::NumericVector::is_na(cur_max)) {
+          if (x(i) > cur_max or std::isnan(cur_max)) {
             cur_max = x(i);
           }
         }
       } else {
         for (int i = l; i <= u; ++i) {
           if (Rcpp::NumericVector::is_na(x(i))) {
-            cur_max = NA_REAL;
+            cur_max = NAN;
             return cur_max;
           }
-          if (Rcpp::NumericVector::is_na(cur_max) or x(i) > cur_max) {
+          if (std::isnan(cur_max) or x(i) > cur_max) {
             cur_max = x(i);
           }
         }
@@ -52,7 +53,7 @@ namespace aggr {
       return cur_max;
     }
 
-    inline double calc_min(Rcpp::NumericVector x, int u, int l, bool na_rm) {
+    double calc_min(Rcpp::NumericVector const& x, int u, int l, bool na_rm) {
       double cur_min = NA_REAL;
 
       if (na_rm) {
@@ -75,9 +76,8 @@ namespace aggr {
       return cur_min;
     }
 
-    template <typename otype>
-    inline otype calc_sum(Rcpp::NumericVector x, int u, int l, bool na_rm) {
-      otype cur_sum = NA_REAL;
+    double calc_sum(Rcpp::NumericVector const& x, int u, int l, bool na_rm) {
+      double cur_sum = NA_REAL;
       if (na_rm) {
         for (int i = l; i <= u ; ++i) {
           if (Rcpp::NumericVector::is_na(cur_sum) & !Rcpp::NumericVector::is_na(x(i))) {
@@ -101,7 +101,7 @@ namespace aggr {
       return cur_sum;
     }
 
-    inline double calc_mean(Rcpp::NumericVector x, int u, int l, bool na_rm) {
+    double calc_mean(Rcpp::NumericVector const& x, int u, int l, bool na_rm) {
       double cur_sum = NA_REAL;
       int nonna = 0;
 
@@ -132,7 +132,7 @@ namespace aggr {
       return cur_sum/nonna;
     }
 
-    inline int calc_whicht(Rcpp::LogicalVector x, int u, int l, bool na_rm, std::string which) {
+    int calc_whicht(Rcpp::LogicalVector const& x, int u, int l, bool na_rm, std::string which) {
 
       if (which == "last") {
         if (na_rm) {
@@ -170,7 +170,7 @@ namespace aggr {
       return NA_INTEGER;
     }
 
-    Rcpp::NumericVector cummax(Rcpp::NumericVector x, bool na_rm) {
+    Rcpp::NumericVector cummax(Rcpp::NumericVector const& x, bool na_rm) {
       int n = x.size();
       Rcpp::NumericVector res(n);
       double cur_max = NA_REAL;
@@ -197,7 +197,7 @@ namespace aggr {
       return res;
     }
 
-    Rcpp::NumericVector cummin(Rcpp::NumericVector x, bool na_rm) {
+    Rcpp::NumericVector cummin(Rcpp::NumericVector const& x, bool na_rm) {
       int n = x.size();
       Rcpp::NumericVector res(n);
       double cur_max = NA_REAL;
@@ -224,7 +224,7 @@ namespace aggr {
       return res;
     }
 
-    Rcpp::NumericVector cumsum(Rcpp::NumericVector x, bool na_rm) {
+    Rcpp::NumericVector cumsum(Rcpp::NumericVector const& x, bool na_rm) {
       int n = x.size();
       Rcpp::NumericVector res(n);
       double cur_sum = NA_REAL;
@@ -255,7 +255,7 @@ namespace aggr {
       return res;
     }
 
-    Rcpp::NumericVector cummean(Rcpp::NumericVector x, bool na_rm) {
+    Rcpp::NumericVector cummean(Rcpp::NumericVector const& x, bool na_rm) {
       int n = x.size();
       Rcpp::NumericVector res(n);
       double cur_sum = NA_REAL;
@@ -291,7 +291,7 @@ namespace aggr {
       return res;
     }
 
-    Rcpp::IntegerVector cumwhicht(Rcpp::LogicalVector x, bool na_rm, std::string which) {
+    Rcpp::IntegerVector cumwhicht(Rcpp::LogicalVector const& x, bool na_rm, std::string which) {
       int n = x.size();
       Rcpp::IntegerVector res(n);
       double whicht = NA_INTEGER;
