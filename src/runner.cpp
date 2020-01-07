@@ -592,7 +592,7 @@ NumericVector min_run(
 //' @export
 // [[Rcpp::export]]
 NumericVector minmax_run(
-    NumericVector x,
+    NumericVector const& x,
     std::string metric = "min",
     bool na_rm = true) {
 
