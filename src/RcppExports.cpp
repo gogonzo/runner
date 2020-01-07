@@ -127,12 +127,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // minmax_run
-NumericVector minmax_run(NumericVector x, std::string metric, bool na_rm);
+NumericVector minmax_run(Rcpp::NumericVector const& x, std::string metric, bool na_rm);
 RcppExport SEXP _runner_minmax_run(SEXP xSEXP, SEXP metricSEXP, SEXP na_rmSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector const& >::type x(xSEXP);
     Rcpp::traits::input_parameter< std::string >::type metric(metricSEXP);
     Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
     rcpp_result_gen = Rcpp::wrap(minmax_run(x, metric, na_rm));

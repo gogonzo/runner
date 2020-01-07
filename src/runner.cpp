@@ -592,7 +592,7 @@ NumericVector min_run(
 //' @export
 // [[Rcpp::export]]
 NumericVector minmax_run(
-    NumericVector const& x,
+    Rcpp::NumericVector const& x,
     std::string metric = "min",
     bool na_rm = true) {
 
@@ -607,11 +607,11 @@ NumericVector minmax_run(
 
   NumericVector res(n);
   res(0) = x(0);
-  NumericVector mins = NumericVector(n);
-  NumericVector maxes = NumericVector(n);
+  NumericVector mins = Rcpp::NumericVector(n);
+  NumericVector maxes = Rcpp::NumericVector(n);
 
   for (int i = 1; i < n; ++i) {
-    if (NumericVector::is_na(x(i)) && !na_rm) {
+    if (Rcpp::NumericVector::is_na(x(i)) && !na_rm) {
       res(i) = NA_REAL;
     } else {
       prev = x(i - 1);
@@ -638,96 +638,94 @@ NumericVector minmax_run(
 
 
 template <int ITYPE>
-IntegerVector streak_run1(const Vector<ITYPE>& x, IntegerVector k, IntegerVector lag,  bool na_rm, bool na_pad) {
+IntegerVector streak_run(Rcpp::Vector<ITYPE> const& x,
+                         Rcpp::IntegerVector const& k,
+                         Rcpp::IntegerVector const& lag,
+                         bool na_rm,
+                         bool na_pad,
+                         Rcpp::IntegerVector const& idx) {
   int n = x.size();
   IntegerVector b(2);
   IntegerVector res(n);
 
-  if ((k.size() == 1) && (lag.size() == 1) && (k(0) == 0) &&  (lag(0) == 0)) {
-    res = aggr::cumstreak(x, lag(0), na_rm);
-  } else if ((k.size() > 1) && (lag.size() > 1)) {
-    for (int i = 0; i < n; ++i) {
-      b = utils::window_ul(i, k(i), lag(i), n, na_pad);
-      res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
-    }
-  } else if ((k.size() > 1) && (lag.size() == 1)) {
-    for (int i = 0; i < n; ++i) {
-      b = utils::window_ul(i, k(i), lag(0), n, na_pad);
-      res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
-    }
-  } else if ((k(0) == 0) && (lag.size() > 1)) {
-    for (int i = 0; i < n; ++i) {
-      b = utils::window_ul(i, k(0), lag(i), n, na_pad, true);
-      res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
-    }
-  } else if ((k(0) == 0) && (lag.size() == 1)) {
-    for (int i = 0; i < n; ++i) {
-      b = utils::window_ul(i, k(0), lag(0), n, na_pad, true);
-      res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
-    }
-  } else if ((lag.size() > 1)) {
-    for (int i = 0; i < n; ++i) {
-      b = utils::window_ul(i, k(0), lag(i), n, na_pad);
-      res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
-    }
-  } else if ((lag.size() == 1)) {
-    for (int i = 0; i < n; ++i) {
-      b = utils::window_ul(i, k(0), lag(0), n, na_pad);
-      res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
-    }
-  }
+  if (idx.size() == 0) {
 
-  return res;
-}
-
-template <int ITYPE>
-IntegerVector streak_run2(const Vector<ITYPE>& x, IntegerVector k, IntegerVector lag, bool na_rm, bool na_pad, IntegerVector indexes) {
-  IntegerVector b;
-  int n = x.size();
-  IntegerVector res(n);
-
-  // no lag
-  if (k.size() > 1) {
-    if (lag.size() > 1) {
+    if ((k.size() == 1) && (lag.size() == 1) && (k(0) == 0) &&  (lag(0) == 0)) {
+      res = aggr::cumstreak(x, lag(0), na_rm);
+    } else if ((k.size() > 1) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(indexes, i, k(i), lag(i), n, na_pad);
+        b = utils::window_ul(i, k(i), lag(i), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
       }
-    } else {
+    } else if ((k.size() > 1) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(indexes, i, k(i), lag(0), n, na_pad);
+        b = utils::window_ul(i, k(i), lag(0), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
       }
-    }
-  } else if (k(0) == 0) {
-    if (lag.size() > 1) {
+    } else if ((k(0) == 0) && (lag.size() > 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(indexes, i, k(0), lag(i), n, na_pad, true);
+        b = utils::window_ul(i, k(0), lag(i), n, na_pad, true);
         res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
       }
-    } else {
+    } else if ((k(0) == 0) && (lag.size() == 1)) {
       for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(indexes, i, k(0), lag(0), n, na_pad, true);
+        b = utils::window_ul(i, k(0), lag(0), n, na_pad, true);
+        res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+      }
+    } else if ((lag.size() > 1)) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, k(0), lag(i), n, na_pad);
+        res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+      }
+    } else if ((lag.size() == 1)) {
+      for (int i = 0; i < n; ++i) {
+        b = utils::window_ul(i, k(0), lag(0), n, na_pad);
         res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
       }
     }
   } else {
-    if (lag.size() > 1) {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(indexes, i, k(0), lag(i), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+    if (k.size() > 1) {
+      if (lag.size() > 1) {
+        for (int i = 0; i < n; ++i) {
+          b = utils::window_ul_dl(idx, i, k(i), lag(i), n, na_pad);
+          res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+        }
+      } else {
+        for (int i = 0; i < n; ++i) {
+          b = utils::window_ul_dl(idx, i, k(i), lag(0), n, na_pad);
+          res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+        }
+      }
+    } else if (k(0) == 0) {
+      if (lag.size() > 1) {
+        for (int i = 0; i < n; ++i) {
+          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad, true);
+          res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+        }
+      } else {
+        for (int i = 0; i < n; ++i) {
+          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad, true);
+          res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+        }
       }
     } else {
-      for (int i = 0; i < n; ++i) {
-        b = utils::window_ul_dl(indexes, i, k(0), lag(0), n, na_pad);
-        res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+      if (lag.size() > 1) {
+        for (int i = 0; i < n; ++i) {
+          b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad);
+          res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+        }
+      } else {
+        for (int i = 0; i < n; ++i) {
+          b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad);
+          res(i) = (b.size() == 2) ? aggr::calc_streak(x, b(1), b(0), na_rm) : NA_INTEGER;
+        }
       }
     }
   }
 
-
   return res;
 }
+
 
 //' Running streak length
 //'
@@ -762,28 +760,16 @@ IntegerVector streak_run(
   checks::check_idx(idx, n);
   checks::check_lag(lag, n);
 
-  if (idx.size() == 0) {
-    switch (TYPEOF(x)) {
-    case INTSXP: return  streak_run1(as<IntegerVector>(x),   k, lag, na_rm, na_pad);
-    case REALSXP: return streak_run1(as<NumericVector>(x),   k, lag, na_rm, na_pad);
-    case STRSXP: return  streak_run1(as<CharacterVector>(x), k, lag, na_rm, na_pad);
-    case LGLSXP: return  streak_run1(as<LogicalVector>(x),   k, lag, na_rm, na_pad);
-    case CPLXSXP: return streak_run1(as<ComplexVector>(x),   k, lag, na_rm, na_pad);
+
+  switch (TYPEOF(x)) {
+    case INTSXP: return  streak_run(as<IntegerVector>(x),   k, lag, na_rm, na_pad, idx);
+    case REALSXP: return streak_run(as<NumericVector>(x),   k, lag, na_rm, na_pad, idx);
+    case STRSXP: return  streak_run(as<CharacterVector>(x), k, lag, na_rm, na_pad, idx);
+    case LGLSXP: return  streak_run(as<LogicalVector>(x),   k, lag, na_rm, na_pad, idx);
+    case CPLXSXP: return streak_run(as<ComplexVector>(x),   k, lag, na_rm, na_pad, idx);
     default: {
       stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
       }
-    }
-  } else {
-    switch (TYPEOF(x)) {
-    case INTSXP: return  streak_run2(as<IntegerVector>(x),   k, lag, na_rm, na_pad, idx);
-    case REALSXP: return streak_run2(as<NumericVector>(x),   k, lag, na_rm, na_pad, idx);
-    case STRSXP: return  streak_run2(as<CharacterVector>(x), k, lag, na_rm, na_pad, idx);
-    case LGLSXP: return  streak_run2(as<LogicalVector>(x),   k, lag, na_rm, na_pad, idx);
-    case CPLXSXP: return streak_run2(as<ComplexVector>(x),   k, lag, na_rm, na_pad, idx);
-    default: {
-      stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
-    }
-    }
   }
 }
 
