@@ -2,7 +2,7 @@
 #define checks_h
 
 namespace checks {
-  inline void check_k(Rcpp::IntegerVector k, int n) {
+  inline void check_k(Rcpp::IntegerVector const& k, int n) {
     if (k.size() != n and k.size() > 1) {
       Rcpp::stop("length of k and length of x differs. length(k) should be 1 or equal to x");
     } else if (Rcpp::any(Rcpp::is_na(k))) {
@@ -21,7 +21,7 @@ namespace checks {
     }
   }
 
-  inline void check_idx(Rcpp::IntegerVector idx, int n) {
+  inline void check_idx(Rcpp::IntegerVector const& idx, int n) {
     if (idx.size() != n and idx.size() > 1) {
       Rcpp::stop("length of idx and length of x differs. length(idx) should be 1 or equal to x");
     } else if (Rcpp::any(Rcpp::is_na(idx))) {
@@ -37,7 +37,7 @@ namespace checks {
     }
   }
 
-  inline void check_lag(Rcpp::IntegerVector lag, int n) {
+  inline void check_lag(Rcpp::IntegerVector const& lag, int n) {
     if (lag.size() != n and lag.size() > 1) {
       Rcpp::stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
     } else if (Rcpp::any(Rcpp::is_na(lag))) {

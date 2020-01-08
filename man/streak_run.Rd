@@ -4,8 +4,14 @@
 \alias{streak_run}
 \title{Running streak length}
 \usage{
-streak_run(x, k = integer(1), lag = integer(1), na_rm = TRUE,
-  na_pad = FALSE, idx = integer(0))
+streak_run(
+  x,
+  k = integer(1),
+  lag = integer(1),
+  na_rm = TRUE,
+  na_pad = FALSE,
+  idx = integer(0)
+)
 }
 \arguments{
 \item{x}{{any type} vector which running function is calculated on}

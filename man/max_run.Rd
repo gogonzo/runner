@@ -4,8 +4,14 @@
 \alias{max_run}
 \title{Running maximum}
 \usage{
-max_run(x, k = integer(1), lag = integer(1), na_rm = TRUE,
-  na_pad = FALSE, idx = integer(0))
+max_run(
+  x,
+  k = integer(1),
+  lag = integer(1),
+  na_rm = TRUE,
+  na_pad = FALSE,
+  idx = integer(0)
+)
 }
 \arguments{
 \item{x}{Vector of any type}

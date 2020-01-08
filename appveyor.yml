@@ -18,9 +18,7 @@ cache:
 # Adapt as necessary starting from here
 environment:
   global:
-    USE_RTOOLS: true
-    WARNINGS_ARE_ERRORS: true
-    _R_CHECK_FORCE_SUGGESTS_: false
+    WARNINGS_ARE_ERRORS: 1
 
   matrix:
   - R_VERSION: devel
@@ -37,9 +35,8 @@ environment:
 
   - R_VERSION: patched
 
-  - R_VERSION: oldrel
-    RTOOLS_VERSION: 33
-    CRAN: http://cran.rstudio.com
+  - R_VERSION: 3.5.3
+    RTOOLS_VERSION: 35
 
 matrix:
   fast_finish: true

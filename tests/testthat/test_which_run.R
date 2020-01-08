@@ -1,4 +1,4 @@
-context("Running min")
+context("Running which")
 set.seed(11)
 x1 <- sample(c(T, F), 100, replace = TRUE)
 x2 <- sample(c(NA, T, F), 100, replace = TRUE)

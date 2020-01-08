@@ -323,3 +323,4 @@ test_that("Errors", {
   expect_error(streak_run(x1, idx = (1:99)), "length of idx and length of x differs")
   expect_error(streak_run(x1, idx = c(NA, 1:99)), "Function doesn't accept NA values in idx vector")
 })
+
