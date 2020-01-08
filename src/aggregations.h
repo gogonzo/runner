@@ -138,7 +138,6 @@ namespace aggr {
       }
       return cur_max;
     }
-
     double calc_min(Rcpp::NumericVector const& x, int u, int l, bool na_rm) {
       double cur_min = NA_REAL;
 
@@ -161,7 +160,6 @@ namespace aggr {
       }
       return cur_min;
     }
-
     double calc_sum(Rcpp::NumericVector const& x, int u, int l, bool na_rm) {
       double cur_sum = NA_REAL;
       if (na_rm) {
@@ -186,7 +184,6 @@ namespace aggr {
       }
       return cur_sum;
     }
-
     double calc_mean(Rcpp::NumericVector const& x, int u, int l, bool na_rm) {
       double cur_sum = NA_REAL;
       int nonna = 0;
@@ -217,7 +214,6 @@ namespace aggr {
       }
       return cur_sum/nonna;
     }
-
     int calc_whichf(Rcpp::LogicalVector const& x, int u, int l, bool na_rm) {
 
       if (na_rm) {
@@ -238,7 +234,6 @@ namespace aggr {
 
       return NA_INTEGER;
     }
-
     int calc_whichl(Rcpp::LogicalVector const& x, int u, int l, bool na_rm) {
       if (na_rm) {
         for (int i = u; i >= l ; --i) {

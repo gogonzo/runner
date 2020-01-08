@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 template <typename otype, int ITYPE>
 Rcpp::Vector<Rcpp::traits::r_sexptype_traits<otype>::rtype>
-run_(Rcpp::Vector<ITYPE> const& x,
+just_run(Rcpp::Vector<ITYPE> const& x,
      Rcpp::IntegerVector const& k,
      Rcpp::IntegerVector const& lag,
      Rcpp::IntegerVector const& indexes,
@@ -125,6 +125,128 @@ run_(Rcpp::Vector<ITYPE> const& x,
   return res;
 }
 
+template <typename otype, int ITYPE>
+Rcpp::Vector<Rcpp::traits::r_sexptype_traits<otype>::rtype>
+run_at(Rcpp::Vector<ITYPE> const& x,
+        Rcpp::IntegerVector const& k,
+        Rcpp::IntegerVector const& lag,
+        Rcpp::IntegerVector const& indexes,
+        Rcpp::IntegerVector const& at,
+        Function f,
+        bool na_pad) {
+
+  const int OTYPE = Rcpp::traits::r_sexptype_traits<otype>::rtype;
+
+  int n = x.size();
+  int nn = at.size();
+  IntegerVector idx;
+  Rcpp::Vector<OTYPE> res(nn);
+
+  // Simple windows-------
+  if (indexes.size() == 0) {
+
+    if (k.size() > 1 && lag.size() > 1) {
+      for (int i = 0; i < nn; i++) {
+        idx = utils::window_ul(at(i), k(i), lag(i), n, na_pad);
+        res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+      }
+    } else if (k.size() > 1 && lag.size() == 1) {
+      for (int i = 0; i < nn; i++) {
+        idx = utils::window_ul(at(i), k(i), lag(0), n, na_pad);
+        res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+      }
+    } else if (k(0) == 0 && lag.size() > 1) {
+      for (int i = 0; i < nn; i++) {
+        idx = utils::window_ul(at(i), n, lag(i), n, na_pad, true);
+        res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+      }
+    } else if (k(0) == 0 && lag.size() == 1) {
+      for (int i = 0; i < nn; i++) {
+        idx = utils::window_ul(at(i), n, lag(0), n, na_pad, true);
+        res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+      }
+    } else if (k.size() == 1 && k(0) == n && lag.size() > 1) {
+      for (int i = 0; i < nn; i++) {
+        idx = utils::window_ul(at(i), n, lag(i), n, na_pad);
+        res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+      }
+    } else if (k.size() == 1 && k(0) == n && lag.size() == 1) {
+      for (int i = 0; i < nn; i++) {
+        idx = utils::window_ul(at(i), n, lag(0), n, na_pad);
+        res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+      }
+    } else if (k.size() == 1 && lag.size() > 1) {
+      for (int i = 0; i < nn; i++) {
+        idx = utils::window_ul(at(i), k(0), lag(i), n, na_pad);
+        res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+      }
+    } else if (k.size() == 1 && lag.size() == 1) {
+      for (int i = 0; i < nn; i++) {
+        idx = utils::window_ul(at(i), k(0), lag(0), n, na_pad);
+        res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+      }
+    }
+
+  } else {
+    if (k.size() > 1) {
+      if (lag.size() > 1) {
+        for (int i = 0; i < nn; i++) {
+          idx = utils::window_ul_dl(indexes, i, k(i), lag(i), n, na_pad, false);
+          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+        }
+      } else if (lag(0) != 0){
+        for (int i = 0; i < nn; i++) {
+          idx = utils::window_ul_dl(indexes, i, k(i), lag(0), n, na_pad, false);
+          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+        }
+      } else {
+        for (int i = 0; i < nn; i++) {
+          idx = utils::window_ul_dl(indexes, i, k(i), 0, n, na_pad, false);
+          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+        }
+      }
+    } else if (k(0) == 0) {
+      if (lag.size() > 1) {
+        for (int i = 0; i < nn; i++) {
+          idx = utils::window_ul_dl(indexes, i, k(0), lag(i), n, na_pad, true);
+          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+        }
+      } else if (lag(0) != 0){
+        for (int i = 0; i < nn; i++) {
+          idx = utils::window_ul_dl(indexes, i, k(0), lag(0), n, na_pad, true);
+          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+        }
+      } else {
+        for (int i = 0; i < nn; i++) {
+          idx = utils::window_ul_dl(indexes, i, k(0), 0, n, na_pad, true);
+          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+        }
+      }
+    } else {
+      if (lag.size() > 1) {
+        for (int i = 0; i < nn; i++) {
+          idx = utils::window_ul_dl(indexes, i, k(0), lag(i), n, na_pad, false);
+          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+
+        }
+      } else if (lag(0) != 0) {
+        for (int i = 0; i < nn; i++) {
+          idx = utils::window_ul_dl(indexes, i, k(0), lag(0), n, na_pad, false);
+          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+        }
+      } else {
+        for (int i = 0; i < nn; i++) {
+          idx = utils::window_ul_dl(indexes, i, k(0), 0, n, na_pad, false);
+          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+        }
+      }
+    }
+  }
+
+  return res;
+}
+
+
 //' Custom running function
 //'
 //' Applies custom function to running windows
@@ -153,6 +275,12 @@ run_(Rcpp::Vector<ITYPE> const& x,
 //'        k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5),
 //'        f = function(x) paste(x, collapse = "-"),
 //'        type = "character")
+//'
+//' runner(letters[1:10],
+//'        f = function(x) paste(x, collapse = "-"),
+//'        at = c(1, 5, 8),
+//'        type = "character")
+
 //' @export
 // [[Rcpp::export]]
 SEXP runner(const SEXP x,
@@ -160,6 +288,7 @@ SEXP runner(const SEXP x,
             const IntegerVector k = IntegerVector(1),
             const IntegerVector lag = IntegerVector(1),
             const IntegerVector idx = IntegerVector(0),
+            const IntegerVector at = IntegerVector(0),
             bool na_pad = false,
             std::string type = "numeric") {
 
@@ -169,46 +298,140 @@ SEXP runner(const SEXP x,
   checks::check_idx(idx, n);
   checks::check_lag(lag, n);
 
+  if  (at.size() > 0) {
+    if (type == "logical") {
+      switch (TYPEOF(x)) {
+      case INTSXP:  return run_at<bool>(as<IntegerVector>(x), k, lag, idx, at, f, na_pad);
+      case REALSXP: return run_at<bool>(as<NumericVector>(x), k, lag, idx, at, f, na_pad);
+      case STRSXP:  return run_at<bool>(as<StringVector>(x), k, lag, idx, at, f, na_pad);
+      case LGLSXP: return run_at<bool>(as<LogicalVector>(x), k, lag, idx, at, f, na_pad);
+      case CPLXSXP: return run_at<bool>(as<ComplexVector>(x), k, lag, idx, at, f, na_pad);
+      default: {
+        stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
+      }
+      }
+    } else if (type == "integer") {
+      switch (TYPEOF(x)) {
+      case INTSXP:  return run_at<int>(as<IntegerVector>(x), k, lag, idx, at, f, na_pad);
+      case REALSXP: return run_at<int>(as<NumericVector>(x), k, lag, idx, at, f, na_pad);
+      case STRSXP:  return run_at<int>(as<StringVector>(x), k, lag, idx, at, f, na_pad);
+      case LGLSXP: return run_at<int>(as<LogicalVector>(x), k, lag, idx, at, f, na_pad);
+      case CPLXSXP: return run_at<int>(as<ComplexVector>(x), k, lag, idx, at, f, na_pad);
+      default: {
+        stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
+      }
+      }
+    } else if (type == "numeric") {
+      switch (TYPEOF(x)) {
+      case INTSXP:  return run_at<double>(as<IntegerVector>(x), k, lag, idx, at, f, na_pad);
+      case REALSXP: return run_at<double>(as<NumericVector>(x), k, lag, idx, at, f, na_pad);
+      case STRSXP:  return run_at<double>(as<StringVector>(x), k, lag, idx, at, f, na_pad);
+      case LGLSXP: return run_at<double>(as<LogicalVector>(x), k, lag, idx, at, f, na_pad);
+      case CPLXSXP: return run_at<double>(as<ComplexVector>(x), k, lag, idx, at, f, na_pad);
+      default: {
+        stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
+      }
+      }
+    } else if (type == "character") {
+      switch (TYPEOF(x)) {
+      case INTSXP:  return run_at<Rcpp::String>(as<IntegerVector>(x), k, lag, idx, at, f, na_pad);
+      case REALSXP: return run_at<Rcpp::String>(as<NumericVector>(x), k, lag, idx, at, f, na_pad);
+      case STRSXP:  return run_at<Rcpp::String>(as<StringVector>(x), k, lag, idx, at, f, na_pad);
+      case LGLSXP: return run_at<Rcpp::String>(as<LogicalVector>(x), k, lag, idx, at, f, na_pad);
+      case CPLXSXP: return run_at<Rcpp::String>(as<ComplexVector>(x), k, lag, idx, at, f, na_pad);
+      default: {
+        stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
+      }
+      }
+    }
+  } else {
+    if (type == "logical") {
+      switch (TYPEOF(x)) {
+      case INTSXP:  return run_at<bool>(as<IntegerVector>(x), k, lag, idx, at, f, na_pad);
+      case REALSXP: return run_at<bool>(as<NumericVector>(x), k, lag, idx, at, f, na_pad);
+      case STRSXP:  return run_at<bool>(as<StringVector>(x), k, lag, idx, at, f, na_pad);
+      case LGLSXP: return run_at<bool>(as<LogicalVector>(x), k, lag, idx, at, f, na_pad);
+      case CPLXSXP: return run_at<bool>(as<ComplexVector>(x), k, lag, idx, at, f, na_pad);
+      default: {
+        stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
+      }
+      }
+    } else if (type == "integer") {
+      switch (TYPEOF(x)) {
+      case INTSXP:  return just_run<int>(as<IntegerVector>(x), k, lag, idx, f, na_pad);
+      case REALSXP: return just_run<int>(as<NumericVector>(x), k, lag, idx, f, na_pad);
+      case STRSXP:  return just_run<int>(as<StringVector>(x), k, lag, idx, f, na_pad);
+      case LGLSXP: return just_run<int>(as<LogicalVector>(x), k, lag, idx, f, na_pad);
+      case CPLXSXP: return just_run<int>(as<ComplexVector>(x), k, lag, idx, f, na_pad);
+      default: {
+        stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
+      }
+      }
+    } else if (type == "numeric") {
+      switch (TYPEOF(x)) {
+      case INTSXP:  return just_run<double>(as<IntegerVector>(x), k, lag, idx, f, na_pad);
+      case REALSXP: return just_run<double>(as<NumericVector>(x), k, lag, idx, f, na_pad);
+      case STRSXP:  return just_run<double>(as<StringVector>(x), k, lag, idx, f, na_pad);
+      case LGLSXP: return just_run<double>(as<LogicalVector>(x), k, lag, idx, f, na_pad);
+      case CPLXSXP: return just_run<double>(as<ComplexVector>(x), k, lag, idx, f, na_pad);
+      default: {
+        stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
+      }
+      }
+    } else if (type == "character") {
+      switch (TYPEOF(x)) {
+      case INTSXP:  return just_run<Rcpp::String>(as<IntegerVector>(x), k, lag, idx, f, na_pad);
+      case REALSXP: return just_run<Rcpp::String>(as<NumericVector>(x), k, lag, idx, f, na_pad);
+      case STRSXP:  return just_run<Rcpp::String>(as<StringVector>(x), k, lag, idx, f, na_pad);
+      case LGLSXP: return just_run<Rcpp::String>(as<LogicalVector>(x), k, lag, idx, f, na_pad);
+      case CPLXSXP: return just_run<Rcpp::String>(as<ComplexVector>(x), k, lag, idx, f, na_pad);
+      default: {
+        stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
+      }
+      }
+    }
+  }
+
   if (type == "logical") {
     switch (TYPEOF(x)) {
-    case INTSXP:  return run_<bool>(as<IntegerVector>(x), k, lag, idx, f, na_pad);
-    case REALSXP: return run_<bool>(as<NumericVector>(x), k, lag, idx, f, na_pad);
-    case STRSXP:  return run_<bool>(as<StringVector>(x), k, lag, idx, f, na_pad);
-    case LGLSXP: return run_<bool>(as<LogicalVector>(x), k, lag, idx, f, na_pad);
-    case CPLXSXP: return run_<bool>(as<ComplexVector>(x), k, lag, idx, f, na_pad);
+    case INTSXP:  return just_run<bool>(as<IntegerVector>(x), k, lag, idx, f, na_pad);
+    case REALSXP: return just_run<bool>(as<NumericVector>(x), k, lag, idx, f, na_pad);
+    case STRSXP:  return just_run<bool>(as<StringVector>(x), k, lag, idx, f, na_pad);
+    case LGLSXP: return just_run<bool>(as<LogicalVector>(x), k, lag, idx, f, na_pad);
+    case CPLXSXP: return just_run<bool>(as<ComplexVector>(x), k, lag, idx, f, na_pad);
     default: {
       stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }
     }
   } else if (type == "integer") {
     switch (TYPEOF(x)) {
-    case INTSXP:  return run_<int>(as<IntegerVector>(x), k, lag, idx, f, na_pad);
-    case REALSXP: return run_<int>(as<NumericVector>(x), k, lag, idx, f, na_pad);
-    case STRSXP:  return run_<int>(as<StringVector>(x), k, lag, idx, f, na_pad);
-    case LGLSXP: return run_<int>(as<LogicalVector>(x), k, lag, idx, f, na_pad);
-    case CPLXSXP: return run_<int>(as<ComplexVector>(x), k, lag, idx, f, na_pad);
+    case INTSXP:  return just_run<int>(as<IntegerVector>(x), k, lag, idx, f, na_pad);
+    case REALSXP: return just_run<int>(as<NumericVector>(x), k, lag, idx, f, na_pad);
+    case STRSXP:  return just_run<int>(as<StringVector>(x), k, lag, idx, f, na_pad);
+    case LGLSXP: return just_run<int>(as<LogicalVector>(x), k, lag, idx, f, na_pad);
+    case CPLXSXP: return just_run<int>(as<ComplexVector>(x), k, lag, idx, f, na_pad);
     default: {
       stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }
     }
   } else if (type == "numeric") {
     switch (TYPEOF(x)) {
-    case INTSXP:  return run_<double>(as<IntegerVector>(x), k, lag, idx, f, na_pad);
-    case REALSXP: return run_<double>(as<NumericVector>(x), k, lag, idx, f, na_pad);
-    case STRSXP:  return run_<double>(as<StringVector>(x), k, lag, idx, f, na_pad);
-    case LGLSXP: return run_<double>(as<LogicalVector>(x), k, lag, idx, f, na_pad);
-    case CPLXSXP: return run_<double>(as<ComplexVector>(x), k, lag, idx, f, na_pad);
+    case INTSXP:  return just_run<double>(as<IntegerVector>(x), k, lag, idx, f, na_pad);
+    case REALSXP: return just_run<double>(as<NumericVector>(x), k, lag, idx, f, na_pad);
+    case STRSXP:  return just_run<double>(as<StringVector>(x), k, lag, idx, f, na_pad);
+    case LGLSXP: return just_run<double>(as<LogicalVector>(x), k, lag, idx, f, na_pad);
+    case CPLXSXP: return just_run<double>(as<ComplexVector>(x), k, lag, idx, f, na_pad);
     default: {
       stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }
     }
   } else if (type == "character") {
     switch (TYPEOF(x)) {
-    case INTSXP:  return run_<Rcpp::String>(as<IntegerVector>(x), k, lag, idx, f, na_pad);
-    case REALSXP: return run_<Rcpp::String>(as<NumericVector>(x), k, lag, idx, f, na_pad);
-    case STRSXP:  return run_<Rcpp::String>(as<StringVector>(x), k, lag, idx, f, na_pad);
-    case LGLSXP: return run_<Rcpp::String>(as<LogicalVector>(x), k, lag, idx, f, na_pad);
-    case CPLXSXP: return run_<Rcpp::String>(as<ComplexVector>(x), k, lag, idx, f, na_pad);
+    case INTSXP:  return just_run<Rcpp::String>(as<IntegerVector>(x), k, lag, idx, f, na_pad);
+    case REALSXP: return just_run<Rcpp::String>(as<NumericVector>(x), k, lag, idx, f, na_pad);
+    case STRSXP:  return just_run<Rcpp::String>(as<StringVector>(x), k, lag, idx, f, na_pad);
+    case LGLSXP: return just_run<Rcpp::String>(as<LogicalVector>(x), k, lag, idx, f, na_pad);
+    case CPLXSXP: return just_run<Rcpp::String>(as<ComplexVector>(x), k, lag, idx, f, na_pad);
     default: {
       stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }

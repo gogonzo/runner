@@ -96,9 +96,16 @@ minmax_run <- function(x, metric = "min", na_rm = TRUE) {
 #'        k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5),
 #'        f = function(x) paste(x, collapse = "-"),
 #'        type = "character")
+#'
+#' runner(letters[1:10],
+#'        f = function(x) paste(x, collapse = "-"),
+#'        at = c(1, 5, 8),
+#'        type = "character")
+NULL
+
 #' @export
-runner <- function(x, f, k = integer(1), lag = integer(1), idx = integer(0), na_pad = FALSE, type = "numeric") {
-    .Call('_runner_runner', PACKAGE = 'runner', x, f, k, lag, idx, na_pad, type)
+runner <- function(x, f, k = integer(1), lag = integer(1), idx = integer(0), at = integer(0), na_pad = FALSE, type = "numeric") {
+    .Call('_runner_runner', PACKAGE = 'runner', x, f, k, lag, idx, at, na_pad, type)
 }
 
 #' Running sum
