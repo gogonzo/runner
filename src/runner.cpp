@@ -638,7 +638,7 @@ NumericVector minmax_run(
 
 
 template <int ITYPE>
-IntegerVector streak_run(Rcpp::Vector<ITYPE> const& x,
+IntegerVector streak_run2(Rcpp::Vector<ITYPE> const& x,
                          Rcpp::IntegerVector const& k,
                          Rcpp::IntegerVector const& lag,
                          bool na_rm,
@@ -762,11 +762,11 @@ IntegerVector streak_run(
 
 
   switch (TYPEOF(x)) {
-    case INTSXP: return  streak_run(as<IntegerVector>(x),   k, lag, na_rm, na_pad, idx);
-    case REALSXP: return streak_run(as<NumericVector>(x),   k, lag, na_rm, na_pad, idx);
-    case STRSXP: return  streak_run(as<CharacterVector>(x), k, lag, na_rm, na_pad, idx);
-    case LGLSXP: return  streak_run(as<LogicalVector>(x),   k, lag, na_rm, na_pad, idx);
-    case CPLXSXP: return streak_run(as<ComplexVector>(x),   k, lag, na_rm, na_pad, idx);
+    case INTSXP: return  streak_run2(as<IntegerVector>(x),   k, lag, na_rm, na_pad, idx);
+    case REALSXP: return streak_run2(as<NumericVector>(x),   k, lag, na_rm, na_pad, idx);
+    case STRSXP: return  streak_run2(as<CharacterVector>(x), k, lag, na_rm, na_pad, idx);
+    case LGLSXP: return  streak_run2(as<LogicalVector>(x),   k, lag, na_rm, na_pad, idx);
+    case CPLXSXP: return streak_run2(as<ComplexVector>(x),   k, lag, na_rm, na_pad, idx);
     default: {
       stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
       }
