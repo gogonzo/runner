@@ -1,13 +1,12 @@
 namespace aggr {
-    template <int RTYPE>
-    int calc_streak(Rcpp::Vector<RTYPE> const& x, int u, int l, bool na_rm) {
+    int calc_streak_l(Rcpp::LogicalVector const& x, int u, int l, bool na_rm) {
       int uu = u;
       int cur_streak {0};
 
       if (na_rm) {
         for (int j = u; j >= l ; --j) {
-          if (Rcpp::Vector<RTYPE>::is_na(x(j))) continue;
-          if (Rcpp::Vector<RTYPE>::is_na(x(uu))) uu = j;
+          if (Rcpp::LogicalVector::is_na(x(j))) continue;
+          if (Rcpp::LogicalVector::is_na(x(uu))) uu = j;
           if (x(j) == x(uu)) {
             cur_streak += 1L;
           } else {
@@ -16,8 +15,95 @@ namespace aggr {
         }
       } else {
         for (int j = u; j >= l ; --j) {
-          if (Rcpp::Vector<RTYPE>::is_na(x(j))) return NA_INTEGER;
-          if (Rcpp::Vector<RTYPE>::is_na(x(uu))) uu = j;
+          if (Rcpp::LogicalVector::is_na(x(j))) return NA_INTEGER;
+          if (Rcpp::LogicalVector::is_na(x(uu))) uu = j;
+          if (x(j) == x(uu)) {
+            cur_streak += 1L;
+          } else {
+            break;
+          }
+        }
+      }
+
+      if (cur_streak == 0) return NA_INTEGER;
+      return cur_streak;
+    }
+    int calc_streak_i(Rcpp::IntegerVector const& x, int u, int l, bool na_rm) {
+      int uu = u;
+      int cur_streak {0};
+
+      if (na_rm) {
+        for (int j = u; j >= l ; --j) {
+          if (Rcpp::IntegerVector::is_na(x(j))) continue;
+          if (Rcpp::IntegerVector::is_na(x(uu))) uu = j;
+          if (x(j) == x(uu)) {
+            cur_streak += 1L;
+          } else {
+            break;
+          }
+        }
+      } else {
+        for (int j = u; j >= l ; --j) {
+          if (Rcpp::IntegerVector::is_na(x(j))) return NA_INTEGER;
+          if (Rcpp::IntegerVector::is_na(x(uu))) uu = j;
+          if (x(j) == x(uu)) {
+            cur_streak += 1L;
+          } else {
+            break;
+          }
+        }
+      }
+
+      if (cur_streak == 0) return NA_INTEGER;
+      return cur_streak;
+    }
+    int calc_streak_n(Rcpp::NumericVector const& x, int u, int l, bool na_rm) {
+      int uu = u;
+      int cur_streak {0};
+
+      if (na_rm) {
+        for (int j = u; j >= l ; --j) {
+          if (Rcpp::NumericVector::is_na(x(j))) continue;
+          if (Rcpp::NumericVector::is_na(x(uu))) uu = j;
+          if (x(j) == x(uu)) {
+            cur_streak += 1L;
+          } else {
+            break;
+          }
+        }
+      } else {
+        for (int j = u; j >= l ; --j) {
+          if (Rcpp::NumericVector::is_na(x(j))) return NA_INTEGER;
+          if (Rcpp::NumericVector::is_na(x(uu))) uu = j;
+          if (x(j) == x(uu)) {
+            cur_streak += 1L;
+          } else {
+            break;
+          }
+        }
+      }
+
+      if (cur_streak == 0) return NA_INTEGER;
+      return cur_streak;
+    }
+    int calc_streak_s(Rcpp::StringVector const& x, int u, int l, bool na_rm) {
+      int uu = u;
+      int cur_streak {0};
+
+      if (na_rm) {
+        for (int j = u; j >= l ; --j) {
+          if (Rcpp::StringVector::is_na(x(j))) continue;
+          if (Rcpp::StringVector::is_na(x(uu))) uu = j;
+          if (x(j) == x(uu)) {
+            cur_streak += 1L;
+          } else {
+            break;
+          }
+        }
+      } else {
+        for (int j = u; j >= l ; --j) {
+          if (Rcpp::StringVector::is_na(x(j))) return NA_INTEGER;
+          if (Rcpp::StringVector::is_na(x(uu))) uu = j;
           if (x(j) == x(uu)) {
             cur_streak += 1L;
           } else {
@@ -173,7 +259,6 @@ namespace aggr {
       return NA_INTEGER;
     }
 
-
     template <int ITYPE>
     Rcpp::IntegerVector cumstreak(Rcpp::Vector<ITYPE> const& x, int lag, bool na_rm) {
       int n = x.size();
@@ -235,7 +320,6 @@ namespace aggr {
       }
       return res;
     }
-
     Rcpp::NumericVector cummin(Rcpp::NumericVector const& x, bool na_rm) {
       int n = x.size();
       Rcpp::NumericVector res(n);
@@ -262,7 +346,6 @@ namespace aggr {
       }
       return res;
     }
-
     Rcpp::NumericVector cumsum(Rcpp::NumericVector const& x, bool na_rm) {
       int n = x.size();
       Rcpp::NumericVector res(n);
@@ -293,7 +376,6 @@ namespace aggr {
       }
       return res;
     }
-
     Rcpp::NumericVector cummean(Rcpp::NumericVector const& x, bool na_rm) {
       int n = x.size();
       Rcpp::NumericVector res(n);
@@ -329,7 +411,6 @@ namespace aggr {
       }
       return res;
     }
-
     Rcpp::IntegerVector cumwhichf(Rcpp::LogicalVector const& x, bool na_rm) {
       int n = x.size();
       Rcpp::IntegerVector res(n);
@@ -357,7 +438,6 @@ namespace aggr {
       }
       return res;
     }
-
     Rcpp::IntegerVector cumwhichl(Rcpp::LogicalVector const& x, bool na_rm) {
       int n = x.size();
       Rcpp::IntegerVector res(n);

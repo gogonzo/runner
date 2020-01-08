@@ -45,6 +45,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// minmax_run
+Rcpp::NumericVector minmax_run(Rcpp::NumericVector const& x, std::string metric, bool na_rm);
+RcppExport SEXP _runner_minmax_run(SEXP xSEXP, SEXP metricSEXP, SEXP na_rmSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector const& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< std::string >::type metric(metricSEXP);
+    Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
+    rcpp_result_gen = Rcpp::wrap(minmax_run(x, metric, na_rm));
+    return rcpp_result_gen;
+END_RCPP
+}
 // runner
 SEXP runner(const SEXP x, const Function f, const IntegerVector k, const IntegerVector lag, const IntegerVector idx, bool na_pad, std::string type);
 RcppExport SEXP _runner_runner(SEXP xSEXP, SEXP fSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP idxSEXP, SEXP na_padSEXP, SEXP typeSEXP) {
@@ -126,37 +139,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// minmax_run
-NumericVector minmax_run(Rcpp::NumericVector const& x, std::string metric, bool na_rm);
-RcppExport SEXP _runner_minmax_run(SEXP xSEXP, SEXP metricSEXP, SEXP na_rmSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericVector const& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< std::string >::type metric(metricSEXP);
-    Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
-    rcpp_result_gen = Rcpp::wrap(minmax_run(x, metric, na_rm));
-    return rcpp_result_gen;
-END_RCPP
-}
 // streak_run
-IntegerVector streak_run(SEXP x, IntegerVector k, IntegerVector lag, bool na_rm, bool na_pad, IntegerVector idx);
+IntegerVector streak_run(SEXP x, Rcpp::IntegerVector k, Rcpp::IntegerVector lag, bool na_rm, bool na_pad, Rcpp::IntegerVector idx);
 RcppExport SEXP _runner_streak_run(SEXP xSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP na_rmSEXP, SEXP na_padSEXP, SEXP idxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type lag(lagSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type k(kSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type lag(lagSEXP);
     Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
     Rcpp::traits::input_parameter< bool >::type na_pad(na_padSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type idx(idxSEXP);
     rcpp_result_gen = Rcpp::wrap(streak_run(x, k, lag, na_rm, na_pad, idx));
     return rcpp_result_gen;
 END_RCPP
 }
 // which_run
-IntegerVector which_run(LogicalVector x, IntegerVector k, IntegerVector lag, std::string which, bool na_rm, bool na_pad, IntegerVector idx);
+Rcpp::IntegerVector which_run(LogicalVector x, IntegerVector k, IntegerVector lag, std::string which, bool na_rm, bool na_pad, IntegerVector idx);
 RcppExport SEXP _runner_which_run(SEXP xSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP whichSEXP, SEXP na_rmSEXP, SEXP na_padSEXP, SEXP idxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -192,12 +192,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_runner_fill_run", (DL_FUNC) &_runner_fill_run, 3},
     {"_runner_lag_run", (DL_FUNC) &_runner_lag_run, 4},
     {"_runner_length_run", (DL_FUNC) &_runner_length_run, 3},
+    {"_runner_minmax_run", (DL_FUNC) &_runner_minmax_run, 3},
     {"_runner_runner", (DL_FUNC) &_runner_runner, 7},
     {"_runner_sum_run", (DL_FUNC) &_runner_sum_run, 6},
     {"_runner_mean_run", (DL_FUNC) &_runner_mean_run, 6},
     {"_runner_max_run", (DL_FUNC) &_runner_max_run, 6},
     {"_runner_min_run", (DL_FUNC) &_runner_min_run, 6},
-    {"_runner_minmax_run", (DL_FUNC) &_runner_minmax_run, 3},
     {"_runner_streak_run", (DL_FUNC) &_runner_streak_run, 6},
     {"_runner_which_run", (DL_FUNC) &_runner_which_run, 7},
     {"_runner_window_run", (DL_FUNC) &_runner_window_run, 5},

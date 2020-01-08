@@ -54,6 +54,20 @@ length_run <- function(k = integer(1), lag = integer(1), idx = integer(0)) {
     .Call('_runner_length_run', PACKAGE = 'runner', k, lag, idx)
 }
 
+#' Running min/max
+#'
+#'
+#' \code{min_run} calculates running minimum-maximum on given \code{x} numeric
+#'  vector, specified \code{k} window size.
+#' @inheritParams runner
+#' @inheritParams sum_run
+#' @param metric \code{character} what to return, minimum or maximum
+#' @return list.
+#' @export
+minmax_run <- function(x, metric = "min", na_rm = TRUE) {
+    .Call('_runner_minmax_run', PACKAGE = 'runner', x, metric, na_rm)
+}
+
 #' Custom running function
 #'
 #' Applies custom function to running windows
@@ -171,20 +185,6 @@ max_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad = 
 #' @export
 min_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad = FALSE, idx = integer(0)) {
     .Call('_runner_min_run', PACKAGE = 'runner', x, k, lag, na_rm, na_pad, idx)
-}
-
-#' Running min/max
-#'
-#'
-#' \code{min_run} calculates running minimum-maximum on given \code{x} numeric
-#'  vector, specified \code{k} window size.
-#' @inheritParams runner
-#' @inheritParams sum_run
-#' @param metric \code{character} what to return, minimum or maximum
-#' @return list.
-#' @export
-minmax_run <- function(x, metric = "min", na_rm = TRUE) {
-    .Call('_runner_minmax_run', PACKAGE = 'runner', x, metric, na_rm)
 }
 
 #' Running streak length
