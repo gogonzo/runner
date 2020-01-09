@@ -151,6 +151,105 @@ namespace utils {
     return Rcpp::IntegerVector(0);
   }
 
+  Rcpp::IntegerVector window_ul_at(Rcpp::IntegerVector const& indexes, int at, int k, int lag, int n, bool na_pad, bool cum = false) {
+    int li, ui;
+    if (cum) {
+      li = 0;
+    } else {
+      li = at - lag - k + 1;
+    }
+    ui = at - lag;
+
+    if (na_pad) {
+      if (cum) {
+        if ((ui > indexes(n - 1)) or (ui < indexes(0))) return Rcpp::IntegerVector(0);
+      } else {
+        if ((li < indexes(0)) or (ui > indexes(n - 1))) return Rcpp::IntegerVector(0);
+      }
+    // |---------- [ ]    [ ] |----------
+    } else {
+      if (cum) {
+        if (ui< indexes(0)) return Rcpp::IntegerVector(0);
+      } else {
+        if ((ui < indexes(0)) or (li > indexes(n - 1)))
+          return Rcpp::IntegerVector(0);
+      }
+    }
+
+
+    Rcpp::IntegerVector idx_out(2);
+    // cumulative ========================================================================
+    if (cum) {
+      // [-------]-+-->
+      if (lag >= 0) {
+        for (int u = 0; u < n; u++) {
+          if (indexes(u) > ui) {
+            idx_out(0) = 0;
+            idx_out(1) = u - 1;
+            return idx_out;
+          } else if (u == (n - 1)) {
+            idx_out(0) = 0;
+            idx_out(1) = u;
+            return idx_out;
+          }
+        }
+        // [-------+-]-->
+      } else if (lag < 0) {
+        for (int u = n - 1; u >= 0; u--) {
+          if (indexes(u) <= ui) {
+            idx_out(0) = 0;
+            idx_out(1) = u;
+            return idx_out;
+          } else if (u == 0) {
+            return Rcpp::IntegerVector(0);
+          }
+        }
+
+      }
+    }
+
+    if (lag >= 0) {
+      for (int u = n - 1; u >= 0; u--) {
+        if ((at - indexes(u)) < (k + lag)) {
+          if ((at - indexes(u)) >= lag) {
+            for (int l = u; l >= 0; l--) {
+              if ((at - indexes(l) > (k + lag - 1))) {
+                idx_out(0) = l + 1;
+                idx_out(1) = u;
+                return idx_out;
+              } else if (l == 0) {
+                idx_out(1) = u;
+                return idx_out;
+              }
+            }
+          }
+        } else {
+          return Rcpp::IntegerVector(0);
+        }
+      }
+    } else {
+      for (int l = 0; l < n; l++) {
+        if (indexes(l) <= ui) {
+          if (indexes(l) >= li) {
+            for (int u = l; u < n; u++) {
+              if (indexes(u) > ui) {
+                idx_out(0) = l;
+                idx_out(1) = u - 1;
+                return idx_out;
+              } else if (u == (n - 1)) {
+                idx_out(0) = l;
+                idx_out(1) = u;
+                return idx_out;
+              }
+            }
+          }
+        } else {
+          return Rcpp::IntegerVector(0);
+        }
+      }
+    }
+    return Rcpp::IntegerVector(0);
+  }
 }
 
 #endif

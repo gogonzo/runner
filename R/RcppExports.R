@@ -72,18 +72,26 @@ minmax_run <- function(x, metric = "min", na_rm = TRUE) {
 #'
 #' Applies custom function to running windows
 #' @param x Vector of any type
-#' @param k \code{integer} vector or single value denoting size of the running window. If \code{k} is a single
-#' value then window size is constant for all elements, otherwise if \code{length(k) == length(x)} different
-#' window size for each element.
+#' @param k \code{integer} vector or single value denoting size of the running
+#' window. If \code{k} is a single value then window size is constant for all
+#' elements, otherwise if \code{length(k) == length(x)} different window size
+#' for each element.
 #' @param lag \code{integer} vector or single value denoting window lag.
 #' If \code{lag} is a single value then window lag is constant for all elements,
 #' otherwise if \code{length(lag) == length(x)} different window size for each
 #' element. Negative value shifts window forward.
-#' @param idx \code{date or integer} an optional integer vector containing index of observation. If specified
-#' then \code{k} and \code{lag} are depending on \code{idx}. Length of \code{idx} should be equal of length \code{x}
+#' @param idx \code{date or integer} an optional integer vector containing
+#' index of observation. If specified
+#' then \code{k} and \code{lag} are depending on \code{idx}. Length of
+#' \code{idx} should be equal of length \code{x}
 #' @param f \code{function} to be applied on \code{x}
-#' @param na_pad \code{logical} single value (default \code{na_pad=FALSE}) - if \code{TRUE} calculation on
-#' incomplete window will return \code{NA}. Incomplete window is when some parts of the window are out of range
+#' @param at \code{date or integer} vector of any size and any value
+#' defining output data points. Values of the vector defines the indexes which
+#' data is computed at. If \code{idx} is missing then indexes are
+#' \code{seq_along(x)}, otherwise depends on indexes passed with \code{idx}.
+#' @param na_pad \code{logical} single value (default \code{na_pad=FALSE}) - if
+#'  \code{TRUE} calculation on incomplete window will return \code{NA}.
+#'  Incomplete window is when some parts of the window are out of range
 #' @param type output type ("logical", "numeric", "integer", "character")
 #' @examples
 #' runner(1:10, f = mean, k = 3)
@@ -101,8 +109,7 @@ minmax_run <- function(x, metric = "min", na_rm = TRUE) {
 #'        f = function(x) paste(x, collapse = "-"),
 #'        at = c(1, 5, 8),
 #'        type = "character")
-NULL
-
+#'
 #' @export
 runner <- function(x, f, k = integer(1), lag = integer(1), idx = integer(0), at = integer(0), na_pad = FALSE, type = "numeric") {
     .Call('_runner_runner', PACKAGE = 'runner', x, f, k, lag, idx, at, na_pad, type)
@@ -112,10 +119,14 @@ runner <- function(x, f, k = integer(1), lag = integer(1), idx = integer(0), at 
 #'
 #' Running sum in specified window of numeric vector.
 #' @inheritParams runner
+#'
 #' @param x \code{numeric} vector which running function is calculated on
+#'
 #' @param na_rm \code{logical} single value (default \code{na_rm = TRUE}) -
 #' if \code{TRUE} sum is calculating excluding \code{NA}.
+#'
 #' @inheritParams runner
+#'
 #' @return sum \code{code} vector of length equals length of \code{x}.
 #' @examples
 #' set.seed(11)

@@ -16,9 +16,10 @@ sum_run(
 \arguments{
 \item{x}{\code{numeric} vector which running function is calculated on}
 
-\item{k}{\code{integer} vector or single value denoting size of the running window. If \code{k} is a single
-value then window size is constant for all elements, otherwise if \code{length(k) == length(x)} different
-window size for each element.}
+\item{k}{\code{integer} vector or single value denoting size of the running
+window. If \code{k} is a single value then window size is constant for all
+elements, otherwise if \code{length(k) == length(x)} different window size
+for each element.}
 
 \item{lag}{\code{integer} vector or single value denoting window lag.
 If \code{lag} is a single value then window lag is constant for all elements,
@@ -28,11 +29,14 @@ element. Negative value shifts window forward.}
 \item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) -
 if \code{TRUE} sum is calculating excluding \code{NA}.}
 
-\item{na_pad}{\code{logical} single value (default \code{na_pad=FALSE}) - if \code{TRUE} calculation on
-incomplete window will return \code{NA}. Incomplete window is when some parts of the window are out of range}
+\item{na_pad}{\code{logical} single value (default \code{na_pad=FALSE}) - if
+\code{TRUE} calculation on incomplete window will return \code{NA}.
+Incomplete window is when some parts of the window are out of range}
 
-\item{idx}{\code{date or integer} an optional integer vector containing index of observation. If specified
-then \code{k} and \code{lag} are depending on \code{idx}. Length of \code{idx} should be equal of length \code{x}}
+\item{idx}{\code{date or integer} an optional integer vector containing
+index of observation. If specified
+then \code{k} and \code{lag} are depending on \code{idx}. Length of
+\code{idx} should be equal of length \code{x}}
 }
 \value{
 sum \code{code} vector of length equals length of \code{x}.
