@@ -136,6 +136,7 @@
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>1</span>),
   <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>1</span>),
   <span class='kw'>idx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0</span>),
+  <span class='kw'>at</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0</span>),
   <span class='kw'>na_pad</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"numeric"</span>
 )</pre>
@@ -153,9 +154,10 @@
     </tr>
     <tr>
       <th>k</th>
-      <td><p><code>integer</code> vector or single value denoting size of the running window. If <code>k</code> is a single
-value then window size is constant for all elements, otherwise if <code>length(k) == length(x)</code> different
-window size for each element.</p></td>
+      <td><p><code>integer</code> vector or single value denoting size of the running
+window. If <code>k</code> is a single value then window size is constant for all
+elements, otherwise if <code>length(k) == length(x)</code> different window size
+for each element.</p></td>
     </tr>
     <tr>
       <th>lag</th>
@@ -166,13 +168,23 @@ element. Negative value shifts window forward.</p></td>
     </tr>
     <tr>
       <th>idx</th>
-      <td><p><code>date or integer</code> an optional integer vector containing index of observation. If specified
-then <code>k</code> and <code>lag</code> are depending on <code>idx</code>. Length of <code>idx</code> should be equal of length <code>x</code></p></td>
+      <td><p><code>date or integer</code> an optional integer vector containing
+index of observation. If specified
+then <code>k</code> and <code>lag</code> are depending on <code>idx</code>. Length of
+<code>idx</code> should be equal of length <code>x</code></p></td>
+    </tr>
+    <tr>
+      <th>at</th>
+      <td><p><code>date or integer</code> vector of any size and any value
+defining output data points. Values of the vector defines the indexes which
+data is computed at. If <code>idx</code> is missing then indexes are
+<code><a href='https://rdrr.io/r/base/seq.html'>seq_along(x)</a></code>, otherwise depends on indexes passed with <code>idx</code>.</p></td>
     </tr>
     <tr>
       <th>na_pad</th>
-      <td><p><code>logical</code> single value (default <code>na_pad=FALSE</code>) - if <code>TRUE</code> calculation on
-incomplete window will return <code>NA</code>. Incomplete window is when some parts of the window are out of range</p></td>
+      <td><p><code>logical</code> single value (default <code>na_pad=FALSE</code>) - if
+<code>TRUE</code> calculation on incomplete window will return <code>NA</code>.
+Incomplete window is when some parts of the window are out of range</p></td>
     </tr>
     <tr>
       <th>type</th>
@@ -189,7 +201,11 @@ incomplete window will return <code>NA</code>. Incomplete window is when some pa
        <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>4</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>),
        <span class='kw'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>x</span>, <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>"-"</span>),
        <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"character"</span>)</div><div class='output co'>#&gt;  [1] "a"         "a-b"       "b-c"       "a-b-c-d"   "a-b-c-d-e" "b-c-d-e-f"
-#&gt;  [7] "c-d-e-f-g" "d-e-f-g-h" "e-f-g-h-i" "f-g-h-i-j"</div></pre>
+#&gt;  [7] "c-d-e-f-g" "d-e-f-g-h" "e-f-g-h-i" "f-g-h-i-j"</div><div class='input'>
+<span class='fu'>runner</span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>],
+       <span class='kw'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>x</span>, <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>"-"</span>),
+       <span class='kw'>at</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>5</span>, <span class='fl'>8</span>),
+       <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"character"</span>)</div><div class='output co'>#&gt; [1] "a"               "a-b-c-d-e"       "a-b-c-d-e-f-g-h"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <h2>Contents</h2>

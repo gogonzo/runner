@@ -141,9 +141,10 @@ then the result is number of observations within k days window.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>k</th>
-      <td><p><code>integer</code> vector or single value denoting size of the running window. If <code>k</code> is a single
-value then window size is constant for all elements, otherwise if <code>length(k) == length(x)</code> different
-window size for each element.</p></td>
+      <td><p><code>integer</code> vector or single value denoting size of the running
+window. If <code>k</code> is a single value then window size is constant for all
+elements, otherwise if <code>length(k) == length(x)</code> different window size
+for each element.</p></td>
     </tr>
     <tr>
       <th>lag</th>
@@ -154,8 +155,10 @@ element. Negative value shifts window forward.</p></td>
     </tr>
     <tr>
       <th>idx</th>
-      <td><p><code>date or integer</code> an optional integer vector containing index of observation. If specified
-then <code>k</code> and <code>lag</code> are depending on <code>idx</code>. Length of <code>idx</code> should be equal of length <code>x</code></p></td>
+      <td><p><code>date or integer</code> an optional integer vector containing
+index of observation. If specified
+then <code>k</code> and <code>lag</code> are depending on <code>idx</code>. Length of
+<code>idx</code> should be equal of length <code>x</code></p></td>
     </tr>
     </table>
 
