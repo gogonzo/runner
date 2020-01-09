@@ -59,8 +59,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // runner
-SEXP runner(const SEXP x, const Function f, const IntegerVector k, const IntegerVector lag, const IntegerVector idx, bool na_pad, std::string type);
-RcppExport SEXP _runner_runner(SEXP xSEXP, SEXP fSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP idxSEXP, SEXP na_padSEXP, SEXP typeSEXP) {
+SEXP runner(const SEXP x, const Function f, const IntegerVector k, const IntegerVector lag, const IntegerVector idx, const IntegerVector at, bool na_pad, std::string type);
+RcppExport SEXP _runner_runner(SEXP xSEXP, SEXP fSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP idxSEXP, SEXP atSEXP, SEXP na_padSEXP, SEXP typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -69,9 +69,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const IntegerVector >::type k(kSEXP);
     Rcpp::traits::input_parameter< const IntegerVector >::type lag(lagSEXP);
     Rcpp::traits::input_parameter< const IntegerVector >::type idx(idxSEXP);
+    Rcpp::traits::input_parameter< const IntegerVector >::type at(atSEXP);
     Rcpp::traits::input_parameter< bool >::type na_pad(na_padSEXP);
     Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
-    rcpp_result_gen = Rcpp::wrap(runner(x, f, k, lag, idx, na_pad, type));
+    rcpp_result_gen = Rcpp::wrap(runner(x, f, k, lag, idx, at, na_pad, type));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -193,7 +194,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_runner_lag_run", (DL_FUNC) &_runner_lag_run, 4},
     {"_runner_length_run", (DL_FUNC) &_runner_length_run, 3},
     {"_runner_minmax_run", (DL_FUNC) &_runner_minmax_run, 3},
-    {"_runner_runner", (DL_FUNC) &_runner_runner, 7},
+    {"_runner_runner", (DL_FUNC) &_runner_runner, 8},
     {"_runner_sum_run", (DL_FUNC) &_runner_sum_run, 6},
     {"_runner_mean_run", (DL_FUNC) &_runner_mean_run, 6},
     {"_runner_max_run", (DL_FUNC) &_runner_max_run, 6},

@@ -313,6 +313,23 @@ test_that("date window", {
     runner(x2, k = 4, lag = lag, idx = idx, f = streak2, na_pad = TRUE))
 })
 
+test_that("data types", {
+  expect_equal(
+    streak_run(as.integer(x2)),
+    runner(as.integer(x2), f = streak2))
+
+  expect_equal(
+    streak_run(as.character(x2)),
+    runner(as.character(x2), f = streak2))
+
+  expect_equal(
+    streak_run(c(TRUE, TRUE, FALSE, FALSE, TRUE)),
+    runner(c(TRUE, TRUE, FALSE, FALSE, TRUE), f = streak2))
+
+
+})
+
+
 test_that("Errors", {
   expect_error(streak_run(x1, k = (1:999)), "length of k and length of x differs")
   expect_error(streak_run(x1, k = c(NA, k[-1])), "Function doesn't accept NA values in k vector")

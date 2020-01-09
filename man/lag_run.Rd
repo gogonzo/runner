@@ -14,8 +14,10 @@ If \code{lag} is a single value then window lag is constant for all elements,
 otherwise if \code{length(lag) == length(x)} different window size for each
 element. Negative value shifts window forward.}
 
-\item{idx}{\code{date or integer} an optional integer vector containing index of observation. If specified
-then \code{k} and \code{lag} are depending on \code{idx}. Length of \code{idx} should be equal of length \code{x}}
+\item{idx}{\code{date or integer} an optional integer vector containing
+index of observation. If specified
+then \code{k} and \code{lag} are depending on \code{idx}. Length of
+\code{idx} should be equal of length \code{x}}
 
 \item{nearest}{\code{logical} single value. Applied when \code{idx} is used,
 then \code{nearest = FALSE} returns observation lagged exactly by the

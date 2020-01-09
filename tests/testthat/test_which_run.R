@@ -41,6 +41,28 @@ test_that("       |--------]------->", {
     which_run(x2, na_pad = TRUE),
     as.integer(runner(x2, f = which2, na_pad = TRUE))
   )
+
+
+  expect_identical(
+    which_run(x2, which = "first"),
+    as.integer(runner(x2, function(x) which2(x, arg_which = "first")))
+  )
+
+  expect_identical(
+    which_run(x2, which = "first", na_pad = TRUE),
+    as.integer(runner(x2, function(x) which2(x, arg_which = "first"), na_pad = TRUE))
+  )
+
+  expect_identical(
+    which_run(x1, na_rm = FALSE),
+    as.integer(runner(x1, function(x) which2(x, na_rm = FALSE)))
+  )
+
+
+  expect_identical(
+    which_run(x1, which = "first", na_rm = FALSE),
+    as.integer(runner(x1, function(x) which2(x, arg_which = "first", na_rm = FALSE)))
+  )
 })
 
 test_that("   [...|----]---+------->", {
