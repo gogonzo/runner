@@ -21,9 +21,18 @@ test_that("       |--------]------->", {
     runner(x1, f = mean),
     sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i)])))
 
+  expect_identical(
+    runner(x1, f = mean, idx = idx),
+    sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i)])))
+
 
   expect_identical(
     runner(x1, f = mean),
+    runner(x1, f = mean, at = seq_along(x1))
+  )
+
+  expect_identical(
+    runner(x1, f = mean, idx = idx),
     runner(x1, f = mean, at = seq_along(x1))
   )
 
@@ -127,6 +136,11 @@ test_that("       |----[...]------->", {
     runner(x1, k = 3, f = mean, na_pad = TRUE),
     sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = 3, na_pad = TRUE)])))
 
+  expect_equal(
+    runner(x1, k = k, f = mean),
+    sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = k[i], lag = 0)])))
+
+
 
   expect_equal(
     runner(x1, k = 3, f = mean),
@@ -135,6 +149,11 @@ test_that("       |----[...]------->", {
   expect_equal(
     runner(x1, k = 3, f = mean, na_pad = TRUE),
     runner(x1, k = 3, f = mean, na_pad = TRUE, at = seq_along(x1)))
+
+  expect_equal(
+    runner(x1, k = k, f = mean),
+    runner(x1, k = k, f = mean, at = seq_along(x1)))
+
 })
 
 test_that("       [...|--------+-------[...]", {
@@ -287,7 +306,6 @@ test_that("various", {
   expect_equal(
     runner(x1, k = k, lag = lag, f = mean),
     sapply(window_run(x1, k = k, lag = lag), mean))
-
 
 
 
@@ -520,9 +538,103 @@ test_that("i/o type", {
   expect_identical(
     c("1+1i", "1+1i-2+2i", "1+1i-2+2i-3+3i", "1+1i-2+2i-3+3i-4+4i"),
     runner(cpl_input, f = char_function, type = "character"))
-
-
 })
+
+
+test_that("i/o type at", {
+  log_input <- c(T, T, F, F)
+  int_input <- as.integer(1:4)
+  num_input <- as.numeric(1:4) + 0.5
+  cha_input <- letters[1:4]
+  cpl_input <- complex(real = 1:4, imaginary = 1:4)
+
+  log_function <- function(x) any(duplicated(x))
+  int_function  <- function(x) as.integer(length(x))
+  num_function  <- function(x) as.double(sum(x))
+  char_function <- function(x) paste(x, collapse = "-")
+
+  at <- c(2, 3)
+  # <logical>
+  expect_identical(
+    as.logical(c(FALSE, TRUE, TRUE, TRUE))[at],
+    runner(log_input, f = log_function, type = "logical", at = at))
+
+  expect_identical(
+    as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
+    runner(int_input, f = log_function, type = "logical", at = at))
+
+  expect_identical(
+    as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
+    runner(num_input, f = log_function, type = "logical", at = at))
+
+  expect_identical(
+    as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
+    runner(cha_input, f = log_function, type = "logical", at = at))
+
+  expect_identical(
+    as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
+    runner(cpl_input, f = log_function, type = "logical", at = at))
+
+  # <integer>
+  expect_identical(
+    as.integer(c(1, 2, 3, 4))[at],
+    runner(log_input, f = int_function, type = "integer", at = at))
+
+  expect_identical(
+    as.integer(c(1, 2, 3, 4))[at],
+    runner(int_input, f = int_function, type = "integer", at = at))
+
+  expect_identical(
+    as.integer(c(1, 2, 3, 4))[at],
+    runner(num_input, f = int_function, type = "integer", at = at))
+
+  expect_identical(
+    as.integer(c(1, 2, 3, 4))[at],
+    runner(cha_input, f = int_function, type = "integer", at = at))
+
+  expect_identical(
+    as.integer(c(1, 2, 3, 4))[at],
+    runner(cpl_input, f = int_function, type = "integer", at = at))
+
+  # <numeric>
+  expect_identical(
+    as.numeric(c(1, 2, 2, 2))[at],
+    runner(log_input, f = num_function, type = "numeric", at = at))
+
+  expect_identical(
+    as.numeric(c(1, 3, 6, 10))[at],
+    runner(int_input, f = num_function, type = "numeric", at = at))
+
+  expect_identical(
+    as.numeric(c(1.5, 4, 7.5, 12))[at],
+    runner(num_input, f = num_function, type = "numeric", at = at))
+
+  expect_error(runner(cha_input, f = num_function, type = "numeric", at = at))
+
+  expect_warning(runner(cpl_input, f = num_function, type = "numeric", at = at))
+
+  # <character>
+  expect_identical(
+    c("TRUE", "TRUE-TRUE", "TRUE-TRUE-FALSE", "TRUE-TRUE-FALSE-FALSE")[at],
+    runner(log_input, f = char_function, type = "character", at = at))
+
+  expect_identical(
+    c("1", "1-2", "1-2-3", "1-2-3-4")[at],
+    runner(int_input, f = char_function, type = "character", at = at))
+
+  expect_identical(
+    c("1.5", "1.5-2.5", "1.5-2.5-3.5", "1.5-2.5-3.5-4.5")[at],
+    runner(num_input, f = char_function, type = "character", at = at))
+
+  expect_identical(
+    c("a", "a-b", "a-b-c", "a-b-c-d")[at],
+    runner(cha_input, f = char_function, type = "character", at = at))
+
+  expect_identical(
+    c("1+1i", "1+1i-2+2i", "1+1i-2+2i-3+3i", "1+1i-2+2i-3+3i-4+4i")[at],
+    runner(cpl_input, f = char_function, type = "character", at = at))
+})
+
 
 test_that("at date window", {
   at <- sample(idx, 10)
@@ -633,21 +745,34 @@ test_that("at date window", {
   )
 })
 
-
 test_that("Errors", {
   expect_error(runner(x = letters[1:5]))
   expect_error(runner(x = letters[1:5], f = ""))
 
-  expect_error(runner(list(1:10), k = 5, f = mean), "Invalid data type")
-  expect_error(runner(1:10, k = -5, f = mean), "k can't be negative")
+  expect_error(runner(list(1:10), k = 5, f = mean),
+               "Invalid data type")
+  expect_error(runner(1:10, k = -5, f = mean),
+               "k can't be negative")
 
-  expect_error(runner(1:10, k = (1:9), f = mean), "length of k and length of x differs")
-  expect_error(runner(1:10, k = c(NA, 1:9), f = mean), "Function doesn't accept NA values in k vector")
+  expect_error(runner(1:10, k = (1:9), f = mean),
+               "length of k and length of x differs")
+  expect_error(runner(1:10, k = c(NA, 1:9), f = mean),
+               "Function doesn't accept NA values in k vector")
+  expect_error(runner(x1, k = integer(0), idx = idx, f = mean),
+               "length of k should not be zero")
 
-  expect_error(runner(1:10, lag = (1:9), f = mean), "length of lag and length of x differs")
-  expect_error(runner(1:10, lag = c(NA, 1:9), f = mean), "Function doesn't accept NA values in lag vector")
 
-  expect_error(runner(1:10, idx = (1:9), f = mean), "length of idx and length of x differs")
-  expect_error(runner(1:10, idx = c(NA, 1:9), f = mean), "Function doesn't accept NA values in idx vector")
-  expect_error(runner(1:10, idx = sample(1:10), f = mean), "idx have to be in descending order")
+  expect_error(runner(1:10, lag = (1:9), f = mean),
+               "length of lag and length of x differs")
+  expect_error(runner(x1, k = k, lag = integer(0), idx = idx, f = mean),
+               "length of lag should not be zero")
+  expect_error(runner(1:10, lag = c(NA, 1:9), f = mean),
+               "Function doesn't accept NA values in lag vector")
+
+  expect_error(runner(1:10, idx = (1:9), f = mean),
+               "length of idx and length of x differs")
+  expect_error(runner(1:10, idx = c(NA, 1:9), f = mean),
+               "Function doesn't accept NA values in idx vector")
+  expect_error(runner(1:10, idx = sample(1:10), f = mean),
+               "idx have to be in descending order")
 })

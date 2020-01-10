@@ -326,6 +326,18 @@ test_that("data types", {
     streak_run(c(TRUE, TRUE, FALSE, FALSE, TRUE)),
     runner(c(TRUE, TRUE, FALSE, FALSE, TRUE), f = streak2))
 
+  expect_equal(
+    streak_run(as.integer(x2), k = 2),
+    runner(as.integer(x2), k = 2, f = streak2))
+
+  expect_equal(
+    streak_run(as.character(x2), k = 2),
+    runner(as.character(x2), k = 2, f = streak2))
+
+  expect_equal(
+    streak_run(c(TRUE, TRUE, FALSE, FALSE, TRUE), k = 2),
+    runner(c(TRUE, TRUE, FALSE, FALSE, TRUE), k = 2, f = streak2))
+
 
 })
 
