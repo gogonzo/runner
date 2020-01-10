@@ -5,8 +5,8 @@ x2 <- sample(c(NA, 1, 2, 3), 100, replace = TRUE)
 k <- sample(1:100, 100, replace = TRUE)
 lag <- sample(-15:15, 100, replace = TRUE)
 idx <- cumsum(sample(c(1, 2, 3, 4), 100, replace = TRUE))
-max2 <- function(x) {
-  if (all(is.na(x))) return(NA) else max(x, na.rm = TRUE)
+max2 <- function(x, na_rm = TRUE) {
+  if (all(is.na(x))) return(NA) else max(x, na.rm = na_rm)
 }
 
 test_that("       |--------]------->", {
@@ -18,6 +18,11 @@ test_that("       |--------]------->", {
   expect_identical(
     max_run(x2, na_pad = TRUE),
     runner(x2, f = max2, na_pad = TRUE)
+  )
+
+  expect_identical(
+    max_run(x2, na_rm = FALSE),
+    runner(x2, function(x) max2(x, na_rm = FALSE))
   )
 })
 

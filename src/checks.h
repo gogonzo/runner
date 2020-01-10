@@ -7,6 +7,8 @@ namespace checks {
       Rcpp::stop("length of k and length of x differs. length(k) should be 1 or equal to x");
     } else if (Rcpp::any(Rcpp::is_na(k))) {
       Rcpp::stop("Function doesn't accept NA values in k vector");
+    } else if (k.size() == 0) {
+      Rcpp::stop("length of k should not be zero. Please specify k as single value, or don't specify for default value.");
     }
     if (k.size() == 1) {
       if (k(0) < 0) {
@@ -42,6 +44,8 @@ namespace checks {
       Rcpp::stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
     } else if (Rcpp::any(Rcpp::is_na(lag))) {
       Rcpp::stop("Function doesn't accept NA values in lag vector");
+    } else if (lag.size() == 0) {
+      Rcpp::stop("length of lag should not be zero. Please specify k as single value, or don't specify for default value.");
     }
   }
 
