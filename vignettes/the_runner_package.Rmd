@@ -43,10 +43,19 @@ Windows are defined by several parameters, like size, lag and indexes of observa
 Sometimes data points in dataset are not equally spaced (missing weekends, holidays, other missings) and thus window size should vary to keep expected time frame.  If one specifies `idx` argument, than running functions are applied on windows depending on date. `idx` should be the same length as `x` of class `Date` or `integer`. Including `idx` can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size `k = 5` lagged by `lag = 2`. In parentheses ranges for each window.
 
 ![](images/running_date_windows_explain.png)
-  
+
+### running at (only in `runner`)
+
+Runner by default returns vector of the same size as `x` unless one puts any-size 
+vector to `at` argument. Each element of `at` is an index on which runner 
+calculates function. 
+
+
 ### `NA` padding  
-Using `runner` one can also specify `na_pad = TRUE` which would return `NA` for any window which 
-is partially out of range - meaning that there is no sufficient number of observations to fill the window. By default `na_pad = FALSE`, which means that incomplete windows are calculated anyway. `na_pad` is applied on normal cumulative windows and on windows depending on date.
+Using `runner` one can also specify `na_pad = TRUE` which would return `NA` for 
+any window which is partially out of range - meaning that there is no sufficient
+number of observations to fill the window. By default `na_pad = FALSE`, which 
+means that incomplete windows are calculated anyway. `na_pad` is applied on normal cumulative windows and on windows depending on date.
 
 ## Using package
 
@@ -56,8 +65,9 @@ Package contains most fundamental function `runner::runner` which gives possibil
   
 ![](images/using_runner.png)
 
-Below example of using `base::mean` inside of the `runner` function.
+Below example of using `base::mean` inside of the `runner` function. 
 ```{r, echo=TRUE}
+set.seed(1)
 library(runner)
 x <- runif(15)
 k <- sample(1:15, 15, replace = TRUE)
@@ -78,7 +88,18 @@ date_windows <- runner(x = x, k = k, idx = idx, f = function(x) mean(x, trim = 0
 data.frame(x, k, idx, simple_mean, trimmed_mean, varying_window, date_windows)
 ```
 
-### builtin functions
+Running only on specified indexes
+
+```{r}
+set.seed(1)
+x <- runif(15)
+k <- sample(1:15, 15, replace = TRUE)
+idx <- cumsum(sample(c(1, 2, 3, 4), 15, replace = TRUE))
+
+runner(x = x, k = 4, f = mean, at = c(1, 4, 5, 6))
+```
+
+### built-in functions
 With `runner` one can use any R functions, but some of them are optimized for speed reasons.
 These functions are:  
 - aggregating functions - `length_run`, `min_run`, `max_run`, `minmax_run`, `sum_run`, `mean_run`, `streak_run`  

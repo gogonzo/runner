@@ -1,9 +1,9 @@
 #include <Rcpp.h>
 using namespace Rcpp;
-#include "checks.h"
-#include "utils.h"
 #include "aggregations.h"
+#include "checks.h"
 #include "runner.h"
+#include "utils.h"
 // [[Rcpp::plugins("cpp11")]]
 
 template <typename otype, int ITYPE>
