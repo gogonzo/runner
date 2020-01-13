@@ -11,7 +11,7 @@ Rcpp::Vector<Rcpp::traits::r_sexptype_traits<otype>::rtype>
 run(Rcpp::Vector<ITYPE> const& x,
     Rcpp::IntegerVector const& k,
     Rcpp::IntegerVector const& lag,
-    Rcpp::IntegerVector const& indexes,
+    Rcpp::IntegerVector const& idx,
     Rcpp::IntegerVector const& at,
     Function f,
     bool na_pad) {
@@ -20,49 +20,49 @@ run(Rcpp::Vector<ITYPE> const& x,
   int n = x.size();
   int nn = at.size();
   Rcpp::Vector<OTYPE> res(at.size() == 0 ? n : nn);
-  IntegerVector idx(2);
+  IntegerVector b(2);
 
   if (at.size() == 0) {
-    if (indexes.size() == 0) {
+    if (idx.size() == 0) {
       if (k.size() > 1 && lag.size() > 1) {
         for (int i = 0; i < n; i++) {
-          idx = utils::window_ul(i, k(i), lag(i), n, na_pad);
-          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+          b = utils::window_ul(i, k(i), lag(i), n, na_pad);
+          res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() > 1 && lag.size() == 1) {
         for (int i = 0; i < n; i++) {
-          idx = utils::window_ul(i, k(i), lag(0), n, na_pad);
-          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+          b = utils::window_ul(i, k(i), lag(0), n, na_pad);
+          res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 0 && lag.size() > 1) {
         for (int i = 0; i < n; i++) {
-          idx = utils::window_ul(i, n, lag(i), n, na_pad, true);
-          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+          b = utils::window_ul(i, n, lag(i), n, na_pad, true);
+          res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 0 && lag.size() == 1) {
         for (int i = 0; i < n; i++) {
-          idx = utils::window_ul(i, n, lag(0), n, na_pad, true);
-          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+          b = utils::window_ul(i, n, lag(0), n, na_pad, true);
+          res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 1 && k(0) == n && lag.size() > 1) {
         for (int i = 0; i < n; i++) {
-          idx = utils::window_ul(i, n, lag(i), n, na_pad);
-          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+          b = utils::window_ul(i, n, lag(i), n, na_pad);
+          res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 1 && k(0) == n && lag.size() == 1) {
         for (int i = 0; i < n; i++) {
-          idx = utils::window_ul(i, n, lag(0), n, na_pad);
-          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+          b = utils::window_ul(i, n, lag(0), n, na_pad);
+          res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 1 && lag.size() > 1) {
         for (int i = 0; i < n; i++) {
-          idx = utils::window_ul(i, k(0), lag(i), n, na_pad);
-          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+          b = utils::window_ul(i, k(0), lag(i), n, na_pad);
+          res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 1 && lag.size() == 1) {
         for (int i = 0; i < n; i++) {
-          idx = utils::window_ul(i, k(0), lag(0), n, na_pad);
-          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+          b = utils::window_ul(i, k(0), lag(0), n, na_pad);
+          res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       }
 
@@ -70,112 +70,112 @@ run(Rcpp::Vector<ITYPE> const& x,
       if (k.size() > 1) {
         if (lag.size() > 1) {
           for (int i = 0; i < n; i++) {
-            idx = utils::window_ul_dl(indexes, i, k(i), lag(i), n, na_pad, false);
-            res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+            b = utils::window_ul_dl(idx, i, k(i), lag(i), n, na_pad, false);
+            res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
           }
         } else {
           for (int i = 0; i < n; i++) {
-            idx = utils::window_ul_dl(indexes, i, k(i), lag(0), n, na_pad, false);
-            res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+            b = utils::window_ul_dl(idx, i, k(i), lag(0), n, na_pad, false);
+            res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
           }
         }
 
       } else if (k.size() == 0) {
         if (lag.size() > 1) {
           for (int i = 0; i < n; i++) {
-            idx = utils::window_ul_dl(indexes, i, n, lag(i), n, na_pad, true);
-            res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+            b = utils::window_ul_dl(idx, i, n, lag(i), n, na_pad, true);
+            res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
           }
         } else {
           for (int i = 0; i < n; i++) {
-            idx = utils::window_ul_dl(indexes, i, n, lag(0), n, na_pad, true);
-            res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+            b = utils::window_ul_dl(idx, i, n, lag(0), n, na_pad, true);
+            res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
           }
         }
       } else if (k.size() == 1) {
         if (lag.size() > 1) {
           for (int i = 0; i < n; i++) {
-            idx = utils::window_ul_dl(indexes, i, k(0), lag(i), n, na_pad, false);
-            res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+            b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad, false);
+            res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
 
           }
         } else {
           for (int i = 0; i < n; i++) {
-            idx = utils::window_ul_dl(indexes, i, k(0), lag(0), n, na_pad, false);
-            res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+            b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad, false);
+            res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
           }
         }
       }
     }
   } else {
-    if (indexes.size() == 0) {
+    if (idx.size() == 0) {
       if (k.size() > 1 && lag.size() > 1) {
         for (int i = 0; i < nn; i++) {
-          idx = utils::window_ul(at(i) - 1, k(i), lag(i), n, na_pad);
-          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+          b = utils::window_ul(at(i) - 1, k(i), lag(i), n, na_pad);
+          res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() > 1 && lag.size() == 1) {
         for (int i = 0; i < nn; i++) {
-          idx = utils::window_ul(at(i) - 1, k(i), lag(0), n, na_pad);
-          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+          b = utils::window_ul(at(i) - 1, k(i), lag(0), n, na_pad);
+          res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 0 && lag.size() > 1) {
         for (int i = 0; i < nn; i++) {
-          idx = utils::window_ul(at(i) - 1, n, lag(i), n, na_pad, true);
-          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+          b = utils::window_ul(at(i) - 1, n, lag(i), n, na_pad, true);
+          res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 0 && lag.size() == 1) {
         for (int i = 0; i < nn; i++) {
-          idx = utils::window_ul(at(i) - 1, n, lag(0), n, na_pad, true);
-          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+          b = utils::window_ul(at(i) - 1, n, lag(0), n, na_pad, true);
+          res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 1 && lag.size() > 1) {
         for (int i = 0; i < nn; i++) {
-          idx = utils::window_ul(at(i) - 1, k(0), lag(i), n, na_pad);
-          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+          b = utils::window_ul(at(i) - 1, k(0), lag(i), n, na_pad);
+          res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 1 && lag.size() == 1) {
         for (int i = 0; i < nn; i++) {
-          idx = utils::window_ul(at(i) - 1, k(0), lag(0), n, na_pad);
-          res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+          b = utils::window_ul(at(i) - 1, k(0), lag(0), n, na_pad);
+          res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       }
     } else {
       if (k.size() > 1) {
         if (lag.size() > 1) {
           for (int i = 0; i < nn; i++) {
-            idx = utils::window_ul_at(indexes, at(i), k(i), lag(i), n, na_pad, false);
-            res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+            b = utils::window_ul_at(idx, at(i), k(i), lag(i), n, na_pad, false);
+            res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
           }
         } else {
           for (int i = 0; i < nn; i++) {
-            idx = utils::window_ul_at(indexes, at(i), k(i), lag(0), n, na_pad, false);
-            res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+            b = utils::window_ul_at(idx, at(i), k(i), lag(0), n, na_pad, false);
+            res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
           }
         }
       } else if (k.size() == 0) {
         if (lag.size() > 1) {
           for (int i = 0; i < nn; i++) {
-            idx = utils::window_ul_at(indexes, at(i), n, lag(i), n, na_pad, true);
-            res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+            b = utils::window_ul_at(idx, at(i), n, lag(i), n, na_pad, true);
+            res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
           }
         } else {
           for (int i = 0; i < nn; i++) {
-            idx = utils::window_ul_at(indexes, at(i), n, lag(0), n, na_pad, true);
-            res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+            b = utils::window_ul_at(idx, at(i), n, lag(0), n, na_pad, true);
+            res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
           }
         }
       } else if (k.size() == 1) {
         if (lag.size() > 1) {
           for (int i = 0; i < nn; i++) {
-            idx = utils::window_ul_at(indexes, at(i), k(0), lag(i), n, na_pad, false);
-            res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+            b = utils::window_ul_at(idx, at(i), k(0), lag(i), n, na_pad, false);
+            res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
 
           }
         } else {
           for (int i = 0; i < nn; i++) {
-            idx = utils::window_ul_at(indexes, at(i), k(0), lag(0), n, na_pad, false);
-            res(i) = (idx.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, idx, f);
+            b = utils::window_ul_at(idx, at(i), k(0), lag(0), n, na_pad, false);
+            res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
           }
         }
       }
@@ -211,7 +211,6 @@ runner_vec(Rcpp::Vector<ITYPE> const& x,
 
   Rcpp::Vector<otype>  res(nn);
   IntegerVector b(2);
-
 
   // Simple windows-------
   if (at.size() == 0) {
@@ -634,8 +633,8 @@ Rcpp::NumericVector sum_run(
 
   if (k.size() == 0 &&
       lag.size() == 1 &&
+      lag(0) == 0 &&
       idx.size() == 0 &&
-      // lag(0) == 0 &&
       at.size() == 0) {
     return aggr::cumsum(x, na_rm);
   } else {
@@ -672,8 +671,8 @@ NumericVector mean_run(
 
   if (k.size() == 0 &&
       lag.size() == 1 &&
+      lag(0) == 0 &&
       idx.size() == 0 &&
-      // lag(0) == 0 &&
       at.size() == 0) {
     return aggr::cummean(x, na_rm);
   } else {
@@ -711,8 +710,8 @@ NumericVector max_run(
 
   if (k.size() == 0 &&
       lag.size() == 1 &&
+      lag(0) == 0 &&
       idx.size() == 0 &&
-      // lag(0) == 0 &&
       at.size() == 0) {
     return aggr::cummax(x, na_rm);
   } else {
@@ -749,8 +748,8 @@ NumericVector min_run(
 
   if (k.size() == 0 &&
       lag.size() == 1 &&
+      lag(0) == 0 &&
       idx.size() == 0 &&
-      // lag(0) == 0 &&
       at.size() == 0) {
     return aggr::cummin(x, na_rm);
   } else {
@@ -788,8 +787,8 @@ IntegerVector streak_run(
 
   if (k.size() == 0 &&
       lag.size() == 1 &&
+      lag(0) == 0 &&
       idx.size() == 0 &&
-      // lag(0) == 0 &&
       at.size() == 0) {
     switch (TYPEOF(x)) {
       case INTSXP: return aggr::cumstreak(as<IntegerVector>(x), lag(0), na_rm);
@@ -860,8 +859,8 @@ Rcpp::IntegerVector which_run(
   if (which == "first") {
     if (k.size() == 0 &&
         lag.size() == 1 &&
+        lag(0) == 0 &&
         idx.size() == 0 &&
-        // lag(0) == 0 &&
         at.size() == 0) {
       return aggr::cumwhichf(x, na_rm);
     } else {
@@ -871,8 +870,8 @@ Rcpp::IntegerVector which_run(
   } else {
     if (k.size() == 0 &&
         lag.size() == 1 &&
+        lag(0) == 0 &&
         idx.size() == 0 &&
-        // lag(0) == 0 &&
         at.size() == 0) {
       return aggr::cumwhichl(x, na_rm);
     } else {
