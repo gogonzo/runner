@@ -111,7 +111,7 @@ minmax_run <- function(x, metric = "min", na_rm = TRUE) {
 #'        type = "character")
 #'
 #' @export
-runner <- function(x, f, k = integer(1), lag = integer(1), idx = integer(0), at = integer(0), na_pad = FALSE, type = "numeric") {
+runner <- function(x, f, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_pad = FALSE, type = "numeric") {
     .Call('_runner_runner', PACKAGE = 'runner', x, f, k, lag, idx, at, na_pad, type)
 }
 
@@ -138,8 +138,8 @@ runner <- function(x, f, k = integer(1), lag = integer(1), idx = integer(0), at 
 #' sum_run(x2, na_rm = FALSE)
 #' sum_run(x2, na_rm = TRUE, k = 4)
 #' @export
-sum_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad = FALSE, idx = integer(0)) {
-    .Call('_runner_sum_run', PACKAGE = 'runner', x, k, lag, na_rm, na_pad, idx)
+sum_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_rm = TRUE, na_pad = FALSE) {
+    .Call('_runner_sum_run', PACKAGE = 'runner', x, k, lag, idx, at, na_rm, na_pad)
 }
 
 #' Running mean
@@ -158,8 +158,8 @@ sum_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad = 
 #' mean_run(x2, na_rm = FALSE )
 #' mean_run(x2, na_rm = TRUE, k=4)
 #' @export
-mean_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad = FALSE, idx = integer(0)) {
-    .Call('_runner_mean_run', PACKAGE = 'runner', x, k, lag, na_rm, na_pad, idx)
+mean_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_rm = TRUE, na_pad = FALSE) {
+    .Call('_runner_mean_run', PACKAGE = 'runner', x, k, lag, idx, at, na_rm, na_pad)
 }
 
 #' Running maximum
@@ -180,8 +180,8 @@ mean_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad =
 #' max_run(x2, na_rm = TRUE, k=4) # maximum in 4-element window
 #' max_run(x2, na_rm = FALSE, k=k) # maximum in varying k window size
 #' @export
-max_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad = FALSE, idx = integer(0)) {
-    .Call('_runner_max_run', PACKAGE = 'runner', x, k, lag, na_rm, na_pad, idx)
+max_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_rm = TRUE, na_pad = FALSE) {
+    .Call('_runner_max_run', PACKAGE = 'runner', x, k, lag, idx, at, na_rm, na_pad)
 }
 
 #' Running minimum
@@ -201,8 +201,8 @@ max_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad = 
 #' min_run(x2, na_rm = TRUE, k = 4)
 #' min_run(x2, na_rm = FALSE, k = k)
 #' @export
-min_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad = FALSE, idx = integer(0)) {
-    .Call('_runner_min_run', PACKAGE = 'runner', x, k, lag, na_rm, na_pad, idx)
+min_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_rm = TRUE, na_pad = FALSE) {
+    .Call('_runner_min_run', PACKAGE = 'runner', x, k, lag, idx, at, na_rm, na_pad)
 }
 
 #' Running streak length
@@ -223,8 +223,8 @@ min_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad = 
 #' streak_run(x2, na_pad = TRUE, k = 3) # streak run within k=3 with padding NA
 #' streak_run(x1, k = k) # streak run within varying window size specified by vector k
 #' @export
-streak_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad = FALSE, idx = integer(0)) {
-    .Call('_runner_streak_run', PACKAGE = 'runner', x, k, lag, na_rm, na_pad, idx)
+streak_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_rm = TRUE, na_pad = FALSE) {
+    .Call('_runner_streak_run', PACKAGE = 'runner', x, k, lag, idx, at, na_rm, na_pad)
 }
 
 #' Running which
@@ -246,8 +246,8 @@ streak_run <- function(x, k = integer(1), lag = integer(1), na_rm = TRUE, na_pad
 #' which_run(x2, na_rm = TRUE, k = 4)
 #' which_run(x2, na_rm = FALSE, k = k)
 #' @export
-which_run <- function(x, k = integer(1), lag = integer(1), which = "last", na_rm = TRUE, na_pad = FALSE, idx = integer(0)) {
-    .Call('_runner_which_run', PACKAGE = 'runner', x, k, lag, which, na_rm, na_pad, idx)
+which_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), which = "last", na_rm = TRUE, na_pad = FALSE) {
+    .Call('_runner_which_run', PACKAGE = 'runner', x, k, lag, idx, at, which, na_rm, na_pad)
 }
 
 #' List of running windows

@@ -2,13 +2,16 @@
 #define checks_h
 
 namespace checks {
-  inline void check_k(Rcpp::IntegerVector const& k, int n) {
+  inline void check_k(Rcpp::IntegerVector const& k, int n, std::string var) {
     if (k.size() != n and k.size() > 1) {
-      Rcpp::stop("length of k and length of x differs. length(k) should be 1 or equal to x");
+      Rcpp::stop(
+        "length of k and length of " +
+        var +
+        " differs. length(k) should be 1 or equal to " +
+        var
+      );
     } else if (Rcpp::any(Rcpp::is_na(k))) {
       Rcpp::stop("Function doesn't accept NA values in k vector");
-    } else if (k.size() == 0) {
-      Rcpp::stop("length of k should not be zero. Please specify k as single value, or don't specify for default value.");
     }
     if (k.size() == 1) {
       if (k(0) < 0) {
@@ -23,9 +26,14 @@ namespace checks {
     }
   }
 
-  inline void check_idx(Rcpp::IntegerVector const& idx, int n) {
+  inline void check_idx(Rcpp::IntegerVector const& idx, int n, std::string var) {
     if (idx.size() != n and idx.size() > 1) {
-      Rcpp::stop("length of idx and length of x differs. length(idx) should be 1 or equal to x");
+      Rcpp::stop(
+        "length of idx and length of " +
+        var +
+        " differs. length(idx) should be 1 or equal to " +
+        var
+      );
     } else if (Rcpp::any(Rcpp::is_na(idx))) {
       Rcpp::stop("Function doesn't accept NA values in idx vector");
     }
@@ -39,13 +47,22 @@ namespace checks {
     }
   }
 
-  inline void check_lag(Rcpp::IntegerVector const& lag, int n) {
+  inline void check_lag(Rcpp::IntegerVector const& lag, int n, std::string var) {
     if (lag.size() != n and lag.size() > 1) {
-      Rcpp::stop("length of lag and length of x differs. length(lag) should be 1 or equal to x");
+      Rcpp::stop("length of lag and length of " +
+                 var +
+                 " differs. length(lag) should be 1 or equal to " +
+                 var);
     } else if (Rcpp::any(Rcpp::is_na(lag))) {
       Rcpp::stop("Function doesn't accept NA values in lag vector");
     } else if (lag.size() == 0) {
-      Rcpp::stop("length of lag should not be zero. Please specify k as single value, or don't specify for default value.");
+      Rcpp::stop("length of lag should not be zero. Please specify lag as single value, or don't specify for default value.");
+    }
+  }
+
+  inline void check_at(Rcpp::IntegerVector const& at) {
+    if (Rcpp::any(Rcpp::is_na(at))) {
+      Rcpp::stop("Function doesn't accept NA values in at vector");
     }
   }
 

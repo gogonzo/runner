@@ -124,9 +124,9 @@ SEXP window_run(SEXP x,
                 IntegerVector idx = IntegerVector(0),
                 bool na_pad = false) {
   int n = Rf_length(x);
-  checks::check_k(k, n);
-  checks::check_idx(idx, n);
-  checks::check_lag(lag, n);
+  checks::check_k(k, n, "x");
+  checks::check_idx(idx, n, "x");
+  checks::check_lag(lag, n, "x");
 
 
   switch (TYPEOF(x)) {
