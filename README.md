@@ -53,7 +53,7 @@ runner(x,
 
 ## Running windows
 
-All options of the `runner` are examplained in each section below using
+All options of the `runner` are explained in each section below using
 illustrations and `window_run` function. `window_run` creates list of
 running windows with settings which can be used in `runner::runner` and
 other functions in the package.
@@ -86,7 +86,7 @@ is a single value than it is constant for all elements of x. For varying
 lag size one should specify `lag` as integer vector of `length(lag) ==
 length(x)` where each element of `lag` defines lag of window. Default
 value of `lag = 0`. Example below illustrates window of `k = 4` lagged
-by `lag = 2` for 10’th element of vector `x`. Lag can also be negative
+by `lag = 2` for 10-th element of vector `x`. Lag can also be negative
 value, which shifts window forward instead of backward.
 
 ![](man/figures/lagged_window_k_lag.png)

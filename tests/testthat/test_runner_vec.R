@@ -280,8 +280,6 @@ test_that("       |------[]+------->", {
     sum_run(x2, k = 1, lag = 1, na_pad = TRUE),
     runner(x2, k = 1, lag = 1, f = sum2, na_pad = TRUE))
 
-
-
   expect_equal(
     sum_run(x2, k = 1, lag = 1)[at],
     sum_run(x2, k = 1, lag = 1, at = seq_along(x2)[at]))
@@ -300,6 +298,9 @@ test_that("various", {
     sum_run(x2, k = k, lag = 1, na_pad = TRUE),
     runner(x2, k = k, lag = 1, f = sum2, na_pad = TRUE))
 
+  expect_equal(
+    sum_run(x2, lag = lag),
+    runner(x2, lag = lag, f = sum2))
 
   expect_equal(
     sum_run(x2, k = 3, lag = lag),
@@ -331,6 +332,10 @@ test_that("various", {
     sum_run(x2, k = k[at], lag = 1, at = seq_along(x2)[at], na_pad = TRUE))
 
   expect_equal(
+    sum_run(x2, lag = lag)[at],
+    sum_run(x2, lag = lag[at], at = seq_along(x2)[at]))
+
+  expect_equal(
     sum_run(x2, k = 3, lag = lag)[at],
     sum_run(x2, k = 3, lag = lag[at], at = seq_along(x2)[at]))
 
@@ -348,6 +353,14 @@ test_that("various", {
 })
 
 test_that("date window", {
+  expect_equal(
+    sum_run(x2, idx = idx, na_pad = FALSE),
+    runner(x2, idx = idx, f = sum2, na_pad = FALSE))
+
+  expect_equal(
+    sum_run(x2, idx = idx, na_pad = TRUE),
+    runner(x2, idx = idx, f = sum2, na_pad = TRUE))
+
   expect_equal(
     sum_run(x2, lag = 3, idx = idx, na_pad = FALSE),
     runner(x2, lag = 3, idx = idx, f = sum2, na_pad = FALSE))
@@ -421,6 +434,14 @@ test_that("date window", {
     runner(x2, k = 3, lag = -4, idx = idx, f = sum2, na_pad = TRUE))
 
   expect_equal(
+    sum_run(x2, k = k, lag = 0, idx = idx, na_pad = FALSE),
+    runner(x2, k = k, lag = 0, idx = idx, f = sum2, na_pad = FALSE))
+
+  expect_equal(
+    sum_run(x2, k = k, lag = 0, idx = idx, na_pad = TRUE),
+    runner(x2, k = k, lag = 0, idx = idx, f = sum2, na_pad = TRUE))
+
+  expect_equal(
     sum_run(x2, k = k, lag = -4, idx = idx, na_pad = FALSE),
     runner(x2, k = k, lag = -4, idx = idx, f = sum2, na_pad = FALSE))
 
@@ -436,10 +457,26 @@ test_that("date window", {
   expect_equal(
     sum_run(x2, k = 4, lag = lag, idx = idx, na_pad = TRUE),
     runner(x2, k = 4, lag = lag, idx = idx, f = sum2, na_pad = TRUE))
+
+  expect_equal(
+    sum_run(x2, k = k, lag = lag, idx = idx, na_pad = FALSE),
+    runner(x2, k = k, lag = lag, idx = idx, f = sum2, na_pad = FALSE))
+
+  expect_equal(
+    sum_run(x2, k = k, lag = lag, idx = idx, na_pad = TRUE),
+    runner(x2, k = k, lag = lag, idx = idx, f = sum2, na_pad = TRUE))
 })
 
 test_that("at date", {
   ids <- match(at_date, idx)
+  expect_equal(
+    sum_run(x2, idx = idx, na_pad = FALSE)[ids],
+    sum_run(x2, idx = idx, at = at_date, na_pad = FALSE))
+
+  expect_equal(
+    sum_run(x2, idx = idx, na_pad = TRUE)[ids],
+    sum_run(x2, idx = idx, at = at_date, na_pad = TRUE))
+
   expect_equal(
     sum_run(x2, lag = 3, idx = idx, na_pad = FALSE)[ids],
     sum_run(x2, lag = 3, idx = idx, at = at_date, na_pad = FALSE))
@@ -521,7 +558,6 @@ test_that("at date", {
     sum_run(x2, k = k, lag = -4, idx = idx, na_pad = TRUE)[ids],
     sum_run(x2, k = k[ids], lag = -4, idx = idx, at = at_date, na_pad = TRUE))
 
-
   expect_equal(
     sum_run(x2, k = 4, lag = lag, idx = idx, na_pad = FALSE)[ids],
     sum_run(x2, k = 4, lag = lag[ids], idx = idx, at = at_date, na_pad = FALSE))
@@ -529,4 +565,12 @@ test_that("at date", {
   expect_equal(
     sum_run(x2, k = 4, lag = lag, idx = idx, na_pad = TRUE)[ids],
     sum_run(x2, k = 4, lag = lag[ids], idx = idx, at = at_date, na_pad = TRUE))
+
+  expect_equal(
+    sum_run(x2, k = k, lag = lag, idx = idx, na_pad = FALSE)[ids],
+    sum_run(x2, k = k[ids], lag = lag[ids], idx = idx, at = at_date, na_pad = FALSE))
+
+  expect_equal(
+    sum_run(x2, k = k, lag = lag, idx = idx, na_pad = TRUE)[ids],
+    sum_run(x2, k = k[ids], lag = lag[ids], idx = idx, at = at_date, na_pad = TRUE))
 })

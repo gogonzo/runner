@@ -30,7 +30,7 @@ runner(x,
 ```
 
 ## Running windows
-All options of the `runner` are examplained in each section below using 
+All options of the `runner` are explained in each section below using 
 illustrations and `window_run` function. `window_run` creates list of running 
 windows with settings which can be used in `runner::runner` and other functions 
 in the package.  

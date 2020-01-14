@@ -2,6 +2,18 @@
 #define checks_h
 
 namespace checks {
+  inline void check_type(std::string type) {
+    if (type != "character" &&
+        type != "numeric" &&
+        type != "integer" &&
+        type != "logical") {
+      Rcpp::stop(
+        "Invalid output type (" +
+          type +
+          "). Please specify one of the following: 'character', 'numeric', 'integer', 'logical'");
+    }
+  }
+
   inline void check_k(Rcpp::IntegerVector const& k, int n, std::string var) {
     if (k.size() != n and k.size() > 1) {
       Rcpp::stop(

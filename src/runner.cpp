@@ -567,6 +567,7 @@ SEXP runner(const SEXP x,
   checks::check_lag(lag, nn, var);
   checks::check_idx(idx, n, var);
   checks::check_at(at);
+  checks::check_type(type);
 
     if (type == "logical") {
       switch (TYPEOF(x)) {
@@ -575,7 +576,7 @@ SEXP runner(const SEXP x,
         case REALSXP: return run<bool>(as<NumericVector>(x), k, lag, idx, at, f, na_pad);
         case STRSXP:  return run<bool>(as<StringVector>(x), k, lag, idx, at, f, na_pad);
         default: {
-          stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
+          stop("Invalid 'x' type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
         }
       }
     } else if (type == "integer") {
@@ -585,7 +586,7 @@ SEXP runner(const SEXP x,
         case REALSXP: return run<int>(as<NumericVector>(x), k, lag, idx, at, f, na_pad);
         case STRSXP:  return run<int>(as<StringVector>(x), k, lag, idx, at, f, na_pad);
         default: {
-          stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
+          stop("Invalid 'x' type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
         }
       }
     } else if (type == "numeric") {
@@ -595,7 +596,7 @@ SEXP runner(const SEXP x,
         case REALSXP: return run<double>(as<NumericVector>(x), k, lag, idx, at, f, na_pad);
         case STRSXP:  return run<double>(as<StringVector>(x), k, lag, idx, at, f, na_pad);
         default: {
-          stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
+          stop("Invalid 'x' type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
         }
       }
     } else if (type == "character") {
@@ -605,7 +606,7 @@ SEXP runner(const SEXP x,
         case REALSXP: return run<Rcpp::String>(as<NumericVector>(x), k, lag, idx, at, f, na_pad);
         case STRSXP:  return run<Rcpp::String>(as<StringVector>(x), k, lag, idx, at, f, na_pad);
         default: {
-          stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
+          stop("Invalid 'x' type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
         }
       }
     }
@@ -1192,7 +1193,6 @@ Rcpp::List
       }
     }
 
-
     return res;
 
   }
@@ -1216,10 +1216,6 @@ SEXP window_run(SEXP x,
                 IntegerVector idx = IntegerVector(0),
                 IntegerVector at = IntegerVector(0),
                 bool na_pad = false) {
-  int n = Rf_length(x);
-  checks::check_k(k, n, "x");
-  checks::check_idx(idx, n, "x");
-  checks::check_lag(lag, n, "x");
 
   switch (TYPEOF(x)) {
   case INTSXP:  return window_create(as<IntegerVector>(x), k, lag, idx, at, na_pad);
