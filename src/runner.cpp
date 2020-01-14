@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
-#include "aggregations.h"
+#include "vector_funs.h"
+#include "window_funs.h"
 #include "checks.h"
 #include "runner.h"
 #include "utils.h"
@@ -489,7 +490,6 @@ runner_vec(Rcpp::Vector<ITYPE> const& x,
 
 }
 
-
 //' Custom running function
 //'
 //' Applies custom function to running windows
@@ -881,3 +881,337 @@ Rcpp::IntegerVector which_run(
 
   return R_NilValue;
 }
+
+template <int ITYPE>
+Rcpp::List
+  window_create(
+    Rcpp::Vector<ITYPE> const& x,
+    Rcpp::IntegerVector const& k,
+    Rcpp::IntegerVector const& lag,
+    Rcpp::IntegerVector const& idx,
+    Rcpp::IntegerVector const& at,
+    bool na_pad) {
+
+    int n = x.size();
+    int nn = at.size() == 0 ? x.size() : at.size();
+    std::string var = at.size() == 0 ? "x" : "at";
+
+    checks::check_k(k, nn, var);
+    checks::check_lag(lag, nn, var);
+    checks::check_idx(idx, n, var);
+    checks::check_at(at);
+
+    Rcpp::List  res(nn);
+    IntegerVector b(2);
+
+    // Simple windows-------
+    if (at.size() == 0) {
+      if (idx.size() == 0) {
+        if (k.size() > 1 && lag.size() > 1) {
+          for (int i = 0; i < n; i++) {
+            b = utils::window_ul(i, k(i), lag(i), n, na_pad);
+            if (b.size() == 0) {
+              res(i) = Rcpp::Vector<ITYPE>(0);
+            } else {
+              res(i) = listfuns::get_window(x, b(1), b(0));
+            }
+          }
+        } else if (k.size() > 1 && lag.size() == 1) {
+          for (int i = 0; i < n; i++) {
+            b = utils::window_ul(i, k(i), lag(0), n, na_pad);
+            if (b.size() == 0) {
+              res(i) = Rcpp::Vector<ITYPE>(0);
+            } else {
+              res(i) = listfuns::get_window(x, b(1), b(0));
+            }
+          }
+        } else if (k.size() == 0 && lag.size() > 1) {
+          for (int i = 0; i < n; i++) {
+            b = utils::window_ul(i, n, lag(i), n, na_pad, true);
+            if (b.size() == 0) {
+              res(i) = Rcpp::Vector<ITYPE>(0);
+            } else {
+              res(i) = listfuns::get_window(x, b(1), b(0));
+            }
+          }
+        } else if (k.size() == 0 && lag.size() == 1) {
+          for (int i = 0; i < n; i++) {
+            b = utils::window_ul(i, n, lag(0), n, na_pad, true);
+            if (b.size() == 0) {
+              res(i) = Rcpp::Vector<ITYPE>(0);
+            } else {
+              res(i) = listfuns::get_window(x, b(1), b(0));
+            }
+          }
+        } else if (k.size() == 1 && lag.size() > 1) {
+          for (int i = 0; i < n; i++) {
+            b = utils::window_ul(i, k(0), lag(i), n, na_pad);
+            if (b.size() == 0) {
+              res(i) = Rcpp::Vector<ITYPE>(0);
+            } else {
+              res(i) = listfuns::get_window(x, b(1), b(0));
+            }
+          }
+        } else if (k.size() == 1 && lag.size() == 1) {
+          for (int i = 0; i < n; i++) {
+            b = utils::window_ul(i, k(0), lag(0), n, na_pad);
+            if (b.size() == 0) {
+              res(i) = Rcpp::Vector<ITYPE>(0);
+            } else {
+              res(i) = listfuns::get_window(x, b(1), b(0));
+            }
+          }
+        }
+
+      } else {
+        if (k.size() > 1) {
+          if (lag.size() > 1) {
+            for (int i = 0; i < n; i++) {
+              b = utils::window_ul_dl(idx, i, k(i), lag(i), n, na_pad, false);
+              if (b.size() == 0) {
+                res(i) = Rcpp::Vector<ITYPE>(0);
+              } else {
+                res(i) = listfuns::get_window(x, b(1), b(0));
+              }
+            }
+          } else {
+            for (int i = 0; i < n; i++) {
+              b = utils::window_ul_dl(idx, i, k(i), lag(0), n, na_pad, false);
+              if (b.size() == 0) {
+                res(i) = Rcpp::Vector<ITYPE>(0);
+              } else {
+                res(i) = listfuns::get_window(x, b(1), b(0));
+              }
+            }
+          }
+        } else if (k.size() == 0) {
+          if (lag.size() > 1) {
+            for (int i = 0; i < n; i++) {
+              b = utils::window_ul_dl(idx, i, n, lag(i), n, na_pad, true);
+              if (b.size() == 0) {
+                res(i) = Rcpp::Vector<ITYPE>(0);
+              } else {
+                res(i) = listfuns::get_window(x, b(1), b(0));
+              }
+            }
+          } else {
+            for (int i = 0; i < n; i++) {
+              b = utils::window_ul_dl(idx, i, n, lag(0), n, na_pad, true);
+              if (b.size() == 0) {
+                res(i) = Rcpp::Vector<ITYPE>(0);
+              } else {
+                res(i) = listfuns::get_window(x, b(1), b(0));
+              }
+            }
+          }
+        } else {
+          if (lag.size() > 1) {
+            for (int i = 0; i < n; i++) {
+              b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad, false);
+              if (b.size() == 0) {
+                res(i) = Rcpp::Vector<ITYPE>(0);
+              } else {
+                res(i) = listfuns::get_window(x, b(1), b(0));
+              }
+            }
+          } else {
+            for (int i = 0; i < n; i++) {
+              b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad, false);
+              if (b.size() == 0) {
+                res(i) = Rcpp::Vector<ITYPE>(0);
+              } else {
+                res(i) = listfuns::get_window(x, b(1), b(0));
+              }
+            }
+          }
+        }
+      }
+    } else {
+      if (idx.size() == 0) {
+        if (k.size() > 1 && lag.size() > 1) {
+          for (int i = 0; i < nn; i++) {
+            b = utils::window_ul(at(i) - 1, k(i), lag(i), n, na_pad);
+            if (b.size() == 0) {
+              res(i) = Rcpp::Vector<ITYPE>(0);
+            } else {
+              res(i) = listfuns::get_window(x, b(1), b(0));
+            }
+          }
+        } else if (k.size() > 1 && lag.size() == 1) {
+          for (int i = 0; i < nn; i++) {
+            b = utils::window_ul(at(i) - 1, k(i), lag(0), n, na_pad);
+            if (b.size() == 0) {
+              res(i) = Rcpp::Vector<ITYPE>(0);
+            } else {
+              res(i) = listfuns::get_window(x, b(1), b(0));
+            }
+          }
+        } else if (k.size() == 0 && lag.size() > 1) {
+          for (int i = 0; i < nn; i++) {
+            b = utils::window_ul(at(i) - 1, n, lag(i), n, na_pad, true);
+            if (b.size() == 0) {
+              res(i) = Rcpp::Vector<ITYPE>(0);
+            } else {
+              res(i) = listfuns::get_window(x, b(1), b(0));
+            }
+          }
+        } else if (k.size() == 0 && lag.size() == 1) {
+          for (int i = 0; i < nn; i++) {
+            b = utils::window_ul(at(i) - 1, n, lag(0), n, na_pad, true);
+            if (b.size() == 0) {
+              res(i) = Rcpp::Vector<ITYPE>(0);
+            } else {
+              res(i) = listfuns::get_window(x, b(1), b(0));
+            }
+          }
+        } else if (k.size() == 1 && lag.size() > 1) {
+          for (int i = 0; i < nn; i++) {
+            b = utils::window_ul(at(i) - 1, k(0), lag(i), n, na_pad);
+            if (b.size() == 0) {
+              res(i) = Rcpp::Vector<ITYPE>(0);
+            } else {
+              res(i) = listfuns::get_window(x, b(1), b(0));
+            }
+          }
+        } else if (k.size() == 1 && lag.size() == 1) {
+          for (int i = 0; i < nn; i++) {
+            b = utils::window_ul(at(i) - 1, k(0), lag(0), n, na_pad);
+            if (b.size() == 0) {
+              res(i) = Rcpp::Vector<ITYPE>(0);
+            } else {
+              res(i) = listfuns::get_window(x, b(1), b(0));
+            }
+          }
+        }
+
+      } else {
+        if (k.size() > 1) {
+          if (lag.size() > 1) {
+            for (int i = 0; i < nn; i++) {
+              b = utils::window_ul_at(idx, at(i), k(i), lag(i), n, na_pad, false);
+              if (b.size() == 0) {
+                res(i) = Rcpp::Vector<ITYPE>(0);
+              } else {
+                res(i) = listfuns::get_window(x, b(1), b(0));
+              }
+            }
+          } else if (lag(0) != 0){
+            for (int i = 0; i < nn; i++) {
+              b = utils::window_ul_at(idx, at(i), k(i), lag(0), n, na_pad, false);
+              if (b.size() == 0) {
+                res(i) = Rcpp::Vector<ITYPE>(0);
+              } else {
+                res(i) = listfuns::get_window(x, b(1), b(0));
+              }
+            }
+          } else {
+            for (int i = 0; i < nn; i++) {
+              b = utils::window_ul_at(idx, at(i), k(i), 0, n, na_pad, false);
+              if (b.size() == 0) {
+                res(i) = Rcpp::Vector<ITYPE>(0);
+              } else {
+                res(i) = listfuns::get_window(x, b(1), b(0));
+              }
+            }
+          }
+        } else if (k.size() == 0) {
+          if (lag.size() > 1) {
+            for (int i = 0; i < nn; i++) {
+              b = utils::window_ul_at(idx, at(i), n, lag(i), n, na_pad, true);
+              if (b.size() == 0) {
+                res(i) = Rcpp::Vector<ITYPE>(0);
+              } else {
+                res(i) = listfuns::get_window(x, b(1), b(0));
+              }
+            }
+          } else if (lag(0) != 0){
+            for (int i = 0; i < nn; i++) {
+              b = utils::window_ul_at(idx, at(i), n, lag(0), n, na_pad, true);
+              if (b.size() == 0) {
+                res(i) = Rcpp::Vector<ITYPE>(0);
+              } else {
+                res(i) = listfuns::get_window(x, b(1), b(0));
+              }
+            }
+          } else {
+            for (int i = 0; i < nn; i++) {
+              b = utils::window_ul_at(idx, at(i), n, 0, n, na_pad, true);
+              if (b.size() == 0) {
+                res(i) = Rcpp::Vector<ITYPE>(0);
+              } else {
+                res(i) = listfuns::get_window(x, b(1), b(0));
+              }
+            }
+          }
+        } else if (k.size() == 1) {
+          if (lag.size() > 1) {
+            for (int i = 0; i < nn; i++) {
+              b = utils::window_ul_at(idx, at(i), k(0), lag(i), n, na_pad, false);
+              if (b.size() == 0) {
+                res(i) = Rcpp::Vector<ITYPE>(0);
+              } else {
+                res(i) = listfuns::get_window(x, b(1), b(0));
+              }
+            }
+          } else if (lag(0) != 0) {
+            for (int i = 0; i < nn; i++) {
+              b = utils::window_ul_at(idx, at(i), k(0), lag(0), n, na_pad, false);
+              if (b.size() == 0) {
+                res(i) = Rcpp::Vector<ITYPE>(0);
+              } else {
+                res(i) = listfuns::get_window(x, b(1), b(0));
+              }
+            }
+          } else {
+            for (int i = 0; i < nn; i++) {
+              b = utils::window_ul_at(idx, at(i), k(0), 0, n, na_pad, false);
+              if (b.size() == 0) {
+                res(i) = Rcpp::Vector<ITYPE>(0);
+              } else {
+                res(i) = listfuns::get_window(x, b(1), b(0));
+              }
+            }
+          }
+        }
+      }
+    }
+
+
+    return res;
+
+  }
+
+//' List of running windows
+//'
+//' Creates list of windows
+//' @inheritParams runner
+//' @examples
+//' window_run(1:10, k = 3, lag = -1)
+//' window_run(letters[1:10], k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
+//' @export
+// [[Rcpp::export]]
+SEXP window_run(SEXP x,
+                IntegerVector k = IntegerVector(0),
+                IntegerVector lag = IntegerVector(1),
+                IntegerVector idx = IntegerVector(0),
+                IntegerVector at = IntegerVector(0),
+                bool na_pad = false) {
+  int n = Rf_length(x);
+  checks::check_k(k, n, "x");
+  checks::check_idx(idx, n, "x");
+  checks::check_lag(lag, n, "x");
+
+  switch (TYPEOF(x)) {
+  case INTSXP:  return window_create(as<IntegerVector>(x), k, lag, idx, at, na_pad);
+  case REALSXP: return window_create(as<NumericVector>(x), k, lag, idx, at, na_pad);
+  case STRSXP:  return window_create(as<CharacterVector>(x), k, lag, idx, at, na_pad);
+  case LGLSXP:  return window_create(as<LogicalVector>(x), k, lag, idx, at, na_pad);
+  default: {
+    stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
+  }
+  }
+
+  return R_NilValue;
+}
+
+

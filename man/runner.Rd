@@ -7,7 +7,7 @@
 runner(
   x,
   f,
-  k = integer(1),
+  k = integer(0),
   lag = integer(1),
   idx = integer(0),
   at = integer(0),
@@ -65,4 +65,5 @@ runner(letters[1:10],
        f = function(x) paste(x, collapse = "-"),
        at = c(1, 5, 8),
        type = "character")
+
 }

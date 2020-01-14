@@ -8,7 +8,7 @@ idx <- cumsum(sample(c(1, 2, 3, 4), 100, replace = TRUE))
 sum2 <- function(x, na_rm = TRUE) {
   if (all(is.na(x))) return(NA) else sum(x, na.rm = na_rm)
 }
-sample_id <- sample(1:100, 10)
+ids <- sample(1:100, 10)
 
 test_that("       |--------]------->", {
   expect_identical(
@@ -29,18 +29,18 @@ test_that("       |--------]------->", {
 
 
   expect_identical(
-    sum_run(x2)[sample_id],
-    sum_run(x2, at = seq_along(x2)[sample_id])
+    sum_run(x2)[ids],
+    sum_run(x2, at = seq_along(x2)[ids])
   )
 
   expect_identical(
-    sum_run(x2, na_pad = TRUE)[sample_id],
-    sum_run(x2, at = seq_along(x2)[sample_id], na_pad = TRUE)
+    sum_run(x2, na_pad = TRUE)[ids],
+    sum_run(x2, at = seq_along(x2)[ids], na_pad = TRUE)
   )
 
   expect_identical(
-    sum_run(x2, na_rm = FALSE)[sample_id],
-    sum_run(x2, at = seq_along(x2)[sample_id], na_rm = FALSE)
+    sum_run(x2, na_rm = FALSE)[ids],
+    sum_run(x2, at = seq_along(x2)[ids], na_rm = FALSE)
   )
 })
 
@@ -56,12 +56,12 @@ test_that("   [...|----]---+------->", {
 
 
   expect_equal(
-    sum_run(x2, lag = 3)[sample_id],
-    sum_run(x2, lag = 3, at = seq_along(x2)[sample_id]))
+    sum_run(x2, lag = 3)[ids],
+    sum_run(x2, lag = 3, at = seq_along(x2)[ids]))
 
   expect_equal(
-    sum_run(x2, lag = 3, na_pad = TRUE)[sample_id],
-    sum_run(x2, lag = 3, at = seq_along(x2)[sample_id], na_pad = TRUE))
+    sum_run(x2, lag = 3, na_pad = TRUE)[ids],
+    sum_run(x2, lag = 3, at = seq_along(x2)[ids], na_pad = TRUE))
 })
 
 test_that("       |--------+---]--->", {
@@ -75,12 +75,12 @@ test_that("       |--------+---]--->", {
 
 
   expect_equal(
-    sum_run(x2, lag = -3)[sample_id],
-    sum_run(x2, lag = -3, at = seq_along(x2)[sample_id]))
+    sum_run(x2, lag = -3)[ids],
+    sum_run(x2, lag = -3, at = seq_along(x2)[ids]))
 
   expect_equal(
-    sum_run(x2, lag = -3, na_pad = TRUE)[sample_id],
-    sum_run(x2, lag = -3, at = seq_along(x2)[sample_id], na_pad = TRUE))
+    sum_run(x2, lag = -3, na_pad = TRUE)[ids],
+    sum_run(x2, lag = -3, at = seq_along(x2)[ids], na_pad = TRUE))
 })
 
 test_that("  [...]|--------+------->", {
@@ -103,20 +103,20 @@ test_that("  [...]|--------+------->", {
 
 
   expect_equal(
-    sum_run(x2, lag = 100)[sample_id],
-    sum_run(x2, lag = 100, at = seq_along(x2)[sample_id]))
+    sum_run(x2, lag = 100)[ids],
+    sum_run(x2, lag = 100, at = seq_along(x2)[ids]))
 
   expect_equal(
-    sum_run(x2, lag = 100, na_pad = TRUE)[sample_id],
-    sum_run(x2, lag = 100, at = seq_along(x2), na_pad = TRUE)[sample_id])
+    sum_run(x2, lag = 100, na_pad = TRUE)[ids],
+    sum_run(x2, lag = 100, at = seq_along(x2), na_pad = TRUE)[ids])
 
   expect_equal(
-    sum_run(x2, lag = -100)[sample_id],
-    sum_run(x2, lag = -100, at = seq_along(x2)[sample_id]))
+    sum_run(x2, lag = -100)[ids],
+    sum_run(x2, lag = -100, at = seq_along(x2)[ids]))
 
   expect_equal(
-    sum_run(x2, lag = -100, na_pad = TRUE)[sample_id],
-    sum_run(x2, lag = -100, at = seq_along(x2)[sample_id], na_pad = TRUE))
+    sum_run(x2, lag = -100, na_pad = TRUE)[ids],
+    sum_run(x2, lag = -100, at = seq_along(x2)[ids], na_pad = TRUE))
 })
 
 test_that("       |----[...]------->", {
@@ -130,12 +130,12 @@ test_that("       |----[...]------->", {
 
 
   expect_equal(
-    sum_run(x2, k = 3)[sample_id],
-    sum_run(x2, k = 3, at = seq_along(x2)[sample_id]))
+    sum_run(x2, k = 3)[ids],
+    sum_run(x2, k = 3, at = seq_along(x2)[ids]))
 
   expect_equal(
-    sum_run(x2, k = 3, na_pad = TRUE)[sample_id],
-    sum_run(x2, k = 3, at = seq_along(x2)[sample_id], na_pad = TRUE))
+    sum_run(x2, k = 3, na_pad = TRUE)[ids],
+    sum_run(x2, k = 3, at = seq_along(x2)[ids], na_pad = TRUE))
 
 })
 
@@ -167,28 +167,28 @@ test_that("       [...|--------+-------[...]", {
 
 
   expect_equal(
-    sum_run(x2, k = 1)[sample_id],
-    sum_run(x2, k = 1, at = seq_along(x2)[sample_id]))
+    sum_run(x2, k = 1)[ids],
+    sum_run(x2, k = 1, at = seq_along(x2)[ids]))
 
   expect_equal(
-    sum_run(x2, k = 1, na_pad = TRUE)[sample_id],
-    sum_run(x2, k = 1, at = seq_along(x2)[sample_id], na_pad = TRUE))
+    sum_run(x2, k = 1, na_pad = TRUE)[ids],
+    sum_run(x2, k = 1, at = seq_along(x2)[ids], na_pad = TRUE))
 
   expect_equal(
-    sum_run(x2, k = 99)[sample_id],
-    sum_run(x2, k = 99, at = seq_along(x2)[sample_id]))
+    sum_run(x2, k = 99)[ids],
+    sum_run(x2, k = 99, at = seq_along(x2)[ids]))
 
   expect_equal(
-    sum_run(x2, k = 99, na_pad = TRUE)[sample_id],
-    sum_run(x2, k = 99, at = seq_along(x2)[sample_id], na_pad = TRUE))
+    sum_run(x2, k = 99, na_pad = TRUE)[ids],
+    sum_run(x2, k = 99, at = seq_along(x2)[ids], na_pad = TRUE))
 
   expect_equal(
-    sum_run(x2, k = 100)[sample_id],
-    sum_run(x2, k = 100, at = seq_along(x2)[sample_id]))
+    sum_run(x2, k = 100)[ids],
+    sum_run(x2, k = 100, at = seq_along(x2)[ids]))
 
   expect_equal(
-    sum_run(x2, k = 100, na_pad = TRUE)[sample_id],
-    sum_run(x2, k = 100, at = seq_along(x2)[sample_id], na_pad = TRUE))
+    sum_run(x2, k = 100, na_pad = TRUE)[ids],
+    sum_run(x2, k = 100, at = seq_along(x2)[ids], na_pad = TRUE))
 })
 
 test_that("       [...|----]---+------->", {
@@ -211,20 +211,20 @@ test_that("       [...|----]---+------->", {
 
 
   expect_equal(
-    sum_run(x2, k = 5, lag = 3)[sample_id],
-    sum_run(x2, k = 5, lag = 3, at = seq_along(x2)[sample_id]))
+    sum_run(x2, k = 5, lag = 3)[ids],
+    sum_run(x2, k = 5, lag = 3, at = seq_along(x2)[ids]))
 
   expect_equal(
-    sum_run(x2, k = 5, lag = 3, na_pad = TRUE)[sample_id],
-    sum_run(x2, k = 5, lag = 3, at = seq_along(x2)[sample_id], na_pad = TRUE))
+    sum_run(x2, k = 5, lag = 3, na_pad = TRUE)[ids],
+    sum_run(x2, k = 5, lag = 3, at = seq_along(x2)[ids], na_pad = TRUE))
 
   expect_equal(
-    sum_run(x2, k = 5, lag = 3, na_rm = FALSE)[sample_id],
-    sum_run(x2, k = 5, lag = 3, at = seq_along(x2)[sample_id], na_rm = FALSE))
+    sum_run(x2, k = 5, lag = 3, na_rm = FALSE)[ids],
+    sum_run(x2, k = 5, lag = 3, at = seq_along(x2)[ids], na_rm = FALSE))
 
   expect_equal(
-    sum_run(x2, k = 5, lag = 3, na_pad = TRUE, na_rm = FALSE)[sample_id],
-    sum_run(x2, k = 5, lag = 3, at = seq_along(x2)[sample_id], na_pad = TRUE, na_rm = FALSE))
+    sum_run(x2, k = 5, lag = 3, na_pad = TRUE, na_rm = FALSE)[ids],
+    sum_run(x2, k = 5, lag = 3, at = seq_along(x2)[ids], na_pad = TRUE, na_rm = FALSE))
 })
 
 test_that("       |-----[--+---]--->", {
@@ -247,20 +247,20 @@ test_that("       |-----[--+---]--->", {
 
 
   expect_equal(
-    sum_run(x2, k = 5, lag = -3)[sample_id],
-    sum_run(x2, k = 5, lag = -3, at = seq_along(x2)[sample_id]))
+    sum_run(x2, k = 5, lag = -3)[ids],
+    sum_run(x2, k = 5, lag = -3, at = seq_along(x2)[ids]))
 
   expect_equal(
-    sum_run(x2, k = 5, lag = -3, na_pad = TRUE)[sample_id],
-    sum_run(x2, k = 5, lag = -3, at = seq_along(x2)[sample_id], na_pad = TRUE))
+    sum_run(x2, k = 5, lag = -3, na_pad = TRUE)[ids],
+    sum_run(x2, k = 5, lag = -3, at = seq_along(x2)[ids], na_pad = TRUE))
 
   expect_equal(
-    sum_run(x2, k = 5, lag = -3, na_rm = FALSE)[sample_id],
-    sum_run(x2, k = 5, lag = -3, at = seq_along(x2)[sample_id], na_rm = FALSE))
+    sum_run(x2, k = 5, lag = -3, na_rm = FALSE)[ids],
+    sum_run(x2, k = 5, lag = -3, at = seq_along(x2)[ids], na_rm = FALSE))
 
   expect_equal(
-    sum_run(x2, k = 5, lag = -3, na_pad = TRUE, na_rm = FALSE)[sample_id],
-    sum_run(x2, k = 5, lag = -3, at = seq_along(x2)[sample_id], na_pad = TRUE, na_rm = FALSE))
+    sum_run(x2, k = 5, lag = -3, na_pad = TRUE, na_rm = FALSE)[ids],
+    sum_run(x2, k = 5, lag = -3, at = seq_along(x2)[ids], na_pad = TRUE, na_rm = FALSE))
 })
 
 test_that("       |--------+-[---]->", {
@@ -275,12 +275,12 @@ test_that("       |--------+-[---]->", {
 
 
   expect_equal(
-    sum_run(x2, k = 5, lag = -7)[sample_id],
-    sum_run(x2, k = 5, lag = -7, at = seq_along(x2)[sample_id]))
+    sum_run(x2, k = 5, lag = -7)[ids],
+    sum_run(x2, k = 5, lag = -7, at = seq_along(x2)[ids]))
 
   expect_equal(
-    sum_run(x2, k = 5, lag = -7, na_pad = TRUE)[sample_id],
-    sum_run(x2, k = 5, lag = -7, at = seq_along(x2)[sample_id], na_pad = TRUE))
+    sum_run(x2, k = 5, lag = -7, na_pad = TRUE)[ids],
+    sum_run(x2, k = 5, lag = -7, at = seq_along(x2)[ids], na_pad = TRUE))
 
 })
 
@@ -296,12 +296,12 @@ test_that("       |--------+[]----->", {
 
 
   expect_equal(
-    sum_run(x2, k = 1, lag = -1)[sample_id],
-    sum_run(x2, k = 1, lag = -1, at = seq_along(x2)[sample_id]))
+    sum_run(x2, k = 1, lag = -1)[ids],
+    sum_run(x2, k = 1, lag = -1, at = seq_along(x2)[ids]))
 
   expect_equal(
-    sum_run(x2, k = 1, lag = -1, na_pad = TRUE)[sample_id],
-    sum_run(x2, k = 1, lag = -1, at = seq_along(x2)[sample_id], na_pad = TRUE))
+    sum_run(x2, k = 1, lag = -1, na_pad = TRUE)[ids],
+    sum_run(x2, k = 1, lag = -1, at = seq_along(x2)[ids], na_pad = TRUE))
 })
 
 test_that("       |------[]+------->", {
@@ -316,12 +316,12 @@ test_that("       |------[]+------->", {
 
 
   expect_equal(
-    sum_run(x2, k = 1, lag = 1)[sample_id],
-    sum_run(x2, k = 1, lag = 1, at = seq_along(x2)[sample_id]))
+    sum_run(x2, k = 1, lag = 1)[ids],
+    sum_run(x2, k = 1, lag = 1, at = seq_along(x2)[ids]))
 
   expect_equal(
-    sum_run(x2, k = 1, lag = 1, na_pad = TRUE)[sample_id],
-    sum_run(x2, k = 1, lag = 1, at = seq_along(x2)[sample_id], na_pad = TRUE))
+    sum_run(x2, k = 1, lag = 1, na_pad = TRUE)[ids],
+    sum_run(x2, k = 1, lag = 1, at = seq_along(x2)[ids], na_pad = TRUE))
 })
 
 test_that("various", {

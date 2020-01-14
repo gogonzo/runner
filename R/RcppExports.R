@@ -258,7 +258,7 @@ which_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at 
 #' window_run(1:10, k = 3, lag = -1)
 #' window_run(letters[1:10], k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
 #' @export
-window_run <- function(x, k = integer(1), lag = integer(1), idx = integer(0), na_pad = FALSE) {
-    .Call('_runner_window_run', PACKAGE = 'runner', x, k, lag, idx, na_pad)
+window_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_pad = FALSE) {
+    .Call('_runner_window_run', PACKAGE = 'runner', x, k, lag, idx, at, na_pad)
 }
 
