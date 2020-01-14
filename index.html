@@ -124,7 +124,7 @@
 <div id="running-windows" class="section level2">
 <h2 class="hasAnchor">
 <a href="#running-windows" class="anchor"></a>Running windows</h2>
-<p>All options of the <code>runner</code> are examplained in each section below using illustrations and <code>window_run</code> function. <code>window_run</code> creates list of running windows with settings which can be used in <code><a href="reference/runner.html">runner::runner</a></code> and other functions in the package.</p>
+<p>All options of the <code>runner</code> are explained in each section below using illustrations and <code>window_run</code> function. <code>window_run</code> creates list of running windows with settings which can be used in <code><a href="reference/runner.html">runner::runner</a></code> and other functions in the package.</p>
 <p>Following diagram illustrates what running windows are - in this case running windows of length <code>k = 4</code>. For each of 15 elements of a vector each window contains current 4 elements.</p>
 <p><img src="reference/figures/running_windows_explain.png"></p>
 <div id="window-size" class="section level3">
@@ -137,7 +137,7 @@
 <div id="window-lag" class="section level3">
 <h3 class="hasAnchor">
 <a href="#window-lag" class="anchor"></a>Window lag</h3>
-<p><code>lag</code> denotes how many observations windows will be lagged by. If <code>lag</code> is a single value than it is constant for all elements of x. For varying lag size one should specify <code>lag</code> as integer vector of <code>length(lag) == length(x)</code> where each element of <code>lag</code> defines lag of window. Default value of <code>lag = 0</code>. Example below illustrates window of <code>k = 4</code> lagged by <code>lag = 2</code> for 10’th element of vector <code>x</code>. Lag can also be negative value, which shifts window forward instead of backward.</p>
+<p><code>lag</code> denotes how many observations windows will be lagged by. If <code>lag</code> is a single value than it is constant for all elements of x. For varying lag size one should specify <code>lag</code> as integer vector of <code>length(lag) == length(x)</code> where each element of <code>lag</code> defines lag of window. Default value of <code>lag = 0</code>. Example below illustrates window of <code>k = 4</code> lagged by <code>lag = 2</code> for 10-th element of vector <code>x</code>. Lag can also be negative value, which shifts window forward instead of backward.</p>
 <p><img src="reference/figures/lagged_window_k_lag.png"></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="reference/window_run.html">window_run</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">15</span>, <span class="dt">k =</span> <span class="dv">4</span>, <span class="dt">lag =</span> <span class="dv">2</span>)</a></code></pre></div>
 </div>
