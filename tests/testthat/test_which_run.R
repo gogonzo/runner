@@ -251,6 +251,7 @@ test_that("idx", {
 })
 
 test_that("Errors", {
+  expect_error(which_run(x1, which = "any"), "which value should be either")
   expect_error(which_run(x1, k = (1:999)), "length of k and length of x differs")
   expect_error(which_run(x1, k = c(NA, k[-1])), "Function doesn't accept NA values in k vector")
 

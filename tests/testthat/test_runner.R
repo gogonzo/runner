@@ -331,6 +331,16 @@ test_that("various", {
 
 test_that("date window", {
   expect_equal(
+    runner(x1, idx = idx, f = mean),
+    sapply(window_run(x1, idx = idx), mean)
+  )
+
+  expect_equal(
+    runner(x2, idx = idx, f = mean, na_pad = TRUE),
+    sapply(window_run(x2, idx = idx, na_pad = TRUE), mean)
+  )
+
+  expect_equal(
     runner(x1, lag = 3, idx = idx, f = mean),
     sapply(window_run(x1, lag = 3, idx = idx), mean)
   )
@@ -424,6 +434,16 @@ test_that("date window", {
   expect_equal(
     runner(x1, k = 3, lag = lag, idx = idx, f = mean),
     sapply(window_run(x1, k = 3, lag = lag, idx = idx), mean)
+  )
+
+  expect_equal(
+    runner(x2, k = k, lag = 3, idx = idx, f = mean, na_pad = TRUE),
+    sapply(window_run(x2, k = k, lag = 3, idx = idx, na_pad = TRUE), mean)
+  )
+
+  expect_equal(
+    runner(x1, k = k, lag = lag, idx = idx, f = mean),
+    sapply(window_run(x1, k = k, lag = lag, idx = idx), mean)
   )
 
   expect_equal(
@@ -612,13 +632,23 @@ test_that("i/o type at", {
 test_that("at date window", {
   ids <- match(at_date, idx)
   expect_equal(
-    runner(x1, lag = 3, idx = idx, f = mean)[ids],
-    runner(x1, lag = 3, idx = idx, at = at_date, f = mean)
+    runner(x1, idx = idx, f = mean)[ids],
+    runner(x1, idx = idx, at = at_date, f = mean)
   )
 
   expect_equal(
-    runner(x1, lag = 3, idx = idx, f = mean)[ids],
-    runner(x1, lag = 3, idx = idx, at = at_date, f = mean)
+    runner(x1, idx = idx, f = mean)[ids],
+    runner(x1, idx = idx, at = at_date, f = mean)
+  )
+
+  expect_equal(
+    runner(x1, lag = 3, idx = idx, f = mean, na_pad = FALSE)[ids],
+    runner(x1, lag = 3, idx = idx, at = at_date, f = mean, na_pad = FALSE)
+  )
+
+  expect_equal(
+    runner(x1, lag = 3, idx = idx, f = mean, na_pad = TRUE)[ids],
+    runner(x1, lag = 3, idx = idx, at = at_date, f = mean, na_pad = TRUE)
   )
 
   expect_equal(
@@ -716,14 +746,28 @@ test_that("at date window", {
     runner(x2, k = k, lag = 3, idx = idx, f = mean, na_pad = TRUE)[ids],
     runner(x2, k = k[ids], lag = 3, idx = idx, at = at_date, f = mean, na_pad = TRUE)
   )
+
+  expect_equal(
+    runner(x1, k = k, lag = lag, idx = idx, f = mean)[ids],
+    runner(x1, k = k[ids], lag = lag[ids], idx = idx, at = at_date, f = mean)
+  )
+
+  expect_equal(
+    runner(x2, k = k, lag = lag, idx = idx, f = mean, na_pad = TRUE)[ids],
+    runner(x2, k = k[ids], lag = lag[ids], idx = idx, at = at_date, f = mean, na_pad = TRUE)
+  )
 })
 
 test_that("Errors", {
   expect_error(runner(x = letters[1:5]))
   expect_error(runner(x = letters[1:5], f = ""))
 
-  expect_error(runner(list(1:10), k = 5, f = mean),
-               "Invalid data type")
+  expect_error(runner(list(1:10), k = 5, f = mean), "Invalid \\'x\\' type")
+  expect_error(runner(list(1:10), k = 5, f = mean, type = "character"), "Invalid \\'x\\' type")
+  expect_error(runner(list(1:10), k = 5, f = mean, type = "integer"), "Invalid \\'x\\' type")
+  expect_error(runner(list(1:10), k = 5, f = mean, type = "logical"), "Invalid \\'x\\' type")
+  expect_error(runner(1:10, k = 5, f = mean, type = "wrong type"), "Invalid output type")
+
   expect_error(runner(1:10, k = -5, f = mean),
                "k can't be negative")
 
