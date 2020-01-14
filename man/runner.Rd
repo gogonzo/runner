@@ -18,7 +18,7 @@ runner(
 \arguments{
 \item{x}{Vector of any type}
 
-\item{f}{\code{function} to be applied on \code{x}}
+\item{f}{\code{function} to be applied on windows created from \code{x}}
 
 \item{k}{\code{integer} vector or single value denoting size of the running
 window. If \code{k} is a single value then window size is constant for all

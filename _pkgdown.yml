@@ -17,6 +17,7 @@ reference:
       - max_run
       - streak_run
       - sum_run
+      - minmax_run
   - title: "Utility functions"
     desc: "Functions applied in running window"
     contents:
@@ -24,8 +25,3 @@ reference:
      - lag_run
      - which_run
 
-article:
-
-template:
-  params:
-    bootswatch: cerulean

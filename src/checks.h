@@ -47,7 +47,9 @@ namespace checks {
     }
   }
 
-  inline void check_lag(Rcpp::IntegerVector const& lag, int n, std::string var) {
+  inline void check_lag(Rcpp::IntegerVector const& lag,
+                        int n,
+                        std::string var) {
     if (lag.size() != n and lag.size() > 1) {
       Rcpp::stop("length of lag and length of " +
                  var +

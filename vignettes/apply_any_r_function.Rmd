@@ -1,46 +1,16 @@
 ---
-output: github_document
+title: "Apply any R function on rolling windows"
+author: "Dawid Kałędkowski"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{The runner package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-```
-
-# `runner` an R package for running operations.
-
-# <img src="man/figures/hexlogo.png" align="right" />
-
-<!-- badges: start -->
-[![](https://cranlogs.r-pkg.org/badges/runner)](https://CRAN.R-project.org/package=runner)
-[![](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner)
-[![](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner)
-[![](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)](https://codecov.io/gh/gogonzo/runner/branch/master)
-<!-- badges: end -->
-
-## About
-Package contains standard running functions (aka. rolling) with additional 
-options like varying window size, lagging, handling missings and windows 
-depending on date. `runner` brings also rolling  streak and rolling which, what 
-extends beyond range of functions already implemented in R packages. This 
-package can be successfully used to manipulate and aggregate time series or 
-longitudinal data.
-
-## Installation
-
-Install package from from GitHub or from CRAN.
-
-```{r gh-installation, eval=FALSE}
-# devtools::install_github("gogonzo/runner")
-install.packages("runner")
-```
-
 ## Using runner
-![](man/figures/using_runner.png)
+![](images/using_runner.png)
 `runner` package provides functions applied on running windows. The most 
 universal function is `runner::runner` which gives user possibility to apply 
 any R function `f` in running window. R function `f` should return single value 
@@ -69,7 +39,7 @@ Following diagram illustrates what running windows are - in this case running
 windows of length `k = 4`. For each of 15 elements of a vector each window 
 contains current 4 elements.
 
-![](man/figures/running_windows_explain.png)
+![](images/running_windows_explain.png)
 
 
 ### Window size
@@ -80,10 +50,12 @@ defines window length. If `k` is empty it means that window will be cumulative
 (like `base::cumsum`). Example below illustrates window of `k = 4` for 10th 
 element of vector `x`.  
 
-![](man/figures/constant_window.png)
+![](images/constant_window.png)
 
 ```{r eval=FALSE}
-window_run(1:15, k = 4)
+runner::runner(x = 1:15, 
+               k = 4, 
+               f = function(x) mean(x))
 ```
 
 ### Window lag
@@ -95,9 +67,12 @@ below illustrates window of `k = 4` lagged by `lag = 2` for 10'th element of
 vector `x`. Lag can also be negative value, which shifts window forward instead 
 of backward.
 
-![](man/figures/lagged_window_k_lag.png)
+![](images/lagged_window_k_lag.png)
 ```{r eval=FALSE}
-window_run(1:15, k = 4, lag = 2)
+runner::runner(x = 1:15, 
+               k = 4, 
+               lag = 2,
+               f = function(x) mean(x))
 ```
 
 ### Windows depending on date
@@ -110,14 +85,15 @@ will denote number of periods in window different for each data point. Example
 below illustrates window of size `k = 5` lagged by `lag = 2`. In parentheses 
 ranges for each window.
 
-![](man/figures/running_date_windows_explain.png)
+![](images/running_date_windows_explain.png)
 
 ```{r eval=FALSE}
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
-window_run(x = 1:14, 
-           k = 5, 
-           lag = 1, 
-           idx = idx)
+runner::runner(x = 1:15, 
+               k = 5,
+               lag = 1,
+               idx = idx,
+               f = function(x) mean(x))
 ```
 
 ### running at
@@ -128,14 +104,15 @@ calculates function. Below illustrates output of runner for `at = c(13, 27, 45, 
 which gives windows in ranges enclosed in square brackets. Range for `at = 27` is
 `[22, 26]` which is not available in current indices.  
 
-![](man/figures/runner_at_date.png)
+![](images/runner_at_date.png)
 ```{r eval=FALSE}
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
-window_run(x = idx, 
-           k = 5, 
-           lag = 1, 
-           idx = idx, 
-           at = c(18, 27, 48, 31))
+runner::runner(x = 1:15, 
+               k = 5,
+               lag = 1,
+               idx = idx,
+               at = c(18, 27, 48, 31),
+               f = function(x) mean(x))
 ```
 
 
@@ -150,16 +127,17 @@ windows exceed range given by `idx` so for these windows are empty for
 (no single element within `[-2, 3]`) and last window will return elements within
 matching `idx`.
 
-![](man/figures/runner_at_date_na_pad.png)
+![](images/runner_at_date_na_pad.png)
 
 ```{r eval=FALSE}
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
-window_run(x = idx, 
-           k = 5, 
-           lag = 1, 
-           idx = idx, 
-           at = c(4, 18, 48, 51),
-           na_pad = TRUE)
+runner::runner(x = 1:15, 
+               k = 5, 
+               lag = 1, 
+               idx = idx, 
+               at = c(4, 18, 48, 51),
+               na_pad = TRUE,
+               f = function(x) mean(x))
 ```
 
 ### Build-in functions

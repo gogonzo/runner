@@ -16,7 +16,7 @@ to original topic on [stack-overflow](https://stackoverflow.com).
 
 ### Number of unique elements in 7 days window
 
-```{r}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 library(runner)
 x <- sample(letters, 20, replace = TRUE)
 date <- as.Date(cumsum(sample(1:5, 20, replace = TRUE)), origin = Sys.Date()) # unequaly spaced time series
@@ -26,7 +26,7 @@ runner(x, k = 7, idx = date, f = function(x) length(unique(x)))
 
 ### weekly trimmed mean
 
-```{r}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 x <- cumsum(rnorm(20))
 date <- as.Date(cumsum(sample(1:5, 20, replace = TRUE)), origin = Sys.Date()) # unequaly spaced time series
 
@@ -35,7 +35,7 @@ runner(x, k = 7, idx = date, f = function(x) mean(x, trim = 0.05))
 
 ### 2 weeks regression
 
-```{r}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 x <- cumsum(rnorm(20))
 y <- 3 * x + rnorm(20)
 date <- as.Date(cumsum(sample(1:3, 20, replace = TRUE)), origin = Sys.Date()) # unequaly spaced time series
@@ -56,7 +56,7 @@ lines(data$date, data$pred, col = "blue")
 
 [SO discussion](https://stackoverflow.com/a/58167952/3495076)
 
-```{r}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 library(dplyr)
 set.seed(3737)
 df <- data.frame(
@@ -76,7 +76,7 @@ df %>%
 
 [SO discussion](https://stackoverflow.com/questions/41693081/)
 
-```{r}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 library(runner)
 df <- read.table(text = "  user_id       date category
        27 2016-01-01    apple
