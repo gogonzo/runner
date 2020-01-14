@@ -12,8 +12,8 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -92,13 +92,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/apply_any_r_function.html">Apply any R function on rolling windows</a>
+    </li>
+    <li>
       <a href="../articles/built-in_functions.html">Built-in functions</a>
     </li>
     <li>
       <a href="../articles/runner_examples.html">Runner examples</a>
-    </li>
-    <li>
-      <a href="../articles/the_runner_package.html">The runner package</a>
     </li>
   </ul>
 </li>
@@ -132,11 +132,12 @@
 
     <pre class="usage"><span class='fu'>mean_run</span>(
   <span class='no'>x</span>,
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>1</span>),
+  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0</span>),
   <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>1</span>),
+  <span class='kw'>idx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0</span>),
+  <span class='kw'>at</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0</span>),
   <span class='kw'>na_rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>na_pad</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>idx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0</span>)
+  <span class='kw'>na_pad</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -161,6 +162,20 @@ otherwise if <code>length(lag) == length(x)</code> different window size for eac
 element. Negative value shifts window forward.</p></td>
     </tr>
     <tr>
+      <th>idx</th>
+      <td><p><code>date or integer</code> an optional integer vector containing
+index of observation. If specified
+then <code>k</code> and <code>lag</code> are depending on <code>idx</code>. Length of
+<code>idx</code> should be equal of length <code>x</code></p></td>
+    </tr>
+    <tr>
+      <th>at</th>
+      <td><p><code>date or integer</code> vector of any size and any value
+defining output data points. Values of the vector defines the indexes which
+data is computed at. If <code>idx</code> is missing then indexes are
+<code><a href='https://rdrr.io/r/base/seq.html'>seq_along(x)</a></code>, otherwise depends on indexes passed with <code>idx</code>.</p></td>
+    </tr>
+    <tr>
       <th>na_rm</th>
       <td><p><code>logical</code> single value (default <code>na_rm = TRUE</code>) -
 if <code>TRUE</code> sum is calculating excluding <code>NA</code>.</p></td>
@@ -170,13 +185,6 @@ if <code>TRUE</code> sum is calculating excluding <code>NA</code>.</p></td>
       <td><p><code>logical</code> single value (default <code>na_pad=FALSE</code>) - if
 <code>TRUE</code> calculation on incomplete window will return <code>NA</code>.
 Incomplete window is when some parts of the window are out of range</p></td>
-    </tr>
-    <tr>
-      <th>idx</th>
-      <td><p><code>date or integer</code> an optional integer vector containing
-index of observation. If specified
-then <code>k</code> and <code>lag</code> are depending on <code>idx</code>. Length of
-<code>idx</code> should be equal of length <code>x</code></p></td>
     </tr>
     </table>
 

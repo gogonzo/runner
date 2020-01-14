@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Runner examples • runner</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -54,13 +54,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/apply_any_r_function.html">Apply any R function on rolling windows</a>
+    </li>
+    <li>
       <a href="../articles/built-in_functions.html">Built-in functions</a>
     </li>
     <li>
       <a href="../articles/runner_examples.html">Runner examples</a>
-    </li>
-    <li>
-      <a href="../articles/the_runner_package.html">The runner package</a>
     </li>
   </ul>
 </li>
@@ -101,7 +101,7 @@
 <a class="sourceLine" id="cb1-3" data-line-number="3">date &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">20</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)), <span class="dt">origin =</span> <span class="kw"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>()) <span class="co"># unequaly spaced time series</span></a>
 <a class="sourceLine" id="cb1-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="../reference/runner.html">runner</a></span>(x, <span class="dt">k =</span> <span class="dv">7</span>, <span class="dt">idx =</span> date, <span class="dt">f =</span> <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(x)))</a></code></pre></div>
-<pre><code>##  [1] 1 2 3 2 3 3 2 2 3 3 2 2 2 2 3 4 4 3 2 2</code></pre>
+<pre><code>##  [1] 1 2 3 2 2 2 2 2 2 3 2 3 2 2 3 4 3 3 3 2</code></pre>
 </div>
 <div id="weekly-trimmed-mean" class="section level3">
 <h3 class="hasAnchor">
@@ -110,10 +110,10 @@
 <a class="sourceLine" id="cb3-2" data-line-number="2">date &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">20</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)), <span class="dt">origin =</span> <span class="kw"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>()) <span class="co"># unequaly spaced time series</span></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb3-4" data-line-number="4"><span class="kw"><a href="../reference/runner.html">runner</a></span>(x, <span class="dt">k =</span> <span class="dv">7</span>, <span class="dt">idx =</span> date, <span class="dt">f =</span> <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(x, <span class="dt">trim =</span> <span class="fl">0.05</span>))</a></code></pre></div>
-<pre><code>##  [1] -0.9919722 -0.3246399 -0.6753750 -1.2490400 -2.5758098 -3.2833879
-##  [7] -4.6958919 -4.4878877 -4.4739861 -5.2943955 -5.2257999 -5.7213669
-## [13] -5.5751954 -5.7744131 -5.6758784 -5.6848161 -5.7824944 -5.7686220
-## [19] -6.3957285 -7.2204895</code></pre>
+<pre><code>##  [1] -0.6493722 -0.1304217  0.3983186  1.0807504  0.9547238  0.3970772
+##  [7]  0.4613813 -0.3457704 -1.3077507 -2.9595914 -2.8218689 -2.1962012
+## [13] -1.7995161 -2.0176755 -1.9981119 -1.4766867 -1.1371348 -1.1981536
+## [19] -1.2153787 -1.5893881</code></pre>
 </div>
 <div id="weeks-regression" class="section level3">
 <h3 class="hasAnchor">
@@ -137,26 +137,18 @@
 <h3 class="hasAnchor">
 <a href="#rolling-sums-for-groups-with-uneven-time-gaps" class="anchor"></a>Rolling sums for groups with uneven time gaps</h3>
 <p><a href="https://stackoverflow.com/a/58167952/3495076">SO discussion</a></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a></code></pre></div>
-<pre><code>## 
-## Attaching package: 'dplyr'</code></pre>
-<pre><code>## The following objects are masked from 'package:stats':
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">3737</span>)</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">df &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">  <span class="dt">user_id =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="dv">27</span>, <span class="dv">7</span>), <span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="dv">11</span>, <span class="dv">7</span>)),</a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">  <span class="dt">date =</span> <span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'2016-01-01'</span>, <span class="st">'2016-01-03'</span>, <span class="st">'2016-01-05'</span>, <span class="st">'2016-01-07'</span>, <span class="st">'2016-01-10'</span>, <span class="st">'2016-01-14'</span>, <span class="st">'2016-01-16'</span>), <span class="dv">2</span>)),</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5">  <span class="dt">value =</span> <span class="kw"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="dv">14</span>, <span class="dv">15</span>, <span class="dv">5</span>), <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb10-7" data-line-number="7">df <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(user_id) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
-<a class="sourceLine" id="cb10-10" data-line-number="10">    <span class="dt">v_minus7  =</span> <span class="kw"><a href="../reference/sum_run.html">sum_run</a></span>(value, <span class="dv">7</span>, <span class="dt">idx =</span> date),</a>
-<a class="sourceLine" id="cb10-11" data-line-number="11">    <span class="dt">v_minus14 =</span> <span class="kw"><a href="../reference/sum_run.html">sum_run</a></span>(value, <span class="dv">14</span>, <span class="dt">idx =</span> date))</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">3737</span>)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">df &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">  <span class="dt">user_id =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="dv">27</span>, <span class="dv">7</span>), <span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="dv">11</span>, <span class="dv">7</span>)),</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">  <span class="dt">date =</span> <span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'2016-01-01'</span>, <span class="st">'2016-01-03'</span>, <span class="st">'2016-01-05'</span>, <span class="st">'2016-01-07'</span>, <span class="st">'2016-01-10'</span>, <span class="st">'2016-01-14'</span>, <span class="st">'2016-01-16'</span>), <span class="dv">2</span>)),</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">  <span class="dt">value =</span> <span class="kw"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="dv">14</span>, <span class="dv">15</span>, <span class="dv">5</span>), <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">df <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(user_id) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
+<a class="sourceLine" id="cb6-11" data-line-number="11">    <span class="dt">v_minus7  =</span> <span class="kw"><a href="../reference/sum_run.html">sum_run</a></span>(value, <span class="dv">7</span>, <span class="dt">idx =</span> date),</a>
+<a class="sourceLine" id="cb6-12" data-line-number="12">    <span class="dt">v_minus14 =</span> <span class="kw"><a href="../reference/sum_run.html">sum_run</a></span>(value, <span class="dv">14</span>, <span class="dt">idx =</span> date))</a></code></pre></div>
 <pre><code>## # A tibble: 14 x 5
 ## # Groups:   user_id [2]
 ##    user_id date       value v_minus7 v_minus14
@@ -180,29 +172,29 @@
 <h3 class="hasAnchor">
 <a href="#unique-for-specified-time-frame" class="anchor"></a>Unique for specified time frame</h3>
 <p><a href="https://stackoverflow.com/questions/41693081/">SO discussion</a></p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(runner)</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">df &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span>(<span class="dt">text =</span> <span class="st">"  user_id       date category</span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="st">       27 2016-01-01    apple</span></a>
-<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="st">       27 2016-01-03    apple</span></a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="st">       27 2016-01-05     pear</span></a>
-<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="st">       27 2016-01-07     plum</span></a>
-<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="st">       27 2016-01-10    apple</span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="st">       27 2016-01-14     pear</span></a>
-<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="st">       27 2016-01-16     plum</span></a>
-<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="st">       11 2016-01-01    apple</span></a>
-<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="st">       11 2016-01-03     pear</span></a>
-<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="st">       11 2016-01-05     pear</span></a>
-<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="st">       11 2016-01-07     pear</span></a>
-<a class="sourceLine" id="cb12-14" data-line-number="14"><span class="st">       11 2016-01-10    apple</span></a>
-<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="st">       11 2016-01-14    apple</span></a>
-<a class="sourceLine" id="cb12-16" data-line-number="16"><span class="st">       11 2016-01-16    apple"</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb12-17" data-line-number="17"></a>
-<a class="sourceLine" id="cb12-18" data-line-number="18">df <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb12-19" data-line-number="19"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(user_id) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb12-20" data-line-number="20"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
-<a class="sourceLine" id="cb12-21" data-line-number="21">    <span class="dt">distinct_7  =</span> <span class="kw"><a href="../reference/runner.html">runner</a></span>(category, <span class="dt">k =</span>  <span class="dv">7</span>, <span class="dt">idx =</span> date, <span class="dt">f =</span> <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(x))),</a>
-<a class="sourceLine" id="cb12-22" data-line-number="22">    <span class="dt">distinct_14 =</span> <span class="kw"><a href="../reference/runner.html">runner</a></span>(category, <span class="dt">k =</span> <span class="dv">14</span>, <span class="dt">idx =</span> date, <span class="dt">f =</span> <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(x)))</a>
-<a class="sourceLine" id="cb12-23" data-line-number="23">  )</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(runner)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">df &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span>(<span class="dt">text =</span> <span class="st">"  user_id       date category</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="st">       27 2016-01-01    apple</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="st">       27 2016-01-03    apple</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="st">       27 2016-01-05     pear</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="st">       27 2016-01-07     plum</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="st">       27 2016-01-10    apple</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="st">       27 2016-01-14     pear</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="st">       27 2016-01-16     plum</span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="st">       11 2016-01-01    apple</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="st">       11 2016-01-03     pear</span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="st">       11 2016-01-05     pear</span></a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="st">       11 2016-01-07     pear</span></a>
+<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="st">       11 2016-01-10    apple</span></a>
+<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="st">       11 2016-01-14    apple</span></a>
+<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="st">       11 2016-01-16    apple"</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb8-17" data-line-number="17"></a>
+<a class="sourceLine" id="cb8-18" data-line-number="18">df <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(user_id) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
+<a class="sourceLine" id="cb8-21" data-line-number="21">    <span class="dt">distinct_7  =</span> <span class="kw"><a href="../reference/runner.html">runner</a></span>(category, <span class="dt">k =</span>  <span class="dv">7</span>, <span class="dt">idx =</span> date, <span class="dt">f =</span> <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(x))),</a>
+<a class="sourceLine" id="cb8-22" data-line-number="22">    <span class="dt">distinct_14 =</span> <span class="kw"><a href="../reference/runner.html">runner</a></span>(category, <span class="dt">k =</span> <span class="dv">14</span>, <span class="dt">idx =</span> date, <span class="dt">f =</span> <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(x)))</a>
+<a class="sourceLine" id="cb8-23" data-line-number="23">  )</a></code></pre></div>
 <pre><code>## # A tibble: 14 x 5
 ## # Groups:   user_id [2]
 ##    user_id date       category distinct_7 distinct_14

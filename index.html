@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Running Operations for Vectors • runner</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -57,13 +57,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/apply_any_r_function.html">Apply any R function on rolling windows</a>
+    </li>
+    <li>
       <a href="articles/built-in_functions.html">Built-in functions</a>
     </li>
     <li>
       <a href="articles/runner_examples.html">Runner examples</a>
-    </li>
-    <li>
-      <a href="articles/the_runner_package.html">The runner package</a>
     </li>
   </ul>
 </li>
@@ -92,11 +92,12 @@
 <h1 class="hasAnchor">
 <a href="#section" class="anchor"></a><img src="reference/figures/hexlogo.png" align="right">
 </h1>
+<!-- badges: start -->
 
 <div id="about" class="section level2">
 <h2 class="hasAnchor">
 <a href="#about" class="anchor"></a>About</h2>
-<p>Package contains standard running functions (aka. windowed, rolling, cumulative) with additional options. <code>runner</code> provides extended functionality like date windows, handling missings and varying window size. <code>runner</code> brings also rolling streak and rolling which, what extends beyond range of functions already implemented in R packages.</p>
+<p>Package contains standard running functions (aka. rolling) with additional options like varying window size, lagging, handling missings and windows depending on date. <code>runner</code> brings also rolling streak and rolling which, what extends beyond range of functions already implemented in R packages. This package can be successfully used to manipulate and aggregate time series or longitudinal data.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -108,56 +109,81 @@
 <div id="using-runner" class="section level2">
 <h2 class="hasAnchor">
 <a href="#using-runner" class="anchor"></a>Using runner</h2>
-<p><code>runner</code> package provides functions applied on running windows. Diagram below illustrates what running windows are - in this case running <code>k = 4</code> windows. For each of 15 elements of a vector each window contains current 4 elements.</p>
+<p><img src="reference/figures/using_runner.png"><code>runner</code> package provides functions applied on running windows. The most universal function is <code><a href="reference/runner.html">runner::runner</a></code> which gives user possibility to apply any R function <code>f</code> in running window. R function <code>f</code> should return single value for each window. In example below trimmed mean is calculated on 14-days window.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(runner)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">x &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="dv">20</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">dates &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/seq.Date.html">seq.Date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>(), <span class="kw"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>() <span class="op">+</span><span class="st"> </span><span class="dv">19</span>, <span class="dt">by =</span> <span class="st">"1 day"</span>)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw"><a href="reference/runner.html">runner</a></span>(x, </a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">       <span class="dt">k =</span> <span class="dv">14</span>, </a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">       <span class="dt">idx =</span> dates, </a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">       <span class="dt">f =</span> <span class="cf">function</span>(xi) {</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">        <span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(xi, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>, <span class="dt">trim =</span> <span class="fl">0.05</span>)</a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">       })</a></code></pre></div>
+</div>
+<div id="running-windows" class="section level2">
+<h2 class="hasAnchor">
+<a href="#running-windows" class="anchor"></a>Running windows</h2>
+<p>All options of the <code>runner</code> are examplained in each section below using illustrations and <code>window_run</code> function. <code>window_run</code> creates list of running windows with settings which can be used in <code><a href="reference/runner.html">runner::runner</a></code> and other functions in the package.</p>
+<p>Following diagram illustrates what running windows are - in this case running windows of length <code>k = 4</code>. For each of 15 elements of a vector each window contains current 4 elements.</p>
 <p><img src="reference/figures/running_windows_explain.png"></p>
-<p>Using <code>runner</code> one can apply any R function <code>f</code> in running window of length defined by <code>k</code>, window <code>lag</code>, observation indexes <code>idx</code>.</p>
-<p><img src="reference/figures/using_runner.png"></p>
 <div id="window-size" class="section level3">
 <h3 class="hasAnchor">
 <a href="#window-size" class="anchor"></a>Window size</h3>
 <p><code>k</code> denotes number of elements in window. If <code>k</code> is a single value then window size is constant for all elements of x. For varying window size one should specify <code>k</code> as integer vector of <code>length(k) == length(x)</code> where each element of <code>k</code> defines window length. If <code>k</code> is empty it means that window will be cumulative (like <code><a href="https://rdrr.io/r/base/cumsum.html">base::cumsum</a></code>). Example below illustrates window of <code>k = 4</code> for 10th element of vector <code>x</code>.</p>
 <p><img src="reference/figures/constant_window.png"></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="reference/window_run.html">window_run</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">15</span>, <span class="dt">k =</span> <span class="dv">4</span>)</a></code></pre></div>
 </div>
 <div id="window-lag" class="section level3">
 <h3 class="hasAnchor">
 <a href="#window-lag" class="anchor"></a>Window lag</h3>
-<p><code>lag</code> denotes how many observations windows will be lagged by. If <code>lag</code> is a single value than it’s constant for all elements of x. For varying lag size one should specify <code>lag</code> as integer vector of <code>length(lag) == length(x)</code> where each element of <code>lag</code> defines lag of window. Default value of <code>lag = 0</code>. Example below illustrates window of <code>k = 4</code> lagged by <code>lag = 2</code> for 10’th element of vector <code>x</code>. Lag can also be negative value, which shifts window forward instead of backward.</p>
+<p><code>lag</code> denotes how many observations windows will be lagged by. If <code>lag</code> is a single value than it is constant for all elements of x. For varying lag size one should specify <code>lag</code> as integer vector of <code>length(lag) == length(x)</code> where each element of <code>lag</code> defines lag of window. Default value of <code>lag = 0</code>. Example below illustrates window of <code>k = 4</code> lagged by <code>lag = 2</code> for 10’th element of vector <code>x</code>. Lag can also be negative value, which shifts window forward instead of backward.</p>
 <p><img src="reference/figures/lagged_window_k_lag.png"></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="reference/window_run.html">window_run</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">15</span>, <span class="dt">k =</span> <span class="dv">4</span>, <span class="dt">lag =</span> <span class="dv">2</span>)</a></code></pre></div>
 </div>
 <div id="windows-depending-on-date" class="section level3">
 <h3 class="hasAnchor">
 <a href="#windows-depending-on-date" class="anchor"></a>Windows depending on date</h3>
 <p>Sometimes data points in dataset are not equally spaced (missing weekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies <code>idx</code> argument, than running functions are applied on windows depending on date. <code>idx</code> should be the same length as <code>x</code> of class <code>Date</code> or <code>integer</code>. Including <code>idx</code> can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size <code>k = 5</code> lagged by <code>lag = 2</code>. In parentheses ranges for each window.</p>
 <p><img src="reference/figures/running_date_windows_explain.png"></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">idx &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">13</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">18</span>, <span class="dv">21</span>, <span class="dv">27</span>, <span class="dv">31</span>, <span class="dv">37</span>, <span class="dv">42</span>, <span class="dv">44</span>, <span class="dv">47</span>, <span class="dv">48</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="reference/window_run.html">window_run</a></span>(<span class="dt">x =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">14</span>, </a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">           <span class="dt">k =</span> <span class="dv">5</span>, </a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">           <span class="dt">lag =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">           <span class="dt">idx =</span> idx)</a></code></pre></div>
+</div>
+<div id="running-at" class="section level3">
+<h3 class="hasAnchor">
+<a href="#running-at" class="anchor"></a>running at</h3>
+<p>Runner by default returns vector of the same size as <code>x</code> unless one puts any-size vector to <code>at</code> argument. Each element of <code>at</code> is an index on which runner calculates function. Below illustrates output of runner for <code>at = c(13, 27, 45, 31)</code> which gives windows in ranges enclosed in square brackets. Range for <code>at = 27</code> is <code>[22, 26]</code> which is not available in current indices.</p>
+<p><img src="reference/figures/runner_at_date.png"></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">idx &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">13</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">18</span>, <span class="dv">21</span>, <span class="dv">27</span>, <span class="dv">31</span>, <span class="dv">37</span>, <span class="dv">42</span>, <span class="dv">44</span>, <span class="dv">47</span>, <span class="dv">48</span>)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw"><a href="reference/window_run.html">window_run</a></span>(<span class="dt">x =</span> idx, </a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">           <span class="dt">k =</span> <span class="dv">5</span>, </a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">           <span class="dt">lag =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">           <span class="dt">idx =</span> idx, </a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">           <span class="dt">at =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">18</span>, <span class="dv">27</span>, <span class="dv">48</span>, <span class="dv">31</span>))</a></code></pre></div>
 </div>
 <div id="na-padding" class="section level3">
 <h3 class="hasAnchor">
 <a href="#na-padding" class="anchor"></a><code>NA</code> padding</h3>
-<p>Using <code>runner</code> one can also specify <code>na_pad = TRUE</code> which would return <code>NA</code> for any window which is partially out of range - meaning that there is no sufficient number of observations to fill the window. By default <code>na_pad = FALSE</code>, which means that incomplete windows are calculated anyway. <code>na_pad</code> is applied on normal cumulative windows and on windows depending on date.</p>
+<p>Using <code>runner</code> one can also specify <code>na_pad = TRUE</code> which would return <code>NA</code> for any window which is partially out of range - meaning that there is no sufficient number of observations to fill the window. By default <code>na_pad = FALSE</code>, which means that incomplete windows are calculated anyway. <code>na_pad</code> is applied on normal cumulative windows and on windows depending on date. In example below two windows exceed range given by <code>idx</code> so for these windows are empty for <code>na_pad = TRUE</code>. If used sets <code>na_pad = FALSE</code> first window will be empty (no single element within <code>[-2, 3]</code>) and last window will return elements within matching <code>idx</code>.</p>
+<p><img src="reference/figures/runner_at_date_na_pad.png"></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">idx &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">13</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">18</span>, <span class="dv">21</span>, <span class="dv">27</span>, <span class="dv">31</span>, <span class="dv">37</span>, <span class="dv">42</span>, <span class="dv">44</span>, <span class="dv">47</span>, <span class="dv">48</span>)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw"><a href="reference/window_run.html">window_run</a></span>(<span class="dt">x =</span> idx, </a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">           <span class="dt">k =</span> <span class="dv">5</span>, </a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">           <span class="dt">lag =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">           <span class="dt">idx =</span> idx, </a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">           <span class="dt">at =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">4</span>, <span class="dv">18</span>, <span class="dv">48</span>, <span class="dv">51</span>),</a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">           <span class="dt">na_pad =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 </div>
 <div id="build-in-functions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#build-in-functions" class="anchor"></a>Build-in functions</h3>
-<p>With <code>runner</code> one can use any R functions, but some of them are optimized for speed reasons. These functions are:</p>
-<ul>
-<li>aggregating functions - <code>length_run</code>, <code>min_run</code>, <code>max_run</code>, <code>minmax_run</code>, <code>sum_run</code>, <code>mean_run</code>, <code>streak_run</code>
-</li>
-<li>utility functions - <code>fill_run</code>, <code>lag_run</code>, <code>which_run</code>
-</li>
-</ul>
+<p>With <code>runner</code> one can use any R functions, but some of them are optimized for speed reasons. These functions are:<br>
+- aggregating functions - <code>length_run</code>, <code>min_run</code>, <code>max_run</code>, <code>minmax_run</code>, <code>sum_run</code>, <code>mean_run</code>, <code>streak_run</code><br>
+- utility functions - <code>fill_run</code>, <code>lag_run</code>, <code>which_run</code></p>
 </div>
-</div>
-<div id="simple-example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simple-example" class="anchor"></a>Simple example</h2>
-<p>14-days trimmed mean</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(runner)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">x &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="dv">20</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">date &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/seq.Date.html">seq.Date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>(), <span class="kw"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>() <span class="op">+</span><span class="st"> </span><span class="dv">19</span>, <span class="dt">by =</span> <span class="st">"1 day"</span>)</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw"><a href="reference/runner.html">runner</a></span>(x, <span class="dt">k =</span> <span class="dv">14</span>, <span class="dt">idx =</span> date, <span class="dt">f =</span> <span class="cf">function</span>(xi) <span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(xi, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>, <span class="dt">trim =</span> <span class="fl">0.05</span>))</a></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">##  [1] 0.4394014 0.3126355 0.4827135 0.5236178 0.4819801 0.6976055 0.6023376</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">##  [8] 0.6202999 0.5219315 0.3677634 0.3204818 0.4331546 0.5947573 0.5615686</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">## [15] 0.5020783 0.4840329 0.4259051 0.3359465 0.3505671 0.3486055</a></code></pre></div>
 </div>
 </div>
 
