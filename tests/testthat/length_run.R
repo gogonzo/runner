@@ -31,13 +31,11 @@ test_that("length_run constant k", {
 
 test_that("Errors", {
   expect_error(length_run(idx = integer(0)), "idx should be of length > 0")
-  expect_error(length_run(idx = character(0)), "Not compatible with requested type")
 
   expect_error(length_run(k = 1:9, idx = idx), "length of k and length of idx differs")
-  expect_error(length_run(lag = 1:9, idx = idx), "length of k and length of lag differs")
+  expect_error(length_run(lag = 1:9, idx = idx), "length of lag and length of idx differs")
 
   expect_error(length_run(k = c(NA, 1:9), idx = idx), "NA values in k vector")
   expect_error(length_run(lag = c(NA, 1:9), idx = idx), "NA values in lag vector")
-
-
+  expect_error(length_run(lag = 1:10, idx = c(NA, 1:9)), "NA values in idx vector")
 })

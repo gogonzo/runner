@@ -1,3 +1,6 @@
+# 0.3.1
+* added `at` argument to all functions to return output with specific indexes.
+
 # 0.3.0
 
 * switch to c++11 compiler

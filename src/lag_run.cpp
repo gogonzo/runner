@@ -24,8 +24,8 @@ SEXP lag_run(SEXP x,
              bool nearest = false) {
   int n = Rf_length(x);
 
-  checks::check_idx(idx, n);
-  checks::check_lag(lag, n);
+  checks::check_idx(idx, n, "x");
+  checks::check_lag(lag, n, "x");
 
 
   if ((idx.size() == 0) & (lag.size() == 1)) {

@@ -7,7 +7,7 @@
 runner(
   x,
   f,
-  k = integer(1),
+  k = integer(0),
   lag = integer(1),
   idx = integer(0),
   at = integer(0),
@@ -18,7 +18,7 @@ runner(
 \arguments{
 \item{x}{Vector of any type}
 
-\item{f}{\code{function} to be applied on \code{x}}
+\item{f}{\code{function} to be applied on windows created from \code{x}}
 
 \item{k}{\code{integer} vector or single value denoting size of the running
 window. If \code{k} is a single value then window size is constant for all
@@ -65,4 +65,5 @@ runner(letters[1:10],
        f = function(x) paste(x, collapse = "-"),
        at = c(1, 5, 8),
        type = "character")
+
 }

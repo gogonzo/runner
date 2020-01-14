@@ -341,7 +341,6 @@ test_that("data types", {
 
 })
 
-
 test_that("Errors", {
   expect_error(streak_run(x1, k = (1:999)), "length of k and length of x differs")
   expect_error(streak_run(x1, k = c(NA, k[-1])), "Function doesn't accept NA values in k vector")

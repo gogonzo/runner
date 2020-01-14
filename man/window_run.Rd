@@ -6,9 +6,10 @@
 \usage{
 window_run(
   x,
-  k = integer(1),
+  k = integer(0),
   lag = integer(1),
   idx = integer(0),
+  at = integer(0),
   na_pad = FALSE
 )
 }
@@ -29,6 +30,11 @@ element. Negative value shifts window forward.}
 index of observation. If specified
 then \code{k} and \code{lag} are depending on \code{idx}. Length of
 \code{idx} should be equal of length \code{x}}
+
+\item{at}{\code{date or integer} vector of any size and any value
+defining output data points. Values of the vector defines the indexes which
+data is computed at. If \code{idx} is missing then indexes are
+\code{seq_along(x)}, otherwise depends on indexes passed with \code{idx}.}
 
 \item{na_pad}{\code{logical} single value (default \code{na_pad=FALSE}) - if
 \code{TRUE} calculation on incomplete window will return \code{NA}.

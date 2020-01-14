@@ -21,9 +21,9 @@ IntegerVector length_run(IntegerVector k = IntegerVector(1),
     stop("idx should be of length > 0");
   }
 
-  checks::check_k(k, n);
-  checks::check_idx(idx, n);
-  checks::check_lag(lag, n);
+  checks::check_k(k, n, "idx");
+  checks::check_idx(idx, n, "idx");
+  checks::check_lag(lag, n, "idx");
 
   IntegerVector res(n);
   if ((k.size() == 1)) {

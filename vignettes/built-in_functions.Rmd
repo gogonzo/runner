@@ -14,8 +14,17 @@ Before you proceed further to this tutorial, make sure you know what running fun
 
 ### Running `<mean,sum,min,max>_run`
 
-Runner provides basic aggregation methods calculated within running windows. Below example showing some functions behavior for different arguments setup. `min_run` calculates current minimum for all elements of the vector. Let's take a look at 8'th element of the vector which `min_run` is calculated on.  
-First setup uses default values, so algorithm is looking for minimum value in all elements before actual (i=8). By default missing values are removed before calculations by argument `na_rm = TRUE`, and also window is not specified. The default is equivalent of `base::cummin` with additional option to ignore `NA` values. In second example within window k=5, the lowest value is -3. In the last example minimum is not available due to existence of `NA`. Graphical example is reproduced below in the code.
+Runner provides basic aggregation methods calculated within running windows. 
+Below example showing some functions behavior for different arguments setup. 
+`min_run` calculates current minimum for all elements of the vector. Let's take 
+a look at 8'th element of the vector which `min_run` is calculated on.  
+First setup uses default values, so algorithm is looking for minimum value in 
+all elements before actual (i=8). By default missing values are removed before 
+calculations by argument `na_rm = TRUE`, and also window is not specified. The 
+default is equivalent of `base::cummin` with additional option to ignore `NA` 
+values. In second example within window k=5, the lowest value is -3. In the last 
+example minimum is not available due to existence of `NA`. Graphical example is 
+reproduced below in the code.
 
 ![](images/running_minimum.png)
 
