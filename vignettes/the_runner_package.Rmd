@@ -44,11 +44,19 @@ Sometimes data points in dataset are not equally spaced (missing weekends, holid
 
 ![](images/running_date_windows_explain.png)
 
-### running at (only in `runner`)
+### running at
 
 Runner by default returns vector of the same size as `x` unless one puts any-size 
 vector to `at` argument. Each element of `at` is an index on which runner 
-calculates function. 
+calculates function. `at` doesn't have to be ordered nor unique. Below 
+3-elements window `at` specified indices. 
+
+![](images/runner_at_date.png)
+
+```{r eval=FALSE}
+x <- seq_len(100)
+runner::window_run(x, k = 3, at = c(1, 23, 46, 23))
+```
 
 
 ### `NA` padding  
@@ -67,8 +75,8 @@ Package contains most fundamental function `runner::runner` which gives possibil
 
 Below example of using `base::mean` inside of the `runner` function. 
 ```{r, echo=TRUE}
-set.seed(1)
 library(runner)
+set.seed(1)
 x <- runif(15)
 k <- sample(1:15, 15, replace = TRUE)
 idx <- cumsum(sample(c(1, 2, 3, 4), 15, replace = TRUE))
