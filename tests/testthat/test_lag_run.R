@@ -110,6 +110,6 @@ test_that("Errors", {
 
   expect_error(lag_run(x, idx = (1:9)), "length of idx and length of x differs")
   expect_error(lag_run(x, idx = c(NA, 1:29)), "Function doesn't accept NA values in idx vector")
-  expect_error(lag_run(x, idx = sample(1:30)), "idx have to be in descending order")
+  expect_error(lag_run(x, idx = sample(1:30)), "idx have to be in ascending order")
 })
 

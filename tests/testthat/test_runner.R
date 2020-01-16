@@ -788,7 +788,7 @@ test_that("Errors", {
   expect_error(runner(1:10, idx = c(NA, 1:9), f = mean),
                "Function doesn't accept NA values in idx vector")
   expect_error(runner(1:10, idx = sample(1:10), f = mean),
-               "idx have to be in descending order")
+               "idx have to be in ascending order")
 
 
   expect_error(
