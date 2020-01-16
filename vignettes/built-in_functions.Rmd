@@ -7,8 +7,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This tutorial presents built-in functions in runner package which goal is to maximize performance. Even if one can apply any R function with `runner::runner`, built-in functions are multiple times faster than R equivalent.  
-Before you proceed further to this tutorial, make sure you know what running functions are, if not read ["The runner package"](the_runner_package.html)  vignette.
+This tutorial presents built-in functions in runner package which goal is to 
+maximize performance. Even if one can apply any R function with `runner::runner`,
+built-in functions are multiple times faster than R equivalent. Before you 
+proceed further to this tutorial, make sure you know what the
+["running functions are"](../index.html).
 
 ## Running aggregations
 
