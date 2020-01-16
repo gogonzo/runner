@@ -1,3 +1,8 @@
+template:
+  params:
+    bootswatch: cerulean
+    ganalytics: UA-156194578-1
+
 destination: docs
 toc:
   depth: 3
