@@ -53,7 +53,7 @@ namespace checks {
     if (idx.size() > 1) {
       for (int i = 1; i < n; i++) {
         if (idx(i) < idx(i - 1)) {
-          Rcpp::stop("idx have to be in descending order");
+          Rcpp::stop("idx have to be in ascending order");
         }
       }
     }
