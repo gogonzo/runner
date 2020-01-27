@@ -107,7 +107,7 @@
 <a class="sourceLine" id="cb1-3" data-line-number="3">date &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">20</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)), <span class="dt">origin =</span> <span class="kw"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>()) <span class="co"># unequaly spaced time series</span></a>
 <a class="sourceLine" id="cb1-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="../reference/runner.html">runner</a></span>(x, <span class="dt">k =</span> <span class="dv">7</span>, <span class="dt">idx =</span> date, <span class="dt">f =</span> <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(x)))</a></code></pre></div>
-<pre><code>##  [1] 1 2 3 3 3 3 3 2 2 2 2 3 3 4 3 2 2 2 2 3</code></pre>
+<pre><code>##  [1] 1 2 2 2 3 3 2 2 2 2 3 4 4 2 2 2 2 3 4 4</code></pre>
 </div>
 <div id="weekly-trimmed-mean" class="section level3">
 <h3 class="hasAnchor">
@@ -116,9 +116,10 @@
 <a class="sourceLine" id="cb3-2" data-line-number="2">date &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">20</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)), <span class="dt">origin =</span> <span class="kw"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>()) <span class="co"># unequaly spaced time series</span></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb3-4" data-line-number="4"><span class="kw"><a href="../reference/runner.html">runner</a></span>(x, <span class="dt">k =</span> <span class="dv">7</span>, <span class="dt">idx =</span> date, <span class="dt">f =</span> <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(x, <span class="dt">trim =</span> <span class="fl">0.05</span>))</a></code></pre></div>
-<pre><code>##  [1] 2.143411 1.717688 1.698567 2.361705 3.962164 4.920538 4.908101 5.539019
-##  [9] 6.557011 6.852071 6.713383 6.804469 6.407256 6.354609 6.717369 6.337257
-## [17] 5.704206 4.837671 4.387144 4.562364</code></pre>
+<pre><code>##  [1] -0.2420385  0.2156016  0.5804196  0.2168090 -0.5528809 -0.5827062
+##  [7] -0.9123739 -1.6015267 -2.6129032 -2.9780624 -3.0927785 -3.3872764
+## [13] -3.6369218 -3.8281371 -3.6703611 -4.2042933 -3.8052385 -3.8972705
+## [19] -3.1127187 -2.9495475</code></pre>
 </div>
 <div id="weeks-regression" class="section level3">
 <h3 class="hasAnchor">
