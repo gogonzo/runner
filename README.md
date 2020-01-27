@@ -111,7 +111,7 @@ each window.
 
 ``` r
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
-window_run(x = 1:14, 
+window_run(x = 1:15, 
            k = 5, 
            lag = 1, 
            idx = idx)
