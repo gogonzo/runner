@@ -18,25 +18,27 @@ which_run(
 \arguments{
 \item{x}{Vector of any type}
 
-\item{k}{\code{integer} vector or single value denoting size of the running
+\item{k}{(\code{integer}) vector or single value denoting size of the running
 window. If \code{k} is a single value then window size is constant for all
 elements, otherwise if \code{length(k) == length(x)} different window size
 for each element.}
 
-\item{lag}{\code{integer} vector or single value denoting window lag.
+\item{lag}{(\code{integer}) vector or single value denoting window lag.
 If \code{lag} is a single value then window lag is constant for all elements,
 otherwise if \code{length(lag) == length(x)} different window size for each
 element. Negative value shifts window forward.}
 
-\item{idx}{\code{date or integer} an optional integer vector containing
+\item{idx}{(\code{date or integer}) an optional integer vector containing
 index of observation. If specified
 then \code{k} and \code{lag} are depending on \code{idx}. Length of
 \code{idx} should be equal of length \code{x}}
 
-\item{at}{\code{date or integer} vector of any size and any value
+\item{at}{(\code{date or integer}) vector of any size and any value
 defining output data points. Values of the vector defines the indexes which
-data is computed at. If \code{idx} is missing then indexes are
-\code{seq_along(x)}, otherwise depends on indexes passed with \code{idx}.}
+data is computed at. If \code{idx} is missing then uses indices from \code{1}
+ to \code{length(x)}, otherwise depends on indexes passed with \code{idx}.
+ If \code{at} is defined then \code{k} and \code{lag} should be of length equal
+ one or length of the \code{at}.}
 
 \item{which}{\code{character} value "first" or "last" denoting if the first or last \code{TRUE}
 index is returned from the window.}

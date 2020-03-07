@@ -2,7 +2,7 @@
 #define utils_h
 
 namespace utils {
-  //' Boundaries of the lagged running window
+  // Boundaries of the lagged running window
   Rcpp::IntegerVector window_ul(int i, int k, int lag, int n, bool na_pad, bool cum = false) {
     Rcpp::IntegerVector res(2);
 
@@ -40,7 +40,7 @@ namespace utils {
     return res;
   }
 
-  //' Boundaries of the lagged running window based on indexes
+  // Boundaries of the lagged running window based on indexes
   Rcpp::IntegerVector window_ul_dl(Rcpp::IntegerVector const& indexes, int i, int k, int lag, int n, bool na_pad, bool cum = false) {
     if (na_pad) {
       if (cum) {

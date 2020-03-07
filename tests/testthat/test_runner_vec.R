@@ -53,11 +53,11 @@ test_that("       |--------+---]--->", {
 test_that("  [...]|--------+------->", {
   expect_equal(
     sum_run(x2, lag = 100),
-    runner(x2, lag = 100, f = sum2))
+    runner(x2, lag = 100, f = sum2, type = "numeric"))
 
   expect_equal(
     sum_run(x2, lag = 100, na_pad = TRUE),
-    runner(x2, lag = 100, f = sum2, na_pad = TRUE))
+    runner(x2, lag = 100, f = sum2, na_pad = TRUE, type = "numeric"))
 
   expect_equal(
     sum_run(x2, lag = -100),
@@ -65,7 +65,7 @@ test_that("  [...]|--------+------->", {
 
   expect_equal(
     sum_run(x2, lag = -100, na_pad = TRUE),
-    runner(x2, lag = -100, f = sum2, na_pad = TRUE))
+    runner(x2, lag = -100, f = sum2, na_pad = TRUE, type = "numeric"))
 
 
 
@@ -169,11 +169,11 @@ test_that("       [...|----]---+------->", {
 
   expect_equal(
     sum_run(x2, k = 5, lag = 3, na_rm = FALSE),
-    runner(x2, k = 5, lag = 3, f = sum))
+    runner(x2, k = 5, lag = 3, f = sum, type = "numeric"))
 
   expect_equal(
     sum_run(x2, k = 5, lag = 3, na_pad = TRUE, na_rm = FALSE),
-    runner(x2, k = 5, lag = 3, f = sum, na_pad = TRUE))
+    runner(x2, k = 5, lag = 3, f = sum, na_pad = TRUE, type = "numeric"))
 
 
 
@@ -209,7 +209,7 @@ test_that("       |-----[--+---]--->", {
 
   expect_equal(
     sum_run(x2, k = 5, lag = -3, na_pad = TRUE, na_rm = FALSE),
-    runner(x2, k = 5, lag = -3, f = sum, na_pad = TRUE))
+    runner(x2, k = 5, lag = -3, f = sum, na_pad = TRUE, type = "numeric"))
 
 
 

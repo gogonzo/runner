@@ -58,24 +58,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// runner
-SEXP runner(const SEXP x, const Function f, const IntegerVector k, const IntegerVector lag, const IntegerVector idx, const IntegerVector at, bool na_pad, std::string type);
-RcppExport SEXP _runner_runner(SEXP xSEXP, SEXP fSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP idxSEXP, SEXP atSEXP, SEXP na_padSEXP, SEXP typeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const SEXP >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const Function >::type f(fSEXP);
-    Rcpp::traits::input_parameter< const IntegerVector >::type k(kSEXP);
-    Rcpp::traits::input_parameter< const IntegerVector >::type lag(lagSEXP);
-    Rcpp::traits::input_parameter< const IntegerVector >::type idx(idxSEXP);
-    Rcpp::traits::input_parameter< const IntegerVector >::type at(atSEXP);
-    Rcpp::traits::input_parameter< bool >::type na_pad(na_padSEXP);
-    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
-    rcpp_result_gen = Rcpp::wrap(runner(x, f, k, lag, idx, at, na_pad, type));
-    return rcpp_result_gen;
-END_RCPP
-}
 // sum_run
 Rcpp::NumericVector sum_run(NumericVector x, IntegerVector k, IntegerVector lag, IntegerVector idx, IntegerVector at, bool na_rm, bool na_pad);
 RcppExport SEXP _runner_sum_run(SEXP xSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP idxSEXP, SEXP atSEXP, SEXP na_rmSEXP, SEXP na_padSEXP) {
@@ -201,7 +183,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_runner_lag_run", (DL_FUNC) &_runner_lag_run, 4},
     {"_runner_length_run", (DL_FUNC) &_runner_length_run, 3},
     {"_runner_minmax_run", (DL_FUNC) &_runner_minmax_run, 3},
-    {"_runner_runner", (DL_FUNC) &_runner_runner, 8},
     {"_runner_sum_run", (DL_FUNC) &_runner_sum_run, 7},
     {"_runner_mean_run", (DL_FUNC) &_runner_mean_run, 7},
     {"_runner_max_run", (DL_FUNC) &_runner_max_run, 7},
