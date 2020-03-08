@@ -49,20 +49,20 @@ test_that("       |--------+---]--->", {
 test_that("  [...]|--------+------->", {
   expect_equal(
     min_run(x2, lag = 100),
-    runner(x2, lag = 100, f = min2))
+    runner(x2, lag = 100, f = min2, type = "numeric"))
 
   expect_equal(
     min_run(x2, lag = 100, na_pad = TRUE),
-    runner(x2, lag = 100, f = min2, na_pad = TRUE))
+    runner(x2, lag = 100, f = min2, na_pad = TRUE, type = "numeric"))
 
 
   expect_equal(
     min_run(x2, lag = -100),
-    runner(x2, lag = -100, f = min2))
+    runner(x2, lag = -100, f = min2, type = "numeric"))
 
   expect_equal(
     min_run(x2, lag = -100, na_pad = TRUE),
-    runner(x2, lag = -100, f = min2, na_pad = TRUE))
+    runner(x2, lag = -100, f = min2, na_pad = TRUE, type = "numeric"))
 })
 
 test_that("       |----[...]------->", {
@@ -113,11 +113,11 @@ test_that("       [...|----]---+------->", {
 
   expect_equal(
     min_run(x2, k = 5, lag = 3, na_rm = FALSE),
-    runner(x2, k = 5, lag = 3, f = min))
+    runner(x2, k = 5, lag = 3, f = min, type = "numeric"))
 
   expect_equal(
     min_run(x2, k = 5, lag = 3, na_pad = TRUE, na_rm = FALSE),
-    runner(x2, k = 5, lag = 3, f = min, na_pad = TRUE))
+    runner(x2, k = 5, lag = 3, f = min, na_pad = TRUE, type = "numeric"))
 })
 
 test_that("       |-----[--+---]--->", {
@@ -135,7 +135,7 @@ test_that("       |-----[--+---]--->", {
 
   expect_equal(
     min_run(x2, k = 5, lag = -3, na_pad = TRUE, na_rm = FALSE),
-    runner(x2, k = 5, lag = -3, f = min, na_pad = TRUE))
+    runner(x2, k = 5, lag = -3, f = min, na_pad = TRUE, type = "numeric"))
 })
 
 test_that("       |--------+-[---]->", {

@@ -63,11 +63,11 @@ test_that("       |--------+---]--->", {
 test_that("  [...]|--------+------->", {
   expect_equal(
     streak_run(x2, lag = 100),
-    runner(x2, lag = 100, f = streak2))
+    runner(x2, lag = 100, f = streak2, type = "numeric"))
 
   expect_equal(
     streak_run(x2, lag = 100, na_pad = TRUE),
-    runner(x2, lag = 100, f = streak2, na_pad = TRUE))
+    runner(x2, lag = 100, f = streak2, na_pad = TRUE, type = "numeric"))
 
 
   expect_equal(
@@ -76,7 +76,7 @@ test_that("  [...]|--------+------->", {
 
   expect_equal(
     streak_run(x2, lag = -100, na_pad = TRUE),
-    runner(x2, lag = -100, f = streak2, na_pad = TRUE))
+    runner(x2, lag = -100, f = streak2, na_pad = TRUE, type = "numeric"))
 })
 
 test_that("       |----[...]------->", {

@@ -24,6 +24,11 @@ test_that("       |--------]------->", {
     sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i)])))
 
   expect_identical(
+    runner(x2, f = mean, na.rm = TRUE),
+    sapply(seq_along(x2), function(i) mean(x2[find_idx(x2, i = i)], na.rm = TRUE))
+  )
+
+  expect_identical(
     runner(x1, f = mean, idx = idx),
     sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i)])))
 
@@ -97,7 +102,8 @@ test_that("       |--------+---]--->", {
 test_that("  [...]|--------+------->", {
   expect_equal(
     runner(x1, lag = 100, f = mean),
-    sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, lag = 100)])))
+    sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, lag = 100)]))
+  )
 
   expect_equal(
     runner(x1, lag = -100, f = mean),
@@ -766,7 +772,7 @@ test_that("Errors", {
   expect_error(runner(list(1:10), k = 5, f = mean, type = "character"), "Invalid \\'x\\' type")
   expect_error(runner(list(1:10), k = 5, f = mean, type = "integer"), "Invalid \\'x\\' type")
   expect_error(runner(list(1:10), k = 5, f = mean, type = "logical"), "Invalid \\'x\\' type")
-  expect_error(runner(1:10, k = 5, f = mean, type = "wrong type"), "Invalid output type")
+  expect_error(runner(1:10, k = 5, f = mean, type = "wrong type"), "cannot make a vector of mode")
 
   expect_error(runner(1:10, k = -5, f = mean),
                "k can't be negative")

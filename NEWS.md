@@ -1,3 +1,8 @@
+# runner 0.3.2
+* `runner` function with default `type = "auto"` which automatically guess the type
+of returned object.
+* speed up `runner` function.
+
 # runner 0.3.1
 
 * added `at` argument to all functions to return output with specific indexes.
