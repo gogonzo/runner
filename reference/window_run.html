@@ -36,7 +36,8 @@
 
 
 <meta property="og:title" content="List of running windows — window_run" />
-<meta property="og:description" content="Creates list of windows" />
+<meta property="og:description" content="Creates list of windows with given arguments settings.
+Length of output list is equal" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -79,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -137,7 +138,8 @@
     </div>
 
     <div class="ref-description">
-    <p>Creates list of windows</p>
+    <p>Creates <code>list</code> of windows with given arguments settings.
+Length of output <code>list</code> is equal</p>
     </div>
 
     <pre class="usage"><span class='fu'>window_run</span>(
@@ -158,31 +160,33 @@
     </tr>
     <tr>
       <th>k</th>
-      <td><p><code>integer</code> vector or single value denoting size of the running
+      <td><p>(<code>integer</code>) vector or single value denoting size of the running
 window. If <code>k</code> is a single value then window size is constant for all
 elements, otherwise if <code>length(k) == length(x)</code> different window size
 for each element.</p></td>
     </tr>
     <tr>
       <th>lag</th>
-      <td><p><code>integer</code> vector or single value denoting window lag.
+      <td><p>(<code>integer</code>) vector or single value denoting window lag.
 If <code>lag</code> is a single value then window lag is constant for all elements,
 otherwise if <code>length(lag) == length(x)</code> different window size for each
 element. Negative value shifts window forward.</p></td>
     </tr>
     <tr>
       <th>idx</th>
-      <td><p><code>date or integer</code> an optional integer vector containing
+      <td><p>(<code>date or integer</code>) an optional integer vector containing
 index of observation. If specified
 then <code>k</code> and <code>lag</code> are depending on <code>idx</code>. Length of
 <code>idx</code> should be equal of length <code>x</code></p></td>
     </tr>
     <tr>
       <th>at</th>
-      <td><p><code>date or integer</code> vector of any size and any value
+      <td><p>(<code>date or integer</code>) vector of any size and any value
 defining output data points. Values of the vector defines the indexes which
-data is computed at. If <code>idx</code> is missing then indexes are
-<code><a href='https://rdrr.io/r/base/seq.html'>seq_along(x)</a></code>, otherwise depends on indexes passed with <code>idx</code>.</p></td>
+data is computed at. If <code>idx</code> is missing then uses indices from <code>1</code>
+ to <code><a href='https://rdrr.io/r/base/length.html'>length(x)</a></code>, otherwise depends on indexes passed with <code>idx</code>.
+ If <code>at</code> is defined then <code>k</code> and <code>lag</code> should be of length equal
+ one or length of the <code>at</code>.</p></td>
     </tr>
     <tr>
       <th>na_pad</th>
@@ -192,6 +196,11 @@ Incomplete window is when some parts of the window are out of range</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>list of vectors (windows). Length of list is the same as
+<code><a href='https://rdrr.io/r/base/length.html'>length(x)</a></code> or <code><a href='https://rdrr.io/r/base/length.html'>length(at)</a></code> if specified, and length of each
+ window is defined by <code>k</code> (unless window is out of range).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>window_run</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>lag</span> <span class='kw'>=</span> -<span class='fl'>1</span>)</div><div class='output co'>#&gt; [[1]]
@@ -258,6 +267,7 @@ Incomplete window is when some parts of the window are out of range</p></td>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 

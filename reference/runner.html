@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Custom running function — runner • runner</title>
+<title>Apply running function — runner • runner</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Custom running function — runner" />
-<meta property="og:description" content="Applies custom function to running windows" />
+<meta property="og:title" content="Apply running function — runner" />
+<meta property="og:description" content="Applies custom function on running windows." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -131,13 +131,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Custom running function</h1>
+    <h1>Apply running function</h1>
     
     <div class="hidden name"><code>runner.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Applies custom function to running windows</p>
+    <p>Applies custom function on running windows.</p>
     </div>
 
     <pre class="usage"><span class='fu'>runner</span>(
@@ -148,7 +148,8 @@
   <span class='kw'>idx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0</span>),
   <span class='kw'>at</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0</span>),
   <span class='kw'>na_pad</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"numeric"</span>
+  <span class='no'>...</span>,
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"auto"</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -164,31 +165,33 @@
     </tr>
     <tr>
       <th>k</th>
-      <td><p><code>integer</code> vector or single value denoting size of the running
+      <td><p>(<code>integer</code>) vector or single value denoting size of the running
 window. If <code>k</code> is a single value then window size is constant for all
 elements, otherwise if <code>length(k) == length(x)</code> different window size
 for each element.</p></td>
     </tr>
     <tr>
       <th>lag</th>
-      <td><p><code>integer</code> vector or single value denoting window lag.
+      <td><p>(<code>integer</code>) vector or single value denoting window lag.
 If <code>lag</code> is a single value then window lag is constant for all elements,
 otherwise if <code>length(lag) == length(x)</code> different window size for each
 element. Negative value shifts window forward.</p></td>
     </tr>
     <tr>
       <th>idx</th>
-      <td><p><code>date or integer</code> an optional integer vector containing
+      <td><p>(<code>date or integer</code>) an optional integer vector containing
 index of observation. If specified
 then <code>k</code> and <code>lag</code> are depending on <code>idx</code>. Length of
 <code>idx</code> should be equal of length <code>x</code></p></td>
     </tr>
     <tr>
       <th>at</th>
-      <td><p><code>date or integer</code> vector of any size and any value
+      <td><p>(<code>date or integer</code>) vector of any size and any value
 defining output data points. Values of the vector defines the indexes which
-data is computed at. If <code>idx</code> is missing then indexes are
-<code><a href='https://rdrr.io/r/base/seq.html'>seq_along(x)</a></code>, otherwise depends on indexes passed with <code>idx</code>.</p></td>
+data is computed at. If <code>idx</code> is missing then uses indices from <code>1</code>
+ to <code><a href='https://rdrr.io/r/base/length.html'>length(x)</a></code>, otherwise depends on indexes passed with <code>idx</code>.
+ If <code>at</code> is defined then <code>k</code> and <code>lag</code> should be of length equal
+ one or length of the <code>at</code>.</p></td>
     </tr>
     <tr>
       <th>na_pad</th>
@@ -197,21 +200,40 @@ data is computed at. If <code>idx</code> is missing then indexes are
 Incomplete window is when some parts of the window are out of range</p></td>
     </tr>
     <tr>
+      <th>...</th>
+      <td><p>other arguments passed to the function <code>f</code>.</p></td>
+    </tr>
+    <tr>
       <th>type</th>
-      <td><p>output type ("logical", "numeric", "integer", "character")</p></td>
+      <td><p>output type <code>("logical", "numeric", "integer", "character")</code>.
+<code>runner</code> by default returns numeric values, but if function is expected
+to return other type, user should specify this in <code>type</code> argument.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>vector with aggregated values for each window. Length of output is the
+same as <code><a href='https://rdrr.io/r/base/length.html'>length(x)</a></code> or <code><a href='https://rdrr.io/r/base/length.html'>length(at)</a></code> if specified. Type of the output
+is taken from <code>type</code> argument.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>runner</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>f</span> <span class='kw'>=</span> <span class='no'>mean</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt;  [1] 1.0 1.5 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0</div><div class='input'><span class='fu'>runner</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt;  [1] 1.0 1.5 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0</div><div class='input'><span class='fu'>runner</span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>],
+    <pre class="examples"><div class='input'>
+<span class='co'># mean on k = 3 elements windows</span>
+<span class='fu'>runner</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>f</span> <span class='kw'>=</span> <span class='no'>mean</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt;  [1] 1.0 1.5 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0</div><div class='input'>
+<span class='co'># mean on k = 3 elements windows with different specification</span>
+<span class='fu'>runner</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt;  [1] 1.0 1.5 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0</div><div class='input'>
+<span class='co'># number of unique values in each window (varying window size)</span>
+<span class='fu'>runner</span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>],
        <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>4</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>),
        <span class='kw'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>x</span>)))</div><div class='output co'>#&gt;  [1] 1 2 2 4 5 5 5 5 5 5</div><div class='input'>
+<span class='co'># concatenate window values</span>
 <span class='fu'>runner</span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>],
        <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>4</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>),
        <span class='kw'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>x</span>, <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>"-"</span>),
        <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"character"</span>)</div><div class='output co'>#&gt;  [1] "a"         "a-b"       "b-c"       "a-b-c-d"   "a-b-c-d-e" "b-c-d-e-f"
 #&gt;  [7] "c-d-e-f-g" "d-e-f-g-h" "e-f-g-h-i" "f-g-h-i-j"</div><div class='input'>
+<span class='co'># concatenate only on selected windows index</span>
 <span class='fu'>runner</span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>],
        <span class='kw'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>x</span>, <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>"-"</span>),
        <span class='kw'>at</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>5</span>, <span class='fl'>8</span>),
@@ -222,6 +244,7 @@ Incomplete window is when some parts of the window are out of range</p></td>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 

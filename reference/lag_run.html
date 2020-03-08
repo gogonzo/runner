@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -151,14 +151,14 @@
     </tr>
     <tr>
       <th>lag</th>
-      <td><p><code>integer</code> vector or single value denoting window lag.
+      <td><p>(<code>integer</code>) vector or single value denoting window lag.
 If <code>lag</code> is a single value then window lag is constant for all elements,
 otherwise if <code>length(lag) == length(x)</code> different window size for each
 element. Negative value shifts window forward.</p></td>
     </tr>
     <tr>
       <th>idx</th>
-      <td><p><code>date or integer</code> an optional integer vector containing
+      <td><p>(<code>date or integer</code>) an optional integer vector containing
 index of observation. If specified
 then <code>k</code> and <code>lag</code> are depending on <code>idx</code>. Length of
 <code>idx</code> should be equal of length <code>x</code></p></td>
