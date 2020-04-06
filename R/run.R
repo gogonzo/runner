@@ -40,6 +40,27 @@
 #' # mean on k = 3 elements windows with different specification
 #' runner(1:10, k = 3, f = function(x) mean(x, na.rm = TRUE))
 #'
+#' # concatenate two columns
+#' runner(
+#'   data.frame(
+#'     a = letters[1:10],
+#'     b = 1:10
+#'   ),
+#'   f = function(x) paste(paste0(x$a, x$b), collapse = "+"),
+#'   type = "character"
+#' )
+#'
+#' # concatenate two columns with additional argument
+#' runner(
+#'   data.frame(
+#'     a = letters[1:10],
+#'     b = 1:10
+#'   ),
+#'   f = function(x, xxx) paste(paste0(x$a, xxx, x$b), collapse = " + "),
+#'   xxx = "...",
+#'   type = "character"
+#' )
+#'
 #' # number of unique values in each window (varying window size)
 #' runner(letters[1:10],
 #'        k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5),
@@ -73,10 +94,27 @@ runner <- function(x,
     stop("f should be a function")
   }
 
-  w <- window_run(x = x, k = k, lag = lag, idx = idx, at = at, na_pad = na_pad)
+  w <- window_run(
+    x = `if`(is.data.frame(x), seq_len(nrow(x)), x),
+    k = k,
+    lag = lag,
+    idx = idx,
+    at = at,
+    na_pad = na_pad
+  )
+
   n <- length(w)
 
-  if (type != "auto") {
+  if (is.data.frame(x)) {
+    res <- sapply(w, function(ww) {
+      if (is.null(ww)) {
+        NA
+      } else {
+        f(x[ww, ], ...)
+      }
+    })
+
+  } else if (type != "auto") {
     res <- vector(mode = type, length = n)
     for (i in seq_len(n)) {
       ww <- w[[i]]

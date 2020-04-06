@@ -26,49 +26,49 @@ run(Rcpp::Vector<ITYPE> const& x,
   if (at.size() == 0) {
     if (idx.size() == 0) {
       if (k.size() > 1 && lag.size() > 1) {
-        #pragma omp parallel for schedule(dynamic)
+
         for (int i = 0; i < n; i++) {
           b = utils::window_ul(i, k(i), lag(i), n, na_pad);
           res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() > 1 && lag.size() == 1) {
-        #pragma omp parallel for schedule(dynamic)
+
         for (int i = 0; i < n; i++) {
           b = utils::window_ul(i, k(i), lag(0), n, na_pad);
           res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 0 && lag.size() > 1) {
-#pragma omp parallel for schedule(dynamic)
+
         for (int i = 0; i < n; i++) {
           b = utils::window_ul(i, n, lag(i), n, na_pad, true);
           res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 0 && lag.size() == 1) {
-#pragma omp parallel for schedule(dynamic)
+
         for (int i = 0; i < n; i++) {
           b = utils::window_ul(i, n, lag(0), n, na_pad, true);
           res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 1 && k(0) == n && lag.size() > 1) {
-#pragma omp parallel for schedule(dynamic)
+
         for (int i = 0; i < n; i++) {
           b = utils::window_ul(i, n, lag(i), n, na_pad);
           res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 1 && k(0) == n && lag.size() == 1) {
-        #pragma omp parallel for schedule(dynamic)
+
         for (int i = 0; i < n; i++) {
           b = utils::window_ul(i, n, lag(0), n, na_pad);
           res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 1 && lag.size() > 1) {
-#pragma omp parallel for schedule(dynamic)
+
         for (int i = 0; i < n; i++) {
           b = utils::window_ul(i, k(0), lag(i), n, na_pad);
           res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 1 && lag.size() == 1) {
-#pragma omp parallel for schedule(dynamic)
+
         for (int i = 0; i < n; i++) {
           b = utils::window_ul(i, k(0), lag(0), n, na_pad);
           res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
@@ -78,13 +78,13 @@ run(Rcpp::Vector<ITYPE> const& x,
     } else {
       if (k.size() > 1) {
         if (lag.size() > 1) {
-#pragma omp parallel for schedule(dynamic)
+
           for (int i = 0; i < n; i++) {
             b = utils::window_ul_dl(idx, i, k(i), lag(i), n, na_pad, false);
             res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
           }
         } else {
-#pragma omp parallel for schedule(dynamic)
+
           for (int i = 0; i < n; i++) {
             b = utils::window_ul_dl(idx, i, k(i), lag(0), n, na_pad, false);
             res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
@@ -93,13 +93,13 @@ run(Rcpp::Vector<ITYPE> const& x,
 
       } else if (k.size() == 0) {
         if (lag.size() > 1) {
-#pragma omp parallel for schedule(dynamic)
+
           for (int i = 0; i < n; i++) {
             b = utils::window_ul_dl(idx, i, n, lag(i), n, na_pad, true);
             res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
           }
         } else {
-#pragma omp parallel for schedule(dynamic)
+
           for (int i = 0; i < n; i++) {
             b = utils::window_ul_dl(idx, i, n, lag(0), n, na_pad, true);
             res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
@@ -107,14 +107,14 @@ run(Rcpp::Vector<ITYPE> const& x,
         }
       } else if (k.size() == 1) {
         if (lag.size() > 1) {
-#pragma omp parallel for schedule(dynamic)
+
           for (int i = 0; i < n; i++) {
             b = utils::window_ul_dl(idx, i, k(0), lag(i), n, na_pad, false);
             res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
 
           }
         } else {
-#pragma omp parallel for schedule(dynamic)
+
           for (int i = 0; i < n; i++) {
             b = utils::window_ul_dl(idx, i, k(0), lag(0), n, na_pad, false);
             res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
@@ -125,37 +125,37 @@ run(Rcpp::Vector<ITYPE> const& x,
   } else {
     if (idx.size() == 0) {
       if (k.size() > 1 && lag.size() > 1) {
-#pragma omp parallel for schedule(dynamic)
+
         for (int i = 0; i < nn; i++) {
           b = utils::window_ul(at(i) - 1, k(i), lag(i), n, na_pad);
           res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() > 1 && lag.size() == 1) {
-#pragma omp parallel for schedule(dynamic)
+
         for (int i = 0; i < nn; i++) {
           b = utils::window_ul(at(i) - 1, k(i), lag(0), n, na_pad);
           res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 0 && lag.size() > 1) {
-#pragma omp parallel for schedule(dynamic)
+
         for (int i = 0; i < nn; i++) {
           b = utils::window_ul(at(i) - 1, n, lag(i), n, na_pad, true);
           res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 0 && lag.size() == 1) {
-#pragma omp parallel for schedule(dynamic)
+
         for (int i = 0; i < nn; i++) {
           b = utils::window_ul(at(i) - 1, n, lag(0), n, na_pad, true);
           res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 1 && lag.size() > 1) {
-#pragma omp parallel for schedule(dynamic)
+
         for (int i = 0; i < nn; i++) {
           b = utils::window_ul(at(i) - 1, k(0), lag(i), n, na_pad);
           res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
         }
       } else if (k.size() == 1 && lag.size() == 1) {
-#pragma omp parallel for schedule(dynamic)
+
         for (int i = 0; i < nn; i++) {
           b = utils::window_ul(at(i) - 1, k(0), lag(0), n, na_pad);
           res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
@@ -164,13 +164,13 @@ run(Rcpp::Vector<ITYPE> const& x,
     } else {
       if (k.size() > 1) {
         if (lag.size() > 1) {
-#pragma omp parallel for schedule(dynamic)
+
           for (int i = 0; i < nn; i++) {
             b = utils::window_ul_at(idx, at(i), k(i), lag(i), n, na_pad, false);
             res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
           }
         } else {
-#pragma omp parallel for schedule(dynamic)
+
           for (int i = 0; i < nn; i++) {
             b = utils::window_ul_at(idx, at(i), k(i), lag(0), n, na_pad, false);
             res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
@@ -178,13 +178,13 @@ run(Rcpp::Vector<ITYPE> const& x,
         }
       } else if (k.size() == 0) {
         if (lag.size() > 1) {
-#pragma omp parallel for schedule(dynamic)
+
           for (int i = 0; i < nn; i++) {
             b = utils::window_ul_at(idx, at(i), n, lag(i), n, na_pad, true);
             res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
           }
         } else {
-#pragma omp parallel for schedule(dynamic)
+
           for (int i = 0; i < nn; i++) {
             b = utils::window_ul_at(idx, at(i), n, lag(0), n, na_pad, true);
             res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
@@ -192,14 +192,14 @@ run(Rcpp::Vector<ITYPE> const& x,
         }
       } else if (k.size() == 1) {
         if (lag.size() > 1) {
-#pragma omp parallel for schedule(dynamic)
+
           for (int i = 0; i < nn; i++) {
             b = utils::window_ul_at(idx, at(i), k(0), lag(i), n, na_pad, false);
             res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
 
           }
         } else {
-#pragma omp parallel for schedule(dynamic)
+
           for (int i = 0; i < nn; i++) {
             b = utils::window_ul_at(idx, at(i), k(0), lag(0), n, na_pad, false);
             res(i) = (b.size() == 0) ? Rcpp::Vector<OTYPE>::get_na() : apply::apply<otype>(x, b, f);
