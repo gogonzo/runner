@@ -125,6 +125,7 @@
 #'        at = c(1, 5, 8),
 #'        type = "character")
 #'
+#' @md
 #' @importFrom methods is
 #' @export
 runner <- function(x,
