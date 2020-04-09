@@ -94,14 +94,13 @@ which means that output of the runner is now of length equal to \code{at}. Note
 that one can change index of \code{x} by specifying \code{idx}.
 Illustration below shows output of \code{runner} for \code{at = c(13, 27, 45, 31)}
 which gives windows in ranges enclosed in square brackets. Range for \code{at = 27} is
-\code{[22, 26]} which is not available in current indices. \cr
+\verb{[22, 26]} which is not available in current indices. \cr
 \if{html}{\figure{runner_at.png}{options: width="75\%" alt="Figure: runner_at.png"}}
 \if{latex}{\figure{runner_at.pdf}{options: width=7cm}}\cr
-
+}
+}
 Above is not enough since \code{k} and \code{lag} can be a vector which allows to
 stretch and lag/lead each window freely on in time (on indices).
-}
-}
 }
 \examples{
 
