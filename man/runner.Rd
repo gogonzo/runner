@@ -12,8 +12,8 @@ runner(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  ...,
-  type = "auto"
+  type = "auto",
+  ...
 )
 }
 \arguments{
@@ -46,11 +46,11 @@ data is computed at. Can be also \code{POSIXt} sequence increment
 \code{TRUE} calculation on incomplete window will return \code{NA}.
 Incomplete window is when some parts of the window are out of range}
 
-\item{...}{other arguments passed to the function \code{f}.}
-
 \item{type}{output type (\code{"logical"}, \code{"numeric"}, \code{"integer"}, \code{"character"}, \code{"auto"}).
 \code{runner} by default returns type automatically. In case of failure of \code{"auto"}
 please specify desired type.}
+
+\item{...}{other arguments passed to the function \code{f}.}
 }
 \value{
 vector with aggregated values for each window. Length of output is the

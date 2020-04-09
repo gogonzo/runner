@@ -128,15 +128,17 @@
 #' @md
 #' @importFrom methods is
 #' @export
-runner <- function(x,
-                  f,
-                  k = integer(0),
-                  lag = integer(1),
-                  idx = integer(0),
-                  at = integer(0),
-                  na_pad = FALSE,
-                  ...,
-                  type = "auto") {
+runner <- function(
+  x,
+  f,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  type = "auto",
+  ...
+  ) {
 
   if (!is(f, "function")) {
     stop("f should be a function")
@@ -151,11 +153,9 @@ runner <- function(x,
     na_pad = na_pad
   )
 
-  n <- length(w)
-
-  if (is.data.frame(x)) {
+  if (is.data.frame(x) || is.matrix(x)) {
     res <- sapply(w, function(ww) {
-      if (is.null(ww)) {
+      if (length(ww) == 0) {
         NA
       } else {
         f(x[ww, ], ...)
@@ -163,6 +163,7 @@ runner <- function(x,
     })
 
   } else if (type != "auto") {
+    n <- length(w)
     res <- vector(mode = type, length = n)
     for (i in seq_len(n)) {
       ww <- w[[i]]
