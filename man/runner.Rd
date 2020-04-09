@@ -17,37 +17,37 @@ runner(
 )
 }
 \arguments{
-\item{x}{to be input in runner custom
+\item{x}{(\code{vector}, \code{data.frame}, \code{matrix}) to be input in runner custom
 function \code{f}.}
 
-\item{f}{to be applied on windows created from \code{x}}
+\item{f}{(\code{function}) to be applied on windows created from \code{x}}
 
-\item{k}{vector or single value denoting size of the running
+\item{k}{(\code{integer}) vector or single value denoting size of the running
 window. If \code{k} is a single value then window size is constant for all
 elements, otherwise if \code{length(k) == length(x)} different window size
 for each element.}
 
-\item{lag}{vector or single value denoting window lag.
+\item{lag}{(\code{integer}) vector or single value denoting window lag.
 If \code{lag} is a single value then window lag is constant for all elements,
 otherwise if \code{length(lag) == length(x)} different window size for each
 element. Negative value shifts window forward.}
 
-\item{idx}{an optional integer vector containing
+\item{idx}{(\code{integer}, \code{Date}, \code{POSIXt}) an optional integer vector containing
 sorted (ascending) index of observation. If specified then \code{k} and
 \code{lag} are depending on \code{idx}.
 Length of \code{idx} should be equal of length \code{x}.}
 
-\item{at}{vector of any size and any value
+\item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character}) vector of any size and any value
 defining output data points. Values of the vector defines the indexes which
 data is computed at. Can be also \code{POSIXt} sequence increment
 \code{\link[base]{seq.POSIXt}}. More in details.}
 
-\item{na_pad}{single value (default \code{na_pad = FALSE}) - if
+\item{na_pad}{(\code{logical}) single value (default \code{na_pad = FALSE}) - if
 \code{TRUE} calculation on incomplete window will return \code{NA}.
 Incomplete window is when some parts of the window are out of range}
 
-\item{type}{output type (\code{"logical"}, \code{"numeric"}, \code{"integer"}, \code{"character"}, \code{"auto"}).
-\code{runner} by default returns type automatically. In case of failure of \code{"auto"}
+\item{type}{(\code{character}) output type (\code{"logical"}, \code{"numeric"}, \code{"integer"}, \code{"character"}, \code{"auto"}).
+\code{runner} by default guess type automatically. In case of failure of \code{"auto"}
 please specify desired type.}
 
 \item{...}{other arguments passed to the function \code{f}.}
@@ -97,6 +97,13 @@ which gives windows in ranges enclosed in square brackets. Range for \code{at = 
 \verb{[22, 26]} which is not available in current indices. \cr
 \if{html}{\figure{runner_at.png}{options: width="75\%" alt="Figure: runner_at.png"}}
 \if{latex}{\figure{runner_at.pdf}{options: width=7cm}}\cr
+
+\code{at} can also be specified as interval of the output defined by \code{at = "<time unit>"}
+which retults in obtaining results on following indices
+\code{seq(min(idx), max(idx), by = "<time unit>")}. \code{"<time unit>"} is the same
+as in \code{\link[base]{seq.POSIXt}} function.
+It's worth noting that time-unit can't be more frequent than \code{idx} - for
+\code{Date} the most frequent time-unit is a \code{"day"}, for \code{POSIXt} a \code{sec}.
 }
 }
 Above is not enough since \code{k} and \code{lag} can be a vector which allows to

@@ -1,37 +1,37 @@
 #' Apply running function
 #'
 #' Applies custom function on running windows.
-#' @param x  to be input in runner custom
+#' @param x (`vector`, `data.frame`, `matrix`) to be input in runner custom
 #'  function `f`.
 #'
-#' @param k  vector or single value denoting size of the running
+#' @param k (`integer`) vector or single value denoting size of the running
 #'  window. If `k` is a single value then window size is constant for all
 #'  elements, otherwise if `length(k) == length(x)` different window size
 #'  for each element.
 #'
-#' @param lag  vector or single value denoting window lag.
+#' @param lag (`integer`) vector or single value denoting window lag.
 #'  If `lag` is a single value then window lag is constant for all elements,
 #'  otherwise if `length(lag) == length(x)` different window size for each
 #'  element. Negative value shifts window forward.
 #'
-#' @param idx  an optional integer vector containing
+#' @param idx (`integer`, `Date`, `POSIXt`) an optional integer vector containing
 #'  sorted (ascending) index of observation. If specified then `k` and
 #'  `lag` are depending on `idx`.
 #'  Length of `idx` should be equal of length `x`.
 #'
-#' @param f to be applied on windows created from `x`
+#' @param f (`function`) to be applied on windows created from `x`
 #'
-#' @param at vector of any size and any value
+#' @param at (`integer`, `Date`, `POSIXt`, `character`) vector of any size and any value
 #'  defining output data points. Values of the vector defines the indexes which
 #'  data is computed at. Can be also `POSIXt` sequence increment
 #'  \code{\link[base]{seq.POSIXt}}. More in details.
 #'
-#' @param na_pad single value (default `na_pad = FALSE`) - if
+#' @param na_pad (`logical`) single value (default `na_pad = FALSE`) - if
 #'  `TRUE` calculation on incomplete window will return `NA`.
 #'  Incomplete window is when some parts of the window are out of range
 #'
-#' @param type output type (`"logical"`, `"numeric"`, `"integer"`, `"character"`, `"auto"`).
-#'  `runner` by default returns type automatically. In case of failure of `"auto"`
+#' @param type (`character`) output type (`"logical"`, `"numeric"`, `"integer"`, `"character"`, `"auto"`).
+#'  `runner` by default guess type automatically. In case of failure of `"auto"`
 #'  please specify desired type.
 #'
 #' @param ... other arguments passed to the function `f`.
@@ -73,10 +73,17 @@
 #'    `[22, 26]` which is not available in current indices. \cr
 #'    \if{html}{\figure{runner_at.png}{options: width="75\%" alt="Figure: runner_at.png"}}
 #'    \if{latex}{\figure{runner_at.pdf}{options: width=7cm}}\cr
+#'
+#'    `at` can also be specified as interval of the output defined by `at = "<time unit>"`
+#'    which retults in obtaining results on following indices
+#'    `seq(min(idx), max(idx), by = "<time unit>")`. `"<time unit>"` is the same
+#'    as in \code{\link[base]{seq.POSIXt}} function.
+#'    It's worth noting that time-unit can't be more frequent than `idx` - for
+#'    `Date` the most frequent time-unit is a `"day"`, for `POSIXt` a `sec`.
 #'  }
 #' }
-#'    Above is not enough since `k` and `lag` can be a vector which allows to
-#'    stretch and lag/lead each window freely on in time (on indices).
+#' Above is not enough since `k` and `lag` can be a vector which allows to
+#' stretch and lag/lead each window freely on in time (on indices).
 #'
 #' @return vector with aggregated values for each window. Length of output is the
 #'  same as `length(x)` or `length(at)` if specified. Type of the output
@@ -152,7 +159,7 @@ runner <- function(
     k = k,
     lag = lag,
     idx = idx,
-    at = at,
+    at = at_by_sequence(at, idx),
     na_pad = na_pad
   )
 
@@ -194,6 +201,10 @@ runner <- function(
 at_by_sequence <- function(at, idx) {
   if ((is.character(at) && length(at) == 1) ||
       inherits(at, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
+    if (length(idx) == 0) {
+      sprintf("`idx` can't be empty while specifying at='%s'")
+    }
+
     at <- seq(min(idx), max(idx), by = at)
   }
   return(at)

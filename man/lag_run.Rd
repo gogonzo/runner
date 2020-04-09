@@ -7,15 +7,15 @@
 lag_run(x, lag = 1L, idx = integer(0), nearest = FALSE)
 }
 \arguments{
-\item{x}{to be input in runner custom
+\item{x}{(\code{vector}, \code{data.frame}, \code{matrix}) to be input in runner custom
 function \code{f}.}
 
-\item{lag}{vector or single value denoting window lag.
+\item{lag}{(\code{integer}) vector or single value denoting window lag.
 If \code{lag} is a single value then window lag is constant for all elements,
 otherwise if \code{length(lag) == length(x)} different window size for each
 element. Negative value shifts window forward.}
 
-\item{idx}{an optional integer vector containing
+\item{idx}{(\code{integer}, \code{Date}, \code{POSIXt}) an optional integer vector containing
 sorted (ascending) index of observation. If specified then \code{k} and
 \code{lag} are depending on \code{idx}.
 Length of \code{idx} should be equal of length \code{x}.}

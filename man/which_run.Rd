@@ -16,25 +16,25 @@ which_run(
 )
 }
 \arguments{
-\item{x}{to be input in runner custom
+\item{x}{(\code{vector}, \code{data.frame}, \code{matrix}) to be input in runner custom
 function \code{f}.}
 
-\item{k}{vector or single value denoting size of the running
+\item{k}{(\code{integer}) vector or single value denoting size of the running
 window. If \code{k} is a single value then window size is constant for all
 elements, otherwise if \code{length(k) == length(x)} different window size
 for each element.}
 
-\item{lag}{vector or single value denoting window lag.
+\item{lag}{(\code{integer}) vector or single value denoting window lag.
 If \code{lag} is a single value then window lag is constant for all elements,
 otherwise if \code{length(lag) == length(x)} different window size for each
 element. Negative value shifts window forward.}
 
-\item{idx}{an optional integer vector containing
+\item{idx}{(\code{integer}, \code{Date}, \code{POSIXt}) an optional integer vector containing
 sorted (ascending) index of observation. If specified then \code{k} and
 \code{lag} are depending on \code{idx}.
 Length of \code{idx} should be equal of length \code{x}.}
 
-\item{at}{vector of any size and any value
+\item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character}) vector of any size and any value
 defining output data points. Values of the vector defines the indexes which
 data is computed at. Can be also \code{POSIXt} sequence increment
 \code{\link[base]{seq.POSIXt}}. More in details.}
@@ -45,7 +45,7 @@ index is returned from the window.}
 \item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) -
 if \code{TRUE} sum is calculating excluding \code{NA}.}
 
-\item{na_pad}{single value (default \code{na_pad = FALSE}) - if
+\item{na_pad}{(\code{logical}) single value (default \code{na_pad = FALSE}) - if
 \code{TRUE} calculation on incomplete window will return \code{NA}.
 Incomplete window is when some parts of the window are out of range}
 }
