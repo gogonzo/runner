@@ -7,7 +7,8 @@
 minmax_run(x, metric = "min", na_rm = TRUE)
 }
 \arguments{
-\item{x}{Vector of any type}
+\item{x}{to be input in runner custom
+function \code{f}.}
 
 \item{metric}{\code{character} what to return, minimum or maximum}
 

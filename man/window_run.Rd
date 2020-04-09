@@ -14,31 +14,30 @@ window_run(
 )
 }
 \arguments{
-\item{x}{Vector of any type}
+\item{x}{to be input in runner custom
+function \code{f}.}
 
-\item{k}{(\code{integer}) vector or single value denoting size of the running
+\item{k}{vector or single value denoting size of the running
 window. If \code{k} is a single value then window size is constant for all
 elements, otherwise if \code{length(k) == length(x)} different window size
 for each element.}
 
-\item{lag}{(\code{integer}) vector or single value denoting window lag.
+\item{lag}{vector or single value denoting window lag.
 If \code{lag} is a single value then window lag is constant for all elements,
 otherwise if \code{length(lag) == length(x)} different window size for each
 element. Negative value shifts window forward.}
 
-\item{idx}{(\code{date or integer}) an optional integer vector containing
-index of observation. If specified
-then \code{k} and \code{lag} are depending on \code{idx}. Length of
-\code{idx} should be equal of length \code{x}}
+\item{idx}{an optional integer vector containing
+sorted (ascending) index of observation. If specified then \code{k} and
+\code{lag} are depending on \code{idx}.
+Length of \code{idx} should be equal of length \code{x}.}
 
-\item{at}{(\code{date or integer}) vector of any size and any value
+\item{at}{vector of any size and any value
 defining output data points. Values of the vector defines the indexes which
-data is computed at. If \code{idx} is missing then uses indices from \code{1}
- to \code{length(x)}, otherwise depends on indexes passed with \code{idx}.
- If \code{at} is defined then \code{k} and \code{lag} should be of length equal
- one or length of the \code{at}.}
+data is computed at. Can be also \code{POSIXt} sequence increment
+\code{\link[base]{seq.POSIXt}}. More in details.}
 
-\item{na_pad}{\code{logical} single value (default \code{na_pad=FALSE}) - if
+\item{na_pad}{single value (default \code{na_pad = FALSE}) - if
 \code{TRUE} calculation on incomplete window will return \code{NA}.
 Incomplete window is when some parts of the window are out of range}
 }
