@@ -12,7 +12,7 @@ test_that("k by", {
       "2019-11-01 03:02:01")
   )
 
-  expect_identical(idx - new_k, expected)
+  expect_equal(idx - new_k, expected)
 
   idx <- seq(as.POSIXct("2019-01-01 03:02:01"), as.POSIXct("2020-01-01 03:02:01"), by = "month")
   new_k <- k_by(k = "month", idx = idx, param = "k")
@@ -24,7 +24,7 @@ test_that("k by", {
       "2019-11-01 03:02:01", "2019-12-01 03:02:01")
   )
 
-  expect_identical(idx - new_k, expected)
+  expect_equal(idx - new_k, expected)
 
 
   idx <- seq(as.POSIXct("2019-01-01 03:02:01"), as.POSIXct("2020-01-01 03:02:01"), by = "month")
@@ -37,7 +37,7 @@ test_that("k by", {
       "2019-11-01 03:02:01", "2019-12-01 03:02:01")
   )
 
-  expect_identical(idx - new_k, expected)
+  expect_equal(idx - new_k, expected)
 
 
   idx <- seq(as.POSIXct("2019-01-01 03:02:01"), as.POSIXct("2020-01-01 03:02:01"), by = "month")
@@ -50,7 +50,7 @@ test_that("k by", {
       "2020-02-01 03:02:01")
   )
 
-  expect_identical(idx - new_k, expected)
+  expect_equal(idx - new_k, expected)
 
 
   idx <- seq(as.POSIXct("2020-01-01 03:02:01"), as.POSIXct("2020-02-01 03:02:01"), by = "month")
@@ -59,7 +59,7 @@ test_that("k by", {
     c("2020-02-01 03:02:01", "2020-01-25 03:02:01")
   )
 
-  expect_identical(idx - new_k, expected)
+  expect_equal(idx - new_k, expected)
 
 
   idx <- seq(as.POSIXct("2019-01-01 03:02:01"), as.POSIXct("2020-01-01 03:02:01"), by = "month")
@@ -70,28 +70,28 @@ test_that("k by", {
 })
 
 test_that("reformat k", {
-  expect_identical(
+  expect_equal(
     reformat_k("day", only_positive = TRUE),
     "-1 days"
   )
 
-  expect_identical(
+  expect_equal(
     reformat_k("2 days", only_positive = TRUE),
     "-2 days"
   )
 
-  expect_identical(
+  expect_equal(
     reformat_k(c("2 days", "2 months"), only_positive = TRUE),
     c("-2 days", "-2 months")
   )
 
 
-  expect_identical(
+  expect_equal(
     reformat_k("2 days", only_positive = FALSE),
     "-2 days"
   )
 
-  expect_identical(
+  expect_equal(
     reformat_k(c("day", "-2 days", "2 days"), only_positive = FALSE),
     c("-1 days", "2 days", "-2 days")
   )
@@ -120,10 +120,10 @@ test_that("seq_by", {
       "2019-07-01 03:02:01", "2019-09-01 03:02:01", "2019-11-01 03:02:01",
       "2020-01-01 03:02:01")
   )
-  expect_identical(out, expected)
+  expect_equal(out, expected)
 
   out <- seq_by(at = "-2 months", idx = idx)
-  expect_identical(out, rev(expected))
+  expect_equal(out, rev(expected))
 
 
   expect_error(
