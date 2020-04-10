@@ -133,6 +133,6 @@ test_that("seq_by", {
 
   expect_error(
     seq_by(at = "-2 months", idx = 1:2),
-    "To specify at as difftime character idx can't be empty"
+    "To specify at as time interval character `idx` can't be empty"
   )
 })

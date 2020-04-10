@@ -7,10 +7,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
   
-todo:
- - aggregate to custom time-interval
- - 
-  
 The most fundamental function in `runner` package is `runner`. With `runner::runner`
 one can apply any R function on running windows. This tutorial presents set of 
 examples explaining how to tackle some tasks. Some of the examples are referenced 
@@ -50,7 +46,7 @@ runner(
 )
 ```
 
-### Prediction on current day based on preeceding 2-weeks regression
+### Prediction on current day based on preceding 2-weeks regression
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 library(runner)
@@ -109,6 +105,7 @@ df %>%
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 library(runner)
+library(dplyr)
 
 df <- read.table(text = "  user_id       date category
        27 2016-01-01    apple
@@ -131,16 +128,16 @@ df %>%
   mutate(
     distinct_7  = runner(category, 
                          k = "7 days", 
-                         idx = date, 
+                         idx = as.Date(date), 
                          f = function(x) length(unique(x))),
     distinct_14 = runner(category, 
                          k = "14 days", 
-                         idx = date, 
+                         idx = as.Date(date), 
                          f = function(x) length(unique(x)))
   )
 ```
 
-### Aggregating values from another data.frame in grouped_df
+### Aggregating values from another data.frame in `grouped_df`
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 library(runner)
@@ -181,7 +178,7 @@ df2 %>%
   group_by(Company.name2) %>%
   mutate(
     intercept = runner(
-      x = df[df$Company.name == "MSFT", ], 
+      x = df[df$Company.name ==  Company.name2[1], ], 
       k = "180 days", 
       lag = "5 days",
       idx = df$Date[df$Company.name == Company.name2[1]],
@@ -196,9 +193,8 @@ df2 %>%
       x = df[df$Company.name == Company.name2[1], ],  
       k = "180 days", 
       lag = "5 days",
-      idx = df$Date,
-      at = Event_date[df$Company.name == Company.name2[1]],
-      company = Company.name2[1],
+      idx = df$Date[df$Company.name == Company.name2[1]],
+      at = Event_date,
       f = function(x) {
         coef(
           lm(stock_return ~ market_return, data = x)
@@ -206,6 +202,4 @@ df2 %>%
       }
     )
   )
-
-
 ```

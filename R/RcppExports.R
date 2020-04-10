@@ -75,6 +75,26 @@ minmax_run <- function(x, metric = "min", na_rm = TRUE) {
 #'
 #' @param x \code{numeric} vector which running function is calculated on
 #'
+#' @param k (\code{integer}` vector or single value)\cr
+#'  Denoting size of the running window. If \code{k} is a single value then window
+#'  size is constant for all elements, otherwise if \code{length(k) == length(x)}
+#'  different window size for each element.
+#'
+#' @param lag (\code{integer} vector or single value)\cr
+#'  Denoting window lag. If \code{lag} is a single value then window lag is constant
+#'  for all elements, otherwise if \code{length(lag) == length(x)} different window
+#'  size for each element. Negative value shifts window forward.
+#'
+#' @param idx (\code{integer}, \code{Date}, \code{POSIXt})\cr
+#'  Optional integer vector containing sorted (ascending) index of observation.
+#'  By default \code{idx} is index incremented by one. User can provide index with
+#'  varying increment and with duplicated values. If specified then \code{k} and \code{lag}
+#'  are depending on \code{idx}. Length of \code{idx} have to be equal of length \code{x}.
+#'
+#' @param at (\code{integer}, \code{Date}, \code{POSIXt}, \code{character} vector)\cr
+#'  Vector of any size and any value defining output data points. Values of the
+#'  vector defines the indexes which data is computed at.
+#'
 #' @param na_rm \code{logical} single value (default \code{na_rm = TRUE}) -
 #' if \code{TRUE} sum is calculating excluding \code{NA}.
 #'

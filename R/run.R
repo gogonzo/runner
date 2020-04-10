@@ -65,7 +65,7 @@
 #'  }
 #'  \item{**Windows depending on date**}{\cr
 #'    If one specifies `idx` this would mean that output windows size might
-#'    change in size because of inequally spaced indexes. Fox example 5-period
+#'    change in size because of unequally spaced indexes. Fox example 5-period
 #'    window is different than 5-element window, because 5-period window might
 #'    contain any number of observation (7-day mean is not the same as 7-element mean)
 #'     \cr
@@ -84,7 +84,7 @@
 #'    \if{latex}{\figure{runner_at.pdf}{options: width=7cm}}
 #'    \cr
 #'    `at` can also be specified as interval of the output defined by `at = "<increment>"`
-#'    which retults in obtaining results on following indices
+#'    which results in output on following indices
 #'    `seq.POSIXt(min(idx), max(idx), by = "<increment>")`. Increment of sequence is the
 #'    same as in \code{\link[base]{seq.POSIXt}} function.
 #'    It's worth noting that increment interval can't be more frequent than
@@ -146,36 +146,25 @@
 #'        at = c(1, 5, 8),
 #'        type = "character")
 #'
-#' # 30 day mean or hourly data - at every 7 days
-#' runner(
-#'   dummy_hour,
-#'   k = 30 * 24 * 60 * 60, # days*hours*mins*secs
-#'   lag = 24 * 60 * 60, # lagged by 1-day
-#'   idx = dummy_hour$hour,
-#'   at = "7 days",
-#'   f = function(x) {
-#'     data.frame(
-#'       date = as.Date(x$hour)[1],
-#'       val = mean(x$val1)
-#'      )
-#'   }
+#' # 5 days mean
+#' idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
+#' runner::runner(
+#'   x = idx,
+#'   k = "5 days",
+#'   lag = 1,
+#'   idx = Sys.Date() + idx,
+#'   f = function(x) mean(x)
 #' )
 #'
-#' # 30 day mean or hourly data - at every 7 days (output as data.frame)
-#' runner(
-#'   dummy_hour,
-#'   k = 30 * 24 * 60 * 60, # days*hours*mins*secs
-#'   lag = 24 * 60 * 60, # lagged by 1-day
-#'   idx = dummy_hour$hour,
-#'   at = "7 days",
-#'   f = function(x) {
-#'     data.frame(
-#'       date = as.Date(x$hour)[1],
-#'       val = mean(x$val1)
-#'      )
-#'   }
+#'# 5 days mean at 4-indices
+#' runner::runner(
+#'   x = 1:15,
+#'   k = 5,
+#'   lag = 1,
+#'   idx = idx,
+#'   at = c(18, 27, 48, 31),
+#'   f = mean
 #' )
-#'
 #' @md
 #' @importFrom methods is
 #' @export
@@ -190,11 +179,24 @@ runner <- function(
   type = "auto",
   ...
   ) {
+
+  if (any(is.na(k))) {
+    stop("Function doesn't accept NA values in k vector");
+  }
+  if (any(is.na(lag))) {
+    stop("Function doesn't accept NA values in lag vector");
+  }
+  if (any(is.na(idx))) {
+    stop("Function doesn't accept NA values in idx vector");
+  }
   if (!is(f, "function")) {
     stop("f should be a function")
   }
 
+
   at <- seq_by(at, idx)
+  k <- k_by(k, if (length(at > 0)) at else idx, "k")
+  lag <- k_by(lag, if (length(at > 0)) at else idx, "lag")
 
   w <- window_run(
     x = if (is.data.frame(x) || is.matrix(x)) {
@@ -202,8 +204,8 @@ runner <- function(
     } else {
       x
     },
-    k = k_by(k, if (length(at > 0)) at else idx, "k"),
-    lag = k_by(lag, if (length(at > 0)) at else idx, "lag"),
+    k = k,
+    lag = lag,
     idx = idx,
     at = at,
     na_pad = na_pad
@@ -246,14 +248,15 @@ runner <- function(
 #' Creates sequence for at as time-unit-interval
 #'
 #' Creates sequence for at as time-unit-interval
-
+#' @param at object from runner
+#' @param idx object from runner
 seq_by <- function(at, idx) {
   if ((is.character(at) &&
        length(at) == 1)) {
 
     if (length(idx) == 0) {
       stop(
-        sprintf("`idx` can't be empty while specifying at as time-unit-interval")
+        sprintf("`idx` can't be empty while specifying at as time interval")
       )
     }
 
@@ -264,7 +267,7 @@ seq_by <- function(at, idx) {
         seq(min(idx), max(idx), by = at)
       }
     } else {
-      stop("To specify at as time-unit-interval `idx` can't be empty")
+      stop("To specify at as time interval character `idx` can't be empty")
     }
   }
   return(at)
@@ -273,10 +276,13 @@ seq_by <- function(at, idx) {
 #' Converts k and lag from time-unit-interval to int
 #'
 #' Converts k and lag from time-unit-interval to int
+#' @param k object from runner
+#' @param idx object from runner
+#' @param param name of the parameter to be printed in error message
 #' @examples
 #' k <-  "1 month"
 #' idx <- seq(as.POSIXct("2019-01-01 03:02:01"), as.POSIXct("2020-01-01 03:02:01"), by = "month")
-#' k_difftime <- k_by(k, idx)
+#' k_difftime <- runner:::k_by(k, idx, param = "k")
 #' idx - k_difftime
 k_by <- function(k, idx, param) {
   if (is.character(k)) {
@@ -289,7 +295,7 @@ k_by <- function(k, idx, param) {
     from <- if (length(idx) == length(k) && length(k) != 1) {
       if (length(idx) == 0) {
         stop(
-          sprintf("`idx` can't be empty while specifying %s as time-unit", param)
+          sprintf("`idx` can't be empty while specifying %s as time interval", param)
         )
       }
       mapply(
@@ -319,15 +325,17 @@ k_by <- function(k, idx, param) {
   return(k)
 }
 
-#' Reformats time-unit-interval to valid for runner
+#' Formats time-unit-interval to valid for runner
 #'
-#' Reformats time-unit-interval to valid for runner
+#' Formats time-unit-interval to valid for runner
+#' @param k (k or lag) object from runner to be formatted
+#' @param only_positive for k is TRUE, for lag is FALSE
 #' @examples
-#' reformat_k("1 days")
-#' reformat_k("day")
-#' reformat_k("10 days")
-#' reformat_k("-10 days", only_positive = FALSE)
-#' reformat_k(c("-10 days", "2 months"), only_positive = FALSE)
+#' runner:::reformat_k("1 days")
+#' runner:::reformat_k("day")
+#' runner:::reformat_k("10 days")
+#' runner:::reformat_k("-10 days", only_positive = FALSE)
+#' runner:::reformat_k(c("-10 days", "2 months"), only_positive = FALSE)
 reformat_k <- function(k, only_positive = TRUE) {
   if (only_positive && any(grepl("^-", k))) {
     stop("k can't be negative")
@@ -342,4 +350,3 @@ reformat_k <- function(k, only_positive = TRUE) {
 
   return(k)
 }
-
