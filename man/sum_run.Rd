@@ -28,13 +28,14 @@ otherwise if \code{length(lag) == length(x)} different window size for each
 element. Negative value shifts window forward.}
 
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt}) an optional integer vector containing
-sorted (ascending) index of observation. If specified then \code{k} and
-\code{lag} are depending on \code{idx}.
-Length of \code{idx} should be equal of length \code{x}.}
+sorted (ascending) index of observation. By default \code{idx} is index incremented
+by one. User can provide index with varying increment and with duplicated values.
+If specified then \code{k} and \code{lag} are depending on \code{idx}.
+Length of \code{idx} have to be equal of length \code{x}.}
 
-\item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character}) vector of any size and any value
-defining output data points. Values of the vector defines the indexes which
-data is computed at. Can be also \code{POSIXt} sequence increment
+\item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character}) vector of any size and
+any value defining output data points. Values of the vector defines the
+indexes which data is computed at. Can be also \code{POSIXt} sequence increment
 \code{\link[base]{seq.POSIXt}}. More in details.}
 
 \item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) -

@@ -28,14 +28,12 @@ dummy_hour <- dummy_min[sample(seq_len(nrow(dummy_min)), 10000, replace = TRUE),
 dummy_hour <- dummy_hour[order(dummy_hour$min),]
 dummy_hour$min <- lubridate::round_date(dummy_hour$min, unit = "hour")
 colnames(dummy_hour)[1] <- "hour"
-dummy_hour <- dummy_hour[, c("hour", "val2")]
 
 # create daily data ----
 dummy_day <- dummy_min[sample(seq_len(nrow(dummy_min)), 10000, replace = TRUE), ]
 dummy_day <- dummy_day[order(dummy_day$min),]
 dummy_day$min <- lubridate::round_date(dummy_day$min, unit = "day")
 colnames(dummy_day)[1] <- "day"
-dummy_day <- dummy_day[, c("day", "val3", "val4")]
 
 
 library(ggplot2)

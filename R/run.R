@@ -15,24 +15,28 @@
 #'  element. Negative value shifts window forward.
 #'
 #' @param idx (`integer`, `Date`, `POSIXt`) an optional integer vector containing
-#'  sorted (ascending) index of observation. If specified then `k` and
-#'  `lag` are depending on `idx`.
-#'  Length of `idx` should be equal of length `x`.
+#'  sorted (ascending) index of observation. By default `idx` is index incremented
+#'  by one. User can provide index with varying increment and with duplicated values.
+#'  If specified then `k` and `lag` are depending on `idx`.
+#'  Length of `idx` have to be equal of length `x`.
 #'
-#' @param f (`function`) to be applied on windows created from `x`
+#' @param f (`function`) to be applied on windows created from `x`. This function
+#' is meant to summarize windows and create single element for each window, but
+#' one can also specify function which return multiple elements (runner output will
+#' be a list).
 #'
-#' @param at (`integer`, `Date`, `POSIXt`, `character`) vector of any size and any value
-#'  defining output data points. Values of the vector defines the indexes which
-#'  data is computed at. Can be also `POSIXt` sequence increment
+#' @param at (`integer`, `Date`, `POSIXt`, `character`) vector of any size and
+#'  any value defining output data points. Values of the vector defines the
+#'  indexes which data is computed at. Can be also `POSIXt` sequence increment
 #'  \code{\link[base]{seq.POSIXt}}. More in details.
 #'
 #' @param na_pad (`logical`) single value (default `na_pad = FALSE`) - if
 #'  `TRUE` calculation on incomplete window will return `NA`.
 #'  Incomplete window is when some parts of the window are out of range
 #'
-#' @param type (`character`) output type (`"logical"`, `"numeric"`, `"integer"`, `"character"`, `"auto"`).
-#'  `runner` by default guess type automatically. In case of failure of `"auto"`
-#'  please specify desired type.
+#' @param type (`character`) output type (`"logical"`, `"numeric"`, `"integer"`,
+#'  `"character"`, `"auto"`). `runner` by default guess type automatically. In
+#'  case of failure of `"auto"` please specify desired type.
 #'
 #' @param ... other arguments passed to the function `f`.
 #'
@@ -47,7 +51,7 @@
 #'    \if{html}{\figure{cumulative_windows.png}{options: width="75\%" alt="Figure: cumulative_windows.png"}}
 #'    \if{latex}{\figure{cumulative_windows.pdf}{options: width=7cm}}
 #'  }
-#'  \item{**Incremental index**}{\cr
+#'  \item{**Constant sliding windows**}{\cr
 #'    applied when user specify `k` as constant value keeping `idx` and
 #'    `at` unspecified. `lag` argument shifts windows left (`lag > 0`)
 #'    or right (`lag < 0`). \cr
@@ -131,6 +135,36 @@
 #'        at = c(1, 5, 8),
 #'        type = "character")
 #'
+#' # 30 day mean or hourly data - at every 7 days
+#' runner(
+#'   dummy_hour,
+#'   k = 30 * 24 * 60 * 60, # days*hours*mins*secs
+#'   lag = 24 * 60 * 60, # lagged by 1-day
+#'   idx = dummy_hour$hour,
+#'   at = "7 days",
+#'   f = function(x) {
+#'     data.frame(
+#'       date = as.Date(x$hour)[1],
+#'       val = mean(x$val1)
+#'      )
+#'   }
+#' )
+#'
+#' # 30 day mean or hourly data - at every 7 days (output as data.frame)
+#' runner(
+#'   dummy_hour,
+#'   k = 30 * 24 * 60 * 60, # days*hours*mins*secs
+#'   lag = 24 * 60 * 60, # lagged by 1-day
+#'   idx = dummy_hour$hour,
+#'   at = "7 days",
+#'   f = function(x) {
+#'     data.frame(
+#'       date = as.Date(x$hour)[1],
+#'       val = mean(x$val1)
+#'      )
+#'   }
+#' )
+#'
 #' @md
 #' @importFrom methods is
 #' @export
@@ -145,7 +179,6 @@ runner <- function(
   type = "auto",
   ...
   ) {
-
   if (!is(f, "function")) {
     stop("f should be a function")
   }
@@ -208,4 +241,11 @@ at_by_sequence <- function(at, idx) {
     at <- seq(min(idx), max(idx), by = at)
   }
   return(at)
+}
+
+add_datetime <- function(idx, k) {
+
+
+
+
 }

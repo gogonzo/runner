@@ -20,7 +20,10 @@ runner(
 \item{x}{(\code{vector}, \code{data.frame}, \code{matrix}) to be input in runner custom
 function \code{f}.}
 
-\item{f}{(\code{function}) to be applied on windows created from \code{x}}
+\item{f}{(\code{function}) to be applied on windows created from \code{x}. This function
+is meant to summarize windows and create single element for each window, but
+one can also specify function which return multiple elements (runner output will
+be a list).}
 
 \item{k}{(\code{integer}) vector or single value denoting size of the running
 window. If \code{k} is a single value then window size is constant for all
@@ -33,22 +36,23 @@ otherwise if \code{length(lag) == length(x)} different window size for each
 element. Negative value shifts window forward.}
 
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt}) an optional integer vector containing
-sorted (ascending) index of observation. If specified then \code{k} and
-\code{lag} are depending on \code{idx}.
-Length of \code{idx} should be equal of length \code{x}.}
+sorted (ascending) index of observation. By default \code{idx} is index incremented
+by one. User can provide index with varying increment and with duplicated values.
+If specified then \code{k} and \code{lag} are depending on \code{idx}.
+Length of \code{idx} have to be equal of length \code{x}.}
 
-\item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character}) vector of any size and any value
-defining output data points. Values of the vector defines the indexes which
-data is computed at. Can be also \code{POSIXt} sequence increment
+\item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character}) vector of any size and
+any value defining output data points. Values of the vector defines the
+indexes which data is computed at. Can be also \code{POSIXt} sequence increment
 \code{\link[base]{seq.POSIXt}}. More in details.}
 
 \item{na_pad}{(\code{logical}) single value (default \code{na_pad = FALSE}) - if
 \code{TRUE} calculation on incomplete window will return \code{NA}.
 Incomplete window is when some parts of the window are out of range}
 
-\item{type}{(\code{character}) output type (\code{"logical"}, \code{"numeric"}, \code{"integer"}, \code{"character"}, \code{"auto"}).
-\code{runner} by default guess type automatically. In case of failure of \code{"auto"}
-please specify desired type.}
+\item{type}{(\code{character}) output type (\code{"logical"}, \code{"numeric"}, \code{"integer"},
+\code{"character"}, \code{"auto"}). \code{runner} by default guess type automatically. In
+case of failure of \code{"auto"} please specify desired type.}
 
 \item{...}{other arguments passed to the function \code{f}.}
 }
@@ -71,7 +75,7 @@ this would mean that \code{k} is equal to number of available elements \cr
 \if{html}{\figure{cumulative_windows.png}{options: width="75\%" alt="Figure: cumulative_windows.png"}}
 \if{latex}{\figure{cumulative_windows.pdf}{options: width=7cm}}
 }
-\item{\strong{Incremental index}}{\cr
+\item{\strong{Constant sliding windows}}{\cr
 applied when user specify \code{k} as constant value keeping \code{idx} and
 \code{at} unspecified. \code{lag} argument shifts windows left (\code{lag > 0})
 or right (\code{lag < 0}). \cr
@@ -150,5 +154,35 @@ runner(letters[1:10],
        f = function(x) paste(x, collapse = "-"),
        at = c(1, 5, 8),
        type = "character")
+
+# 30 day mean or hourly data - at every 7 days
+runner(
+  dummy_hour,
+  k = 30 * 24 * 60 * 60, # days*hours*mins*secs
+  lag = 24 * 60 * 60, # lagged by 1-day
+  idx = dummy_hour$hour,
+  at = "7 days",
+  f = function(x) {
+    data.frame(
+      date = as.Date(x$hour)[1],
+      val = mean(x$val1)
+     )
+  }
+)
+
+# 30 day mean or hourly data - at every 7 days (output as data.frame)
+runner(
+  dummy_hour,
+  k = 30 * 24 * 60 * 60, # days*hours*mins*secs
+  lag = 24 * 60 * 60, # lagged by 1-day
+  idx = dummy_hour$hour,
+  at = "7 days",
+  f = function(x) {
+    data.frame(
+      date = as.Date(x$hour)[1],
+      val = mean(x$val1)
+     )
+  }
+)
 
 }
