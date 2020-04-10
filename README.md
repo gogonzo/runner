@@ -31,11 +31,10 @@ install.packages("runner")
 
 ## Using runner
 
-![](man/figures/using_runner.png) `runner` package provides functions
-applied on running windows. The most universal function is
-`runner::runner` which gives user possibility to apply any R function
-`f` in running window. In example below quarterly correlation is
-calculated lagged by 1 month.
+`runner` package provides functions applied on running windows. The most
+universal function is `runner::runner` which gives user possibility to
+apply any R function `f` in running window. In example below quarterly
+correlation is calculated lagged by 1 month.
 
 ``` r
 library(runner)
@@ -117,7 +116,7 @@ window of size `k = 5` lagged by `lag = 2`. In parentheses ranges for
 each
 window.
 
-![](man/figures/running_date_windows_explain.png)
+![](man/figures/running_date_windows.png)
 
 ``` r
 idx <- Sys.Date() + c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)

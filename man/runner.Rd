@@ -17,44 +17,49 @@ runner(
 )
 }
 \arguments{
-\item{x}{(\code{vector}, \code{data.frame}, \code{matrix}) to be input in runner custom
-function \code{f}.}
+\item{x}{(\code{vector}, \code{data.frame}, \code{matrix})\cr
+Input in runner custom function \code{f}.}
 
-\item{f}{(\code{function}) to be applied on windows created from \code{x}. This function
-is meant to summarize windows and create single element for each window, but
-one can also specify function which return multiple elements (runner output will
-be a list).}
+\item{f}{(\code{function})\cr
+Applied on windows created from \code{x}. This function is meant to summarize
+windows and create single element for each window, but one can also specify
+function which return multiple elements (runner output will be a list).}
 
-\item{k}{(\code{integer}) vector or single value denoting size of the running
-window. If \code{k} is a single value then window size is constant for all
-elements, otherwise if \code{length(k) == length(x)} different window size
-for each element.}
+\item{k}{(\code{integer} vector or single value)\cr
+Denoting size of the running window. If \code{k} is a single value then window
+size is constant for all elements, otherwise if \code{length(k) == length(x)}
+different window size for each element. One can also specify \code{k} in the same
+way as by in \code{\link[base]{seq.POSIXt}}. More in details.}
 
-\item{lag}{(\code{integer}) vector or single value denoting window lag.
-If \code{lag} is a single value then window lag is constant for all elements,
-otherwise if \code{length(lag) == length(x)} different window size for each
-element. Negative value shifts window forward.}
+\item{lag}{(\code{integer} vector or single value)\cr
+Denoting window lag. If \code{lag} is a single value then window lag is constant
+for all elements, otherwise if \code{length(lag) == length(x)} different window
+size for each element. Negative value shifts window forward. One can also
+specify \code{lag} in the same way as by in \code{\link[base]{seq.POSIXt}}.
+More in details.}
 
-\item{idx}{(\code{integer}, \code{Date}, \code{POSIXt}) an optional integer vector containing
-sorted (ascending) index of observation. By default \code{idx} is index incremented
-by one. User can provide index with varying increment and with duplicated values.
-If specified then \code{k} and \code{lag} are depending on \code{idx}.
-Length of \code{idx} have to be equal of length \code{x}.}
+\item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr
+Optional integer vector containing sorted (ascending) index of observation.
+By default \code{idx} is index incremented by one. User can provide index with
+varying increment and with duplicated values. If specified then \code{k} and \code{lag}
+are depending on \code{idx}. Length of \code{idx} have to be equal of length \code{x}.}
 
-\item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character}) vector of any size and
-any value defining output data points. Values of the vector defines the
-indexes which data is computed at. Can be also \code{POSIXt} sequence increment
-\code{\link[base]{seq.POSIXt}}. More in details.}
+\item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character} vector)\cr
+Vector of any size and any value defining output data points. Values of the
+vector defines the indexes which data is computed at. Can be also \code{POSIXt}
+sequence increment \code{\link[base]{seq.POSIXt}}. More in details.}
 
-\item{na_pad}{(\code{logical}) single value (default \code{na_pad = FALSE}) - if
-\code{TRUE} calculation on incomplete window will return \code{NA}.
-Incomplete window is when some parts of the window are out of range}
+\item{na_pad}{(\code{logical} single value)\cr
+Whether incomplete window should return \code{NA} (if \code{na_pad = TRUE})
+Incomplete window is when some parts of the window are out of range.}
 
-\item{type}{(\code{character}) output type (\code{"logical"}, \code{"numeric"}, \code{"integer"},
-\code{"character"}, \code{"auto"}). \code{runner} by default guess type automatically. In
-case of failure of \code{"auto"} please specify desired type.}
+\item{type}{(\code{character} single value)\cr
+output type (\code{"auto"}, \code{"logical"}, \code{"numeric"}, \code{"integer"}, \code{"character"}).
+\code{runner} by default guess type automatically. In case of failure of \code{"auto"}
+please specify desired type.}
 
-\item{...}{other arguments passed to the function \code{f}.}
+\item{...}{(optional)\cr
+other arguments passed to the function \code{f}.}
 }
 \value{
 vector with aggregated values for each window. Length of output is the
@@ -84,7 +89,7 @@ or right (\code{lag < 0}). \cr
 }
 \item{\strong{Windows depending on date}}{\cr
 If one specifies \code{idx} this would mean that output windows size might
-change in size because of inequally spaced indexes. Fox example 5-period
+change in size because of unequally spaced indexes. Fox example 5-period
 window is different than 5-element window, because 5-period window might
 contain any number of observation (7-day mean is not the same as 7-element mean)
 \cr
@@ -100,14 +105,20 @@ Illustration below shows output of \code{runner} for \code{at = c(13, 27, 45, 31
 which gives windows in ranges enclosed in square brackets. Range for \code{at = 27} is
 \verb{[22, 26]} which is not available in current indices. \cr
 \if{html}{\figure{runner_at.png}{options: width="75\%" alt="Figure: runner_at.png"}}
-\if{latex}{\figure{runner_at.pdf}{options: width=7cm}}\cr
+\if{latex}{\figure{runner_at.pdf}{options: width=7cm}}
+\cr
+\code{at} can also be specified as interval of the output defined by \code{at = "<increment>"}
+which results in output on following indices
+\code{seq.POSIXt(min(idx), max(idx), by = "<increment>")}. Increment of sequence is the
+same as in \code{\link[base]{seq.POSIXt}} function.
+It's worth noting that increment interval can't be more frequent than
+interval of \code{idx} - for \code{Date} the most frequent time-unit is a \code{"day"},
+for \code{POSIXt} a \code{sec}.
 
-\code{at} can also be specified as interval of the output defined by \code{at = "<time unit>"}
-which retults in obtaining results on following indices
-\code{seq(min(idx), max(idx), by = "<time unit>")}. \code{"<time unit>"} is the same
-as in \code{\link[base]{seq.POSIXt}} function.
-It's worth noting that time-unit can't be more frequent than \code{idx} - for
-\code{Date} the most frequent time-unit is a \code{"day"}, for \code{POSIXt} a \code{sec}.
+\code{k} and \code{lag} can also be specified as using time sequence increment. Available
+time units are \verb{"sec", "min", "hour", "day", "DSTday", "week", "month", "quarter" or "year"}.
+To increment by number of units one can also specify \verb{<number> <unit>s}
+for example \code{lag = "-2 days"}, \code{k = "5 weeks"}.
 }
 }
 Above is not enough since \code{k} and \code{lag} can be a vector which allows to
@@ -155,34 +166,23 @@ runner(letters[1:10],
        at = c(1, 5, 8),
        type = "character")
 
-# 30 day mean or hourly data - at every 7 days
-runner(
-  dummy_hour,
-  k = 30 * 24 * 60 * 60, # days*hours*mins*secs
-  lag = 24 * 60 * 60, # lagged by 1-day
-  idx = dummy_hour$hour,
-  at = "7 days",
-  f = function(x) {
-    data.frame(
-      date = as.Date(x$hour)[1],
-      val = mean(x$val1)
-     )
-  }
+# 5 days mean
+idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
+runner::runner(
+  x = idx,
+  k = "5 days",
+  lag = 1,
+  idx = Sys.Date() + idx,
+  f = function(x) mean(x)
 )
 
-# 30 day mean or hourly data - at every 7 days (output as data.frame)
-runner(
-  dummy_hour,
-  k = 30 * 24 * 60 * 60, # days*hours*mins*secs
-  lag = 24 * 60 * 60, # lagged by 1-day
-  idx = dummy_hour$hour,
-  at = "7 days",
-  f = function(x) {
-    data.frame(
-      date = as.Date(x$hour)[1],
-      val = mean(x$val1)
-     )
-  }
+# 5 days mean at 4-indices
+runner::runner(
+  x = 1:15,
+  k = 5,
+  lag = 1,
+  idx = idx,
+  at = c(18, 27, 48, 31),
+  f = mean
 )
-
 }

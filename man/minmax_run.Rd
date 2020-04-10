@@ -7,8 +7,8 @@
 minmax_run(x, metric = "min", na_rm = TRUE)
 }
 \arguments{
-\item{x}{(\code{vector}, \code{data.frame}, \code{matrix}) to be input in runner custom
-function \code{f}.}
+\item{x}{(\code{vector}, \code{data.frame}, \code{matrix})\cr
+Input in runner custom function \code{f}.}
 
 \item{metric}{\code{character} what to return, minimum or maximum}
 
