@@ -34,29 +34,33 @@ install.packages("runner")
 ![](man/figures/using_runner.png) `runner` package provides functions
 applied on running windows. The most universal function is
 `runner::runner` which gives user possibility to apply any R function
-`f` in running window. R function `f` should return single value for
-each window. In example below trimmed mean is calculated on 14-days
-window.
+`f` in running window. In example below quarterly correlation is
+calculated lagged by 1 month.
 
 ``` r
 library(runner)
-x <- rnorm(20)
-dates <- seq.Date(Sys.Date(), Sys.Date() + 19, by = "1 day")
 
-runner(x, 
-       k = 14, 
-       idx = dates, 
-       f = function(xi) {
-        mean(xi, na.rm = TRUE, trim = 0.05)
-       })
+x <- data.frame(
+  date = seq.Date(Sys.Date(), Sys.Date() + 365, length.out = 20),
+  a = rnorm(20),
+  b = rnorm(20)
+)
+
+runner(
+  x, 
+  lag = "1 months",
+  k = "4 months", 
+  idx = x$date, 
+  f = function(x) {
+    cor(x$a, x$b)
+  }
+)
 ```
 
-## Running windows
+There are different kinds of running windows and all of them are
+implemented in `runner`.
 
-All options of the `runner` are explained in each section below using
-illustrations and `window_run` function. `window_run` creates list of
-running windows with settings which can be used in `runner::runner` and
-other functions in the package.
+## Running windows
 
 Following diagram illustrates what running windows are - in this case
 running windows of length `k = 4`. For each of 15 elements of a vector
@@ -76,7 +80,7 @@ below illustrates window of `k = 4` for 10th element of vector `x`.
 ![](man/figures/constant_window.png)
 
 ``` r
-window_run(1:15, k = 4)
+runner(1:15, k = 4, f = function(x) x)
 ```
 
 ### Window lag
@@ -92,7 +96,12 @@ value, which shifts window forward instead of backward.
 ![](man/figures/lagged_window_k_lag.png)
 
 ``` r
-window_run(1:15, k = 4, lag = 2)
+runner(
+  1:15, 
+  k = 4, 
+  lag = 2, 
+  f = function(x) x
+)
 ```
 
 ### Windows depending on date
@@ -105,16 +114,20 @@ same length as `x` of class `Date` or `integer`. Including `idx` can be
 combined with varying window size, than k will denote number of periods
 in window different for each data point. Example below illustrates
 window of size `k = 5` lagged by `lag = 2`. In parentheses ranges for
-each window.
+each
+window.
 
 ![](man/figures/running_date_windows_explain.png)
 
 ``` r
-idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
-window_run(x = 1:15, 
-           k = 5, 
-           lag = 1, 
-           idx = idx)
+idx <- Sys.Date() + c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
+runner(
+  x = 1:15, 
+  k = "5 days", 
+  lag = "1 days", 
+  idx = idx,
+  function(x) x
+)
 ```
 
 ### running at
@@ -130,11 +143,14 @@ available in current indices.
 
 ``` r
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
-window_run(x = idx, 
-           k = 5, 
-           lag = 1, 
-           idx = idx, 
-           at = c(18, 27, 48, 31))
+runner(
+  x = idx, 
+  k = 5, 
+  lag = 1, 
+  idx = idx, 
+  at = c(18, 27, 48, 31),
+  function(x) x
+)
 ```
 
 ### `NA` padding
@@ -153,12 +169,15 @@ depending on date. In example below two windows exceed range given by
 
 ``` r
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
-window_run(x = idx, 
-           k = 5, 
-           lag = 1, 
-           idx = idx, 
-           at = c(4, 18, 48, 51),
-           na_pad = TRUE)
+runner(
+  x = idx, 
+  k = 5, 
+  lag = 1, 
+  idx = idx, 
+  at = c(4, 18, 48, 51),
+  na_pad = TRUE,
+  f = function(x) x
+)
 ```
 
 ### Build-in functions

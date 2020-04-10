@@ -5,6 +5,7 @@ x2[sample(1:100, 10)] <- NA
 k <- sample(1:100, 100, replace = TRUE)
 lag <- sample(-15:15, 100, replace = TRUE)
 idx <- cumsum(sample(c(1, 2, 3, 4), 100, replace = TRUE))
+idx_date <- Sys.Date() + idx
 at <- sample(1:100, 10)
 at_date <- sample(idx, 10)
 find_idx <- function(x, i, k, lag = 0, na_pad = FALSE) {
@@ -761,6 +762,79 @@ test_that("at date window", {
   expect_equal(
     runner(x2, k = k, lag = lag, idx = idx, f = mean, na_pad = TRUE)[ids],
     runner(x2, k = k[ids], lag = lag[ids], idx = idx, at = at_date, f = mean, na_pad = TRUE)
+  )
+})
+
+test_that("at with difftime", {
+
+
+  at_date <- seq_by(at = "1 month", idx = idx_date)
+  expect_identical(
+    at_date,
+    seq(min(idx_date), max(idx_date), by = "1 month")
+  )
+
+  expect_equal(
+    runner(1:100, at = "1 month", idx = idx_date, f = function(x) max(x)),
+    runner(1:100, at = at_date, idx = idx_date, f = function(x) max(x))
+  )
+
+  at_date <- seq_by(at = "-1 month", idx = idx_date)
+  expect_identical(
+    at_date,
+    seq(max(idx_date), min(idx_date), by = "-1 month")
+  )
+  expect_equal(
+    runner(1:100, at = "-1 month", idx = idx_date, f = function(x) max(x)),
+    runner(1:100, at = at_date, idx = idx_date, f = function(x) max(x))
+  )
+})
+
+test_that("k with difftime", {
+  expect_equal(
+    runner(1:100, k = "2 weeks", idx = idx_date, f = function(x) x),
+    runner(1:100, k = 14, idx = idx_date, f = function(x) x)
+  )
+
+  k_date <- sample(c("week", "day"), 100, replace = TRUE)
+  k_int <- ifelse(k_date == "week", 7L, 1L)
+
+  expect_equal(
+    runner(1:100, k = k_date, idx = idx_date, f = function(x) x),
+    runner(1:100, k = k_int, idx = idx_date, f = function(x) x)
+  )
+
+  expect_error(
+    runner(1:100, k = "-1 week", idx = idx_date, f = function(x) x),
+    "negative"
+  )
+
+})
+
+test_that("lag with difftime", {
+  expect_equal(
+    runner(1:100, lag = "week", idx = idx_date, f = function(x) x),
+    runner(1:100, lag = 7, idx = idx_date, f = function(x) x)
+  )
+
+  expect_equal(
+    runner(1:100, lag = "-1 week", idx = idx_date, f = function(x) x),
+    runner(1:100, lag = -7, idx = idx_date, f = function(x) x)
+  )
+
+  lag_date <- sample(c("week", "day", "-2 week", "-2 day"), 100, replace = TRUE)
+  lag_int <- vapply(
+    lag_date,
+    function(x)
+      switch(x, "week" = 7L, "day" = 1L, "-2 week" = -14L, "-2 day" = -2L),
+    integer(1),
+    USE.NAMES = FALSE
+  )
+
+
+  expect_equal(
+    runner(1:100, k = 5, lag = lag_date, idx = idx_date, f = function(x) x),
+    runner(1:100, k = 5, lag = lag_int, idx = idx_date, f = function(x) x)
   )
 })
 

@@ -1,44 +1,49 @@
 #' Apply running function
 #'
 #' Applies custom function on running windows.
-#' @param x (`vector`, `data.frame`, `matrix`) to be input in runner custom
-#'  function `f`.
+#' @param x (`vector`, `data.frame`, `matrix`)\cr
+#'  Input in runner custom function `f`.
 #'
-#' @param k (`integer`) vector or single value denoting size of the running
-#'  window. If `k` is a single value then window size is constant for all
-#'  elements, otherwise if `length(k) == length(x)` different window size
-#'  for each element.
+#' @param k (`integer` vector or single value)\cr
+#'  Denoting size of the running window. If `k` is a single value then window
+#'  size is constant for all elements, otherwise if `length(k) == length(x)`
+#'  different window size for each element. One can also specify `k` in the same
+#'  way as by in \code{\link[base]{seq.POSIXt}}. More in details.
 #'
-#' @param lag (`integer`) vector or single value denoting window lag.
-#'  If `lag` is a single value then window lag is constant for all elements,
-#'  otherwise if `length(lag) == length(x)` different window size for each
-#'  element. Negative value shifts window forward.
+#' @param lag (`integer` vector or single value)\cr
+#'  Denoting window lag. If `lag` is a single value then window lag is constant
+#'  for all elements, otherwise if `length(lag) == length(x)` different window
+#'  size for each element. Negative value shifts window forward. One can also
+#'  specify `lag` in the same way as by in \code{\link[base]{seq.POSIXt}}.
+#'  More in details.
 #'
-#' @param idx (`integer`, `Date`, `POSIXt`) an optional integer vector containing
-#'  sorted (ascending) index of observation. By default `idx` is index incremented
-#'  by one. User can provide index with varying increment and with duplicated values.
-#'  If specified then `k` and `lag` are depending on `idx`.
-#'  Length of `idx` have to be equal of length `x`.
+#' @param idx (`integer`, `Date`, `POSIXt`)\cr
+#'  Optional integer vector containing sorted (ascending) index of observation.
+#'  By default `idx` is index incremented by one. User can provide index with
+#'  varying increment and with duplicated values. If specified then `k` and `lag`
+#'  are depending on `idx`. Length of `idx` have to be equal of length `x`.
 #'
-#' @param f (`function`) to be applied on windows created from `x`. This function
-#' is meant to summarize windows and create single element for each window, but
-#' one can also specify function which return multiple elements (runner output will
-#' be a list).
+#' @param f (`function`)\cr
+#' Applied on windows created from `x`. This function is meant to summarize
+#' windows and create single element for each window, but one can also specify
+#' function which return multiple elements (runner output will be a list).
 #'
-#' @param at (`integer`, `Date`, `POSIXt`, `character`) vector of any size and
-#'  any value defining output data points. Values of the vector defines the
-#'  indexes which data is computed at. Can be also `POSIXt` sequence increment
-#'  \code{\link[base]{seq.POSIXt}}. More in details.
+#' @param at (`integer`, `Date`, `POSIXt`, `character` vector)\cr
+#'  Vector of any size and any value defining output data points. Values of the
+#'  vector defines the indexes which data is computed at. Can be also `POSIXt`
+#'  sequence increment \code{\link[base]{seq.POSIXt}}. More in details.
 #'
-#' @param na_pad (`logical`) single value (default `na_pad = FALSE`) - if
-#'  `TRUE` calculation on incomplete window will return `NA`.
-#'  Incomplete window is when some parts of the window are out of range
+#' @param na_pad (`logical` single value)\cr
+#'  Whether incomplete window should return `NA` (if `na_pad = TRUE`)
+#'  Incomplete window is when some parts of the window are out of range.
 #'
-#' @param type (`character`) output type (`"logical"`, `"numeric"`, `"integer"`,
-#'  `"character"`, `"auto"`). `runner` by default guess type automatically. In
-#'  case of failure of `"auto"` please specify desired type.
+#' @param type (`character` single value)\cr
+#'  output type (`"auto"`, `"logical"`, `"numeric"`, `"integer"`, `"character"`).
+#'  `runner` by default guess type automatically. In case of failure of `"auto"`
+#'  please specify desired type.
 #'
-#' @param ... other arguments passed to the function `f`.
+#' @param ... (optional)\cr
+#'   other arguments passed to the function `f`.
 #'
 #' @details
 #' Function can apply any R function on running windows defined by `x`,
@@ -76,14 +81,20 @@
 #'    which gives windows in ranges enclosed in square brackets. Range for `at = 27` is
 #'    `[22, 26]` which is not available in current indices. \cr
 #'    \if{html}{\figure{runner_at.png}{options: width="75\%" alt="Figure: runner_at.png"}}
-#'    \if{latex}{\figure{runner_at.pdf}{options: width=7cm}}\cr
-#'
-#'    `at` can also be specified as interval of the output defined by `at = "<time unit>"`
+#'    \if{latex}{\figure{runner_at.pdf}{options: width=7cm}}
+#'    \cr
+#'    `at` can also be specified as interval of the output defined by `at = "<increment>"`
 #'    which retults in obtaining results on following indices
-#'    `seq(min(idx), max(idx), by = "<time unit>")`. `"<time unit>"` is the same
-#'    as in \code{\link[base]{seq.POSIXt}} function.
-#'    It's worth noting that time-unit can't be more frequent than `idx` - for
-#'    `Date` the most frequent time-unit is a `"day"`, for `POSIXt` a `sec`.
+#'    `seq.POSIXt(min(idx), max(idx), by = "<increment>")`. Increment of sequence is the
+#'    same as in \code{\link[base]{seq.POSIXt}} function.
+#'    It's worth noting that increment interval can't be more frequent than
+#'    interval of `idx` - for `Date` the most frequent time-unit is a `"day"`,
+#'    for `POSIXt` a `sec`.
+#'
+#'    `k` and `lag` can also be specified as using time sequence increment. Available
+#'    time units are `"sec", "min", "hour", "day", "DSTday", "week", "month", "quarter" or "year"`.
+#'    To increment by number of units one can also specify `<number> <unit>s`
+#'    for example `lag = "-2 days"`, `k = "5 weeks"`.
 #'  }
 #' }
 #' Above is not enough since `k` and `lag` can be a vector which allows to
@@ -183,16 +194,18 @@ runner <- function(
     stop("f should be a function")
   }
 
+  at <- seq_by(at, idx)
+
   w <- window_run(
     x = if (is.data.frame(x) || is.matrix(x)) {
       seq_len(nrow(x))
     } else {
       x
     },
-    k = k,
-    lag = lag,
+    k = k_by(k, if (length(at > 0)) at else idx, "k"),
+    lag = k_by(lag, if (length(at > 0)) at else idx, "lag"),
     idx = idx,
-    at = at_by_sequence(at, idx),
+    at = at,
     na_pad = na_pad
   )
 
@@ -230,22 +243,103 @@ runner <- function(
   return(res)
 }
 
+#' Creates sequence for at as time-unit-interval
+#'
+#' Creates sequence for at as time-unit-interval
 
-at_by_sequence <- function(at, idx) {
-  if ((is.character(at) && length(at) == 1) ||
-      inherits(at, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
+seq_by <- function(at, idx) {
+  if ((is.character(at) &&
+       length(at) == 1)) {
+
     if (length(idx) == 0) {
-      sprintf("`idx` can't be empty while specifying at='%s'")
+      stop(
+        sprintf("`idx` can't be empty while specifying at as time-unit-interval")
+      )
     }
 
-    at <- seq(min(idx), max(idx), by = at)
+    if (inherits(idx, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
+      at <- if (grepl("^-", at)) {
+        seq(max(idx), min(idx), by = at)
+      } else {
+        seq(min(idx), max(idx), by = at)
+      }
+    } else {
+      stop("To specify at as time-unit-interval `idx` can't be empty")
+    }
   }
   return(at)
 }
 
-add_datetime <- function(idx, k) {
+#' Converts k and lag from time-unit-interval to int
+#'
+#' Converts k and lag from time-unit-interval to int
+#' @examples
+#' k <-  "1 month"
+#' idx <- seq(as.POSIXct("2019-01-01 03:02:01"), as.POSIXct("2020-01-01 03:02:01"), by = "month")
+#' k_difftime <- k_by(k, idx)
+#' idx - k_difftime
+k_by <- function(k, idx, param) {
+  if (is.character(k)) {
+    k <- if (param == "k") {
+      reformat_k(k, only_positive = TRUE)
+    } else {
+      reformat_k(k, only_positive = FALSE)
+    }
 
+    from <- if (length(idx) == length(k) && length(k) != 1) {
+      if (length(idx) == 0) {
+        stop(
+          sprintf("`idx` can't be empty while specifying %s as time-unit", param)
+        )
+      }
+      mapply(
+        FUN = function(x, y) {
+          seq(x, by = y, length.out = 2)[2]
+        },
+        x = idx,
+        y = k
+      )
+    } else if (length(k) == 1) {
+      if (length(idx) == 0) {
+        stop(
+          sprintf("`idx` can't be empty while specifying %s='%s'", param, k)
+        )
+      }
 
+      vapply(
+        idx,
+        function(x) seq(x, by = k, length.out = 2)[2],
+        FUN.VALUE = double(1)
+      )
+    }
 
+    return(as.numeric(idx) - from)
+  }
 
+  return(k)
 }
+
+#' Reformats time-unit-interval to valid for runner
+#'
+#' Reformats time-unit-interval to valid for runner
+#' @examples
+#' reformat_k("1 days")
+#' reformat_k("day")
+#' reformat_k("10 days")
+#' reformat_k("-10 days", only_positive = FALSE)
+#' reformat_k(c("-10 days", "2 months"), only_positive = FALSE)
+reformat_k <- function(k, only_positive = TRUE) {
+  if (only_positive && any(grepl("^-", k))) {
+    stop("k can't be negative")
+  }
+
+  k[grepl("^[a-zA-Z]", k)] <- sprintf("1 %ss", k[grepl("^[a-zA-Z]", k)])
+  positive <- grepl("^[^-]", k)
+  negative <- grepl("^-", k)
+
+  k[positive] <- sprintf("-%s", k[positive])
+  k[negative] <- gsub("^-", "", k[negative])
+
+  return(k)
+}
+
