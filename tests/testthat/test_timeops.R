@@ -64,8 +64,13 @@ test_that("k by", {
 
   idx <- seq(as.POSIXct("2019-01-01 03:02:01"), as.POSIXct("2020-01-01 03:02:01"), by = "month")
   expect_error(
-    new_k <- k_by(k = "-1 month", idx = idx, param = "k"),
+    k_by(k = "-1 month", idx = idx, param = "k"),
     "k can't be negative"
+  )
+
+  expect_error(
+    k_by(k = "1 month", idx = integer(0), param = "lag"),
+    "`idx` can't be empty"
   )
 })
 

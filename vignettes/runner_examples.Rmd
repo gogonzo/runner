@@ -137,7 +137,7 @@ df %>%
 ```
 
 ### Aggregating values from another data.frame in `grouped_df`
-
+[SO Discussion](https://stackoverflow.com/questions/61024712/do-a-rolling-regression-only-on-specific-dates/61045233#61045233)
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 library(runner)
 library(dplyr)

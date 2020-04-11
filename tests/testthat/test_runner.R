@@ -838,8 +838,39 @@ test_that("lag with difftime", {
   )
 })
 
+test_that("runner with df", {
+  expect_equal(
+    runner(iris, k = 10, lag = 1, f = function(x) x),
+    runner(
+      1:nrow(iris),
+      k = 10,
+      lag = 1,
+      f = function(idx) if (length(idx) == 0 || is.na(idx)) {
+       NA
+      } else {
+       iris[idx,]
+      }
+    )
+  )
+
+  expect_equal(
+    runner(iris, k = 10, lag = 1, f = function(x) x)[[50]],
+    iris[40:49, ]
+  )
+
+  expect_equal(
+    runner(iris, k = 10, lag = 1, f = function(x) x)[[1]],
+    NA
+  )
+
+  expect_equal(
+    runner(iris, k = 10, lag = 1, f = function(x) x)[[2]],
+    iris[1, ]
+  )
+
+})
+
 test_that("Errors", {
-  expect_error(runner(x = letters[1:5]))
   expect_error(runner(x = letters[1:5], f = ""))
 
   expect_error(runner(list(1:10), k = 5, f = mean), "Invalid \\'x\\' type")
