@@ -6,7 +6,7 @@
 \usage{
 runner(
   x,
-  f,
+  f = function(x) x,
   k = integer(0),
   lag = integer(1),
   idx = integer(0),
@@ -23,7 +23,8 @@ Input in runner custom function \code{f}.}
 \item{f}{(\code{function})\cr
 Applied on windows created from \code{x}. This function is meant to summarize
 windows and create single element for each window, but one can also specify
-function which return multiple elements (runner output will be a list).}
+function which return multiple elements (runner output will be a list).
+By default runner returns windows as is (\verb{f = function(x)}).}
 
 \item{k}{(\code{integer} vector or single value)\cr
 Denoting size of the running window. If \code{k} is a single value then window
@@ -101,7 +102,7 @@ contain any number of observation (7-day mean is not the same as 7-element mean)
 \code{at} argument. Each element of \code{at} is an index on which runner calculates function -
 which means that output of the runner is now of length equal to \code{at}. Note
 that one can change index of \code{x} by specifying \code{idx}.
-Illustration below shows output of \code{runner} for \code{at = c(13, 27, 45, 31)}
+Illustration below shows output of \code{runner} for \code{at = c(18, 27, 45, 31)}
 which gives windows in ranges enclosed in square brackets. Range for \code{at = 27} is
 \verb{[22, 26]} which is not available in current indices. \cr
 \if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}}
@@ -125,6 +126,9 @@ Above is not enough since \code{k} and \code{lag} can be a vector which allows t
 stretch and lag/lead each window freely on in time (on indices).
 }
 \examples{
+
+# runner returns windows as is by default
+runner(1:10)
 
 # mean on k = 3 elements windows
 runner(1:10, f = mean, k = 3)
