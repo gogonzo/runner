@@ -35,7 +35,7 @@ environment:
 
   - R_VERSION: patched
 
-  - R_VERSION: 3.5.3
+  - R_VERSION: 3.6.1
     RTOOLS_VERSION: 35
 
 matrix:
@@ -43,6 +43,7 @@ matrix:
 
 build_script:
   - travis-tool.sh install_deps
+  - travis-tool.sh install_github r-lib/remotes
 
 test_script:
   - travis-tool.sh run_tests
