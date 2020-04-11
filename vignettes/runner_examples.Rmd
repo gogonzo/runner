@@ -61,7 +61,7 @@ data$pred <- runner(
   lag = "1 day",
   k = "2 weeks",
   idx = data$date,
-  f = running_regression <- function(data) {
+  f = function(data) {
       predict(
         lm(y ~ x, data = data)
       )[nrow(data)]
