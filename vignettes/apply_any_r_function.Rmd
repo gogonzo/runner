@@ -32,9 +32,7 @@ In `runner` this can be achieved as simple by:
 
 ```{r eval=FALSE}
 # full windows
-runner(
-  1:15,
-)
+runner(1:15)
 
 # summarizing - sum
 runner(
