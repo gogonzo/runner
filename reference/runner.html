@@ -150,7 +150,7 @@
 
     <pre class="usage"><span class='fu'>runner</span>(
   <span class='no'>x</span>,
-  <span class='no'>f</span>,
+  <span class='kw'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>,
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0</span>),
   <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>1</span>),
   <span class='kw'>idx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0</span>),
@@ -173,7 +173,8 @@ Input in runner custom function <code>f</code>.</p></td>
       <td><p>(<code>function</code>)<br />
 Applied on windows created from <code>x</code>. This function is meant to summarize
 windows and create single element for each window, but one can also specify
-function which return multiple elements (runner output will be a list).</p></td>
+function which return multiple elements (runner output will be a list).
+By default runner returns windows as is (<code>f = function(x)</code>).</p></td>
     </tr>
     <tr>
       <th>k</th>
@@ -258,7 +259,7 @@ contain any number of observation (7-day mean is not the same as 7-element mean)
 <code>at</code> argument. Each element of <code>at</code> is an index on which runner calculates function -
 which means that output of the runner is now of length equal to <code>at</code>. Note
 that one can change index of <code>x</code> by specifying <code>idx</code>.
-Illustration below shows output of <code>runner</code> for <code>at = c(13, 27, 45, 31)</code>
+Illustration below shows output of <code>runner</code> for <code>at = c(18, 27, 45, 31)</code>
 which gives windows in ranges enclosed in square brackets. Range for <code>at = 27</code> is
 <code>[22, 26]</code> which is not available in current indices. <br />
 <img src='figures/runnerat.png' width="75%" alt="Figure: runnerat.png" /><br />
@@ -277,6 +278,37 @@ stretch and lag/lead each window freely on in time (on indices).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
+<span class='co'># runner returns windows as is by default</span>
+<span class='fu'>runner</span>(<span class='fl'>1</span>:<span class='fl'>10</span>)</div><div class='output co'>#&gt; [[1]]
+#&gt; [1] 1
+#&gt; 
+#&gt; [[2]]
+#&gt; [1] 1 2
+#&gt; 
+#&gt; [[3]]
+#&gt; [1] 1 2 3
+#&gt; 
+#&gt; [[4]]
+#&gt; [1] 1 2 3 4
+#&gt; 
+#&gt; [[5]]
+#&gt; [1] 1 2 3 4 5
+#&gt; 
+#&gt; [[6]]
+#&gt; [1] 1 2 3 4 5 6
+#&gt; 
+#&gt; [[7]]
+#&gt; [1] 1 2 3 4 5 6 7
+#&gt; 
+#&gt; [[8]]
+#&gt; [1] 1 2 3 4 5 6 7 8
+#&gt; 
+#&gt; [[9]]
+#&gt; [1] 1 2 3 4 5 6 7 8 9
+#&gt; 
+#&gt; [[10]]
+#&gt;  [1]  1  2  3  4  5  6  7  8  9 10
+#&gt; </div><div class='input'>
 <span class='co'># mean on k = 3 elements windows</span>
 <span class='fu'>runner</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>f</span> <span class='kw'>=</span> <span class='no'>mean</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt;  [1] 1.0 1.5 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0</div><div class='input'>
 <span class='co'># mean on k = 3 elements windows with different specification</span>
