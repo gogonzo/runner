@@ -1,23 +1,23 @@
 context("Running length")
-k  <- sample(1:5,10, replace=T)
-idx <- cumsum(sample(c(1,2,3), 10, replace=T))
+k  <- sample(1:5,10, replace = TRUE)
+idx <- cumsum(sample(c(1,2,3), 10, replace = TRUE))
 
 test_that("length_run constant k", {
   x1 <- rep(NA, 10)
   x2 <- rep(NA, 10)
 
-  for(i in 1:10) {
-    for(j in i:1) {
-      if(idx[j] <= (idx[i]-3)){
+  for (i in 1:10) {
+    for (j in i:1) {
+      if (idx[j] <= (idx[i] - 3)) {
         x1[i] <- i - j
         break
       }
     }
   }
 
-  for(i in 1:10) {
-    for(j in i:1) {
-      if(idx[j] <= (idx[i]-k[i])){
+  for (i in 1:10) {
+    for (j in i:1) {
+      if (idx[j] <= (idx[i] - k[i])) {
         x2[i] <- i - j
         break
       }
