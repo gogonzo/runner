@@ -7,20 +7,24 @@
 length_run(k = integer(1), lag = integer(1), idx = integer(0))
 }
 \arguments{
-\item{k}{(\code{integer}) vector or single value denoting size of the running
-window. If \code{k} is a single value then window size is constant for all
-elements, otherwise if \code{length(k) == length(x)} different window size
-for each element.}
+\item{k}{(\code{integer} vector or single value)\cr
+Denoting size of the running window. If \code{k} is a single value then window
+size is constant for all elements, otherwise if \code{length(k) == length(x)}
+different window size for each element. One can also specify \code{k} in the same
+way as by in \code{\link[base]{seq.POSIXt}}. More in details.}
 
-\item{lag}{(\code{integer}) vector or single value denoting window lag.
-If \code{lag} is a single value then window lag is constant for all elements,
-otherwise if \code{length(lag) == length(x)} different window size for each
-element. Negative value shifts window forward.}
+\item{lag}{(\code{integer} vector or single value)\cr
+Denoting window lag. If \code{lag} is a single value then window lag is constant
+for all elements, otherwise if \code{length(lag) == length(x)} different window
+size for each element. Negative value shifts window forward. One can also
+specify \code{lag} in the same way as by in \code{\link[base]{seq.POSIXt}}.
+More in details.}
 
-\item{idx}{(\code{date or integer}) an optional integer vector containing
-index of observation. If specified
-then \code{k} and \code{lag} are depending on \code{idx}. Length of
-\code{idx} should be equal of length \code{x}}
+\item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr
+Optional integer vector containing sorted (ascending) index of observation.
+By default \code{idx} is index incremented by one. User can provide index with
+varying increment and with duplicated values. If specified then \code{k} and \code{lag}
+are depending on \code{idx}. Length of \code{idx} have to be equal of length \code{x}.}
 }
 \description{
 Number of elements in k-long window calculated on \code{idx} vector.

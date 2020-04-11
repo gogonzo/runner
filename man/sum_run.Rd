@@ -17,34 +17,32 @@ sum_run(
 \arguments{
 \item{x}{\code{numeric} vector which running function is calculated on}
 
-\item{k}{(\code{integer}) vector or single value denoting size of the running
-window. If \code{k} is a single value then window size is constant for all
-elements, otherwise if \code{length(k) == length(x)} different window size
-for each element.}
+\item{k}{(\code{integer}` vector or single value)\cr
+Denoting size of the running window. If \code{k} is a single value then window
+size is constant for all elements, otherwise if \code{length(k) == length(x)}
+different window size for each element.}
 
-\item{lag}{(\code{integer}) vector or single value denoting window lag.
-If \code{lag} is a single value then window lag is constant for all elements,
-otherwise if \code{length(lag) == length(x)} different window size for each
-element. Negative value shifts window forward.}
+\item{lag}{(\code{integer} vector or single value)\cr
+Denoting window lag. If \code{lag} is a single value then window lag is constant
+for all elements, otherwise if \code{length(lag) == length(x)} different window
+size for each element. Negative value shifts window forward.}
 
-\item{idx}{(\code{date or integer}) an optional integer vector containing
-index of observation. If specified
-then \code{k} and \code{lag} are depending on \code{idx}. Length of
-\code{idx} should be equal of length \code{x}}
+\item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr
+Optional integer vector containing sorted (ascending) index of observation.
+By default \code{idx} is index incremented by one. User can provide index with
+varying increment and with duplicated values. If specified then \code{k} and \code{lag}
+are depending on \code{idx}. Length of \code{idx} have to be equal of length \code{x}.}
 
-\item{at}{(\code{date or integer}) vector of any size and any value
-defining output data points. Values of the vector defines the indexes which
-data is computed at. If \code{idx} is missing then uses indices from \code{1}
- to \code{length(x)}, otherwise depends on indexes passed with \code{idx}.
- If \code{at} is defined then \code{k} and \code{lag} should be of length equal
- one or length of the \code{at}.}
+\item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character} vector)\cr
+Vector of any size and any value defining output data points. Values of the
+vector defines the indexes which data is computed at.}
 
 \item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) -
 if \code{TRUE} sum is calculating excluding \code{NA}.}
 
-\item{na_pad}{\code{logical} single value (default \code{na_pad=FALSE}) - if
-\code{TRUE} calculation on incomplete window will return \code{NA}.
-Incomplete window is when some parts of the window are out of range}
+\item{na_pad}{(\code{logical} single value)\cr
+Whether incomplete window should return \code{NA} (if \code{na_pad = TRUE})
+Incomplete window is when some parts of the window are out of range.}
 }
 \value{
 sum \code{code} vector of length equals length of \code{x}.

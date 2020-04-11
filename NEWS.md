@@ -1,3 +1,10 @@
+# runner 0.3.5
+* `runner` function to be applied on `data.frame` or `matrix` - running windows
+constructed by subsetting rows.
+* `runner` output can be a list.
+* `at` `lag` and `k` allows to specify values as `POSIXt` sequence increment - same as `by` in `seq.POSIXt`.
+* enhanced function documentation by images.
+
 # runner 0.3.2
 * `runner` function with default `type = "auto"` which automatically guess the type
 of returned object.

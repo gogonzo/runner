@@ -35,7 +35,7 @@ environment:
 
   - R_VERSION: patched
 
-  - R_VERSION: 3.5.3
+  - R_VERSION: 3.6.1
     RTOOLS_VERSION: 35
 
 matrix:

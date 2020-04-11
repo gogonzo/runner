@@ -12,46 +12,54 @@ runner(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  ...,
-  type = "auto"
+  type = "auto",
+  ...
 )
 }
 \arguments{
-\item{x}{Vector of any type}
+\item{x}{(\code{vector}, \code{data.frame}, \code{matrix})\cr
+Input in runner custom function \code{f}.}
 
-\item{f}{\code{function} to be applied on windows created from \code{x}}
+\item{f}{(\code{function})\cr
+Applied on windows created from \code{x}. This function is meant to summarize
+windows and create single element for each window, but one can also specify
+function which return multiple elements (runner output will be a list).}
 
-\item{k}{(\code{integer}) vector or single value denoting size of the running
-window. If \code{k} is a single value then window size is constant for all
-elements, otherwise if \code{length(k) == length(x)} different window size
-for each element.}
+\item{k}{(\code{integer} vector or single value)\cr
+Denoting size of the running window. If \code{k} is a single value then window
+size is constant for all elements, otherwise if \code{length(k) == length(x)}
+different window size for each element. One can also specify \code{k} in the same
+way as by in \code{\link[base]{seq.POSIXt}}. More in details.}
 
-\item{lag}{(\code{integer}) vector or single value denoting window lag.
-If \code{lag} is a single value then window lag is constant for all elements,
-otherwise if \code{length(lag) == length(x)} different window size for each
-element. Negative value shifts window forward.}
+\item{lag}{(\code{integer} vector or single value)\cr
+Denoting window lag. If \code{lag} is a single value then window lag is constant
+for all elements, otherwise if \code{length(lag) == length(x)} different window
+size for each element. Negative value shifts window forward. One can also
+specify \code{lag} in the same way as by in \code{\link[base]{seq.POSIXt}}.
+More in details.}
 
-\item{idx}{(\code{date or integer}) an optional integer vector containing
-index of observation. If specified
-then \code{k} and \code{lag} are depending on \code{idx}. Length of
-\code{idx} should be equal of length \code{x}}
+\item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr
+Optional integer vector containing sorted (ascending) index of observation.
+By default \code{idx} is index incremented by one. User can provide index with
+varying increment and with duplicated values. If specified then \code{k} and \code{lag}
+are depending on \code{idx}. Length of \code{idx} have to be equal of length \code{x}.}
 
-\item{at}{(\code{date or integer}) vector of any size and any value
-defining output data points. Values of the vector defines the indexes which
-data is computed at. If \code{idx} is missing then uses indices from \code{1}
- to \code{length(x)}, otherwise depends on indexes passed with \code{idx}.
- If \code{at} is defined then \code{k} and \code{lag} should be of length equal
- one or length of the \code{at}.}
+\item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character} vector)\cr
+Vector of any size and any value defining output data points. Values of the
+vector defines the indexes which data is computed at. Can be also \code{POSIXt}
+sequence increment \code{\link[base]{seq.POSIXt}}. More in details.}
 
-\item{na_pad}{\code{logical} single value (default \code{na_pad=FALSE}) - if
-\code{TRUE} calculation on incomplete window will return \code{NA}.
-Incomplete window is when some parts of the window are out of range}
+\item{na_pad}{(\code{logical} single value)\cr
+Whether incomplete window should return \code{NA} (if \code{na_pad = TRUE})
+Incomplete window is when some parts of the window are out of range.}
 
-\item{...}{other arguments passed to the function \code{f}.}
+\item{type}{(\code{character} single value)\cr
+output type (\code{"auto"}, \code{"logical"}, \code{"numeric"}, \code{"integer"}, \code{"character"}).
+\code{runner} by default guess type automatically. In case of failure of \code{"auto"}
+please specify desired type.}
 
-\item{type}{output type \code{("logical", "numeric", "integer", "character")}.
-\code{runner} by default returns numeric values, but if function is expected
-to return other type, user should specify this in \code{type} argument.}
+\item{...}{(optional)\cr
+other arguments passed to the function \code{f}.}
 }
 \value{
 vector with aggregated values for each window. Length of output is the
@@ -61,6 +69,61 @@ is taken from \code{type} argument.
 \description{
 Applies custom function on running windows.
 }
+\details{
+Function can apply any R function on running windows defined by \code{x},
+\code{k}, \code{lag}, \code{idx} and \code{at}. Running window can be calculated
+on several ways:
+\itemize{
+\item{\strong{Cumulative windows}}{\cr
+applied when user doesn't specify \code{k} argument or specify \code{k = length(x)},
+this would mean that \code{k} is equal to number of available elements \cr
+\if{html}{\figure{cumulativewindows.png}{options: width="75\%" alt="Figure: cumulativewindows.png"}}
+\if{latex}{\figure{cumulativewindows.pdf}{options: width=7cm}}
+}
+\item{\strong{Constant sliding windows}}{\cr
+applied when user specify \code{k} as constant value keeping \code{idx} and
+\code{at} unspecified. \code{lag} argument shifts windows left (\code{lag > 0})
+or right (\code{lag < 0}). \cr
+\if{html}{\figure{incrementalindex.png}{options: width="75\%" alt="Figure: incrementalindex.png"}}
+\if{latex}{\figure{incrementalindex.pdf}{options: width=7cm}}
+}
+\item{\strong{Windows depending on date}}{\cr
+If one specifies \code{idx} this would mean that output windows size might
+change in size because of unequally spaced indexes. Fox example 5-period
+window is different than 5-element window, because 5-period window might
+contain any number of observation (7-day mean is not the same as 7-element mean)
+\cr
+\if{html}{\figure{runningdatewindows.png}{options: width="75\%" alt="Figure: runningdatewindows.png"}}
+\if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
+}
+\item{\strong{Window at specific indices}}{\cr
+\code{runner} by default returns vector of the same size as \code{x} unless one specifies
+\code{at} argument. Each element of \code{at} is an index on which runner calculates function -
+which means that output of the runner is now of length equal to \code{at}. Note
+that one can change index of \code{x} by specifying \code{idx}.
+Illustration below shows output of \code{runner} for \code{at = c(13, 27, 45, 31)}
+which gives windows in ranges enclosed in square brackets. Range for \code{at = 27} is
+\verb{[22, 26]} which is not available in current indices. \cr
+\if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}}
+\if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
+\cr
+\code{at} can also be specified as interval of the output defined by \code{at = "<increment>"}
+which results in output on following indices
+\code{seq.POSIXt(min(idx), max(idx), by = "<increment>")}. Increment of sequence is the
+same as in \code{\link[base]{seq.POSIXt}} function.
+It's worth noting that increment interval can't be more frequent than
+interval of \code{idx} - for \code{Date} the most frequent time-unit is a \code{"day"},
+for \code{POSIXt} a \code{sec}.
+
+\code{k} and \code{lag} can also be specified as using time sequence increment. Available
+time units are \verb{"sec", "min", "hour", "day", "DSTday", "week", "month", "quarter" or "year"}.
+To increment by number of units one can also specify \verb{<number> <unit>s}
+for example \code{lag = "-2 days"}, \code{k = "5 weeks"}.
+}
+}
+Above is not enough since \code{k} and \code{lag} can be a vector which allows to
+stretch and lag/lead each window freely on in time (on indices).
+}
 \examples{
 
 # mean on k = 3 elements windows
@@ -69,16 +132,33 @@ runner(1:10, f = mean, k = 3)
 # mean on k = 3 elements windows with different specification
 runner(1:10, k = 3, f = function(x) mean(x, na.rm = TRUE))
 
+# concatenate two columns
+runner(
+  data.frame(
+    a = letters[1:10],
+    b = 1:10
+  ),
+  f = function(x) paste(paste0(x$a, x$b), collapse = "+"),
+  type = "character"
+)
+
+# concatenate two columns with additional argument
+runner(
+  data.frame(
+    a = letters[1:10],
+    b = 1:10
+  ),
+  f = function(x, xxx) {
+    paste(paste0(x$a, xxx, x$b), collapse = " + ")
+  },
+  xxx = "...",
+  type = "character"
+)
+
 # number of unique values in each window (varying window size)
 runner(letters[1:10],
        k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5),
        f = function(x) length(unique(x)))
-
-# concatenate window values
-runner(letters[1:10],
-       k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5),
-       f = function(x) paste(x, collapse = "-"),
-       type = "character")
 
 # concatenate only on selected windows index
 runner(letters[1:10],
@@ -86,4 +166,23 @@ runner(letters[1:10],
        at = c(1, 5, 8),
        type = "character")
 
+# 5 days mean
+idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
+runner::runner(
+  x = idx,
+  k = "5 days",
+  lag = 1,
+  idx = Sys.Date() + idx,
+  f = function(x) mean(x)
+)
+
+# 5 days mean at 4-indices
+runner::runner(
+  x = 1:15,
+  k = 5,
+  lag = 1,
+  idx = idx,
+  at = c(18, 27, 48, 31),
+  f = mean
+)
 }

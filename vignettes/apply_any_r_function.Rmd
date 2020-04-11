@@ -10,111 +10,231 @@ vignette: >
 ---
 
 ## Using runner
-![](images/using_runner.png)
+
 `runner` package provides functions applied on running windows. The most 
 universal function is `runner::runner` which gives user possibility to apply 
-any R function `f` in running window. R function `f` should return single value 
-for each window. In example below trimmed mean is calculated on 14-days window.
+any R function `f` on running windows. Running windows are defined for each data
+window size `k`, `lag` with respect to their indexes. Unlike other available R 
+packages, `runner` supports any input and output type and also gives full control
+to manipulate window size and lag/lead.
+
+There are different kinds of running windows and all of them are implemented in
+`runner`.
+
+### Cumulative windows
+
+The simplest window type which is similar to `base::cumsum`. At each element
+window is defined by all elements appearing before current.
+
+![](images/cumulative_windows.png)
+
+In `runner` this can be achieved as simple by:
 
 ```{r eval=FALSE}
-library(runner)
-x <- rnorm(20)
-dates <- seq.Date(Sys.Date(), Sys.Date() + 19, by = "1 day")
+# summarizing - sum
+runner(
+  1:15,
+  f = sum
+)
 
-runner(x, 
-       k = 14, 
-       idx = dates, 
-       f = function(xi) {
-        mean(xi, na.rm = TRUE, trim = 0.05)
-       })
+# summarizing - concatenating
+runner(
+  letters[1:15],
+  f = paste,
+  collapse = " > "
+)
+
+# full windows
+runner(
+  1:15,
+  f = function(x) x
+)
 ```
 
-## Running windows
-All options of the `runner` are explained in each section below using 
-illustrations and `window_run` function. `window_run` creates list of running 
-windows with settings which can be used in `runner::runner` and other functions 
-in the package.  
+### Constant sliding windows
 
-Following diagram illustrates what running windows are - in this case running 
-windows of length `k = 4`. For each of 15 elements of a vector each window 
-contains current 4 elements.
+Second type of windows are these commonly known as running/rolling/moving/sliding windows. 
+This types of windows moves along the index instead of "stretching" like a previous ones.  
+Following diagram illustrates running windows of length `k = 4`. Each of 15 windows
+contains 4 elements (except first three).
 
 ![](images/running_windows_explain.png)
 
-
-### Window size
-`k` denotes number of elements in window. If `k` is a single value then window 
-size is constant for all elements of x. For varying window size one should specify 
-`k` as integer vector of `length(k) == length(x)` where each element of `k` 
-defines window length. If `k` is empty it means that window will be cumulative 
-(like `base::cumsum`). Example below illustrates window of `k = 4` for 10th 
-element of vector `x`.  
-
-![](images/constant_window.png)
+To obtain constant sliding windows one just needs to specify `k` argument 
 
 ```{r eval=FALSE}
-runner::runner(x = 1:15, 
-               k = 4, 
-               f = function(x) mean(x))
-```
+# summarizing - sum of 4-elements
+runner(
+  1:15,
+  k = 4,
+  f = sum
+)
 
-### Window lag
-`lag` denotes how many observations windows will be lagged by. If `lag` is a 
-single value than it is constant for all elements of x. For varying lag size one 
-should specify `lag` as integer vector of `length(lag) == length(x)` where each 
-element of `lag` defines lag of window. Default value of `lag = 0`. Example 
-below illustrates window of `k = 4` lagged by `lag = 2` for 10'th element of 
-vector `x`. Lag can also be negative value, which shifts window forward instead 
-of backward.
-
-![](images/lagged_window_k_lag.png)
-```{r eval=FALSE}
-runner::runner(x = 1:15, 
-               k = 4, 
-               lag = 2,
-               f = function(x) mean(x))
+# summarizing - slope from lm
+runner(
+  x = data.frame(
+    a = 1:15,
+    b = 3 * 1:15 + rnorm(15)
+  ),
+  k = 5,
+  f = function(x) {
+    model <- lm(b ~ a, data = x)
+    coefficients(model)["a"]
+  }
+)
 ```
 
 ### Windows depending on date
-Sometimes data points in dataset are not equally spaced (missing weekends, 
-holidays, other missings) and thus window size should vary to keep expected time
-frame.  If one specifies `idx` argument, than running functions are applied on 
-windows depending on date. `idx` should be the same length as `x` of class `Date` 
-or `integer`. Including `idx` can be combined with varying window size, than k
-will denote number of periods in window different for each data point. Example
-below illustrates window of size `k = 5` lagged by `lag = 2`. In parentheses 
-ranges for each window.
+By default `runner` calculates on assumption that index increment by one, but sometimes 
+data points in dataset are not equally spaced (missing weekends, holidays, other missings) 
+and thus window size should vary to keep expected time frame. If one specifies 
+`idx` argument, than running functions are applied on windows depending on date
+rather on a sequence 1-n. 
+`idx` should be the same length as `x` and should be of type `Date`, `POSIXt` or `integer`.
+Example below illustrates window of size `k = 5` lagged by `lag = 1`. 
+Note that one can specify also `k = "5 days"` and `lag = "day"` as in `seq.POSIXt`.
+In parentheses ranges for each window.
 
-![](images/running_date_windows_explain.png)
+
+![](images/running_date_windows.png)
 
 ```{r eval=FALSE}
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
-runner::runner(x = 1:15, 
-               k = 5,
-               lag = 1,
-               idx = idx,
-               f = function(x) mean(x))
+
+# summarize - mean
+runner::runner(
+  x = idx, 
+  k = 5, # 5-days window
+  lag = 1,
+  idx = idx,
+  f = function(x) mean(x)
+)
+
+
+# use Date or datetime sequences
+runner::runner(
+  x = idx, 
+  k = "5 days", # 5-days window
+  lag = 1,
+  idx = Sys.Date() + idx,
+  f = function(x) mean(x)
+)
+
+# obtain window from above illustration
+runner::runner(
+  x = idx, 
+  k = "5 days",
+  lag = 1,
+  idx = Sys.Date() + idx,
+  f = function(x) x
+)
 ```
 
 ### running at
 
 Runner by default returns vector of the same size as `x` unless one puts any-size 
 vector to `at` argument. Each element of `at` is an index on which runner 
-calculates function. Below illustrates output of runner for `at = c(13, 27, 45, 31)` 
+calculates function. Example below illustrates output of runner for `at = c(13, 27, 45, 31)` 
 which gives windows in ranges enclosed in square brackets. Range for `at = 27` is
 `[22, 26]` which is not available in current indices.  
 
 ![](images/runner_at_date.png)
 ```{r eval=FALSE}
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
+
+# summary
 runner::runner(x = 1:15, 
                k = 5,
                lag = 1,
                idx = idx,
                at = c(18, 27, 48, 31),
-               f = function(x) mean(x))
+               f = mean)
+
+# full window
+runner::runner(x = idx, 
+               k = 5,
+               lag = 1,
+               idx = idx,
+               at = c(18, 27, 48, 31),
+               f = function(x) x)
 ```
 
+`at` can also be specified as interval of the output defined by time interval 
+which results in obtaining results on following indices 
+`seq(min(idx), max(idx), by = "<time interval>")`. Interval can be set in the same
+way as in `seq.POSIXt` function. It's worth noting that `at` interval shouldn't be
+more frequent than interval of `idx` - for `Date` the most frequent interval is a 
+`"day"`, for `POSIXt` it's a `"sec"`.
+
+```{r eval=FALSE}
+idx_date <- seq(Sys.Date(), Sys.Date() + 365, by = "1 month")
+
+# change interval to 4-months
+runner(
+  x = 0:12,
+  idx = idx_date,
+  at = "4 months",
+  f = function(x) x
+)
+
+# calculate correlation at every 6-months
+runner(
+  x = data.frame(
+    a = 1:13,
+    b = 1:13 + rnorm(13, sd = 5)
+  ),
+  idx = idx_date,
+  at = "6 months",
+  f = function(x) {
+    cor(x$a, x$b)
+  }
+)
+```
+
+### Move and stretch window in time
+
+One can stretch window length by `k` and shift in time (or index) using `lag`.
+Both arguments can be `integer` and also time interval like for example `2 months`.
+If `k` or `lag` are a single value then window size/lag are constant for all 
+elements of x. User can also specify `k/lag` as vector, then size and
+lag will vary for each window. 
+Both `k` and `lag` can be of `length(.) == 1`, `length(.) == length(x)` or 
+`length(.) == length(at)` (if `at` is specified).
+`lag` can be negative and positive while `k` only non-negative. 
+
+```{r eval=FALSE}
+# summarizing - concatenating
+runner::runner(
+  x = 1:10, 
+  lag = c(-1, 2, -1, -2, 0, 0, 5, -5, -2, -3), 
+  k = c(0, 1, 1, 1, 1, 5, 5, 5, 5, 5), 
+  f = paste,
+  collapse = ","
+)
+
+# full window
+runner::runner(
+  x = 1:10, 
+  lag = 1,
+  k = c(1, 1, 1, 1, 1, 5, 5, 5, 5, 5), 
+  f = function(x) x
+)
+
+# on dates
+idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
+
+runner::runner(
+  x = 1:15, 
+  lag = sample(c("-2 days", "-1 days", "1 days", "2 days"), 
+               size = 15, 
+               replace = TRUE),
+  k = sample(c("5 days", "10 days", "15 days"), 
+             size = 15, 
+             replace = TRUE),
+  idx = Sys.Date() + idx,
+  f = function(x) mean(x)
+)
+```
 
 ### `NA` padding  
 Using `runner` one can also specify `na_pad = TRUE` which would return `NA` for 
