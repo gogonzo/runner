@@ -839,33 +839,36 @@ test_that("lag with difftime", {
 })
 
 test_that("runner with df", {
+  elo <- data.frame(a = sample(letters, 100, replace = TRUE),
+                    b = 1:100)
+
   expect_equal(
-    runner(iris, k = 10, lag = 1, f = function(x) x),
+    runner(elo, k = 10, lag = 1, f = function(x) x),
     runner(
-      1:nrow(iris),
+      1:nrow(elo),
       k = 10,
       lag = 1,
       f = function(idx) if (length(idx) == 0 || is.na(idx)) {
-       NA
+        NA
       } else {
-       iris[idx,]
+        elo[idx,]
       }
     )
   )
 
   expect_equal(
-    runner(iris, k = 10, lag = 1, f = function(x) x)[[50]],
-    iris[40:49, ]
+    runner(elo, k = 10, lag = 1, f = function(x) x)[[50]],
+    elo[40:49, ]
   )
 
   expect_equal(
-    runner(iris, k = 10, lag = 1, f = function(x) x)[[1]],
+    runner(elo, k = 10, lag = 1, f = function(x) x)[[1]],
     NA
   )
 
   expect_equal(
-    runner(iris, k = 10, lag = 1, f = function(x) x)[[2]],
-    iris[1, ]
+    runner(elo, k = 10, lag = 1, f = function(x) x)[[2]],
+    elo[1, ]
   )
 
 })
