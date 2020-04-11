@@ -848,7 +848,7 @@ test_that("runner with df", {
       1:nrow(elo),
       k = 10,
       lag = 1,
-      f = function(idx) if (length(idx) == 0 || is.na(idx)) {
+      f = function(idx) if (length(idx) == 0 || all(is.na(idx))) {
         NA
       } else {
         elo[idx,]
