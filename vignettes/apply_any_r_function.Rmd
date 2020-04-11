@@ -31,6 +31,11 @@ window is defined by all elements appearing before current.
 In `runner` this can be achieved as simple by:
 
 ```{r eval=FALSE}
+# full windows
+runner(
+  1:15,
+)
+
 # summarizing - sum
 runner(
   1:15,
@@ -42,12 +47,6 @@ runner(
   letters[1:15],
   f = paste,
   collapse = " > "
-)
-
-# full windows
-runner(
-  1:15,
-  f = function(x) x
 )
 ```
 
@@ -125,8 +124,7 @@ runner::runner(
   x = idx, 
   k = "5 days",
   lag = 1,
-  idx = Sys.Date() + idx,
-  f = function(x) x
+  idx = Sys.Date() + idx
 )
 ```
 
@@ -155,8 +153,7 @@ runner::runner(x = idx,
                k = 5,
                lag = 1,
                idx = idx,
-               at = c(18, 27, 48, 31),
-               f = function(x) x)
+               at = c(18, 27, 48, 31))
 ```
 
 `at` can also be specified as interval of the output defined by time interval 
@@ -173,8 +170,7 @@ idx_date <- seq(Sys.Date(), Sys.Date() + 365, by = "1 month")
 runner(
   x = 0:12,
   idx = idx_date,
-  at = "4 months",
-  f = function(x) x
+  at = "4 months"
 )
 
 # calculate correlation at every 6-months
@@ -216,8 +212,7 @@ runner::runner(
 runner::runner(
   x = 1:10, 
   lag = 1,
-  k = c(1, 1, 1, 1, 1, 5, 5, 5, 5, 5), 
-  f = function(x) x
+  k = c(1, 1, 1, 1, 1, 5, 5, 5, 5, 5)
 )
 
 # on dates

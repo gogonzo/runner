@@ -79,7 +79,7 @@ below illustrates window of `k = 4` for 10th element of vector `x`.
 ![](man/figures/constantwindow.png)
 
 ``` r
-runner(1:15, k = 4, f = function(x) x)
+runner(1:15, k = 4)
 ```
 
 ### Window lag
@@ -98,8 +98,7 @@ value, which shifts window forward instead of backward.
 runner(
   1:15, 
   k = 4, 
-  lag = 2, 
-  f = function(x) x
+  lag = 2
 )
 ```
 
@@ -124,8 +123,7 @@ runner(
   x = 1:15, 
   k = "5 days", 
   lag = "1 days", 
-  idx = idx,
-  function(x) x
+  idx = idx
 )
 ```
 
@@ -147,8 +145,7 @@ runner(
   k = 5, 
   lag = 1, 
   idx = idx, 
-  at = c(18, 27, 48, 31),
-  function(x) x
+  at = c(18, 27, 48, 31)
 )
 ```
 
@@ -174,8 +171,7 @@ runner(
   lag = 1, 
   idx = idx, 
   at = c(4, 18, 48, 51),
-  na_pad = TRUE,
-  f = function(x) x
+  na_pad = TRUE
 )
 ```
 

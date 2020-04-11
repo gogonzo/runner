@@ -838,8 +838,42 @@ test_that("lag with difftime", {
   )
 })
 
+test_that("runner with df", {
+  elo <- data.frame(a = sample(letters, 100, replace = TRUE),
+                    b = 1:100)
+
+  expect_equal(
+    runner(elo, k = 10, lag = 1, f = function(x) x),
+    runner(
+      1:nrow(elo),
+      k = 10,
+      lag = 1,
+      f = function(idx) if (length(idx) == 0 || all(is.na(idx))) {
+        NA
+      } else {
+        elo[idx,]
+      }
+    )
+  )
+
+  expect_equal(
+    runner(elo, k = 10, lag = 1, f = function(x) x)[[50]],
+    elo[40:49, ]
+  )
+
+  expect_equal(
+    runner(elo, k = 10, lag = 1, f = function(x) x)[[1]],
+    NA
+  )
+
+  expect_equal(
+    runner(elo, k = 10, lag = 1, f = function(x) x)[[2]],
+    elo[1, ]
+  )
+
+})
+
 test_that("Errors", {
-  expect_error(runner(x = letters[1:5]))
   expect_error(runner(x = letters[1:5], f = ""))
 
   expect_error(runner(list(1:10), k = 5, f = mean), "Invalid \\'x\\' type")

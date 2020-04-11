@@ -1,6 +1,10 @@
 context("Running lag")
 set.seed(1)
-x <- 1:30
+x <- 1L:30L
+x2 <- as.numeric(1:30)
+x3 <- sample(letters, 30, replace = TRUE)
+x4 <- sample(c(TRUE, FALSE), 30, replace = TRUE)
+
 lag  <- sample(-10:10, 30, replace = TRUE)
 idx <- cumsum(sample(seq_len(5), 30, replace = TRUE))
 lag_run2 <- function(x, lag = 1, idx = seq_along(x), nearest = FALSE) {
@@ -76,12 +80,30 @@ test_that("lag_run basic - different types", {
 
 test_that("lag_run constant window", {
   expect_identical(lag_run(x, lag = 3), c(rep(NA, 3), head(x, -3)))
+
+  expect_identical(lag_run(x2, lag = 3), c(rep(NA, 3), head(x2, -3)))
+
+  expect_identical(lag_run(x3, lag = 3), c(rep(NA, 3), head(x3, -3)))
+
+  expect_identical(lag_run(x4, lag = 3), c(rep(NA, 3), head(x4, -3)))
 })
 
 test_that("lag_run moving window", {
   expect_identical(lag_run(x, lag = lag), lag_run2(x, lag = lag))
   expect_identical(lag_run(x, lag = lag, nearest = FALSE),
                    lag_run2(x, lag = lag, nearest = FALSE))
+
+  expect_identical(lag_run(x2, lag = lag), lag_run2(x2, lag = lag))
+  expect_identical(lag_run(x2, lag = lag, nearest = FALSE),
+                   lag_run2(x2, lag = lag, nearest = FALSE))
+
+  expect_identical(lag_run(x3, lag = lag), lag_run2(x3, lag = lag))
+  expect_identical(lag_run(x3, lag = lag, nearest = FALSE),
+                   lag_run2(x3, lag = lag, nearest = FALSE))
+
+  expect_identical(lag_run(x4, lag = lag), lag_run2(x4, lag = lag))
+  expect_identical(lag_run(x4, lag = lag, nearest = FALSE),
+                   lag_run2(x4, lag = lag, nearest = FALSE))
 })
 
 test_that("lag_run date idx window (nearest end)", {
@@ -102,6 +124,64 @@ test_that("lag_run date idx window (nearest end)", {
 
   expect_identical(lag_run(x, lag = lag, idx = idx, nearest = FALSE),
                    lag_run2(x, lag = lag, idx = idx, nearest = FALSE))
+
+
+
+  expect_identical(lag_run(x2, lag = 3, idx = idx, nearest = TRUE),
+                   lag_run2(x2, lag = 3, idx = idx, nearest = TRUE))
+
+  expect_identical(lag_run(x2, lag = 3, idx = idx, nearest = FALSE),
+                   lag_run2(x2, lag = 3, idx = idx, nearest = FALSE))
+
+  expect_identical(lag_run(x2, lag = -3, idx = idx, nearest = TRUE),
+                   lag_run2(x2, lag = -3, idx = idx, nearest = TRUE))
+
+  expect_identical(lag_run(x2, lag = -3, idx = idx, nearest = FALSE),
+                   lag_run2(x2, lag = -3, idx = idx, nearest = FALSE))
+
+  expect_identical(lag_run(x2, lag = lag, idx = idx, nearest = TRUE),
+                   lag_run2(x2, lag = lag, idx = idx, nearest = TRUE))
+
+  expect_identical(lag_run(x2, lag = lag, idx = idx, nearest = FALSE),
+                   lag_run2(x2, lag = lag, idx = idx, nearest = FALSE))
+
+
+  expect_identical(lag_run(x3, lag = 3, idx = idx, nearest = TRUE),
+                    lag_run2(x3, lag = 3, idx = idx, nearest = TRUE))
+
+  expect_identical(lag_run(x3, lag = 3, idx = idx, nearest = FALSE),
+                    lag_run2(x3, lag = 3, idx = idx, nearest = FALSE))
+
+  expect_identical(lag_run(x3, lag = -3, idx = idx, nearest = TRUE),
+                    lag_run2(x3, lag = -3, idx = idx, nearest = TRUE))
+
+  expect_identical(lag_run(x3, lag = -3, idx = idx, nearest = FALSE),
+                    lag_run2(x3, lag = -3, idx = idx, nearest = FALSE))
+
+  expect_identical(lag_run(x3, lag = lag, idx = idx, nearest = TRUE),
+                    lag_run2(x3, lag = lag, idx = idx, nearest = TRUE))
+
+  expect_identical(lag_run(x3, lag = lag, idx = idx, nearest = FALSE),
+                    lag_run2(x3, lag = lag, idx = idx, nearest = FALSE))
+
+
+  expect_identical(lag_run(x4, lag = 3, idx = idx, nearest = TRUE),
+                   lag_run2(x4, lag = 3, idx = idx, nearest = TRUE))
+
+  expect_identical(lag_run(x4, lag = 3, idx = idx, nearest = FALSE),
+                   lag_run2(x4, lag = 3, idx = idx, nearest = FALSE))
+
+  expect_identical(lag_run(x4, lag = -3, idx = idx, nearest = TRUE),
+                   lag_run2(x4, lag = -3, idx = idx, nearest = TRUE))
+
+  expect_identical(lag_run(x4, lag = -3, idx = idx, nearest = FALSE),
+                   lag_run2(x4, lag = -3, idx = idx, nearest = FALSE))
+
+  expect_identical(lag_run(x4, lag = lag, idx = idx, nearest = TRUE),
+                   lag_run2(x4, lag = lag, idx = idx, nearest = TRUE))
+
+  expect_identical(lag_run(x4, lag = lag, idx = idx, nearest = FALSE),
+                   lag_run2(x4, lag = lag, idx = idx, nearest = FALSE))
 })
 
 test_that("Errors", {

@@ -27,6 +27,7 @@
 #' Applied on windows created from `x`. This function is meant to summarize
 #' windows and create single element for each window, but one can also specify
 #' function which return multiple elements (runner output will be a list).
+#' By default runner returns windows as is (`f = function(x)`).
 #'
 #' @param at (`integer`, `Date`, `POSIXt`, `character` vector)\cr
 #'  Vector of any size and any value defining output data points. Values of the
@@ -106,6 +107,9 @@
 #'
 #' @examples
 #'
+#' # runner returns windows as is by default
+#' runner(1:10)
+#'
 #' # mean on k = 3 elements windows
 #' runner(1:10, f = mean, k = 3)
 #'
@@ -170,7 +174,7 @@
 #' @export
 runner <- function(
   x,
-  f,
+  f = function(x) x,
   k = integer(0),
   lag = integer(1),
   idx = integer(0),
@@ -293,11 +297,6 @@ k_by <- function(k, idx, param) {
     }
 
     from <- if (length(idx) == length(k) && length(k) != 1) {
-      if (length(idx) == 0) {
-        stop(
-          sprintf("`idx` can't be empty while specifying %s as time interval", param)
-        )
-      }
       mapply(
         FUN = function(x, y) {
           seq(x, by = y, length.out = 2)[2]
