@@ -43,7 +43,7 @@ install.packages("runner")
 
 `runner` package provides functions applied on running windows. The most 
 universal function is `runner::runner` which gives user possibility to apply 
-any R function `f` in running window. In example below quarterly correlation 
+any R function `f` in running window. In example below 4-months correlation 
 is calculated lagged by 
 1 month.
 
