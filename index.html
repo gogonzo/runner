@@ -151,7 +151,7 @@
 <a href="#window-size" class="anchor"></a>Window size</h3>
 <p><code>k</code> denotes number of elements in window. If <code>k</code> is a single value then window size is constant for all elements of x. For varying window size one should specify <code>k</code> as integer vector of <code>length(k) == length(x)</code> where each element of <code>k</code> defines window length. If <code>k</code> is empty it means that window will be cumulative (like <code><a href="https://rdrr.io/r/base/cumsum.html">base::cumsum</a></code>). Example below illustrates window of <code>k = 4</code> for 10th element of vector <code>x</code>.</p>
 <p><img src="reference/figures/constantwindow.png"></p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="reference/runner.html">runner</a></span>(<span class="fl">1</span>:<span class="fl">15</span>, <span class="kw">k</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">f</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="no">x</span>)</pre></div>
+<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="reference/runner.html">runner</a></span>(<span class="fl">1</span>:<span class="fl">15</span>, <span class="kw">k</span> <span class="kw">=</span> <span class="fl">4</span>)</pre></div>
 </div>
 <div id="window-lag" class="section level3">
 <h3 class="hasAnchor">
@@ -161,8 +161,7 @@
 <div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="reference/runner.html">runner</a></span>(
   <span class="fl">1</span>:<span class="fl">15</span>,
   <span class="kw">k</span> <span class="kw">=</span> <span class="fl">4</span>,
-  <span class="kw">lag</span> <span class="kw">=</span> <span class="fl">2</span>,
-  <span class="kw">f</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="no">x</span>
+  <span class="kw">lag</span> <span class="kw">=</span> <span class="fl">2</span>
 )</pre></div>
 </div>
 <div id="windows-depending-on-date" class="section level3">
@@ -175,8 +174,7 @@
   <span class="kw">x</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">15</span>,
   <span class="kw">k</span> <span class="kw">=</span> <span class="st">"5 days"</span>,
   <span class="kw">lag</span> <span class="kw">=</span> <span class="st">"1 days"</span>,
-  <span class="kw">idx</span> <span class="kw">=</span> <span class="no">idx</span>,
-  <span class="kw">function</span>(<span class="no">x</span>) <span class="no">x</span>
+  <span class="kw">idx</span> <span class="kw">=</span> <span class="no">idx</span>
 )</pre></div>
 </div>
 <div id="running-at" class="section level3">
@@ -190,8 +188,7 @@
   <span class="kw">k</span> <span class="kw">=</span> <span class="fl">5</span>,
   <span class="kw">lag</span> <span class="kw">=</span> <span class="fl">1</span>,
   <span class="kw">idx</span> <span class="kw">=</span> <span class="no">idx</span>,
-  <span class="kw">at</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">18</span>, <span class="fl">27</span>, <span class="fl">48</span>, <span class="fl">31</span>),
-  <span class="kw">function</span>(<span class="no">x</span>) <span class="no">x</span>
+  <span class="kw">at</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">18</span>, <span class="fl">27</span>, <span class="fl">48</span>, <span class="fl">31</span>)
 )</pre></div>
 </div>
 <div id="na-padding" class="section level3">
@@ -206,8 +203,7 @@
   <span class="kw">lag</span> <span class="kw">=</span> <span class="fl">1</span>,
   <span class="kw">idx</span> <span class="kw">=</span> <span class="no">idx</span>,
   <span class="kw">at</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>, <span class="fl">18</span>, <span class="fl">48</span>, <span class="fl">51</span>),
-  <span class="kw">na_pad</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-  <span class="kw">f</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="no">x</span>
+  <span class="kw">na_pad</span> <span class="kw">=</span> <span class="fl">TRUE</span>
 )</pre></div>
 </div>
 <div id="build-in-functions" class="section level3">

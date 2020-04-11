@@ -117,7 +117,12 @@
 <p>The simplest window type which is similar to <code><a href="https://rdrr.io/r/base/cumsum.html">base::cumsum</a></code>. At each element window is defined by all elements appearing before current.</p>
 <p><img src="images/cumulative_windows.png"></p>
 <p>In <code>runner</code> this can be achieved as simple by:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="co"># summarizing - sum</span>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="co"># full windows</span>
+<span class="fu"><a href="../reference/runner.html">runner</a></span>(
+  <span class="fl">1</span>:<span class="fl">15</span>,
+)
+
+<span class="co"># summarizing - sum</span>
 <span class="fu"><a href="../reference/runner.html">runner</a></span>(
   <span class="fl">1</span>:<span class="fl">15</span>,
   <span class="kw">f</span> <span class="kw">=</span> <span class="no">sum</span>
@@ -128,12 +133,6 @@
   <span class="no">letters</span>[<span class="fl">1</span>:<span class="fl">15</span>],
   <span class="kw">f</span> <span class="kw">=</span> <span class="no">paste</span>,
   <span class="kw">collapse</span> <span class="kw">=</span> <span class="st">" &gt; "</span>
-)
-
-<span class="co"># full windows</span>
-<span class="fu"><a href="../reference/runner.html">runner</a></span>(
-  <span class="fl">1</span>:<span class="fl">15</span>,
-  <span class="kw">f</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="no">x</span>
 )</pre></body></html></div>
 </div>
 <div id="constant-sliding-windows" class="section level3">
@@ -194,8 +193,7 @@ Following diagram illustrates running windows of length <code>k = 4</code>. Each
   <span class="kw">x</span> <span class="kw">=</span> <span class="no">idx</span>,
   <span class="kw">k</span> <span class="kw">=</span> <span class="st">"5 days"</span>,
   <span class="kw">lag</span> <span class="kw">=</span> <span class="fl">1</span>,
-  <span class="kw">idx</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>() + <span class="no">idx</span>,
-  <span class="kw">f</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="no">x</span>
+  <span class="kw">idx</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>() + <span class="no">idx</span>
 )</pre></body></html></div>
 </div>
 <div id="running-at" class="section level3">
@@ -218,8 +216,7 @@ Following diagram illustrates running windows of length <code>k = 4</code>. Each
                <span class="kw">k</span> <span class="kw">=</span> <span class="fl">5</span>,
                <span class="kw">lag</span> <span class="kw">=</span> <span class="fl">1</span>,
                <span class="kw">idx</span> <span class="kw">=</span> <span class="no">idx</span>,
-               <span class="kw">at</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">18</span>, <span class="fl">27</span>, <span class="fl">48</span>, <span class="fl">31</span>),
-               <span class="kw">f</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="no">x</span>)</pre></body></html></div>
+               <span class="kw">at</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">18</span>, <span class="fl">27</span>, <span class="fl">48</span>, <span class="fl">31</span>))</pre></body></html></div>
 <p><code>at</code> can also be specified as interval of the output defined by time interval which results in obtaining results on following indices <code><a href="https://rdrr.io/r/base/seq.html">seq(min(idx), max(idx), by = "&lt;time interval&gt;")</a></code>. Interval can be set in the same way as in <code>seq.POSIXt</code> function. It’s worth noting that <code>at</code> interval shouldn’t be more frequent than interval of <code>idx</code> - for <code>Date</code> the most frequent interval is a <code>"day"</code>, for <code>POSIXt</code> it’s a <code>"sec"</code>.</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">idx_date</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>(), <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>() + <span class="fl">365</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"1 month"</span>)
 
@@ -227,8 +224,7 @@ Following diagram illustrates running windows of length <code>k = 4</code>. Each
 <span class="fu"><a href="../reference/runner.html">runner</a></span>(
   <span class="kw">x</span> <span class="kw">=</span> <span class="fl">0</span>:<span class="fl">12</span>,
   <span class="kw">idx</span> <span class="kw">=</span> <span class="no">idx_date</span>,
-  <span class="kw">at</span> <span class="kw">=</span> <span class="st">"4 months"</span>,
-  <span class="kw">f</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="no">x</span>
+  <span class="kw">at</span> <span class="kw">=</span> <span class="st">"4 months"</span>
 )
 
 <span class="co"># calculate correlation at every 6-months</span>
@@ -261,8 +257,7 @@ Following diagram illustrates running windows of length <code>k = 4</code>. Each
 <span class="kw pkg">runner</span><span class="kw ns">::</span><span class="fu"><a href="../reference/runner.html">runner</a></span>(
   <span class="kw">x</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">10</span>,
   <span class="kw">lag</span> <span class="kw">=</span> <span class="fl">1</span>,
-  <span class="kw">k</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>),
-  <span class="kw">f</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="no">x</span>
+  <span class="kw">k</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>)
 )
 
 <span class="co"># on dates</span>
