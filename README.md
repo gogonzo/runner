@@ -116,7 +116,7 @@ window of size `k = 5` lagged by `lag = 2`. In parentheses ranges for
 each
 window.
 
-![](man/figures/running_date_windows.png)
+![](man/figures/runningdatewindows.png)
 
 ``` r
 idx <- Sys.Date() + c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)

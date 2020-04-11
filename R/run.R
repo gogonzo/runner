@@ -53,15 +53,15 @@
 #'  \item{**Cumulative windows**}{\cr
 #'    applied when user doesn't specify `k` argument or specify `k = length(x)`,
 #'    this would mean that `k` is equal to number of available elements \cr
-#'    \if{html}{\figure{cumulative_windows.png}{options: width="75\%" alt="Figure: cumulative_windows.png"}}
-#'    \if{latex}{\figure{cumulative_windows.pdf}{options: width=7cm}}
+#'    \if{html}{\figure{cumulativewindows.png}{options: width="75\%" alt="Figure: cumulativewindows.png"}}
+#'    \if{latex}{\figure{cumulativewindows.pdf}{options: width=7cm}}
 #'  }
 #'  \item{**Constant sliding windows**}{\cr
 #'    applied when user specify `k` as constant value keeping `idx` and
 #'    `at` unspecified. `lag` argument shifts windows left (`lag > 0`)
 #'    or right (`lag < 0`). \cr
-#'    \if{html}{\figure{incremental_index.png}{options: width="75\%" alt="Figure: incremental_index.png"}}
-#'    \if{latex}{\figure{incremental_index.pdf}{options: width=7cm}}
+#'    \if{html}{\figure{incrementalindex.png}{options: width="75\%" alt="Figure: incrementalindex.png"}}
+#'    \if{latex}{\figure{incrementalindex.pdf}{options: width=7cm}}
 #'  }
 #'  \item{**Windows depending on date**}{\cr
 #'    If one specifies `idx` this would mean that output windows size might
@@ -69,8 +69,8 @@
 #'    window is different than 5-element window, because 5-period window might
 #'    contain any number of observation (7-day mean is not the same as 7-element mean)
 #'     \cr
-#'    \if{html}{\figure{running_date_windows.png}{options: width="75\%" alt="Figure: running_date_windows.png"}}
-#'    \if{latex}{\figure{running_date_windows.pdf}{options: width=7cm}}
+#'    \if{html}{\figure{runningdatewindows.png}{options: width="75\%" alt="Figure: runningdatewindows.png"}}
+#'    \if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
 #'  }
 #'  \item{**Window at specific indices**}{\cr
 #'    `runner` by default returns vector of the same size as `x` unless one specifies
@@ -80,8 +80,8 @@
 #'    Illustration below shows output of `runner` for `at = c(13, 27, 45, 31)`
 #'    which gives windows in ranges enclosed in square brackets. Range for `at = 27` is
 #'    `[22, 26]` which is not available in current indices. \cr
-#'    \if{html}{\figure{runner_at.png}{options: width="75\%" alt="Figure: runner_at.png"}}
-#'    \if{latex}{\figure{runner_at.pdf}{options: width=7cm}}
+#'    \if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}}
+#'    \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
 #'    \cr
 #'    `at` can also be specified as interval of the output defined by `at = "<increment>"`
 #'    which results in output on following indices
