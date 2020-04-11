@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Running min/max — minmax_run • runner</title>
+<title>Formats time-unit-interval to valid for runner — reformat_k • runner</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Running min/max — minmax_run" />
-<meta property="og:description" content="min_run calculates running minimum-maximum on given x numeric
- vector, specified k window size." />
+<meta property="og:title" content="Formats time-unit-interval to valid for runner — reformat_k" />
+<meta property="og:description" content="Formats time-unit-interval to valid for runner" />
 
 
 
@@ -140,41 +139,33 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Running min/max</h1>
-    <small class="dont-index">Source: <a href='https://github.com/gogonzo/runner/blob/master/R/RcppExports.R'><code>R/RcppExports.R</code></a></small>
-    <div class="hidden name"><code>minmax_run.Rd</code></div>
+    <h1>Formats time-unit-interval to valid for runner</h1>
+    <small class="dont-index">Source: <a href='https://github.com/gogonzo/runner/blob/master/R/run.R'><code>R/run.R</code></a></small>
+    <div class="hidden name"><code>reformat_k.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>min_run</code> calculates running minimum-maximum on given <code>x</code> numeric
- vector, specified <code>k</code> window size.</p>
+    <p>Formats time-unit-interval to valid for runner</p>
     </div>
 
-    <pre class="usage"><span class='fu'>minmax_run</span>(<span class='no'>x</span>, <span class='kw'>metric</span> <span class='kw'>=</span> <span class='st'>"min"</span>, <span class='kw'>na_rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>reformat_k</span>(<span class='no'>k</span>, <span class='kw'>only_positive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>(<code>vector</code>, <code>data.frame</code>, <code>matrix</code>)<br />
-Input in runner custom function <code>f</code>.</p></td>
+      <th>k</th>
+      <td><p>(k or lag) object from runner to be formatted</p></td>
     </tr>
     <tr>
-      <th>metric</th>
-      <td><p><code>character</code> what to return, minimum or maximum</p></td>
-    </tr>
-    <tr>
-      <th>na_rm</th>
-      <td><p><code>logical</code> single value (default <code>na_rm = TRUE</code>) -
-if <code>TRUE</code> sum is calculating excluding <code>NA</code>.</p></td>
+      <th>only_positive</th>
+      <td><p>for k is TRUE, for lag is FALSE</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>list.</p>
-
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw pkg'>runner</span><span class='kw ns'>:::</span><span class='fu'>reformat_k</span>(<span class='st'>"1 days"</span>)</div><div class='output co'>#&gt; [1] "-1 days"</div><div class='input'><span class='kw pkg'>runner</span><span class='kw ns'>:::</span><span class='fu'>reformat_k</span>(<span class='st'>"day"</span>)</div><div class='output co'>#&gt; [1] "-1 days"</div><div class='input'><span class='kw pkg'>runner</span><span class='kw ns'>:::</span><span class='fu'>reformat_k</span>(<span class='st'>"10 days"</span>)</div><div class='output co'>#&gt; [1] "-10 days"</div><div class='input'><span class='kw pkg'>runner</span><span class='kw ns'>:::</span><span class='fu'>reformat_k</span>(<span class='st'>"-10 days"</span>, <span class='kw'>only_positive</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "10 days"</div><div class='input'><span class='kw pkg'>runner</span><span class='kw ns'>:::</span><span class='fu'>reformat_k</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"-10 days"</span>, <span class='st'>"2 months"</span>), <span class='kw'>only_positive</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "10 days"   "-2 months"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

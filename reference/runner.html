@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Apply running function — runner" />
 <meta property="og:description" content="Applies custom function on running windows." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -65,7 +68,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -79,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.5</span>
       </span>
     </div>
 
@@ -117,7 +120,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/gogonzo/runner/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -132,7 +140,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Apply running function</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/gogonzo/runner/blob/master/R/run.R'><code>R/run.R</code></a></small>
     <div class="hidden name"><code>runner.Rd</code></div>
     </div>
 
@@ -148,8 +156,8 @@
   <span class='kw'>idx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0</span>),
   <span class='kw'>at</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0</span>),
   <span class='kw'>na_pad</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"auto"</span>
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"auto"</span>,
+  <span class='no'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -157,57 +165,65 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Vector of any type</p></td>
+      <td><p>(<code>vector</code>, <code>data.frame</code>, <code>matrix</code>)<br />
+Input in runner custom function <code>f</code>.</p></td>
     </tr>
     <tr>
       <th>f</th>
-      <td><p><code>function</code> to be applied on windows created from <code>x</code></p></td>
+      <td><p>(<code>function</code>)<br />
+Applied on windows created from <code>x</code>. This function is meant to summarize
+windows and create single element for each window, but one can also specify
+function which return multiple elements (runner output will be a list).</p></td>
     </tr>
     <tr>
       <th>k</th>
-      <td><p>(<code>integer</code>) vector or single value denoting size of the running
-window. If <code>k</code> is a single value then window size is constant for all
-elements, otherwise if <code>length(k) == length(x)</code> different window size
-for each element.</p></td>
+      <td><p>(<code>integer</code> vector or single value)<br />
+Denoting size of the running window. If <code>k</code> is a single value then window
+size is constant for all elements, otherwise if <code>length(k) == length(x)</code>
+different window size for each element. One can also specify <code>k</code> in the same
+way as by in <code><a href='https://rdrr.io/r/base/seq.POSIXt.html'>seq.POSIXt</a></code>. More in details.</p></td>
     </tr>
     <tr>
       <th>lag</th>
-      <td><p>(<code>integer</code>) vector or single value denoting window lag.
-If <code>lag</code> is a single value then window lag is constant for all elements,
-otherwise if <code>length(lag) == length(x)</code> different window size for each
-element. Negative value shifts window forward.</p></td>
+      <td><p>(<code>integer</code> vector or single value)<br />
+Denoting window lag. If <code>lag</code> is a single value then window lag is constant
+for all elements, otherwise if <code>length(lag) == length(x)</code> different window
+size for each element. Negative value shifts window forward. One can also
+specify <code>lag</code> in the same way as by in <code><a href='https://rdrr.io/r/base/seq.POSIXt.html'>seq.POSIXt</a></code>.
+More in details.</p></td>
     </tr>
     <tr>
       <th>idx</th>
-      <td><p>(<code>date or integer</code>) an optional integer vector containing
-index of observation. If specified
-then <code>k</code> and <code>lag</code> are depending on <code>idx</code>. Length of
-<code>idx</code> should be equal of length <code>x</code></p></td>
+      <td><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>)<br />
+Optional integer vector containing sorted (ascending) index of observation.
+By default <code>idx</code> is index incremented by one. User can provide index with
+varying increment and with duplicated values. If specified then <code>k</code> and <code>lag</code>
+are depending on <code>idx</code>. Length of <code>idx</code> have to be equal of length <code>x</code>.</p></td>
     </tr>
     <tr>
       <th>at</th>
-      <td><p>(<code>date or integer</code>) vector of any size and any value
-defining output data points. Values of the vector defines the indexes which
-data is computed at. If <code>idx</code> is missing then uses indices from <code>1</code>
- to <code><a href='https://rdrr.io/r/base/length.html'>length(x)</a></code>, otherwise depends on indexes passed with <code>idx</code>.
- If <code>at</code> is defined then <code>k</code> and <code>lag</code> should be of length equal
- one or length of the <code>at</code>.</p></td>
+      <td><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>, <code>character</code> vector)<br />
+Vector of any size and any value defining output data points. Values of the
+vector defines the indexes which data is computed at. Can be also <code>POSIXt</code>
+sequence increment <code><a href='https://rdrr.io/r/base/seq.POSIXt.html'>seq.POSIXt</a></code>. More in details.</p></td>
     </tr>
     <tr>
       <th>na_pad</th>
-      <td><p><code>logical</code> single value (default <code>na_pad=FALSE</code>) - if
-<code>TRUE</code> calculation on incomplete window will return <code>NA</code>.
-Incomplete window is when some parts of the window are out of range</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>other arguments passed to the function <code>f</code>.</p></td>
+      <td><p>(<code>logical</code> single value)<br />
+Whether incomplete window should return <code>NA</code> (if <code>na_pad = TRUE</code>)
+Incomplete window is when some parts of the window are out of range.</p></td>
     </tr>
     <tr>
       <th>type</th>
-      <td><p>output type <code>("logical", "numeric", "integer", "character")</code>.
-<code>runner</code> by default returns numeric values, but if function is expected
-to return other type, user should specify this in <code>type</code> argument.</p></td>
+      <td><p>(<code>character</code> single value)<br />
+output type (<code>"auto"</code>, <code>"logical"</code>, <code>"numeric"</code>, <code>"integer"</code>, <code>"character"</code>).
+<code>runner</code> by default guess type automatically. In case of failure of <code>"auto"</code>
+please specify desired type.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>(optional)<br />
+other arguments passed to the function <code>f</code>.</p></td>
     </tr>
     </table>
 
@@ -216,6 +232,48 @@ to return other type, user should specify this in <code>type</code> argument.</p
     <p>vector with aggregated values for each window. Length of output is the
 same as <code><a href='https://rdrr.io/r/base/length.html'>length(x)</a></code> or <code><a href='https://rdrr.io/r/base/length.html'>length(at)</a></code> if specified. Type of the output
 is taken from <code>type</code> argument.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Function can apply any R function on running windows defined by <code>x</code>,
+<code>k</code>, <code>lag</code>, <code>idx</code> and <code>at</code>. Running window can be calculated
+on several ways:</p><ul>
+<li><p><strong>Cumulative windows</strong><br />
+applied when user doesn't specify <code>k</code> argument or specify <code>k = length(x)</code>,
+this would mean that <code>k</code> is equal to number of available elements <br />
+<img src='figures/cumulativewindows.png' width="75%" alt="Figure: cumulativewindows.png" /></p></li>
+<li><p><strong>Constant sliding windows</strong><br />
+applied when user specify <code>k</code> as constant value keeping <code>idx</code> and
+<code>at</code> unspecified. <code>lag</code> argument shifts windows left (<code>lag &gt; 0</code>)
+or right (<code>lag &lt; 0</code>). <br />
+<img src='figures/incrementalindex.png' width="75%" alt="Figure: incrementalindex.png" /></p></li>
+<li><p><strong>Windows depending on date</strong><br />
+If one specifies <code>idx</code> this would mean that output windows size might
+change in size because of unequally spaced indexes. Fox example 5-period
+window is different than 5-element window, because 5-period window might
+contain any number of observation (7-day mean is not the same as 7-element mean)
+<br />
+<img src='figures/runningdatewindows.png' width="75%" alt="Figure: runningdatewindows.png" /></p></li>
+<li><p><strong>Window at specific indices</strong><br />
+<code>runner</code> by default returns vector of the same size as <code>x</code> unless one specifies
+<code>at</code> argument. Each element of <code>at</code> is an index on which runner calculates function -
+which means that output of the runner is now of length equal to <code>at</code>. Note
+that one can change index of <code>x</code> by specifying <code>idx</code>.
+Illustration below shows output of <code>runner</code> for <code>at = c(13, 27, 45, 31)</code>
+which gives windows in ranges enclosed in square brackets. Range for <code>at = 27</code> is
+<code>[22, 26]</code> which is not available in current indices. <br />
+<img src='figures/runnerat.png' width="75%" alt="Figure: runnerat.png" /><br />
+<code>at</code> can also be specified as interval of the output defined by <code>at = "&lt;increment&gt;"</code>
+which results in output on following indices
+<code><a href='https://rdrr.io/r/base/seq.POSIXt.html'>seq.POSIXt(min(idx), max(idx), by = "&lt;increment&gt;")</a></code>. Increment of sequence is the
+same as in <code><a href='https://rdrr.io/r/base/seq.POSIXt.html'>seq.POSIXt</a></code> function.
+It's worth noting that increment interval can't be more frequent than
+interval of <code>idx</code> - for <code>Date</code> the most frequent time-unit is a <code>"day"</code>,
+for <code>POSIXt</code> a <code>sec</code>.<code>k</code> and <code>lag</code> can also be specified as using time sequence increment. Available
+time units are <code>"sec", "min", "hour", "day", "DSTday", "week", "month", "quarter" or "year"</code>.
+To increment by number of units one can also specify <code>&lt;number&gt; &lt;unit&gt;s</code>
+for example <code>lag = "-2 days"</code>, <code>k = "5 weeks"</code>.</p></li>
+</ul><p>Above is not enough since <code>k</code> and <code>lag</code> can be a vector which allows to
+stretch and lag/lead each window freely on in time (on indices).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -223,31 +281,73 @@ is taken from <code>type</code> argument.</p>
 <span class='fu'>runner</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>f</span> <span class='kw'>=</span> <span class='no'>mean</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt;  [1] 1.0 1.5 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0</div><div class='input'>
 <span class='co'># mean on k = 3 elements windows with different specification</span>
 <span class='fu'>runner</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt;  [1] 1.0 1.5 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0</div><div class='input'>
+<span class='co'># concatenate two columns</span>
+<span class='fu'>runner</span>(
+  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
+    <span class='kw'>a</span> <span class='kw'>=</span> <span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>],
+    <span class='kw'>b</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>10</span>
+  ),
+  <span class='kw'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>x</span>$<span class='no'>a</span>, <span class='no'>x</span>$<span class='no'>b</span>), <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>"+"</span>),
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"character"</span>
+)</div><div class='output co'>#&gt;  [1] "a1"                             "a1+b2"                         
+#&gt;  [3] "a1+b2+c3"                       "a1+b2+c3+d4"                   
+#&gt;  [5] "a1+b2+c3+d4+e5"                 "a1+b2+c3+d4+e5+f6"             
+#&gt;  [7] "a1+b2+c3+d4+e5+f6+g7"           "a1+b2+c3+d4+e5+f6+g7+h8"       
+#&gt;  [9] "a1+b2+c3+d4+e5+f6+g7+h8+i9"     "a1+b2+c3+d4+e5+f6+g7+h8+i9+j10"</div><div class='input'>
+<span class='co'># concatenate two columns with additional argument</span>
+<span class='fu'>runner</span>(
+  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
+    <span class='kw'>a</span> <span class='kw'>=</span> <span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>],
+    <span class='kw'>b</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>10</span>
+  ),
+  <span class='kw'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>xxx</span>) {
+    <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>x</span>$<span class='no'>a</span>, <span class='no'>xxx</span>, <span class='no'>x</span>$<span class='no'>b</span>), <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>" + "</span>)
+  },
+  <span class='kw'>xxx</span> <span class='kw'>=</span> <span class='st'>"..."</span>,
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"character"</span>
+)</div><div class='output co'>#&gt;  [1] "a...1"                                                                         
+#&gt;  [2] "a...1 + b...2"                                                                 
+#&gt;  [3] "a...1 + b...2 + c...3"                                                         
+#&gt;  [4] "a...1 + b...2 + c...3 + d...4"                                                 
+#&gt;  [5] "a...1 + b...2 + c...3 + d...4 + e...5"                                         
+#&gt;  [6] "a...1 + b...2 + c...3 + d...4 + e...5 + f...6"                                 
+#&gt;  [7] "a...1 + b...2 + c...3 + d...4 + e...5 + f...6 + g...7"                         
+#&gt;  [8] "a...1 + b...2 + c...3 + d...4 + e...5 + f...6 + g...7 + h...8"                 
+#&gt;  [9] "a...1 + b...2 + c...3 + d...4 + e...5 + f...6 + g...7 + h...8 + i...9"         
+#&gt; [10] "a...1 + b...2 + c...3 + d...4 + e...5 + f...6 + g...7 + h...8 + i...9 + j...10"</div><div class='input'>
 <span class='co'># number of unique values in each window (varying window size)</span>
 <span class='fu'>runner</span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>],
        <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>4</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>),
        <span class='kw'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>x</span>)))</div><div class='output co'>#&gt;  [1] 1 2 2 4 5 5 5 5 5 5</div><div class='input'>
-<span class='co'># concatenate window values</span>
-<span class='fu'>runner</span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>],
-       <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>4</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>),
-       <span class='kw'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>x</span>, <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>"-"</span>),
-       <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"character"</span>)</div><div class='output co'>#&gt;  [1] "a"         "a-b"       "b-c"       "a-b-c-d"   "a-b-c-d-e" "b-c-d-e-f"
-#&gt;  [7] "c-d-e-f-g" "d-e-f-g-h" "e-f-g-h-i" "f-g-h-i-j"</div><div class='input'>
 <span class='co'># concatenate only on selected windows index</span>
 <span class='fu'>runner</span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>],
        <span class='kw'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>x</span>, <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>"-"</span>),
        <span class='kw'>at</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>5</span>, <span class='fl'>8</span>),
        <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"character"</span>)</div><div class='output co'>#&gt; [1] "a"               "a-b-c-d-e"       "a-b-c-d-e-f-g-h"</div><div class='input'>
-</div></pre>
+<span class='co'># 5 days mean</span>
+<span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>4</span>, <span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>13</span>, <span class='fl'>17</span>, <span class='fl'>18</span>, <span class='fl'>18</span>, <span class='fl'>21</span>, <span class='fl'>27</span>, <span class='fl'>31</span>, <span class='fl'>37</span>, <span class='fl'>42</span>, <span class='fl'>44</span>, <span class='fl'>47</span>, <span class='fl'>48</span>)
+<span class='kw pkg'>runner</span><span class='kw ns'>::</span><span class='fu'>runner</span>(
+  <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>idx</span>,
+  <span class='kw'>k</span> <span class='kw'>=</span> <span class='st'>"5 days"</span>,
+  <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>idx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span>() + <span class='no'>idx</span>,
+  <span class='kw'>f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>x</span>)
+)</div><div class='output co'>#&gt;  [1]      NaN  4.00000  5.00000      NaN 13.00000 15.00000 15.00000 17.66667
+#&gt;  [9]      NaN 27.00000      NaN 37.00000 42.00000 43.00000 45.50000</div><div class='input'>
+<span class='co'># 5 days mean at 4-indices</span>
+<span class='kw pkg'>runner</span><span class='kw ns'>::</span><span class='fu'>runner</span>(
+  <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>15</span>,
+  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>5</span>,
+  <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>idx</span> <span class='kw'>=</span> <span class='no'>idx</span>,
+  <span class='kw'>at</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>18</span>, <span class='fl'>27</span>, <span class='fl'>48</span>, <span class='fl'>31</span>),
+  <span class='kw'>f</span> <span class='kw'>=</span> <span class='no'>mean</span>
+)</div><div class='output co'>#&gt; [1]  4.5  NaN 13.5  9.0</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -258,7 +358,7 @@ is taken from <code>type</code> argument.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

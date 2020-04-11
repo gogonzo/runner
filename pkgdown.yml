@@ -1,8 +1,9 @@
 pandoc: '2.2'
-pkgdown: 1.4.1.9000
-pkgdown_sha: b18aa6bc9551ca78b75167abf44f81f396c9b548
+pkgdown: 1.5.1.9000
+pkgdown_sha: cb74ce08c4b25adda98256ea46196b1182f4e0ea
 articles:
   apply_any_r_function: apply_any_r_function.html
   built-in_functions: built-in_functions.html
   runner_examples: runner_examples.html
+last_built: 2020-04-11T01:05Z
 
