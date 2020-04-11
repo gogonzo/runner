@@ -12,7 +12,7 @@ Authors@R: person("Dawid", "Kałędkowski",
 Maintainer: Dawid Kałędkowski <dawid.kaledkowski@gmail.com>
 Description: Fully supports rolling windows operations by controlling window length,
   window lag, time indexing. With runner one can apply any R function on rolling
-  windows. Package eases working with equally and unequally spaced time series.
+  windows. Package eases work with equally and unequally spaced time series.
 License: GPL (>= 2)
 BugReports: https://github.com/gogonzo/runner/issues
 LinkingTo: Rcpp
