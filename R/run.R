@@ -77,7 +77,7 @@
 #'    `at` argument. Each element of `at` is an index on which runner calculates function -
 #'    which means that output of the runner is now of length equal to `at`. Note
 #'    that one can change index of `x` by specifying `idx`.
-#'    Illustration below shows output of `runner` for `at = c(13, 27, 45, 31)`
+#'    Illustration below shows output of `runner` for `at = c(18, 27, 45, 31)`
 #'    which gives windows in ranges enclosed in square brackets. Range for `at = 27` is
 #'    `[22, 26]` which is not available in current indices. \cr
 #'    \if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}}

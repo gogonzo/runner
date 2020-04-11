@@ -65,7 +65,7 @@ Following diagram illustrates what running windows are - in this case
 running windows of length `k = 4`. For each of 15 elements of a vector
 each window contains current 4 elements.
 
-![](man/figures/running_windows_explain.png)
+![](man/figures/incrementalindex.png)
 
 ### Window size
 
@@ -76,7 +76,7 @@ where each element of `k` defines window length. If `k` is empty it
 means that window will be cumulative (like `base::cumsum`). Example
 below illustrates window of `k = 4` for 10th element of vector `x`.
 
-![](man/figures/constant_window.png)
+![](man/figures/constantwindow.png)
 
 ``` r
 runner(1:15, k = 4, f = function(x) x)
@@ -92,7 +92,7 @@ value of `lag = 0`. Example below illustrates window of `k = 4` lagged
 by `lag = 2` for 10-th element of vector `x`. Lag can also be negative
 value, which shifts window forward instead of backward.
 
-![](man/figures/lagged_window_k_lag.png)
+![](man/figures/laggedwindowklag.png)
 
 ``` r
 runner(
@@ -134,11 +134,11 @@ runner(
 Runner by default returns vector of the same size as `x` unless one puts
 any-size vector to `at` argument. Each element of `at` is an index on
 which runner calculates function. Below illustrates output of runner for
-`at = c(13, 27, 45, 31)` which gives windows in ranges enclosed in
+`at = c(18, 27, 45, 31)` which gives windows in ranges enclosed in
 square brackets. Range for `at = 27` is `[22, 26]` which is not
 available in current indices.
 
-![](man/figures/runner_at_date.png)
+![](man/figures/runnerat.png)
 
 ``` r
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
@@ -164,7 +164,7 @@ depending on date. In example below two windows exceed range given by
 `na_pad = FALSE` first window will be empty (no single element within
 `[-2, 3]`) and last window will return elements within matching `idx`.
 
-![](man/figures/runner_at_date_na_pad.png)
+![](man/figures/runneratdatenapad.png)
 
 ``` r
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
