@@ -184,6 +184,7 @@ runner <- function(
   ...
   ) {
 
+
   if (any(is.na(k))) {
     stop("Function doesn't accept NA values in k vector");
   }
@@ -197,7 +198,17 @@ runner <- function(
     stop("f should be a function")
   }
 
+  # dplyr::group_by exception
+  x <- this_group(x)
 
+  # set arguments from attrs set by run_by
+  k <- set_from_attribute(x, k) # no deep copy
+  lag <- set_from_attribute(x, lag)
+  idx <- set_from_attribute(x, idx)
+  na_pad <- set_from_attribute(x, na_pad)
+  at <- set_from_attribute(x, at)
+
+  # use POSIXt.seq
   at <- seq_by(at, idx)
   k <- k_by(k, if (length(at > 0)) at else idx, "k")
   lag <- k_by(lag, if (length(at > 0)) at else idx, "lag")
@@ -235,6 +246,7 @@ runner <- function(
         f(ww, ...)
       }
     }
+
   } else {
     res <- sapply(w, function(ww)
       if (is.null(ww)) {
@@ -245,36 +257,71 @@ runner <- function(
     )
   }
 
-
   return(res)
 }
 
-#' Creates sequence for at as time-unit-interval
+#' Obtains initial call in recursive chain
 #'
-#' Creates sequence for at as time-unit-interval
-#' @param at object from runner
-#' @param idx object from runner
-seq_by <- function(at, idx) {
-  if ((is.character(at) &&
-       length(at) == 1)) {
+#' Obtains initial call in recursive chain. Function to be called inside of the
+#' body.
+#' @param callable (\{argument}) of any function.
+#' @return initial (\code{call})
+get_initial_call = function(callable) {
 
-    if (length(idx) == 0) {
-      stop(
-        sprintf("`idx` can't be empty while specifying at as time interval")
-      )
-    }
+  fr <- rev(sys.frames())
 
-    if (inherits(idx, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
-      at <- if (grepl("^-", at)) {
-        seq(max(idx), min(idx), by = at)
-      } else {
-        seq(min(idx), max(idx), by = at)
-      }
-    } else {
-      stop("To specify at as time interval character `idx` can't be empty")
-    }
+  # Exclude frames created by testthat
+  fr_testing <- vapply(fr, function(env){"env_test" %in% ls(env)}, logical(1))
+  if (any(fr_testing)) {
+    fr <- fr[-which(fr_testing)]
   }
-  return(at)
+  callable <- substitute(callable, fr[[1]])
+
+  for (i in seq_along(fr)[-1]) {
+    callable <- eval(bquote(substitute(.(callable), fr[[i]])))
+  }
+
+  return(callable)
+}
+
+get_parent_call_arg_names <- function() {
+  cl <- sys.call(-2)
+  f <- get(as.character(cl[[1]]), mode="function", sys.frame(-2))
+  cl <- match.call(definition=f, call=cl)
+  names(cl)
+}
+
+#' Set window parameters
+#'
+#' Set window parameters
+#' @inheritParams runner
+#' @return x object which \link{runner} will be executed on.
+#' @examples
+#' data <- data.frame(
+#'  index = c(2, 3, 3, 4, 5, 8, 10, 10, 13, 15)
+#'  a = letters[1:10],
+#'  b = 1:10,
+#' )
+#'
+#' data <- run_by(data, idx = index, k = 5) %>%
+#'   runner(f = function(x) {
+#'     paste(x$a, collapse = ">")
+#'   }
+#' )
+#' @export
+run_by <- function(x, idx, k, lag, na_pad, at) {
+  if (!is.data.frame(x)) {
+    stop("`run_by` should be used only for data.frame. \n
+         Use `runner` on x directly.")
+  }
+
+  if (!missing(idx)) x <- set_run_by(x, idx)
+  if (!missing(k)) x <- set_run_by(x, k)
+  if (!missing(lag)) x <- set_run_by(x, lag)
+  if (!missing(na_pad)) x <- set_run_by(x, na_pad)
+  if (!missing(at)) x <- set_run_by(x, at)
+
+  x
 }
 
 #' Converts k and lag from time-unit-interval to int
@@ -324,6 +371,80 @@ k_by <- function(k, idx, param) {
   return(k)
 }
 
+
+
+#' Creates sequence for at as time-unit-interval
+#'
+#' Creates sequence for at as time-unit-interval
+#' @param at object from runner
+#' @param idx object from runner
+seq_by <- function(at, idx) {
+  if ((is.character(at) &&
+       length(at) == 1)) {
+
+    if (length(idx) == 0) {
+      stop(
+        sprintf("`idx` can't be empty while specifying at as time interval")
+      )
+    }
+
+    if (inherits(idx, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
+      at <- if (grepl("^-", at)) {
+        seq(max(idx), min(idx), by = at)
+      } else {
+        seq(min(idx), max(idx), by = at)
+      }
+    } else {
+      stop("To specify at as time interval character `idx` can't be empty")
+    }
+  }
+  return(at)
+}
+
+set_run_by <- function(x, arg) {
+  arg_name <- deparse(substitute(arg))
+  initial_call <- get_initial_call(callable = arg)
+
+  attr(x, arg_name) <- if (is.name(initial_call)) {
+    deparse(initial_call)
+  } else {
+    arg
+  }
+  x
+}
+
+set_from_attribute <- function(x, attr) {
+  runner_args <- get_parent_call_arg_names()
+  arg_name <- deparse(substitute(attr))
+
+  # no arg overwriting
+  if (!is.null(attr(x, arg_name)) && !arg_name %in% runner_args) {
+    # column name
+    attr <- if (is.character(attr(x, arg_name)) && length(attr(x, arg_name)) == 1) {
+      if (attr(x, arg_name) %in% names(x)) {
+        x[[attr(x, arg_name)]]
+      } else {
+        stop(sprintf('Column "%s" does not exist in x', attr(x, arg_name)))
+      }
+
+    } else {
+      attr(x, arg_name)
+    }
+
+  # arg overwriting (runner masks run_by)
+  } else if (!is.null(attr(x, arg_name)) && arg_name %in% runner_args) {
+    message(
+      sprintf(
+        "%1$s set in run_by() will be ignored in favour of %1$s specified in runner() call",
+        arg_name
+      )
+    )
+  }
+
+  attr
+}
+
+
 #' Formats time-unit-interval to valid for runner
 #'
 #' Formats time-unit-interval to valid for runner
@@ -348,4 +469,30 @@ reformat_k <- function(k, only_positive = TRUE) {
   k[negative] <- gsub("^-", "", k[negative])
 
   return(k)
+}
+
+
+#' Filter dplyr \code{.} by groups
+#'
+#' Filters dplyr \code{.} by current grouping variables. Function created
+#' because data available in `dplyr::group_by %>% mutate` scheme is not filtered
+#' by group - in mutate function \code{.} is still initial dataset.
+#' This function creates \code{data.frame} using \code{dplyr::groups} information.
+#' @param x \code{(data.frame)} object which can be \code{grouped_df} in special
+#' case.
+#' @return data.frame filtered by current \code{dplyr::groups()}
+this_group <- function(x) {
+  if (is(x, "grouped_df")) {
+    new_env <- new.env(parent = parent.frame(n = 2)$.top_env)
+    df_call <- as.call(
+      append(
+        as.name("data.frame"),
+        lapply(names(x), as.name)
+      )
+    )
+
+    x <- eval(df_call, envir = new_env)
+  }
+
+  return(x)
 }
