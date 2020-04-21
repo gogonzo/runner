@@ -22,7 +22,7 @@ test_that("dplyr::group_by - dplyr keeps attributes", {
 
   expect_identical(
     attr(grouped_index, "idx"),
-    "index"
+    as.name("index")
   )
 
   grouped_index <- data %>%
@@ -36,18 +36,21 @@ test_that("dplyr::group_by - dplyr keeps attributes", {
 
   expect_identical(
     attr(grouped_index, "idx"),
-    "index"
+    as.name("index")
   )
 
 
-  grouped_index %>%
+  res <- grouped_index %>%
     dplyr::mutate(
       x = runner(
         .,
         f = function(x) {
-          mean(x$x)
+          unique(paste(x$group1, x$group2))
         }
       )
     )
-
+  expect_identical(
+    res$x,
+    paste(grouped_index$group1, grouped_index$group2)
+  )
 })

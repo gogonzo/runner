@@ -170,9 +170,26 @@
 #'   f = mean
 #' )
 #' @md
+#' @rdname runner
 #' @importFrom methods is
 #' @export
-runner <- function(
+runner <- function (
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  type = "auto",
+  ...
+  ) {
+  UseMethod("runner", x)
+}
+
+#' @rdname runner
+#' @export
+runner.data.frame <- function(
   x,
   f = function(x) x,
   k = integer(0),
@@ -184,6 +201,15 @@ runner <- function(
   ...
   ) {
 
+  # dplyr::group_by exception
+  x <- this_group(x)
+
+  # set arguments from attrs set by run_by
+  k <- set_from_attribute(x, k, allow_time_unit = TRUE) # no deep copy
+  lag <- set_from_attribute(x, lag, allow_time_unit = TRUE)
+  idx <- set_from_attribute(x, idx)
+  na_pad <- set_from_attribute(x, na_pad)
+  at <- set_from_attribute(x, at, allow_time_unit = TRUE)
 
   if (any(is.na(k))) {
     stop("Function doesn't accept NA values in k vector");
@@ -198,15 +224,6 @@ runner <- function(
     stop("f should be a function")
   }
 
-  # dplyr::group_by exception
-  x <- this_group(x)
-
-  # set arguments from attrs set by run_by
-  k <- set_from_attribute(x, k) # no deep copy
-  lag <- set_from_attribute(x, lag)
-  idx <- set_from_attribute(x, idx)
-  na_pad <- set_from_attribute(x, na_pad)
-  at <- set_from_attribute(x, at)
 
   # use POSIXt.seq
   at <- seq_by(at, idx)
@@ -214,11 +231,7 @@ runner <- function(
   lag <- k_by(lag, if (length(at > 0)) at else idx, "lag")
 
   w <- window_run(
-    x = if (is.data.frame(x) || is.matrix(x)) {
-      seq_len(nrow(x))
-    } else {
-      x
-    },
+    x = seq_len(nrow(x)),
     k = k,
     lag = lag,
     idx = idx,
@@ -226,16 +239,60 @@ runner <- function(
     na_pad = na_pad
   )
 
-  if (is.data.frame(x) || is.matrix(x)) {
-    res <- sapply(w, function(ww) {
-      if (length(ww) == 0) {
-        NA
-      } else {
-        f(x[ww, ], ...)
-      }
-    })
+  res <- sapply(w, function(ww) {
+    if (length(ww) == 0) {
+      NA
+    } else {
+      f(x[ww, ], ...)
+    }
+  })
 
-  } else if (type != "auto") {
+  return(res)
+}
+
+#' @rdname runner
+#' @export
+runner.default <- function(
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  type = "auto",
+  ...
+  ) {
+
+  if (any(is.na(k))) {
+    stop("Function doesn't accept NA values in k vector");
+  }
+  if (any(is.na(lag))) {
+    stop("Function doesn't accept NA values in lag vector");
+  }
+  if (any(is.na(idx))) {
+    stop("Function doesn't accept NA values in idx vector");
+  }
+  if (!is(f, "function")) {
+    stop("f should be a function")
+  }
+
+
+  # use POSIXt.seq
+  at <- seq_by(at, idx)
+  k <- k_by(k, if (length(at > 0)) at else idx, "k")
+  lag <- k_by(lag, if (length(at > 0)) at else idx, "lag")
+
+  w <- window_run(
+    x = x,
+    k = k,
+    lag = lag,
+    idx = idx,
+    at = at,
+    na_pad = na_pad
+  )
+
+  if (type != "auto") {
     n <- length(w)
     res <- vector(mode = type, length = n)
     for (i in seq_len(n)) {
@@ -264,10 +321,9 @@ runner <- function(
 #'
 #' Obtains initial call in recursive chain. Function to be called inside of the
 #' body.
-#' @param callable (\{argument}) of any function.
+#' @param callable (\code{argument}) of any function.
 #' @return initial (\code{call})
 get_initial_call = function(callable) {
-
   fr <- rev(sys.frames())
 
   # Exclude frames created by testthat
@@ -289,39 +345,6 @@ get_parent_call_arg_names <- function() {
   f <- get(as.character(cl[[1]]), mode="function", sys.frame(-2))
   cl <- match.call(definition=f, call=cl)
   names(cl)
-}
-
-#' Set window parameters
-#'
-#' Set window parameters
-#' @inheritParams runner
-#' @return x object which \link{runner} will be executed on.
-#' @examples
-#' data <- data.frame(
-#'  index = c(2, 3, 3, 4, 5, 8, 10, 10, 13, 15)
-#'  a = letters[1:10],
-#'  b = 1:10,
-#' )
-#'
-#' data <- run_by(data, idx = index, k = 5) %>%
-#'   runner(f = function(x) {
-#'     paste(x$a, collapse = ">")
-#'   }
-#' )
-#' @export
-run_by <- function(x, idx, k, lag, na_pad, at) {
-  if (!is.data.frame(x)) {
-    stop("`run_by` should be used only for data.frame. \n
-         Use `runner` on x directly.")
-  }
-
-  if (!missing(idx)) x <- set_run_by(x, idx)
-  if (!missing(k)) x <- set_run_by(x, k)
-  if (!missing(lag)) x <- set_run_by(x, lag)
-  if (!missing(na_pad)) x <- set_run_by(x, na_pad)
-  if (!missing(at)) x <- set_run_by(x, at)
-
-  x
 }
 
 #' Converts k and lag from time-unit-interval to int
@@ -373,6 +396,84 @@ k_by <- function(k, idx, param) {
 
 
 
+#' Formats time-unit-interval to valid for runner
+#'
+#' Formats time-unit-interval to valid for runner
+#' @param k (k or lag) object from runner to be formatted
+#' @param only_positive for k is TRUE, for lag is FALSE
+#' @examples
+#' runner:::reformat_k("1 days")
+#' runner:::reformat_k("day")
+#' runner:::reformat_k("10 days")
+#' runner:::reformat_k("-10 days", only_positive = FALSE)
+#' runner:::reformat_k(c("-10 days", "2 months"), only_positive = FALSE)
+reformat_k <- function(k, only_positive = TRUE) {
+  if (only_positive && any(grepl("^-", k))) {
+    stop("k can't be negative")
+  }
+
+  k[grepl("^[a-zA-Z]", k)] <- sprintf("1 %ss", k[grepl("^[a-zA-Z]", k)])
+  positive <- grepl("^[^-]", k)
+  negative <- grepl("^-", k)
+
+  k[positive] <- sprintf("-%s", k[positive])
+  k[negative] <- gsub("^-", "", k[negative])
+
+  return(k)
+}
+
+#' Set window parameters
+#'
+#' Set window parameters for \link{runner} in advance. This function sets the
+#' attributes to \code{x} object and saves user effort to specify window
+#' parameters in further \link{runner} calls.
+#' @inheritParams runner
+#' @return x object which \link{runner} can be executed on.
+#' @examples
+#' library(dplyr)
+#'
+#' data <- data.frame(
+#'  index = c(2, 3, 3, 4, 5, 8, 10, 10, 13, 15),
+#'  a = rep(c("a", "b"), each = 5),
+#'  b = 1:10
+#' )
+#'
+#' data %>%
+#'  group_by(a) %>%
+#'  run_by(., idx = index, k = 5) %>%
+#'  mutate(
+#'    c = runner(
+#'      x = .,
+#'      f = function(x) {
+#'        paste(x$b, collapse = ">")
+#'      }
+#'    ),
+#'    d = runner(
+#'      x = .,
+#'      f = function(x) {
+#'        sum(x$b)
+#'      }
+#'    )
+#'  )
+#' @export
+run_by <- function(x, idx, k, lag, na_pad, at) {
+  if (!is.data.frame(x)) {
+    stop("`run_by` should be used only for data.frame. \n
+         Use `runner` on x directly.")
+  }
+
+  if (!missing(idx)) x <- set_run_by(x, idx, FALSE)
+  if (!missing(k)) x <- set_run_by(x, k)
+  if (!missing(lag)) x <- set_run_by(x, lag)
+  if (!missing(na_pad)) x <- set_run_by(x, na_pad, FALSE)
+  if (!missing(at)) x <- set_run_by(x, at)
+
+  return(x)
+}
+
+
+
+
 #' Creates sequence for at as time-unit-interval
 #'
 #' Creates sequence for at as time-unit-interval
@@ -401,88 +502,136 @@ seq_by <- function(at, idx) {
   return(at)
 }
 
-set_run_by <- function(x, arg) {
+set_run_by <- function(x, arg, allow_time_unit = TRUE) {
   arg_name <- deparse(substitute(arg))
   initial_call <- get_initial_call(callable = arg)
 
+  browser()
   attr(x, arg_name) <- if (is.name(initial_call)) {
-    deparse(initial_call)
+    if (as.character(initial_call) %in% names(x)) {
+      initial_call
+    } else {
+      arg
+    }
+
+  } else if (is.character(arg)) {
+    if (!allow_time_unit) {
+      stop(
+        sprintf(
+          "%s should not be character",
+          arg_name
+        )
+      )
+
+    } else if (is_datetime_valid(arg)) {
+      arg
+
+    } else {
+      stop(
+        sprintf(
+          '%s should not be character unless you specify valid time unit like "<time unit>" or "-*[0-9]+ <time unit>s".',
+          arg_name
+        )
+      )
+
+    }
   } else {
     arg
+
   }
-  x
+
+  return(x)
+
 }
 
-set_from_attribute <- function(x, attr) {
+set_from_attribute <- function(x, attrib, allow_time_unit = TRUE) {
+  browser
+  initial_call <- get_initial_call(callable = attrib)
   runner_args <- get_parent_call_arg_names()
-  arg_name <- deparse(substitute(attr))
+  arg_name <- deparse(substitute(attrib))
+
+  # arg can be:
+  #  - numeric: [1] or [1, 2, 3, ...]
+  #  - character: "2 days"
+  #  - name: index
+  #   - first look in x
+  #   - second just take a values
 
   # no arg overwriting
   if (!is.null(attr(x, arg_name)) && !arg_name %in% runner_args) {
-    # column name
-    attr <- if (is.character(attr(x, arg_name)) && length(attr(x, arg_name)) == 1) {
-      if (attr(x, arg_name) %in% names(x)) {
-        x[[attr(x, arg_name)]]
+
+    # attribute is a name
+    if (is.name(attr(x, arg_name))) {
+      if (as.character(attr(x, arg_name)) %in% names(x)) {
+        attrib <- x[[as.character(attr(x, arg_name))]]
       } else {
-        stop(sprintf('Column "%s" does not exist in x', attr(x, arg_name)))
+        stop(
+          sprintf(
+            'Column "%s" from attr(x, "%s") does not exist in x',
+            as.character(attr(x, arg_name)),
+            as.character(arg_name)
+          )
+        )
       }
 
+      # otherwise just pass attribute through
     } else {
-      attr(x, arg_name)
+      attrib <- attr(x, arg_name)
     }
 
   # arg overwriting (runner masks run_by)
-  } else if (!is.null(attr(x, arg_name)) && arg_name %in% runner_args) {
-    message(
-      sprintf(
-        "%1$s set in run_by() will be ignored in favour of %1$s specified in runner() call",
-        arg_name
+  } else {
+    if (!is.null(attr(x, arg_name))) {
+      warning(
+        sprintf(
+          "%1$s set in run_by() will be ignored in favour of %1$s specified in runner() call",
+          arg_name
+        )
       )
-    )
+    }
+
+    if (is.name(initial_call)) {
+      if (deparse(initial_call) %in% names(x)) {
+        attrib <- x[[deparse(initial_call)]]
+      }
+    } else if (is.character(initial_call)) {
+      if (!allow_time_unit) {
+        stop(
+          sprintf(
+            "%s should not be character",
+            arg_name
+          )
+        )
+      } else if (!is_datetime_valid(initial_call)) {
+        stop(
+          sprintf(
+            '%s should not be character unless you specify valid time unit with following pattern:
+            "^<time unit>$" or "^-*[0-9]+ <time unit>s$".',
+            arg_name
+          )
+        )
+      }
+    }
   }
 
-  attr
+  return(attrib)
 }
 
 
-#' Formats time-unit-interval to valid for runner
+#' Access group data in mutate
 #'
-#' Formats time-unit-interval to valid for runner
-#' @param k (k or lag) object from runner to be formatted
-#' @param only_positive for k is TRUE, for lag is FALSE
-#' @examples
-#' runner:::reformat_k("1 days")
-#' runner:::reformat_k("day")
-#' runner:::reformat_k("10 days")
-#' runner:::reformat_k("-10 days", only_positive = FALSE)
-#' runner:::reformat_k(c("-10 days", "2 months"), only_positive = FALSE)
-reformat_k <- function(k, only_positive = TRUE) {
-  if (only_positive && any(grepl("^-", k))) {
-    stop("k can't be negative")
-  }
-
-  k[grepl("^[a-zA-Z]", k)] <- sprintf("1 %ss", k[grepl("^[a-zA-Z]", k)])
-  positive <- grepl("^[^-]", k)
-  negative <- grepl("^-", k)
-
-  k[positive] <- sprintf("-%s", k[positive])
-  k[negative] <- gsub("^-", "", k[negative])
-
-  return(k)
-}
-
-
-#' Filter dplyr \code{.} by groups
-#'
-#' Filters dplyr \code{.} by current grouping variables. Function created
-#' because data available in `dplyr::group_by %>% mutate` scheme is not filtered
-#' by group - in mutate function \code{.} is still initial dataset.
+#' Access group data in \code{dplyr::mutate} after \code{dplyr::group_by}.
+#' Function created because data available in `dplyr::group_by %>% mutate` scheme
+#' is not filtered by group - in mutate function \code{.} is still initial dataset.
 #' This function creates \code{data.frame} using \code{dplyr::groups} information.
 #' @param x \code{(data.frame)} object which can be \code{grouped_df} in special
 #' case.
 #' @return data.frame filtered by current \code{dplyr::groups()}
 this_group <- function(x) {
   if (is(x, "grouped_df")) {
+    attrs <- attributes(x)
+    attrs <- attrs[names(attrs) != "row.names"]
+
     new_env <- new.env(parent = parent.frame(n = 2)$.top_env)
     df_call <- as.call(
       append(
@@ -492,7 +641,15 @@ this_group <- function(x) {
     )
 
     x <- eval(df_call, envir = new_env)
+    for (i in seq_along(attrs)) {
+      attr(x, names(attrs)[i]) <- attrs[[i]]
+    }
   }
 
   return(x)
+}
+
+is_datetime_valid <- function(x) {
+  grepl("^(sec|min|hour|day|DSTday|week|month|quarter|year)$", x = x) ||
+  grepl("^-*[0-9]+ (sec|min|hour|day|DSTday|week|month|quarter|year)s", x = x)
 }

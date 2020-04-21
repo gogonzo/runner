@@ -2,9 +2,35 @@
 % Please edit documentation in R/run.R
 \name{runner}
 \alias{runner}
+\alias{runner.data.frame}
+\alias{runner.default}
 \title{Apply running function}
 \usage{
 runner(
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  type = "auto",
+  ...
+)
+
+\method{runner}{data.frame}(
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  type = "auto",
+  ...
+)
+
+\method{runner}{default}(
   x,
   f = function(x) x,
   k = integer(0),
