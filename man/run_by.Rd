@@ -42,7 +42,7 @@ sequence increment \code{\link[base]{seq.POSIXt}}. More in details.}
 x object which \link{runner} can be executed on.
 }
 \description{
-Set window parameters for \link{runner} in advance. This function sets the
+Set window parameters for \link{runner}. This function sets the
 attributes to \code{x} object and saves user effort to specify window
 parameters in further \link{runner} calls.
 }
@@ -57,7 +57,7 @@ data <- data.frame(
 
 data \%>\%
  group_by(a) \%>\%
- run_by(., idx = index, k = 5) \%>\%
+ run_by(idx = "index", k = 5) \%>\%
  mutate(
    c = runner(
      x = .,

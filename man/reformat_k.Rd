@@ -9,7 +9,7 @@ reformat_k(k, only_positive = TRUE)
 \arguments{
 \item{k}{(k or lag) object from runner to be formatted}
 
-\item{only_positive}{for k is TRUE, for lag is FALSE}
+\item{only_positive}{for \code{k} is \code{TRUE}, for \code{lag} is \code{FALSE}}
 }
 \description{
 Formats time-unit-interval to valid for runner

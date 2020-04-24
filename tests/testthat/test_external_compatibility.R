@@ -13,7 +13,7 @@ test_that("dplyr::group_by - dplyr keeps attributes", {
   #
   grouped_index <- data %>%
     dplyr::group_by(group1, group2) %>%
-    run_by(idx = index)
+    run_by(idx = "index")
 
   expect_identical(
     dplyr::groups(grouped_index),
@@ -22,11 +22,11 @@ test_that("dplyr::group_by - dplyr keeps attributes", {
 
   expect_identical(
     attr(grouped_index, "idx"),
-    as.name("index")
+    "index"
   )
 
   grouped_index <- data %>%
-    run_by(idx = index) %>%
+    run_by(idx = "index") %>%
     dplyr::group_by(group1, group2)
 
   expect_identical(
@@ -36,7 +36,7 @@ test_that("dplyr::group_by - dplyr keeps attributes", {
 
   expect_identical(
     attr(grouped_index, "idx"),
-    as.name("index")
+    "index"
   )
 
 

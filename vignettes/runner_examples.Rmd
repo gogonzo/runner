@@ -100,7 +100,7 @@ df %>%
   )
 ```
 
-# runner with dplyr
+# runner with `dplyr`
 
 ### Unique for specified time frame
 
@@ -148,20 +148,26 @@ library(dplyr)
 x <- cumsum(rnorm(20))
 y <- 3 * x + rnorm(20)
 date <- Sys.Date() + cumsum(sample(1:3, 20, replace = TRUE)) # unequaly spaced time series
-data <- data.frame(
-  date, 
-  y, 
-  x
-)
+group <-  rep(c("a", "b"), each = 10)
 
-data %>%
-  group_by(Species) %>%
+
+data.frame(date, group, y, x) %>%
+  group_by(group) %>%
+  run_by(idx = "date", k = "5 days") %>%
   mutate(
-    mean_
-    
+    alpha_5 = runner(
+      x = ., 
+      f = function(x) {
+        coefficients(lm(x ~ y, x))[1]
+      }
+    ),
+    beta_5 = runner(
+      x = ., 
+      f = function(x) {
+        coefficients(lm(x ~ y, x))[1]
+      }
+    )
   )
-  
-
 ```
 
 ### Aggregating values from another data.frame in `grouped_df`

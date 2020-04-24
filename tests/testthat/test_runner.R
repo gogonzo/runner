@@ -773,8 +773,7 @@ test_that("at date window", {
 # at with difftime -----
 test_that("at with difftime", {
 
-
-  at_date <- seq_by(at = "1 months", idx = idx_date)
+  at_date <- seq_at(at = "1 months", idx = idx_date)
   expect_identical(
     at_date,
     seq(min(idx_date), max(idx_date), by = "1 months")
@@ -785,7 +784,7 @@ test_that("at with difftime", {
     runner(1:100, at = at_date, idx = idx_date, f = function(x) max(x))
   )
 
-  at_date <- seq_by(at = "-1 months", idx = idx_date)
+  at_date <- seq_at(at = "-1 months", idx = idx_date)
   expect_identical(
     at_date,
     seq(max(idx_date), min(idx_date), by = "-1 months")
@@ -802,6 +801,11 @@ test_that("k with difftime", {
     runner(1:100, k = 14, idx = idx_date, f = function(x) x)
   )
 
+  expect_equal(
+    runner(1:100, k = "2 weeks", idx = idx_date, f = function(x) x),
+    runner(1:100, k = as.difftime(2, units = "weeks"), idx = idx_date, f = function(x) x)
+  )
+
   k_date <- sample(c("week", "day"), 100, replace = TRUE)
   k_int <- ifelse(k_date == "week", 7L, 1L)
 
@@ -812,6 +816,11 @@ test_that("k with difftime", {
 
   expect_error(
     runner(1:100, k = "-1 weeks", idx = idx_date, f = function(x) x),
+    "negative"
+  )
+
+  expect_error(
+    runner(1:100, k = as.difftime(-1, units = "weeks"), idx = idx_date, f = function(x) x),
     "negative"
   )
 
@@ -828,6 +837,18 @@ test_that("lag with difftime", {
     runner(1:100, lag = "-1 weeks", idx = idx_date, f = function(x) x),
     runner(1:100, lag = -7, idx = idx_date, f = function(x) x)
   )
+
+
+  expect_equal(
+    runner(1:100, lag = "2 weeks", idx = idx_date, f = function(x) x),
+    runner(1:100, lag = as.difftime(2, units = "weeks"), idx = idx_date, f = function(x) x)
+  )
+
+  expect_equal(
+    runner(1:100, lag = "-2 weeks", idx = idx_date, f = function(x) x),
+    runner(1:100, lag = as.difftime(-2, units = "weeks"), idx = idx_date, f = function(x) x)
+  )
+
 
   lag_date <- sample(c("week", "day", "-2 weeks", "-2 days"), 100, replace = TRUE)
   lag_int <- vapply(
