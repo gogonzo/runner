@@ -202,6 +202,18 @@ test_that("run_by %>% runner", {
     )
   )
 
+  x <- run_by(data, at = "index", idx = "index")
+  expect_identical(
+    runner(x, f = function(x) mean(x$x)),
+    runner(data, f = function(x) mean(x$x), at = "index", idx = "index")
+  )
+
+  x <- run_by(data, at = "index", idx = "index")
+  expect_warning(
+    runner(x, f = function(x) mean(x$x), at = 1:3),
+    "`at` set in run_by"
+  )
+
 
   # all
   x <- run_by(data, idx = "index", k = 5, lag = 2, na_pad = FALSE, at = 10)
@@ -312,6 +324,13 @@ test_that("run_by %>% runner errors", {
     ),
     "`idx` should be either:"
   )
+
+  expect_error(
+    run_by(data, lag = "1 day"),
+    "`lag` is invalid, should be either"
+  )
+
+
 
   x <- run_by(
     data,

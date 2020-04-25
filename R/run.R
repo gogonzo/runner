@@ -316,29 +316,6 @@ runner.default <- function(
   return(res)
 }
 
-#' Obtains initial call in recursive chain
-#'
-#' Obtains initial call in recursive chain. Function to be called inside of the
-#' body.
-#' @param callable (\code{argument}) of any function.
-#' @return initial (\code{call})
-get_initial_call = function(callable) {
-  fr <- rev(sys.frames())
-
-  # Exclude frames created by testthat
-  fr_testing <- vapply(fr, function(env){"env_test" %in% ls(env)}, logical(1))
-  if (any(fr_testing)) {
-    fr <- fr[-which(fr_testing)]
-  }
-  callable <- substitute(callable, fr[[1]])
-
-  for (i in seq_along(fr)[-1]) {
-    callable <- eval(bquote(substitute(.(callable), fr[[i]])))
-  }
-
-  return(callable)
-}
-
 get_parent_call_arg_names <- function() {
   cl <- sys.call(-2)
   f <- get(as.character(cl[[1]]), mode="function", sys.frame(-2))
@@ -373,7 +350,13 @@ k_by <- function(k, idx, param) {
       reformat_k(k, only_positive = FALSE)
     }
 
-    from <- if (length(idx) == length(k) && length(k) != 1) {
+    from <- if (length(k) != 1) {
+      if (length(idx) == 0) {
+        stop(
+          sprintf("`idx` can't be empty while specifying `%s` as time interval", param)
+        )
+      }
+
       mapply(
         FUN = function(x, y) {
           seq(x, by = y, length.out = 2)[2]
@@ -384,7 +367,7 @@ k_by <- function(k, idx, param) {
     } else if (length(k) == 1) {
       if (length(idx) == 0) {
         stop(
-          sprintf("`idx` can't be empty while specifying %s='%s'", param, k)
+          sprintf("`idx` can't be empty while specifying `%s` as time interval", param)
         )
       }
 
@@ -409,7 +392,7 @@ k_by <- function(k, idx, param) {
 
     if (length(idx) == 0) {
       stop(
-        sprintf("`idx` can't be empty while specifying %s as difftime", param, k)
+        sprintf("`idx` can't be empty while specifying %s as difftime", param)
       )
     }
     from <- idx - k
@@ -526,8 +509,6 @@ seq_at <- function(at, idx) {
       } else {
         seq(min(idx), max(idx), by = at)
       }
-    } else {
-      stop("To specify `at` as time interval `idx` can't be empty")
     }
   }
   return(at)
