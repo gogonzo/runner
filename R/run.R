@@ -535,10 +535,11 @@ seq_at <- function(at, idx) {
 
 set_run_by_index <- function(x, arg) {
   arg_name <- deparse(substitute(arg))
+
   attr(x, arg_name) <- if (is.character(arg) && length(arg) == 1 && arg %in% names(x)) {
     arg
 
-  } else if (is.numeric(arg) || inherits(idx, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
+  } else if (is.numeric(arg) || inherits(arg, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
     arg
   } else {
     stop(
@@ -629,7 +630,7 @@ set_from_attribute_index <- function(x, attrib) {
 
     if (is.character(attrib) && length(attrib) == 1 && attrib %in% names(x)) {
       attrib <- x[[attrib]]
-    } else if (is.numeric(attrib) || inherits(idx, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
+    } else if (is.numeric(attrib) || inherits(attrib, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
       # do nothing
     } else {
       stop(
@@ -663,7 +664,8 @@ set_from_attribute_at <- function(x, attrib) {
         sprintf(
           "`%s` should be either:
          - column name of `x`
-         - vector of type `numeric`, `Date`, `POSIXct` or `POSIXlt`",
+         - vector of type `numeric`, `Date`, `POSIXct` or `POSIXlt`
+         - character value describing dates sequence step as in `by` argument of `seq.POSIXct`",
           arg_name
         ),
         call. = FALSE
@@ -685,9 +687,9 @@ set_from_attribute_at <- function(x, attrib) {
 
     if (is.character(attrib) && length(attrib) == 1 && attrib %in% names(x)) {
       attrib <- x[[attrib]]
-    } else if (all(is_datetime_valid(attrib))) {
+    } else if (length(attrib) == 1 && all(is_datetime_valid(attrib))) {
       # do nothing
-    } else if (is.numeric(attrib) || inherits(idx, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
+    } else if (is.numeric(attrib) || inherits(attrib, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
       # do nothing
     } else {
       stop(

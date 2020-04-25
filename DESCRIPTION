@@ -20,7 +20,6 @@ Imports:
   methods,
   Rcpp 
 Suggests:
-  data.table,
   dplyr,
   knitr,
   magrittr,
