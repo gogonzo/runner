@@ -167,10 +167,6 @@ test_that("seq_at", {
     "`idx` can't be empty while specifying `at`"
   )
 
-  expect_error(
-    seq_at(at = "-2 months", idx = 1:2),
-    "To specify `at` as time interval `idx` can't be empty"
-  )
 
   expect_identical(
     seq_at(at = "2 weeks", idx = idx),

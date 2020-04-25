@@ -231,10 +231,14 @@ test_that("run_by %>% runner", {
   )
 
   x <- run_by(data, at = 1:3, idx = "index")
-  expect_error(
-    runner(x, f = function(x) mean(x$x), at = "index2"),
-    "`at` should be either"
+  expect_warning(
+    expect_error(
+      runner(x, f = function(x) mean(x$x), at = "index2"),
+      "`at` should be either"
+    ),
+    "`at` set in run_by"
   )
+
 
   x <- run_by(data, at = "index")
   names(x)[1] <- "wrong"
