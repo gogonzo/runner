@@ -202,6 +202,16 @@ test_that("run_by %>% runner", {
     )
   )
 
+  # args by name
+  x <- run_by(data, k = "k")
+  expect_warning(
+    expect_error(
+      runner(x, f = function(x) mean(x$x), k = "1 day"),
+      "`k` is invalid, should be either"
+    ),
+    "`k` set in run_by"
+  )
+
   x <- run_by(data, at = "index", idx = "index")
   expect_identical(
     runner(x, f = function(x) mean(x$x)),
@@ -212,6 +222,25 @@ test_that("run_by %>% runner", {
   expect_warning(
     runner(x, f = function(x) mean(x$x), at = 1:3),
     "`at` set in run_by"
+  )
+
+  x <- run_by(data, at = 1:3, idx = "index")
+  expect_warning(
+    runner(x, f = function(x) mean(x$x), at = "index"),
+    "`at` set in run_by"
+  )
+
+  x <- run_by(data, at = 1:3, idx = "index")
+  expect_error(
+    runner(x, f = function(x) mean(x$x), at = "index2"),
+    "`at` should be either"
+  )
+
+  x <- run_by(data, at = "index")
+  names(x)[1] <- "wrong"
+  expect_error(
+    runner(x, f = function(x) mean(x$x)),
+    "`at` should be either"
   )
 
 
