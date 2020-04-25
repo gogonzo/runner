@@ -1,41 +1,5 @@
 context("set index by")
 
-# Test get_initial_call ------
-test_that("Test get_initial_call", {
-  a <- function(x) {
-    x
-  }
-
-  b <- function(arg) {
-    c(arg)
-  }
-
-  c <- function(x) {
-    get_initial_call(x)
-  }
-
-  data <- letters[1:2]
-
-  expect_identical(
-    a(data),
-    letters[1:2]
-  )
-
-  expect_identical(
-    a(x = "elo"),
-    "elo"
-  )
-
-  init <- function(aa) {
-    aa
-  }
-
-  expect_identical(
-    a(x = init(letters[1:2])),
-    letters[1:2]
-  )
-})
-
 # run_by ------
 test_that("run_by", {
   x <- data.frame(x = 1:2, b = letters[1:2])

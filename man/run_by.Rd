@@ -43,8 +43,8 @@ x object which \link{runner} can be executed on.
 }
 \description{
 Set window parameters for \link{runner}. This function sets the
-attributes to \code{x} object and saves user effort to specify window
-parameters in further \link{runner} calls.
+attributes to \code{x} (only \code{data.frame}) object and saves user effort
+to specify window parameters in further multiple \link{runner} calls.
 }
 \examples{
 library(dplyr)
