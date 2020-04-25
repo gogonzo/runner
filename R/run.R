@@ -208,7 +208,7 @@ runner.data.frame <- function(
   k <- set_from_attribute_difftime(x, k) # no deep copy
   lag <- set_from_attribute_difftime(x, lag)
   idx <- set_from_attribute_index(x, idx)
-  at <- set_from_attribute_index(x, at)
+  at <- set_from_attribute_at(x, at)
   na_pad <- set_from_attribute_logical(x, na_pad)
 
   if (any(is.na(k))) {
@@ -450,8 +450,8 @@ reformat_k <- function(k, only_positive = TRUE) {
 #' Set window parameters
 #'
 #' Set window parameters for \link{runner}. This function sets the
-#' attributes to \code{x} object and saves user effort to specify window
-#' parameters in further \link{runner} calls.
+#' attributes to \code{x} (only \code{data.frame}) object and saves user effort
+#' to specify window parameters in further multiple \link{runner} calls.
 #' @inheritParams runner
 #' @return x object which \link{runner} can be executed on.
 #' @examples
@@ -538,8 +538,7 @@ set_run_by_index <- function(x, arg) {
   attr(x, arg_name) <- if (is.character(arg) && length(arg) == 1 && arg %in% names(x)) {
     arg
 
-  } else if (is.numeric(arg) || is(arg, "Date") ||
-             is(arg, "POSIXct") || is(arg, "POSIXlt")) {
+  } else if (is.numeric(arg) || inherits(idx, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
     arg
   } else {
     stop(
@@ -630,8 +629,7 @@ set_from_attribute_index <- function(x, attrib) {
 
     if (is.character(attrib) && length(attrib) == 1 && attrib %in% names(x)) {
       attrib <- x[[attrib]]
-    } else if (is.numeric(attrib) || is(attrib, "Date") ||
-               is(attrib, "POSIXct") || is(attrib, "POSIXlt")) {
+    } else if (is.numeric(attrib) || inherits(idx, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
       # do nothing
     } else {
       stop(
@@ -648,6 +646,65 @@ set_from_attribute_index <- function(x, attrib) {
 
   return(attrib)
 }
+
+set_from_attribute_at <- function(x, attrib) {
+  runner_args <- get_parent_call_arg_names()
+  arg_name <- deparse(substitute(attrib))
+
+  # no arg overwriting
+  if (!is.null(attr(x, arg_name)) && !arg_name %in% runner_args) {
+    if (length(attr(x, arg_name)) == 1 &&
+        is.character(attr(x, arg_name)) &&
+        attr(x, arg_name) %in% names(x)) {
+
+      attrib <- x[[attr(x, arg_name)]]
+    } else if (is.character(attr(x, arg_name))) {
+      stop(
+        sprintf(
+          "`%s` should be either:
+         - column name of `x`
+         - vector of type `numeric`, `Date`, `POSIXct` or `POSIXlt`",
+          arg_name
+        ),
+        call. = FALSE
+      )
+    } else {
+      attrib <- attr(x, arg_name)
+    }
+
+    # arg overwriting (runner masks run_by)
+  } else {
+    if (!is.null(attr(x, arg_name))) {
+      warning(
+        sprintf(
+          "`%1$s` set in run_by() will be ignored in favour of `%1$s` specified in runner() call",
+          arg_name
+        )
+      )
+    }
+
+    if (is.character(attrib) && length(attrib) == 1 && attrib %in% names(x)) {
+      attrib <- x[[attrib]]
+    } else if (all(is_datetime_valid(attrib))) {
+      # do nothing
+    } else if (is.numeric(attrib) || inherits(idx, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
+      # do nothing
+    } else {
+      stop(
+        sprintf(
+          "`%s` should be either:
+         - column name of `x`
+         - vector of type `numeric`, `Date`, `POSIXct` or `POSIXlt`",
+          arg_name
+        ),
+        call. = FALSE
+      )
+    }
+  }
+
+  return(attrib)
+}
+
 
 set_from_attribute_difftime <- function(x, attrib) {
   runner_args <- get_parent_call_arg_names()

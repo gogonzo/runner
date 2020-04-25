@@ -54,3 +54,37 @@ test_that("dplyr::group_by - dplyr keeps attributes", {
     paste(grouped_index$group1, grouped_index$group2)
   )
 })
+
+test_that("correct grouping results", {
+  data <- data.frame(
+    index = cumsum(sample(0:3, 20, replace = TRUE)),
+    group1 = rep(c("a", "b"), each = 20),
+    group2 = rep(c("A", "B"), each = 20),
+    x = 1:20,
+    k = c(rep(2, 10), rep(5, 10)),
+    lag = sample(0:3, 20, replace = TRUE)
+  )
+
+  #
+  grouped_dplyr <- data %>%
+    dplyr::group_by(group1, group2) %>%
+    run_by(idx = "index") %>%
+    mutate(
+      xx = runner(x, f = mean)
+    )
+
+  grouped_dt <- data.table::setDT(data)[
+    ,
+    xx := runner(x, f = mean, idx = index),
+    by = list(group1, group2)
+  ]
+
+
+
+  expect_equal(
+    grouped_dplyr$xx,
+    grouped_dt$xx
+  )
+
+
+})
