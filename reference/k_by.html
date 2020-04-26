@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.7</span>
       </span>
     </div>
 
@@ -155,11 +155,19 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>k</th>
-      <td><p>object from runner</p></td>
+      <td><p>(<code>integer</code> vector or single value)<br />
+Denoting size of the running window. If <code>k</code> is a single value then window
+size is constant for all elements, otherwise if <code>length(k) == length(x)</code>
+different window size for each element. One can also specify <code>k</code> in the same
+way as by in <code><a href='https://rdrr.io/r/base/seq.POSIXt.html'>seq.POSIXt</a></code>. More in details.</p></td>
     </tr>
     <tr>
       <th>idx</th>
-      <td><p>object from runner</p></td>
+      <td><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>)<br />
+Optional integer vector containing sorted (ascending) index of observation.
+By default <code>idx</code> is index incremented by one. User can provide index with
+varying increment and with duplicated values. If specified then <code>k</code> and <code>lag</code>
+are depending on <code>idx</code>. Length of <code>idx</code> have to be equal of length <code>x</code>.</p></td>
     </tr>
     <tr>
       <th>param</th>

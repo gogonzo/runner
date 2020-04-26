@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Lag dependent on variable — lag_run • runner</title>
+<title>Access group data in mutate — this_group • runner</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,11 @@
 
 
 
-<meta property="og:title" content="Lag dependent on variable — lag_run" />
-<meta property="og:description" content="Vector of input lagged along integer vector" />
+<meta property="og:title" content="Access group data in mutate — this_group" />
+<meta property="og:description" content="Access group data in dplyr::mutate after dplyr::group_by.
+Function created because data available in dplyr::group_by %&amp;gt;% mutate scheme
+is not filtered by group - in mutate function . is still initial dataset.
+This function creates data.frame using dplyr::groups information." />
 
 
 
@@ -139,54 +142,34 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Lag dependent on variable</h1>
-    <small class="dont-index">Source: <a href='https://github.com/gogonzo/runner/blob/master/R/RcppExports.R'><code>R/RcppExports.R</code></a></small>
-    <div class="hidden name"><code>lag_run.Rd</code></div>
+    <h1>Access group data in mutate</h1>
+    <small class="dont-index">Source: <a href='https://github.com/gogonzo/runner/blob/master/R/run.R'><code>R/run.R</code></a></small>
+    <div class="hidden name"><code>this_group.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Vector of input lagged along integer vector</p>
+    <p>Access group data in <code><a href='https://dplyr.tidyverse.org/reference/mutate.html'>dplyr::mutate</a></code> after <code><a href='https://dplyr.tidyverse.org/reference/group_by.html'>dplyr::group_by</a></code>.
+Function created because data available in <code>dplyr::group_by %&gt;% mutate</code> scheme
+is not filtered by group - in mutate function <code>.</code> is still initial dataset.
+This function creates <code>data.frame</code> using <code><a href='https://dplyr.tidyverse.org/reference/groups.html'>dplyr::groups</a></code> information.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>lag_run</span>(<span class='no'>x</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>idx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0</span>), <span class='kw'>nearest</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>this_group</span>(<span class='no'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>(<code>vector</code>, <code>data.frame</code>, <code>matrix</code>)<br />
-Input in runner custom function <code>f</code>.</p></td>
-    </tr>
-    <tr>
-      <th>lag</th>
-      <td><p>(<code>integer</code> vector or single value)<br />
-Denoting window lag. If <code>lag</code> is a single value then window lag is constant
-for all elements, otherwise if <code>length(lag) == length(x)</code> different window
-size for each element. Negative value shifts window forward. One can also
-specify <code>lag</code> in the same way as by in <code><a href='https://rdrr.io/r/base/seq.POSIXt.html'>seq.POSIXt</a></code>.
-More in details.</p></td>
-    </tr>
-    <tr>
-      <th>idx</th>
-      <td><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>)<br />
-Optional integer vector containing sorted (ascending) index of observation.
-By default <code>idx</code> is index incremented by one. User can provide index with
-varying increment and with duplicated values. If specified then <code>k</code> and <code>lag</code>
-are depending on <code>idx</code>. Length of <code>idx</code> have to be equal of length <code>x</code>.</p></td>
-    </tr>
-    <tr>
-      <th>nearest</th>
-      <td><p><code>logical</code> single value. Applied when <code>idx</code> is used,
-then <code>nearest = FALSE</code> returns observation lagged exactly by the
-specified number of "periods". When <code>nearest = TRUE</code>
-function returns latest observation within lag window.</p></td>
+      <td><p>(<code>data.frame</code>)<br />
+object which can be <code>grouped_df</code> in special case.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>lag_run</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt;  [1] NA NA NA  1  2  3  4  5  6  7</div><div class='input'><span class='fu'>lag_run</span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>], <span class='kw'>lag</span> <span class='kw'>=</span> -<span class='fl'>2</span>, <span class='kw'>idx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>8</span>, <span class='fl'>10</span>))</div><div class='output co'>#&gt;  [1] "e" "e" "e" "f" NA  "g" "i" NA  "j" NA </div><div class='input'><span class='fu'>lag_run</span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>], <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>idx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>8</span>, <span class='fl'>10</span>), <span class='kw'>nearest</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;  [1] NA  "a" "a" "a" "a" "d" "f" "g" "g" "i"</div></pre>
+    <p>data.frame filtered by current <code><a href='https://dplyr.tidyverse.org/reference/groups.html'>dplyr::groups()</a></code></p>
+
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

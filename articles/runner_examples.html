@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.7</span>
       </span>
     </div>
 
@@ -119,7 +119,7 @@
   <span class="kw">idx</span> <span class="kw">=</span> <span class="no">date</span>,
   <span class="kw">f</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">x</span>))
 )</pre></body></html></div>
-<pre><code>##  [1] 1 2 3 2 2 2 3 2 2 3 3 3 3 2 2 3 2 3 3 4</code></pre>
+<pre><code>##  [1] 1 2 2 3 3 3 4 3 2 2 2 2 3 4 4 2 2 2 2 2</code></pre>
 </div>
 <div id="weekly-trimmed-mean" class="section level3">
 <h3 class="hasAnchor">
@@ -135,30 +135,34 @@
   <span class="kw">idx</span> <span class="kw">=</span> <span class="no">date</span>,
   <span class="kw">f</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">x</span>, <span class="kw">trim</span> <span class="kw">=</span> <span class="fl">0.05</span>)
 )</pre></body></html></div>
-<pre><code>##  [1] 0.3778037 1.4952513 3.1789789 3.2400781 3.3931470 3.3256001 3.1236413
-##  [8] 2.7795762 2.4626835 2.4048506 2.9092925 3.1292091 3.6070003 4.8091073
-## [15] 5.9119426 5.9496448 5.6331092 6.0137034 7.1581373 8.9360375</code></pre>
+<pre><code>##  [1] -0.34768189 -1.06104219 -0.84254719 -0.80836305 -0.72261353 -0.33474229
+##  [7] -0.01613429 -0.36053373 -0.47676123  0.07149697  0.42643509  1.29534337
+## [13]  2.50734972  2.84242977  2.81535765  2.59474822  2.53788766  2.63806839
+## [19]  3.24543561  3.78736213</code></pre>
 </div>
 <div id="prediction-on-current-day-based-on-preceding-2-weeks-regression" class="section level3">
 <h3 class="hasAnchor">
 <a href="#prediction-on-current-day-based-on-preceding-2-weeks-regression" class="anchor"></a>Prediction on current day based on preceding 2-weeks regression</h3>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">runner</span>)
 
+<span class="co"># sample data</span>
 <span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">20</span>))
-<span class="no">y</span> <span class="kw">&lt;-</span> <span class="fl">3</span> * <span class="no">x</span> + <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">20</span>)
-<span class="no">date</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>() + <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fl">3</span>, <span class="fl">20</span>, <span class="kw">replace</span> <span class="kw">=</span> <span class="fl">TRUE</span>)) <span class="co"># unequaly spaced time series</span>
-<span class="no">data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="no">date</span>, <span class="no">y</span>, <span class="no">x</span>)
+<span class="no">data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
+  <span class="kw">date</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>() + <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fl">3</span>, <span class="fl">20</span>, <span class="kw">replace</span> <span class="kw">=</span> <span class="fl">TRUE</span>)), <span class="co"># unequaly spaced time series, </span>
+  <span class="kw">y</span> <span class="kw">=</span> <span class="fl">3</span> * <span class="no">x</span> + <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">20</span>),
+  <span class="kw">x</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">20</span>))
+)
 
-
+<span class="co"># solution</span>
 <span class="no">data</span>$<span class="no">pred</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/runner.html">runner</a></span>(
   <span class="no">data</span>,
-  <span class="kw">lag</span> <span class="kw">=</span> <span class="st">"1 day"</span>,
+  <span class="kw">lag</span> <span class="kw">=</span> <span class="st">"1 days"</span>,
   <span class="kw">k</span> <span class="kw">=</span> <span class="st">"2 weeks"</span>,
-  <span class="kw">idx</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">date</span>,
+  <span class="kw">idx</span> <span class="kw">=</span> <span class="no">date</span>,
   <span class="kw">f</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">data</span>) {
-      <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(
-        <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">y</span> ~ <span class="no">x</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">data</span>)
-      )[<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">data</span>)]
+    <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(
+      <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">y</span> ~ <span class="no">x</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">data</span>)
+    )[<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">data</span>)]
   }
 )
 
@@ -206,6 +210,10 @@
 ## 13      11 2016-01-14  17.5     36.9     107. 
 ## 14      11 2016-01-16  19.3     56.2     119.</code></pre>
 </div>
+<div id="runner-with-dplyr" class="section level1">
+<h1 class="hasAnchor">
+<a href="#runner-with-dplyr" class="anchor"></a>runner with <code>dplyr</code>
+</h1>
 <div id="unique-for-specified-time-frame" class="section level3">
 <h3 class="hasAnchor">
 <a href="#unique-for-specified-time-frame" class="anchor"></a>Unique for specified time frame</h3>
@@ -260,12 +268,65 @@
 ## 13      11 2016-01-14 apple             1           2
 ## 14      11 2016-01-16 apple             1           2</code></pre>
 </div>
+<div id="runner-with-group_by-mutate" class="section level3">
+<h3 class="hasAnchor">
+<a href="#runner-with-group_by-mutate" class="anchor"></a>runner with group_by mutate</h3>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
+
+<span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">20</span>))
+<span class="no">y</span> <span class="kw">&lt;-</span> <span class="fl">3</span> * <span class="no">x</span> + <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">20</span>)
+<span class="no">date</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>() + <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fl">3</span>, <span class="fl">20</span>, <span class="kw">replace</span> <span class="kw">=</span> <span class="fl">TRUE</span>)) <span class="co"># unequaly spaced time series</span>
+<span class="no">group</span> <span class="kw">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"a"</span>, <span class="st">"b"</span>), <span class="kw">each</span> <span class="kw">=</span> <span class="fl">10</span>)
+
+
+<span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="no">date</span>, <span class="no">group</span>, <span class="no">y</span>, <span class="no">x</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(<span class="no">group</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/run_by.html">run_by</a></span>(<span class="kw">idx</span> <span class="kw">=</span> <span class="st">"date"</span>, <span class="kw">k</span> <span class="kw">=</span> <span class="st">"5 days"</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
+    <span class="kw">alpha_5</span> <span class="kw">=</span> <span class="fu"><a href="../reference/runner.html">runner</a></span>(
+      <span class="kw">x</span> <span class="kw">=</span> <span class="no">.</span>,
+      <span class="kw">f</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) {
+        <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coefficients</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">x</span> ~ <span class="no">y</span>, <span class="no">x</span>))[<span class="fl">1</span>]
+      }
+    ),
+    <span class="kw">beta_5</span> <span class="kw">=</span> <span class="fu"><a href="../reference/runner.html">runner</a></span>(
+      <span class="kw">x</span> <span class="kw">=</span> <span class="no">.</span>,
+      <span class="kw">f</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) {
+        <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coefficients</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">x</span> ~ <span class="no">y</span>, <span class="no">x</span>))[<span class="fl">1</span>]
+      }
+    )
+  )</pre></body></html></div>
+<pre><code>## # A tibble: 20 x 6
+## # Groups:   group [2]
+##    date       group      y      x alpha_5  beta_5
+##    &lt;date&gt;     &lt;fct&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1 2020-04-27 a      0.368 0.0470  0.0470  0.0470
+##  2 2020-04-30 a      0.457 0.998  -3.91   -3.91  
+##  3 2020-05-03 a      3.73  0.967   1.00    1.00  
+##  4 2020-05-06 a      3.70  1.26   34.5    34.5   
+##  5 2020-05-08 a      4.76  1.98   -1.26   -1.26  
+##  6 2020-05-10 a     10.9   3.52    0.365   0.365 
+##  7 2020-05-13 a      6.13  2.39    0.948   0.948 
+##  8 2020-05-15 a     12.0   4.06    0.659   0.659 
+##  9 2020-05-17 a     11.0   3.58    0.711   0.711 
+## 10 2020-05-19 a     12.6   4.49   -2.38   -2.38  
+## 11 2020-05-20 b     12.9   3.60    3.60    3.60  
+## 12 2020-05-21 b      8.03  2.76    1.39    1.39  
+## 13 2020-05-22 b     15.8   4.68    0.768   0.768 
+## 14 2020-05-25 b     15.8   5.26    0.492   0.492 
+## 15 2020-05-26 b     20.8   6.95   -1.24   -1.24  
+## 16 2020-05-28 b     22.7   7.67   -0.165  -0.165 
+## 17 2020-05-30 b     19.0   6.55    0.862   0.862 
+## 18 2020-06-01 b     20.7   6.48    0.583   0.583 
+## 19 2020-06-04 b     14.6   5.18    2.05    2.05  
+## 20 2020-06-06 b     16.8   5.14    5.46    5.46</code></pre>
+</div>
 <div id="aggregating-values-from-another-data-frame-in-grouped_df" class="section level3">
 <h3 class="hasAnchor">
 <a href="#aggregating-values-from-another-data-frame-in-grouped_df" class="anchor"></a>Aggregating values from another data.frame in <code>grouped_df</code>
 </h3>
 <p><a href="https://stackoverflow.com/questions/61024712/do-a-rolling-regression-only-on-specific-dates/61045233#61045233">SO Discussion</a></p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">runner</span>)
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">runner</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
 
 <span class="no">Date</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="kw">from</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="st">"2014-01-01"</span>),
@@ -329,19 +390,20 @@
   )</pre></body></html></div>
 <pre><code>## # A tibble: 900 x 4
 ## # Groups:   Company.name2 [2]
-##    Company.name2 Event_date intercept    slope
-##    &lt;fct&gt;         &lt;date&gt;         &lt;dbl&gt;    &lt;dbl&gt;
-##  1 AAPL          2017-10-29  -0.0291   0.0669 
-##  2 AAPL          2019-04-08  -0.0701   0.0157 
-##  3 AAPL          2017-08-05   0.0688  -0.00656
-##  4 AAPL          2018-07-24   0.00725 -0.0304 
-##  5 AAPL          2015-01-15   0.00982 -0.0998 
-##  6 AAPL          2017-07-25   0.0686  -0.00609
-##  7 AAPL          2015-11-23  -0.0482  -0.0269 
-##  8 AAPL          2019-09-18  -0.0658   0.146  
-##  9 AAPL          2016-07-04   0.00890 -0.00803
-## 10 AAPL          2017-07-15   0.0691   0.00376
+##    Company.name2 Event_date intercept   slope
+##    &lt;fct&gt;         &lt;date&gt;         &lt;dbl&gt;   &lt;dbl&gt;
+##  1 AAPL          2017-08-24   -0.0441  0.0247
+##  2 AAPL          2019-04-21   -0.103   0.113 
+##  3 AAPL          2016-06-23    0.0669 -0.0500
+##  4 AAPL          2019-07-28   -0.0570  0.138 
+##  5 AAPL          2016-05-27    0.0758 -0.0222
+##  6 AAPL          2019-05-17   -0.0747  0.120 
+##  7 AAPL          2015-11-13    0.0134 -0.0917
+##  8 AAPL          2019-06-12   -0.0503  0.102 
+##  9 AAPL          2017-03-14    0.0327 -0.0526
+## 10 AAPL          2018-03-15    0.0252 -0.0734
 ## # … with 890 more rows</code></pre>
+</div>
 </div>
   </div>
 
