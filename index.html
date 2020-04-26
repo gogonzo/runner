@@ -206,6 +206,29 @@
   <span class="kw">na_pad</span> <span class="kw">=</span> <span class="fl">TRUE</span>
 )</pre></div>
 </div>
+<div id="using-runner-with-data-frame" class="section level3">
+<h3 class="hasAnchor">
+<a href="#using-runner-with-data-frame" class="anchor"></a>Using runner with <code>data.frame</code>
+</h3>
+<p>User can also put <code>data.frame</code> into <code>x</code> argument and apply functions which involve multiple columns. In example below we calculate beta parameter of <code>lm</code> model on 1, 2, …, n observations respectively. On the plot one can observe how <code>lm</code> parameter adapt with increasing number of observation.</p>
+<div class="sourceCode" id="cb8"><pre class="r"><span class="no">date</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>() + <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fl">3</span>, <span class="fl">40</span>, <span class="kw">replace</span> <span class="kw">=</span> <span class="fl">TRUE</span>)) <span class="co"># unequaly spaced time series</span>
+<span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">40</span>))
+<span class="no">y</span> <span class="kw">&lt;-</span> <span class="fl">30</span> * <span class="no">x</span> + <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">40</span>)
+
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="no">date</span>, <span class="no">y</span>, <span class="no">x</span>)
+
+<span class="no">slope</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/runner.html">runner</a></span>(
+  <span class="no">df</span>,
+  <span class="kw">k</span> <span class="kw">=</span> <span class="fl">10</span>,
+  <span class="kw">idx</span> <span class="kw">=</span> <span class="st">"date"</span>,
+  <span class="kw">function</span>(<span class="no">x</span>) {
+    <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coefficients</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">y</span> ~ <span class="no">x</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">x</span>))[<span class="fl">2</span>]
+  }
+)
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">slope</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">h</span> <span class="kw">=</span> <span class="fl">30</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="st">"blue"</span>)</pre></div>
+</div>
 <div id="build-in-functions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#build-in-functions" class="anchor"></a>Build-in functions</h3>
