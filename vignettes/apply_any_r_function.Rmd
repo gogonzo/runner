@@ -51,7 +51,7 @@ runner(
 ### Constant sliding windows
 
 Second type of windows are these commonly known as running/rolling/moving/sliding windows. 
-This types of windows moves along the index instead of "stretching" like a previous ones.  
+This types of windows moves along the index instead of cumulating like a previous one.  
 Following diagram illustrates running windows of length `k = 4`. Each of 15 windows
 contains 4 elements (except first three).
 
@@ -68,11 +68,13 @@ runner(
 )
 
 # summarizing - slope from lm
+df <- data.frame(
+  a = 1:15,
+  b = 3 * 1:15 + rnorm(15)
+)
+
 runner(
-  x = data.frame(
-    a = 1:15,
-    b = 3 * 1:15 + rnorm(15)
-  ),
+  x = df,
   k = 5,
   f = function(x) {
     model <- lm(b ~ a, data = x)
@@ -82,16 +84,15 @@ runner(
 ```
 
 ### Windows depending on date
-By default `runner` calculates on assumption that index increment by one, but sometimes 
+By default `runner` calculates on assumption that index increments by one, but sometimes 
 data points in dataset are not equally spaced (missing weekends, holidays, other missings) 
 and thus window size should vary to keep expected time frame. If one specifies 
 `idx` argument, than running functions are applied on windows depending on date
 rather on a sequence 1-n. 
 `idx` should be the same length as `x` and should be of type `Date`, `POSIXt` or `integer`.
 Example below illustrates window of size `k = 5` lagged by `lag = 1`. 
-Note that one can specify also `k = "5 days"` and `lag = "day"` as in `seq.POSIXt`.
-In parentheses ranges for each window.
-
+Note that one can specify also `k = "5 days"` and `lag = "day"` as in `seq.POSIXt`.  
+In the example below in square brackets ranges for each window.
 
 ![](images/running_date_windows.png)
 
@@ -139,19 +140,23 @@ which gives windows in ranges enclosed in square brackets. Range for `at = 27` i
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
 
 # summary
-runner::runner(x = 1:15, 
-               k = 5,
-               lag = 1,
-               idx = idx,
-               at = c(18, 27, 48, 31),
-               f = mean)
+runner::runner(
+  x = 1:15, 
+  k = 5,
+  lag = 1,
+  idx = idx,
+  at = c(18, 27, 48, 31),
+  f = mean
+)
 
 # full window
-runner::runner(x = idx, 
-               k = 5,
-               lag = 1,
-               idx = idx,
-               at = c(18, 27, 48, 31))
+runner::runner(
+  x = idx, 
+  k = 5,
+  lag = 1,
+  idx = idx,
+  at = c(18, 27, 48, 31)
+)
 ```
 
 `at` can also be specified as interval of the output defined by time interval 
@@ -175,9 +180,10 @@ runner(
 runner(
   x = data.frame(
     a = 1:13,
-    b = 1:13 + rnorm(13, sd = 5)
+    b = 1:13 + rnorm(13, sd = 5),
+    idx_date
   ),
-  idx = idx_date,
+  idx = "idx_date",
   at = "6 months",
   f = function(x) {
     cor(x$a, x$b)
@@ -244,13 +250,104 @@ matching `idx`.
 
 ```{r eval=FALSE}
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
-runner::runner(x = 1:15, 
-               k = 5, 
-               lag = 1, 
-               idx = idx, 
-               at = c(4, 18, 48, 51),
-               na_pad = TRUE,
-               f = function(x) mean(x))
+
+runner::runner(
+  x = 1:15, 
+  k = 5, 
+  lag = 1, 
+  idx = idx, 
+  at = c(4, 18, 48, 51),
+  na_pad = TRUE,
+  f = function(x) mean(x)
+)
+```
+
+### Using runner with `data.frame` 
+
+User can also put `data.frame` into `x` argument and apply functions which involve
+multiple columns. In example below we calculate beta parameter of `lm` model on 
+1, 2, ..., n observations respectively. On the plot one can observe how `lm`
+parameter adapt with increasing number of observation.
+
+```{r eval=FALSE}
+x <- cumsum(rnorm(40))
+y <- 3 * x + rnorm(40)
+date <- Sys.Date() + cumsum(sample(1:3, 40, replace = TRUE)) # unequaly spaced time series
+group <-  rep(c("a", "b"), 20)
+
+df <- data.frame(date, group, y, x)
+
+slope <- runner(
+  df,
+  function(x) {
+    coefficients(lm(y ~ x, data = x))[2]
+  }
+)
+
+plot(slope)
+```
+
+One can also use `runner` with `dplyr` also with problematic `group_by` 
+operations, without need to apply [group_modify](https://dplyr.tidyverse.org/reference/group_map.html).
+Below we apply grouped 20-days beta, by specifying window length `k = "10 days"` and
+providing column name where indices (dates) are kept. 
+
+```{r eval=FALSE}
+library(dplyr)
+
+df <- df %>%
+  group_by(group) %>%
+  mutate(
+    cumulative_mse = runner(
+      x = .,
+      k = "20 days",
+      idx = "date", # specify column name instead df$date
+      f = function(x) {
+        coefficients(lm(y ~ x, data = x))[2]
+      }
+    )
+  )
+
+library(ggplot2)
+df %>%
+  ggplot(aes(x = date, y = cumulative_mse, group = group, color = group)) +
+  geom_line()
+
+```
+
+When user executes multiple `runner` calls in `dplyr` mutate, one can also use 
+`run_by` function to prespecify arguments in `tidyverse` pipeline. In the example 
+below `runner` functions are applied on `k = "20 days"` calculated on `"date"`
+column.
+
+```{r eval=FALSE}
+df %>%
+  group_by(group) %>%
+  run_by(idx = "date", k = "20 days", na_pad = FALSE) %>%
+  mutate(
+    cumulative_mse = runner(
+      x = .,
+      f = function(x) {
+        mean((residuals(lm(y ~ x, data = x))) ^ 2)
+      }
+    ),
+    
+    intercept = runner(
+      x = .,
+      f = function(x) {
+        coefficients(lm(y ~ x, data = x))[1]
+      }
+    ),
+    
+    slope = runner(
+      x = .,
+      f = function(x) {
+        coefficients(lm(y ~ x, data = x))[2]
+      }
+    ) 
+  )
+
+
 ```
 
 ### Build-in functions

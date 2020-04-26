@@ -50,21 +50,24 @@ runner(
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 library(runner)
 
+# sample data
 x <- cumsum(rnorm(20))
-y <- 3 * x + rnorm(20)
-date <- Sys.Date() + cumsum(sample(1:3, 20, replace = TRUE)) # unequaly spaced time series
-data <- data.frame(date, y, x)
+data <- data.frame(
+  date = Sys.Date() + cumsum(sample(1:3, 20, replace = TRUE)), # unequaly spaced time series, 
+  y = 3 * x + rnorm(20), 
+  x = cumsum(rnorm(20))
+)
 
-
+# solution
 data$pred <- runner(
   data,
-  lag = "1 day",
+  lag = "1 days",
   k = "2 weeks",
-  idx = data$date,
+  idx = date,
   f = function(data) {
-      predict(
-        lm(y ~ x, data = data)
-      )[nrow(data)]
+    predict(
+      lm(y ~ x, data = data)
+    )[nrow(data)]
   }
 )
 
@@ -97,6 +100,7 @@ df %>%
   )
 ```
 
+# runner with `dplyr`
 
 ### Unique for specified time frame
 
@@ -133,6 +137,36 @@ df %>%
                          k = "14 days", 
                          idx = as.Date(date), 
                          f = function(x) length(unique(x)))
+  )
+```
+
+### runner with group_by mutate
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(dplyr)
+
+x <- cumsum(rnorm(20))
+y <- 3 * x + rnorm(20)
+date <- Sys.Date() + cumsum(sample(1:3, 20, replace = TRUE)) # unequaly spaced time series
+group <-  rep(c("a", "b"), each = 10)
+
+
+data.frame(date, group, y, x) %>%
+  group_by(group) %>%
+  run_by(idx = "date", k = "5 days") %>%
+  mutate(
+    alpha_5 = runner(
+      x = ., 
+      f = function(x) {
+        coefficients(lm(x ~ y, x))[1]
+      }
+    ),
+    beta_5 = runner(
+      x = ., 
+      f = function(x) {
+        coefficients(lm(x ~ y, x))[1]
+      }
+    )
   )
 ```
 

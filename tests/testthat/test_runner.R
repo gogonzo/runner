@@ -299,6 +299,7 @@ test_that("       |------[]+------->", {
 
 })
 
+# various -----
 test_that("various", {
   expect_equal(
     runner(x1, k = k, lag = 1, f = mean),
@@ -322,7 +323,6 @@ test_that("various", {
     runner(x1, k = k, lag = 1, f = mean)[at],
     runner(x1, k = k[at], lag = 1, f = mean, at = at))
 
-  # window_run(x1, k = 3, lag = lag)[at]
   expect_equal(
     runner(x1, k = 3, lag = lag, f = mean)[at],
     runner(x1, k = 3, lag = lag[at], f = mean, at = at))
@@ -336,6 +336,7 @@ test_that("various", {
     runner(x1, k = k[at], lag = lag[at], f = mean, at = at))
 })
 
+# date window ----
 test_that("date window", {
   expect_equal(
     runner(x1, idx = idx, f = mean),
@@ -459,6 +460,7 @@ test_that("date window", {
   )
 })
 
+# Function applied on other types-----
 test_that("Function applied on other types", {
     expect_silent(runner(as.integer(1:100), k = 5, f = length))
     expect_silent(runner(as.integer(1:100), k = k, f = length))
@@ -477,6 +479,7 @@ test_that("Function applied on other types", {
     expect_silent(runner(as.Date(1:100, origin = "1970-01-01"), k = k, idx, f = length))
 })
 
+# i/o type -----
 test_that("i/o type", {
   log_input <- c(T, T, F, F)
   int_input <- as.integer(1:4)
@@ -556,6 +559,7 @@ test_that("i/o type", {
 
 })
 
+# i/o type at -----
 test_that("i/o type at", {
   log_input <- c(T, T, F, F)
   int_input <- as.integer(1:4)
@@ -636,6 +640,7 @@ test_that("i/o type at", {
 
 })
 
+# at date window ------
 test_that("at date window", {
   ids <- match(at_date, idx)
   expect_equal(
@@ -765,27 +770,27 @@ test_that("at date window", {
   )
 })
 
+# at with difftime -----
 test_that("at with difftime", {
 
-
-  at_date <- seq_by(at = "1 month", idx = idx_date)
+  at_date <- seq_at(at = "1 months", idx = idx_date)
   expect_identical(
     at_date,
-    seq(min(idx_date), max(idx_date), by = "1 month")
+    seq(min(idx_date), max(idx_date), by = "1 months")
   )
 
   expect_equal(
-    runner(1:100, at = "1 month", idx = idx_date, f = function(x) max(x)),
+    runner(1:100, at = "1 months", idx = idx_date, f = function(x) max(x)),
     runner(1:100, at = at_date, idx = idx_date, f = function(x) max(x))
   )
 
-  at_date <- seq_by(at = "-1 month", idx = idx_date)
+  at_date <- seq_at(at = "-1 months", idx = idx_date)
   expect_identical(
     at_date,
-    seq(max(idx_date), min(idx_date), by = "-1 month")
+    seq(max(idx_date), min(idx_date), by = "-1 months")
   )
   expect_equal(
-    runner(1:100, at = "-1 month", idx = idx_date, f = function(x) max(x)),
+    runner(1:100, at = "-1 months", idx = idx_date, f = function(x) max(x)),
     runner(1:100, at = at_date, idx = idx_date, f = function(x) max(x))
   )
 })
@@ -794,6 +799,11 @@ test_that("k with difftime", {
   expect_equal(
     runner(1:100, k = "2 weeks", idx = idx_date, f = function(x) x),
     runner(1:100, k = 14, idx = idx_date, f = function(x) x)
+  )
+
+  expect_equal(
+    runner(1:100, k = "2 weeks", idx = idx_date, f = function(x) x),
+    runner(1:100, k = as.difftime(2, units = "weeks"), idx = idx_date, f = function(x) x)
   )
 
   k_date <- sample(c("week", "day"), 100, replace = TRUE)
@@ -805,12 +815,18 @@ test_that("k with difftime", {
   )
 
   expect_error(
-    runner(1:100, k = "-1 week", idx = idx_date, f = function(x) x),
+    runner(1:100, k = "-1 weeks", idx = idx_date, f = function(x) x),
+    "negative"
+  )
+
+  expect_error(
+    runner(1:100, k = as.difftime(-1, units = "weeks"), idx = idx_date, f = function(x) x),
     "negative"
   )
 
 })
 
+# lag with difftime ----
 test_that("lag with difftime", {
   expect_equal(
     runner(1:100, lag = "week", idx = idx_date, f = function(x) x),
@@ -818,15 +834,27 @@ test_that("lag with difftime", {
   )
 
   expect_equal(
-    runner(1:100, lag = "-1 week", idx = idx_date, f = function(x) x),
+    runner(1:100, lag = "-1 weeks", idx = idx_date, f = function(x) x),
     runner(1:100, lag = -7, idx = idx_date, f = function(x) x)
   )
 
-  lag_date <- sample(c("week", "day", "-2 week", "-2 day"), 100, replace = TRUE)
+
+  expect_equal(
+    runner(1:100, lag = "2 weeks", idx = idx_date, f = function(x) x),
+    runner(1:100, lag = as.difftime(2, units = "weeks"), idx = idx_date, f = function(x) x)
+  )
+
+  expect_equal(
+    runner(1:100, lag = "-2 weeks", idx = idx_date, f = function(x) x),
+    runner(1:100, lag = as.difftime(-2, units = "weeks"), idx = idx_date, f = function(x) x)
+  )
+
+
+  lag_date <- sample(c("week", "day", "-2 weeks", "-2 days"), 100, replace = TRUE)
   lag_int <- vapply(
     lag_date,
     function(x)
-      switch(x, "week" = 7L, "day" = 1L, "-2 week" = -14L, "-2 day" = -2L),
+      switch(x, "week" = 7L, "day" = 1L, "-2 weeks" = -14L, "-2 days" = -2L),
     integer(1),
     USE.NAMES = FALSE
   )
@@ -838,9 +866,16 @@ test_that("lag with difftime", {
   )
 })
 
+# runner with df  -----
 test_that("runner with df", {
-  elo <- data.frame(a = sample(letters, 100, replace = TRUE),
-                    b = 1:100)
+  elo <- data.frame(
+    index = 1:100,
+    group = rep(c("a", "b"), each = 50),
+    a = sample(letters, 100, replace = TRUE),
+    b = 1:100,
+    k = sample(1:5, 100, replace = TRUE)
+  )
+  index <- 101:200
 
   expect_equal(
     runner(elo, k = 10, lag = 1, f = function(x) x),
@@ -871,8 +906,95 @@ test_that("runner with df", {
     elo[1, ]
   )
 
+  #### more tests
+  elo <- data.frame(
+    index = 1:100,
+    group = rep(c("a", "b"), each = 50),
+    a = sample(letters, 100, replace = TRUE),
+    b = 1:100,
+    k = sample(1:5, 100, replace = TRUE)
+  )
+
+  expect_error(
+    runner(
+      transform(elo, k = sample(c(1, 2, NA), 100, replace = TRUE)),
+      k = "k"
+    )
+  )
+
+  expect_error(
+    runner(
+      transform(elo, lag = sample(c(1, 2, NA), 100, replace = TRUE)),
+      lag = "lag"
+    )
+  )
+
+  expect_error(
+    runner(
+      transform(elo, idx = sample(c(1, 2, NA), 100, replace = TRUE)),
+      idx = "idx"
+    )
+  )
+
+  expect_error(
+    runner(
+      transform(elo, at = sample(c(1, 2, NA), 100, replace = TRUE)),
+      at = "at"
+    )
+  )
+
+  expect_error(
+    runner(
+      elo,
+      f = NULL
+    )
+  )
+
+  ####
+  expect_error(
+    runner(
+      elo,
+      k = "1 days"
+    ),
+    "idx` can't be empty"
+  )
+
+  expect_error(
+    runner(
+      elo,
+      lag = rep("1 days", 100)
+    ),
+    "idx` can't be empty"
+  )
+
+  expect_error(
+    runner(
+      elo,
+      k = as.difftime(1, units = "days")
+    ),
+    "idx` can't be empty"
+  )
+
+  expect_error(
+    runner(
+      elo,
+      lag = as.difftime(rep(1, 100), units = "days")
+    ),
+    "idx` can't be empty"
+  )
+
+  expect_error(
+    runner(
+      elo,
+      lag = factor(1:100)
+    ),
+    "`lag` is invalid"
+  )
+
+
 })
 
+# test errors  -----
 test_that("Errors", {
   expect_error(runner(x = letters[1:5], f = ""))
 

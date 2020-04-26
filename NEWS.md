@@ -1,3 +1,7 @@
+# runner 0.3.7
+* add `run_by` function to prespecify arguments for multiple runner calls
+* `runner` supports `grouped_df`
+
 # runner 0.3.5
 * `runner` function to be applied on `data.frame` or `matrix` - running windows
 constructed by subsetting rows.

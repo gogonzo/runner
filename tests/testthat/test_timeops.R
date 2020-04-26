@@ -3,6 +3,7 @@ context("timeops")
 
 test_that("k by", {
   idx <- seq(as.POSIXct("2019-01-01 03:02:01"), as.POSIXct("2020-01-01 03:02:01"), by = "month")
+
   new_k <- k_by(k = "2 months", idx = idx, param = "k")
   expected <- as.POSIXct(
     c("2018-11-01 03:02:01", "2018-12-01 03:02:01", "2019-01-01 03:02:01",
@@ -62,16 +63,42 @@ test_that("k by", {
   expect_equal(idx - new_k, expected)
 
 
+  expect_equal(
+    k_by(k = "1 weeks", idx = idx, param = "lag"),
+    k_by(k = as.difftime(1, unit = "weeks"), idx = idx, param = "lag")
+  )
+
+
+  expect_equal(
+    k_by(k = "2 weeks", idx = idx, param = "k"),
+    k_by(k = as.difftime(2, units = "weeks"), idx = idx, param = "k")
+  )
+
+
+  expect_equal(
+    k_by(k = as.difftime(-2, units = "weeks"), idx = idx, param = "lag"),
+    k_by(k = "-2 weeks", idx = idx, param = "lag"),
+  )
+
+
+  expect_equal(
+    k_by(k = as.difftime(2, units = "weeks"), idx = idx, param = "lag"),
+    k_by(k = "2 weeks", idx = idx, param = "lag"),
+  )
+
+
   idx <- seq(as.POSIXct("2019-01-01 03:02:01"), as.POSIXct("2020-01-01 03:02:01"), by = "month")
   expect_error(
     k_by(k = "-1 month", idx = idx, param = "k"),
     "k can't be negative"
   )
 
+
   expect_error(
-    k_by(k = "1 month", idx = integer(0), param = "lag"),
-    "`idx` can't be empty"
+    k_by(k = as.difftime(-2, units = "weeks"), idx = idx, param = "k"),
+    "`k` can't be negative"
   )
+
 })
 
 test_that("reformat k", {
@@ -101,6 +128,11 @@ test_that("reformat k", {
     c("-1 days", "2 days", "-2 days")
   )
 
+  expect_equal(
+    reformat_k("2 days", only_positive = FALSE),
+    "-2 days"
+  )
+
 
   expect_error(
     reformat_k("-2 days", only_positive = TRUE),
@@ -117,9 +149,9 @@ test_that("reformat k", {
 
 
 
-test_that("seq_by", {
+test_that("seq_at", {
   idx <- seq(as.POSIXct("2019-01-01 03:02:01"), as.POSIXct("2020-01-01 03:02:01"), by = "month")
-  out <- seq_by(at = "2 months", idx = idx)
+  out <- seq_at(at = "2 months", idx = idx)
   expected <- as.POSIXct(
     c("2019-01-01 03:02:01", "2019-03-01 03:02:01", "2019-05-01 03:02:01",
       "2019-07-01 03:02:01", "2019-09-01 03:02:01", "2019-11-01 03:02:01",
@@ -127,17 +159,22 @@ test_that("seq_by", {
   )
   expect_equal(out, expected)
 
-  out <- seq_by(at = "-2 months", idx = idx)
+  out <- seq_at(at = "-2 months", idx = idx)
   expect_equal(out, rev(expected))
 
-
   expect_error(
-    seq_by(at = "-2 months", idx = integer(0)),
-    "`idx` can't be empty while specifying at"
+    seq_at(at = "-2 months", idx = integer(0)),
+    "`idx` can't be empty while specifying `at`"
   )
 
-  expect_error(
-    seq_by(at = "-2 months", idx = 1:2),
-    "To specify at as time interval character `idx` can't be empty"
+
+  expect_identical(
+    seq_at(at = "2 weeks", idx = idx),
+    seq_at(at = as.difftime(2, units = "weeks"), idx = idx)
+  )
+
+  expect_identical(
+    seq_at(at = "-2 weeks", idx = idx),
+    seq_at(at = as.difftime(-2, units = "weeks"), idx = idx)
   )
 })
