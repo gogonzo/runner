@@ -175,6 +175,34 @@ runner(
 )
 ```
 
+### Using runner with `data.frame`
+
+User can also put `data.frame` into `x` argument and apply functions
+which involve multiple columns. In example below we calculate beta
+parameter of `lm` model on 1, 2, …, n observations respectively. On the
+plot one can observe how `lm` parameter adapt with increasing number of
+observation.
+
+``` r
+date <- Sys.Date() + cumsum(sample(1:3, 40, replace = TRUE)) # unequaly spaced time series
+x <- cumsum(rnorm(40))
+y <- 30 * x + rnorm(40)
+
+df <- data.frame(date, y, x)
+
+slope <- runner(
+  df,
+  k = 10,
+  idx = "date",
+  function(x) {
+    coefficients(lm(y ~ x, data = x))[2]
+  }
+)
+
+plot(slope)
+abline(h = 30, col = "blue")
+```
+
 ### Build-in functions
 
 With `runner` one can use any R functions, but some of them are

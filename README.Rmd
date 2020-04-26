@@ -153,7 +153,6 @@ runner(
 )
 ```
 
-
 ### `NA` padding  
 Using `runner` one can also specify `na_pad = TRUE` which would return `NA` for 
 any window which is partially out of range - meaning that there is no sufficient 
@@ -177,6 +176,33 @@ runner(
   at = c(4, 18, 48, 51),
   na_pad = TRUE
 )
+```
+
+### Using runner with `data.frame` 
+
+User can also put `data.frame` into `x` argument and apply functions which involve
+multiple columns. In example below we calculate beta parameter of `lm` model on 
+1, 2, ..., n observations respectively. On the plot one can observe how `lm`
+parameter adapt with increasing number of observation.
+
+```{r eval=FALSE}
+date <- Sys.Date() + cumsum(sample(1:3, 40, replace = TRUE)) # unequaly spaced time series
+x <- cumsum(rnorm(40))
+y <- 30 * x + rnorm(40)
+
+df <- data.frame(date, y, x)
+
+slope <- runner(
+  df,
+  k = 10,
+  idx = "date",
+  function(x) {
+    coefficients(lm(y ~ x, data = x))[2]
+  }
+)
+
+plot(slope)
+abline(h = 30, col = "blue")
 ```
 
 ### Build-in functions
