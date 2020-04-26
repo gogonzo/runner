@@ -322,6 +322,48 @@ test_that("run_by %>% runner errors", {
     "`idx` should be either:"
   )
 
+  x <- run_by(data, idx = "index")
+  expect_warning(
+    expect_error(
+      runner(
+        x,
+        idx = "index2",
+        f = function(x) mean(x$x)
+      ),
+      "`idx` should be either:"
+    ),
+    "`idx` set in run_by"
+  )
+
+
+  x <- run_by(data, at = "index")
+  expect_warning(
+    expect_error(
+      runner(
+        x,
+        at = "1 day",
+        f = function(x) mean(x$x)
+      ),
+      "`at` should be either:"
+    ),
+    "`at` set in run_by"
+  )
+
+  expect_error(
+    run_by(data, k = as.factor(1:10)),
+    "`k` is invalid, should be either:"
+  )
+
+  expect_error(
+    run_by(data, idx = as.factor(1:10)),
+    "`idx` should be either:"
+  )
+
+  expect_error(
+    run_by(data, at = as.factor(1:10)),
+    "`at` should be either:"
+  )
+
   expect_error(
     run_by(data, lag = "1 day"),
     "`lag` is invalid, should be either"
