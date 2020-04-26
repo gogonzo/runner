@@ -983,6 +983,15 @@ test_that("runner with df", {
     "idx` can't be empty"
   )
 
+  expect_error(
+    runner(
+      elo,
+      lag = factor(1:100)
+    ),
+    "`lag` is invalid"
+  )
+
+
 })
 
 # test errors  -----
