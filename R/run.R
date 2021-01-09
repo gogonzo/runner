@@ -490,7 +490,10 @@ k_by <- function(k, idx, param) {
 
 #' Formats time-unit-interval to valid for runner
 #'
-#' Formats time-unit-interval to valid for runner
+#' Formats time-unit-interval to valid for runner. User specifies \code{k} as
+#' positive number but this means that this interval needs to be substracted
+#' from idx - because windows length extends window backwards in time.
+#' The same situation for lag.
 #' @param k (k or lag) object from runner to be formatted
 #' @param only_positive for \code{k} is \code{TRUE}, for \code{lag} is \code{FALSE}
 #' @examples
@@ -513,10 +516,6 @@ reformat_k <- function(k, only_positive = TRUE) {
 
   return(k)
 }
-
-
-
-
 
 
 #' Creates sequence for at as time-unit-interval
