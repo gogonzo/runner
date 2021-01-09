@@ -2,11 +2,25 @@
 % Please edit documentation in R/run.R
 \name{runner}
 \alias{runner}
-\alias{runner.data.frame}
 \alias{runner.default}
+\alias{runner.data.frame}
+\alias{runner.grouped_df}
+\alias{runner.matrix}
 \title{Apply running function}
 \usage{
 runner(
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  type = "auto",
+  ...
+)
+
+\method{runner}{default}(
   x,
   f = function(x) x,
   k = integer(0),
@@ -30,7 +44,19 @@ runner(
   ...
 )
 
-\method{runner}{default}(
+\method{runner}{grouped_df}(
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  type = "auto",
+  ...
+)
+
+\method{runner}{matrix}(
   x,
   f = function(x) x,
   k = integer(0),
@@ -56,13 +82,13 @@ By default runner returns windows as is (\verb{f = function(x)}).}
 Denoting size of the running window. If \code{k} is a single value then window
 size is constant for all elements, otherwise if \code{length(k) == length(x)}
 different window size for each element. One can also specify \code{k} in the same
-way as by in \code{\link[base]{seq.POSIXt}}. More in details.}
+way as \code{by} argument in \code{\link[base]{seq.POSIXt}}. More in details.}
 
 \item{lag}{(\code{integer} vector or single value)\cr
 Denoting window lag. If \code{lag} is a single value then window lag is constant
 for all elements, otherwise if \code{length(lag) == length(x)} different window
 size for each element. Negative value shifts window forward. One can also
-specify \code{lag} in the same way as by in \code{\link[base]{seq.POSIXt}}.
+specify \code{lag} in the same way as \code{by} argument in \code{\link[base]{seq.POSIXt}}.
 More in details.}
 
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr
@@ -74,7 +100,8 @@ are depending on \code{idx}. Length of \code{idx} have to be equal of length \co
 \item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character} vector)\cr
 Vector of any size and any value defining output data points. Values of the
 vector defines the indexes which data is computed at. Can be also \code{POSIXt}
-sequence increment \code{\link[base]{seq.POSIXt}}. More in details.}
+sequence increment used in \code{at} argument in \code{\link[base]{seq.POSIXt}}.
+More in details.}
 
 \item{na_pad}{(\code{logical} single value)\cr
 Whether incomplete window should return \code{NA} (if \code{na_pad = TRUE})
@@ -124,32 +151,34 @@ contain any number of observation (7-day mean is not the same as 7-element mean)
 \if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
 }
 \item{\strong{Window at specific indices}}{\cr
-\code{runner} by default returns vector of the same size as \code{x} unless one specifies
-\code{at} argument. Each element of \code{at} is an index on which runner calculates function -
-which means that output of the runner is now of length equal to \code{at}. Note
-that one can change index of \code{x} by specifying \code{idx}.
-Illustration below shows output of \code{runner} for \code{at = c(18, 27, 45, 31)}
-which gives windows in ranges enclosed in square brackets. Range for \code{at = 27} is
-\verb{[22, 26]} which is not available in current indices. \cr
+\code{runner} by default returns vector of the same size as \code{x} unless one
+specifies \code{at} argument. Each element of \code{at} is an index on which runner
+calculates function - which means that output of the runner is now of
+length equal to \code{at}. Note that one can change index of \code{x} by specifying
+\code{idx}. Illustration below shows output of \code{runner} for \code{at = c(18, 27, 45, 31)}
+which gives windows in ranges enclosed in square brackets. Range for
+\code{at = 27} is \verb{[22, 26]} which is not available in current indices. \cr
 \if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}}
 \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
 \cr
 \code{at} can also be specified as interval of the output defined by \code{at = "<increment>"}
-which results in output on following indices
-\code{seq.POSIXt(min(idx), max(idx), by = "<increment>")}. Increment of sequence is the
-same as in \code{\link[base]{seq.POSIXt}} function.
+which results in indices sequence defined by
+\code{seq.POSIXt(min(idx), max(idx), by = "<increment>")}. Increment of sequence
+is the same as in \code{\link[base]{seq.POSIXt}} function.
 It's worth noting that increment interval can't be more frequent than
 interval of \code{idx} - for \code{Date} the most frequent time-unit is a \code{"day"},
 for \code{POSIXt} a \code{sec}.
 
-\code{k} and \code{lag} can also be specified as using time sequence increment. Available
-time units are \verb{"sec", "min", "hour", "day", "DSTday", "week", "month", "quarter" or "year"}.
+\code{k} and \code{lag} can also be specified as using time sequence increment.
+Available time units are
+\verb{"sec", "min", "hour", "day", "DSTday", "week", "month", "quarter" or "year"}.
 To increment by number of units one can also specify \verb{<number> <unit>s}
 for example \code{lag = "-2 days"}, \code{k = "5 weeks"}.
-}
-}
-Above is not enough since \code{k} and \code{lag} can be a vector which allows to
+
+Setting \code{k} and \code{lag} as a sequence increment can be also a vector can be a vector which allows to
 stretch and lag/lead each window freely on in time (on indices).
+}
+}
 }
 \examples{
 

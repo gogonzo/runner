@@ -994,6 +994,29 @@ test_that("runner with df", {
 
 })
 
+test_that("runner with matrix", {
+  data <- matrix(data = runif(100, 0, 1), nrow = 20, ncol = 5)
+  res <- runner(
+    x = data,
+    f = function(x) {
+      tryCatch(
+        cor(x),
+        error = function(e) NA
+      )
+    })
+
+  expected <- sapply(
+    X = 1:20,
+    FUN = function(i) {
+      tryCatch(
+        cor(data[1:i, ]),
+        error = function(e) NA
+      )
+    })
+
+  expect_identical(res, expected)
+})
+
 # test errors  -----
 test_that("Errors", {
   expect_error(runner(x = letters[1:5], f = ""))

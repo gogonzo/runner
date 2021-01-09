@@ -19,11 +19,11 @@ to original topic on [stack-overflow](https://stackoverflow.com).
 library(runner)
 
 x <- sample(letters, 20, replace = TRUE)
-date <- Sys.Date() + cumsum(sample(1:5, 20, replace = TRUE)) # unequaly spaced time series
+date <- Sys.Date() + cumsum(sample(1:5, 20, replace = TRUE)) # unequally spaced time series
 
 runner(
   x, 
-  k = "7 days", 
+  k = "7 days",
   idx = date, 
   f = function(x) length(unique(x))
 )

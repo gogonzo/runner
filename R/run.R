@@ -8,13 +8,13 @@
 #'  Denoting size of the running window. If `k` is a single value then window
 #'  size is constant for all elements, otherwise if `length(k) == length(x)`
 #'  different window size for each element. One can also specify `k` in the same
-#'  way as by in \code{\link[base]{seq.POSIXt}}. More in details.
+#'  way as `by` argument in \code{\link[base]{seq.POSIXt}}. More in details.
 #'
 #' @param lag (`integer` vector or single value)\cr
 #'  Denoting window lag. If `lag` is a single value then window lag is constant
 #'  for all elements, otherwise if `length(lag) == length(x)` different window
 #'  size for each element. Negative value shifts window forward. One can also
-#'  specify `lag` in the same way as by in \code{\link[base]{seq.POSIXt}}.
+#'  specify `lag` in the same way as `by` argument in \code{\link[base]{seq.POSIXt}}.
 #'  More in details.
 #'
 #' @param idx (`integer`, `Date`, `POSIXt`)\cr
@@ -24,15 +24,16 @@
 #'  are depending on `idx`. Length of `idx` have to be equal of length `x`.
 #'
 #' @param f (`function`)\cr
-#' Applied on windows created from `x`. This function is meant to summarize
-#' windows and create single element for each window, but one can also specify
-#' function which return multiple elements (runner output will be a list).
-#' By default runner returns windows as is (`f = function(x)`).
+#'  Applied on windows created from `x`. This function is meant to summarize
+#'  windows and create single element for each window, but one can also specify
+#'  function which return multiple elements (runner output will be a list).
+#'  By default runner returns windows as is (`f = function(x)`).
 #'
 #' @param at (`integer`, `Date`, `POSIXt`, `character` vector)\cr
 #'  Vector of any size and any value defining output data points. Values of the
 #'  vector defines the indexes which data is computed at. Can be also `POSIXt`
-#'  sequence increment \code{\link[base]{seq.POSIXt}}. More in details.
+#'  sequence increment used in `at` argument in \code{\link[base]{seq.POSIXt}}.
+#'  More in details.
 #'
 #' @param na_pad (`logical` single value)\cr
 #'  Whether incomplete window should return `NA` (if `na_pad = TRUE`)
@@ -74,32 +75,34 @@
 #'    \if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
 #'  }
 #'  \item{**Window at specific indices**}{\cr
-#'    `runner` by default returns vector of the same size as `x` unless one specifies
-#'    `at` argument. Each element of `at` is an index on which runner calculates function -
-#'    which means that output of the runner is now of length equal to `at`. Note
-#'    that one can change index of `x` by specifying `idx`.
-#'    Illustration below shows output of `runner` for `at = c(18, 27, 45, 31)`
-#'    which gives windows in ranges enclosed in square brackets. Range for `at = 27` is
-#'    `[22, 26]` which is not available in current indices. \cr
+#'    `runner` by default returns vector of the same size as `x` unless one
+#'    specifies `at` argument. Each element of `at` is an index on which runner
+#'    calculates function - which means that output of the runner is now of
+#'    length equal to `at`. Note that one can change index of `x` by specifying
+#'    `idx`. Illustration below shows output of `runner` for `at = c(18, 27, 45, 31)`
+#'    which gives windows in ranges enclosed in square brackets. Range for
+#'    `at = 27` is `[22, 26]` which is not available in current indices. \cr
 #'    \if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}}
 #'    \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
 #'    \cr
 #'    `at` can also be specified as interval of the output defined by `at = "<increment>"`
-#'    which results in output on following indices
-#'    `seq.POSIXt(min(idx), max(idx), by = "<increment>")`. Increment of sequence is the
-#'    same as in \code{\link[base]{seq.POSIXt}} function.
+#'    which results in indices sequence defined by
+#'    `seq.POSIXt(min(idx), max(idx), by = "<increment>")`. Increment of sequence
+#'    is the same as in \code{\link[base]{seq.POSIXt}} function.
 #'    It's worth noting that increment interval can't be more frequent than
 #'    interval of `idx` - for `Date` the most frequent time-unit is a `"day"`,
 #'    for `POSIXt` a `sec`.
 #'
-#'    `k` and `lag` can also be specified as using time sequence increment. Available
-#'    time units are `"sec", "min", "hour", "day", "DSTday", "week", "month", "quarter" or "year"`.
+#'    `k` and `lag` can also be specified as using time sequence increment.
+#'    Available time units are
+#'    `"sec", "min", "hour", "day", "DSTday", "week", "month", "quarter" or "year"`.
 #'    To increment by number of units one can also specify `<number> <unit>s`
 #'    for example `lag = "-2 days"`, `k = "5 weeks"`.
+#'
+#'    Setting `k` and `lag` as a sequence increment can be also a vector can be a vector which allows to
+#'    stretch and lag/lead each window freely on in time (on indices).
 #'  }
 #' }
-#' Above is not enough since `k` and `lag` can be a vector which allows to
-#' stretch and lag/lead each window freely on in time (on indices).
 #'
 #' @return vector with aggregated values for each window. Length of output is the
 #'  same as `length(x)` or `length(at)` if specified. Type of the output
@@ -189,68 +192,6 @@ runner <- function (
 
 #' @rdname runner
 #' @export
-runner.data.frame <- function(
-  x,
-  f = function(x) x,
-  k = integer(0),
-  lag = integer(1),
-  idx = integer(0),
-  at = integer(0),
-  na_pad = FALSE,
-  type = "auto",
-  ...
-  ) {
-
-  # dplyr::group_by exception
-  x <- this_group(x)
-
-  # set arguments from attrs set by run_by
-  k <- set_from_attribute_difftime(x, k) # no deep copy
-  lag <- set_from_attribute_difftime(x, lag)
-  idx <- set_from_attribute_index(x, idx)
-  at <- set_from_attribute_at(x, at)
-  na_pad <- set_from_attribute_logical(x, na_pad)
-
-  if (any(is.na(k))) {
-    stop("Function doesn't accept NA values in k vector");
-  }
-  if (any(is.na(lag))) {
-    stop("Function doesn't accept NA values in lag vector");
-  }
-  if (any(is.na(idx))) {
-    stop("Function doesn't accept NA values in idx vector");
-  }
-  if (!is(f, "function")) {
-    stop("f should be a function")
-  }
-
-  # use POSIXt.seq
-  at  <- seq_at(at, idx)
-  k   <- k_by(k,   if (length(at) > 0) at else idx, "k")
-  lag <- k_by(lag, if (length(at) > 0) at else idx, "lag")
-
-  w <- window_run(
-    x = seq_len(nrow(x)),
-    k = k,
-    lag = lag,
-    idx = idx,
-    at = at,
-    na_pad = na_pad
-  )
-
-  res <- sapply(w, function(ww) {
-    if (length(ww) == 0) {
-      NA
-    } else {
-      f(x[ww, ], ...)
-    }
-  })
-
-  return(res)
-}
-
-#' @rdname runner
-#' @export
 runner.default <- function(
   x,
   f = function(x) x,
@@ -261,8 +202,7 @@ runner.default <- function(
   na_pad = FALSE,
   type = "auto",
   ...
-  ) {
-
+) {
   if (any(is.na(k))) {
     stop("Function doesn't accept NA values in k vector");
   }
@@ -275,7 +215,6 @@ runner.default <- function(
   if (!is(f, "function")) {
     stop("f should be a function")
   }
-
 
   # use POSIXt.seq
   at <- seq_at(at, idx)
@@ -316,10 +255,156 @@ runner.default <- function(
   return(res)
 }
 
-get_parent_call_arg_names <- function() {
-  cl <- sys.call(-2)
-  f <- get(as.character(cl[[1]]), mode="function", sys.frame(-2))
-  cl <- match.call(definition=f, call=cl)
+#' @rdname runner
+#' @export
+runner.data.frame <- function(
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  type = "auto",
+  ...
+) {
+  # set arguments from attrs set by run_by
+  k <- set_from_attribute_difftime(x, k) # no deep copy
+  lag <- set_from_attribute_difftime(x, lag)
+  idx <- set_from_attribute_index(x, idx)
+  at <- set_from_attribute_at(x, at)
+  na_pad <- set_from_attribute_logical(x, na_pad)
+
+  if (any(is.na(k))) {
+    stop("Function doesn't accept NA values in k vector");
+  }
+  if (any(is.na(lag))) {
+    stop("Function doesn't accept NA values in lag vector");
+  }
+  if (any(is.na(idx))) {
+    stop("Function doesn't accept NA values in idx vector");
+  }
+  if (!is(f, "function")) {
+    stop("f should be a function")
+  }
+
+  at  <- seq_at(at, idx)
+  k   <- k_by(k,   if (length(at) > 0) at else idx, "k")
+  lag <- k_by(lag, if (length(at) > 0) at else idx, "lag")
+
+  w <- window_run(
+    x = seq_len(nrow(x)),
+    k = k,
+    lag = lag,
+    idx = idx,
+    at = at,
+    na_pad = na_pad
+  )
+
+  res <- sapply(w, function(ww) {
+    if (length(ww) == 0) {
+      NA
+    } else {
+      f(x[ww, ], ...)
+    }
+  })
+
+  return(res)
+
+}
+
+#' @rdname runner
+#' @export
+runner.grouped_df <- function(
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  type = "auto",
+  ...
+) {
+  runner.data.frame(
+    x = this_group(x),
+    f = f,
+    lag = lag,
+    idx = idx,
+    at = at,
+    na_pad = na_pad,
+    type = type,
+    ...
+  )
+}
+
+#' @rdname runner
+#' @export
+runner.matrix <- function(
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  type = "auto",
+  ...
+) {
+  if (any(is.na(k))) {
+    stop("Function doesn't accept NA values in k vector");
+  }
+  if (any(is.na(lag))) {
+    stop("Function doesn't accept NA values in lag vector");
+  }
+  if (any(is.na(idx))) {
+    stop("Function doesn't accept NA values in idx vector");
+  }
+  if (!is(f, "function")) {
+    stop("f should be a function")
+  }
+
+  at  <- seq_at(at, idx)
+  k   <- k_by(k,   if (length(at) > 0) at else idx, "k")
+  lag <- k_by(lag, if (length(at) > 0) at else idx, "lag")
+
+  w <- window_run(
+    x = seq_len(nrow(x)),
+    k = k,
+    lag = lag,
+    idx = idx,
+    at = at,
+    na_pad = na_pad
+  )
+
+  res <- sapply(w, function(ww) {
+    if (length(ww) == 0) {
+      NA
+    } else {
+      f(x[ww, ], ...)
+    }
+  })
+
+  return(res)
+}
+
+# utilities -----
+get_runner_call_arg_names <- function() {
+  runner_call_idx <- which(
+    vapply(
+      X =  rev(sys.calls()),
+      FUN = function(x) x[[1]] == as.name("runner"),
+      FUN.VALUE = logical(1)
+    )
+  ) - 1
+
+  cl <- sys.call(-runner_call_idx)
+  f <- get(
+    x = as.character(cl[[1]]),
+    mode = "function",
+    envir = sys.frame(-runner_call_idx)
+  )
+  cl <- match.call(definition = f, call = cl)
   names(cl)
 }
 
@@ -328,7 +413,6 @@ is_datetime_valid <- function(x) {
     grepl("^(sec|min|hour|day|DSTday|week|month|quarter|year)$", x = x) |
       grepl("^-*[0-9]+ (sec|min|hour|day|DSTday|week|month|quarter|year)s", x = x)
   )
-
 }
 
 
@@ -430,54 +514,7 @@ reformat_k <- function(k, only_positive = TRUE) {
   return(k)
 }
 
-#' Set window parameters
-#'
-#' Set window parameters for \link{runner}. This function sets the
-#' attributes to \code{x} (only \code{data.frame}) object and saves user effort
-#' to specify window parameters in further multiple \link{runner} calls.
-#' @inheritParams runner
-#' @return x object which \link{runner} can be executed on.
-#' @examples
-#' library(dplyr)
-#'
-#' data <- data.frame(
-#'  index = c(2, 3, 3, 4, 5, 8, 10, 10, 13, 15),
-#'  a = rep(c("a", "b"), each = 5),
-#'  b = 1:10
-#' )
-#'
-#' data %>%
-#'  group_by(a) %>%
-#'  run_by(idx = "index", k = 5) %>%
-#'  mutate(
-#'    c = runner(
-#'      x = .,
-#'      f = function(x) {
-#'        paste(x$b, collapse = ">")
-#'      }
-#'    ),
-#'    d = runner(
-#'      x = .,
-#'      f = function(x) {
-#'        sum(x$b)
-#'      }
-#'    )
-#'  )
-#' @export
-run_by <- function(x, idx, k, lag, na_pad, at) {
-  if (!is.data.frame(x)) {
-    stop("`run_by` should be used only for `data.frame`. \n
-         Use `runner` on x directly.")
-  }
 
-  if (!missing(k)) x <- set_run_by_difftime(x, k)
-  if (!missing(lag)) x <- set_run_by_difftime(x, lag)
-  if (!missing(idx)) x <- set_run_by_index(x, idx)
-  if (!missing(at)) x <- set_run_by_index(x, at)
-  if (!missing(na_pad)) attr(x, "na_pad") <- na_pad
-
-  return(x)
-}
 
 
 
@@ -514,70 +551,12 @@ seq_at <- function(at, idx) {
   return(at)
 }
 
-set_run_by_index <- function(x, arg) {
-  arg_name <- deparse(substitute(arg))
-
-  attr(x, arg_name) <- if (is.character(arg) && length(arg) == 1 && arg %in% names(x)) {
-    arg
-
-  } else if (is.numeric(arg) || inherits(arg, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
-    arg
-  } else {
-    stop(
-      sprintf(
-        "`%s` should be either:
-         - column name of `x`
-         - vector of type `numeric`, `Date`, `POSIXct` or `POSIXlt`",
-        arg_name
-      ),
-      call. = FALSE
-    )
-  }
-  return(x)
-}
-
-set_run_by_difftime <- function(x, arg) {
-  arg_name <- deparse(substitute(arg))
-
-  attr(x, arg_name) <- if (is.character(arg)) {
-    if (length(arg) == 1 && arg %in% names(x)) {
-      arg
-    } else if (all(is_datetime_valid(arg))) {
-      arg
-    } else {
-      stop(
-        sprintf(
-          "`%s` is invalid, should be either:
-           - column name of `x`
-           - `difftime` class or character describing diffitme (see at argument in `seq.POSIXt`)
-           - `numeric` or `integer` vector",
-          arg_name
-        ),
-        call. = FALSE
-      )
-    }
-  } else if (is.numeric(arg) || is(arg, "difftime")) {
-    arg
-  } else {
-    stop(
-      sprintf(
-        "`%s` is invalid, should be either:
-           - column name of `x`
-           - `difftime` class or character describing diffitme (see at argument in `seq.POSIXt`)
-           - `numeric` or `integer` `vector`",
-        arg_name
-      ),
-      call. = FALSE
-    )
-  }
-  return(x)
-}
-
 set_from_attribute_index <- function(x, attrib) {
-  runner_args <- get_parent_call_arg_names()
   arg_name <- deparse(substitute(attrib))
+  runner_args <- get_runner_call_arg_names()
 
-  # no arg overwriting
+  # No arg overwriting
+  #  - attribute not empty and argument not specified
   if (!is.null(attr(x, arg_name)) && !arg_name %in% runner_args) {
     if (length(attr(x, arg_name)) == 1 &&
         is.character(attr(x, arg_name)) &&
@@ -598,7 +577,7 @@ set_from_attribute_index <- function(x, attrib) {
       attrib <- attr(x, arg_name)
     }
 
-    # arg overwriting (runner masks run_by)
+  # arg overwriting (runner masks run_by)
   } else {
     if (!is.null(attr(x, arg_name))) {
       warning(
@@ -630,7 +609,7 @@ set_from_attribute_index <- function(x, attrib) {
 }
 
 set_from_attribute_at <- function(x, attrib) {
-  runner_args <- get_parent_call_arg_names()
+  runner_args <- get_runner_call_arg_names()
   arg_name <- deparse(substitute(attrib))
 
   # no arg overwriting
@@ -690,19 +669,21 @@ set_from_attribute_at <- function(x, attrib) {
 
 
 set_from_attribute_difftime <- function(x, attrib) {
-  runner_args <- get_parent_call_arg_names()
+  runner_args <- get_runner_call_arg_names()
   arg_name <- deparse(substitute(attrib))
 
-  # no arg overwriting
   if (!is.null(attr(x, arg_name)) && !arg_name %in% runner_args) {
+    #  - argument has not been specified so it can be overwritten
     if (length(attr(x, arg_name)) == 1 && attr(x, arg_name) %in% names(x)) {
+      # attr is a variable name
       attrib <- x[[attr(x, arg_name)]]
     } else {
+      # attr is a vector of values - length validation later
       attrib <- attr(x, arg_name)
     }
 
-  # arg overwriting (runner masks run_by)
-  } else {
+  } else if (arg_name %in% runner_args) {
+    # - argument has been specified
     if (!is.null(attr(x, arg_name))) {
       warning(
         sprintf(
@@ -714,9 +695,10 @@ set_from_attribute_difftime <- function(x, attrib) {
 
     if (is.character(attrib)) {
       if (length(attrib) == 1 && attrib %in% names(x)) {
+        # argument as variable name
         attrib <- x[[attrib]]
       } else if (all(is_datetime_valid(attrib))) {
-        # do nothing
+        # argument as a difftime character
       } else {
         stop(
           sprintf(
@@ -749,7 +731,7 @@ set_from_attribute_difftime <- function(x, attrib) {
 }
 
 set_from_attribute_logical <- function(x, attrib) {
-  runner_args <- get_parent_call_arg_names()
+  runner_args <- get_runner_call_arg_names()
   arg_name <- deparse(substitute(attrib))
 
   # no arg overwriting
@@ -781,24 +763,21 @@ set_from_attribute_logical <- function(x, attrib) {
 #' @md
 #' @return data.frame filtered by current `dplyr::groups()`
 this_group <- function(x) {
-  if (is(x, "grouped_df")) {
-    attrs <- attributes(x)
-    attrs <- attrs[names(attrs) != "row.names"]
+  attrs <- attributes(x)
+  attrs <- attrs[names(attrs) != "row.names"]
 
-    new_env <- new.env(parent = parent.frame(n = 2)$.top_env)
-    df_call <- as.call(
-      append(
-        as.name("data.frame"),
-        lapply(names(x), as.name)
-      )
+  new_env <- new.env(parent = parent.frame(n = 2)$.top_env)
+  df_call <- as.call(
+    append(
+      as.name("data.frame"),
+      lapply(names(x), as.name)
     )
+  )
 
-    x <- eval(df_call, envir = new_env)
-    for (i in seq_along(attrs)) {
-      attr(x, names(attrs)[i]) <- attrs[[i]]
-    }
+  x <- eval(df_call, envir = new_env)
+  for (i in seq_along(attrs)) {
+    attr(x, names(attrs)[i]) <- attrs[[i]]
   }
-
   return(x)
 }
 
