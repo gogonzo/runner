@@ -108,6 +108,25 @@
 #'  same as `length(x)` or `length(at)` if specified. Type of the output
 #'  is taken from `type` argument.
 #'
+#' @md
+#' @rdname runner
+#' @importFrom methods is
+#' @export
+runner <- function (
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  type = "auto",
+  ...
+  ) {
+  UseMethod("runner", x)
+}
+
+#' @rdname runner
 #' @examples
 #'
 #' # runner returns windows as is by default
@@ -172,25 +191,6 @@
 #'   at = c(18, 27, 48, 31),
 #'   f = mean
 #' )
-#' @md
-#' @rdname runner
-#' @importFrom methods is
-#' @export
-runner <- function (
-  x,
-  f = function(x) x,
-  k = integer(0),
-  lag = integer(1),
-  idx = integer(0),
-  at = integer(0),
-  na_pad = FALSE,
-  type = "auto",
-  ...
-  ) {
-  UseMethod("runner", x)
-}
-
-#' @rdname runner
 #' @export
 runner.default <- function(
   x,
@@ -256,6 +256,21 @@ runner.default <- function(
 }
 
 #' @rdname runner
+#'
+#' # runner with data.frame
+#' df <- data.frame(
+#'   a = 1:13,
+#'   b = 1:13 + rnorm(13, sd = 5),
+#'   idx = seq(Sys.Date(), Sys.Date() + 365, by = "1 month")
+#' )
+#' runner(
+#'   x = df,
+#'   idx = "idx",
+#'   at = "6 months",
+#'   f = function(x) {
+#'     cor(x$a, x$b)
+#'   }
+#' )
 #' @export
 runner.data.frame <- function(
   x,
@@ -340,6 +355,18 @@ runner.grouped_df <- function(
 }
 
 #' @rdname runner
+#' @examples
+#'
+#' # runner with matrix
+#' data <- matrix(data = runif(100, 0, 1), nrow = 20, ncol = 5)
+#' runner(
+#'   x = data,
+#'   f = function(x) {
+#'     tryCatch(
+#'       cor(x),
+#'       error = function(e) NA
+#'     )
+#'  })
 #' @export
 runner.matrix <- function(
   x,

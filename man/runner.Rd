@@ -3,7 +3,6 @@
 \name{runner}
 \alias{runner}
 \alias{runner.default}
-\alias{runner.data.frame}
 \alias{runner.grouped_df}
 \alias{runner.matrix}
 \title{Apply running function}
@@ -21,18 +20,6 @@ runner(
 )
 
 \method{runner}{default}(
-  x,
-  f = function(x) x,
-  k = integer(0),
-  lag = integer(1),
-  idx = integer(0),
-  at = integer(0),
-  na_pad = FALSE,
-  type = "auto",
-  ...
-)
-
-\method{runner}{data.frame}(
   x,
   f = function(x) x,
   k = integer(0),
@@ -244,4 +231,15 @@ runner::runner(
   at = c(18, 27, 48, 31),
   f = mean
 )
+
+# runner with matrix
+data <- matrix(data = runif(100, 0, 1), nrow = 20, ncol = 5)
+runner(
+  x = data,
+  f = function(x) {
+    tryCatch(
+      cor(x),
+      error = function(e) NA
+    )
+ })
 }
