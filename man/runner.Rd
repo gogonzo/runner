@@ -171,7 +171,6 @@ which gives windows in ranges enclosed in square brackets. Range for
 \if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}}
 \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
 }
-\cr
 }
 \subsection{Specifying time-intervals}{
 

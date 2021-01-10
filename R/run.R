@@ -91,7 +91,6 @@
 #'    \if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}}
 #'    \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
 #'  }
-#'  \cr
 #' }
 #' ## Specifying time-intervals
 #'  `at` can also be specified as interval of the output defined by `at = "<increment>"`
