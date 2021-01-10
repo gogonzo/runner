@@ -141,7 +141,7 @@ runner <- function (
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
-  parallel = FALSE,
+  cl = NULL,
   ...
   ) {
   UseMethod("runner", x)
@@ -305,13 +305,13 @@ runner.default <- function(
 #'
 #' # parallel computing
 #' data <- data.frame(
-#'   a = runif(size),
-#'   b = runif(size),
-#'   idx = cumsum(sample(rpois(size, 5)))
+#'   a = runif(100),
+#'   b = runif(100),
+#'   idx = cumsum(sample(rpois(100, 5)))
 #' )
 #' const <- 0
-#' cl <- makeCluster(detectCores())
-#' clusterExport(cl, "const", envir = environment())
+#' cl <- parallel::makeCluster(detectCores())
+#' parallel::clusterExport(cl, "const", envir = environment())
 #'
 #' runner(
 #'   x = data,
@@ -322,7 +322,7 @@ runner.default <- function(
 #'   idx = "idx",
 #'   cl = cl
 #' )
-#'
+#' parallel::stopCluster(cl)
 #' @export
 runner.data.frame <- function(
   x,

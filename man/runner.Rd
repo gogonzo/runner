@@ -17,7 +17,7 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
-  parallel = FALSE,
+  cl = NULL,
   ...
 )
 
@@ -118,12 +118,12 @@ output type (\code{"auto"}, \code{"logical"}, \code{"numeric"}, \code{"integer"}
 \code{runner} by default guess type automatically. In case of failure of \code{"auto"}
 please specify desired type.}
 
-\item{...}{(optional)\cr
-other arguments passed to the function \code{f}.}
-
 \item{cl}{(\code{cluster}) \emph{experimental}\cr
 Create and pass the cluster to the \code{runner} function to run each window
 calculation in parallel. See \code{\link[parallel]{makeCluster}} in details.}
+
+\item{...}{(optional)\cr
+other arguments passed to the function \code{f}.}
 }
 \value{
 vector with aggregated values for each window. Length of output is the
@@ -288,13 +288,13 @@ runner(
 
 # parallel computing
 data <- data.frame(
-  a = runif(size),
-  b = runif(size),
-  idx = cumsum(sample(rpois(size, 5)))
+  a = runif(100),
+  b = runif(100),
+  idx = cumsum(sample(rpois(100, 5)))
 )
 const <- 0
-cl <- makeCluster(detectCores())
-clusterExport(cl, "const", envir = environment())
+cl <- parallel::makeCluster(detectCores())
+parallel::clusterExport(cl, "const", envir = environment())
 
 runner(
   x = data,
@@ -305,7 +305,7 @@ runner(
   idx = "idx",
   cl = cl
 )
-
+parallel::stopCluster(cl)
 
 # runner with matrix
 data <- matrix(data = runif(100, 0, 1), nrow = 20, ncol = 5)
