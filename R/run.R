@@ -268,7 +268,7 @@ runner.data.frame <- function(
   type = "auto",
   ...
 ) {
-  # set arguments from attrs set by run_by
+  # set arguments from attrs (set by run_by)
   k <- set_from_attribute_difftime(x, k) # no deep copy
   lag <- set_from_attribute_difftime(x, lag)
   idx <- set_from_attribute_index(x, idx)
@@ -289,7 +289,7 @@ runner.data.frame <- function(
   }
 
   at  <- seq_at(at, idx)
-  k   <- k_by(k,   if (length(at) > 0) at else idx, "k")
+  k   <- k_by(k, if (length(at) > 0) at else idx, "k")
   lag <- k_by(lag, if (length(at) > 0) at else idx, "lag")
 
   w <- window_run(
@@ -550,63 +550,6 @@ seq_at <- function(at, idx) {
   return(at)
 }
 
-set_from_attribute_index <- function(x, attrib) {
-  arg_name <- deparse(substitute(attrib))
-  runner_args <- get_runner_call_arg_names()
-
-  # No arg overwriting
-  #  - attribute not empty and argument not specified
-  if (!is.null(attr(x, arg_name)) && !arg_name %in% runner_args) {
-    if (length(attr(x, arg_name)) == 1 &&
-        is.character(attr(x, arg_name)) &&
-        attr(x, arg_name) %in% names(x)) {
-
-      attrib <- x[[attr(x, arg_name)]]
-    } else if (is.character(attr(x, arg_name))) {
-      stop(
-        sprintf(
-          "`%s` should be either:
-         - column name of `x`
-         - vector of type `numeric`, `Date`, `POSIXct` or `POSIXlt`",
-          arg_name
-        ),
-        call. = FALSE
-      )
-    } else {
-      attrib <- attr(x, arg_name)
-    }
-
-  # arg overwriting (runner masks run_by)
-  } else {
-    if (!is.null(attr(x, arg_name))) {
-      warning(
-        sprintf(
-          "`%1$s` set in run_by() will be ignored in favour of `%1$s` specified in runner() call",
-          arg_name
-        )
-      )
-    }
-
-    if (is.character(attrib) && length(attrib) == 1 && attrib %in% names(x)) {
-      attrib <- x[[attrib]]
-    } else if (is.numeric(attrib) || inherits(attrib, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
-      # do nothing
-    } else {
-      stop(
-        sprintf(
-          "`%s` should be either:
-         - column name of `x`
-         - vector of type `numeric`, `Date`, `POSIXct` or `POSIXlt`",
-          arg_name
-        ),
-        call. = FALSE
-      )
-    }
-  }
-
-  return(attrib)
-}
-
 set_from_attribute_at <- function(x, attrib) {
   runner_args <- get_runner_call_arg_names()
   arg_name <- deparse(substitute(attrib))
@@ -719,6 +662,63 @@ set_from_attribute_difftime <- function(x, attrib) {
            - column name of `x`
            - difftime class or character describing diffitme (see at argument in `seq.POSIXt`)
            - numeric or integer vector",
+          arg_name
+        ),
+        call. = FALSE
+      )
+    }
+  }
+
+  return(attrib)
+}
+
+set_from_attribute_index <- function(x, attrib) {
+  arg_name <- deparse(substitute(attrib))
+  runner_args <- get_runner_call_arg_names()
+
+  # No arg overwriting
+  #  - attribute not empty and argument not specified
+  if (!is.null(attr(x, arg_name)) && !arg_name %in% runner_args) {
+    if (length(attr(x, arg_name)) == 1 &&
+        is.character(attr(x, arg_name)) &&
+        attr(x, arg_name) %in% names(x)) {
+
+      attrib <- x[[attr(x, arg_name)]]
+    } else if (is.character(attr(x, arg_name))) {
+      stop(
+        sprintf(
+          "`%s` should be either:
+         - column name of `x`
+         - vector of type `numeric`, `Date`, `POSIXct` or `POSIXlt`",
+          arg_name
+        ),
+        call. = FALSE
+      )
+    } else {
+      attrib <- attr(x, arg_name)
+    }
+
+  # arg overwriting (runner masks run_by)
+  } else {
+    if (!is.null(attr(x, arg_name))) {
+      warning(
+        sprintf(
+          "`%1$s` set in run_by() will be ignored in favour of `%1$s` specified in runner() call",
+          arg_name
+        )
+      )
+    }
+
+    if (is.character(attrib) && length(attrib) == 1 && attrib %in% names(x)) {
+      attrib <- x[[attrib]]
+    } else if (is.numeric(attrib) || inherits(attrib, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
+      # do nothing
+    } else {
+      stop(
+        sprintf(
+          "`%s` should be either:
+         - column name of `x`
+         - vector of type `numeric`, `Date`, `POSIXct` or `POSIXlt`",
           arg_name
         ),
         call. = FALSE

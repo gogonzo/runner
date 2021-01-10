@@ -26,8 +26,7 @@ test_that("       |--------]------->", {
 
   expect_identical(
     runner(x2, f = mean, na.rm = TRUE),
-    sapply(seq_along(x2), function(i) mean(x2[find_idx(x2, i = i)], na.rm = TRUE))
-  )
+    sapply(seq_along(x2), function(i) mean(x2[find_idx(x2, i = i)], na.rm = TRUE)))
 
   expect_identical(
     runner(x1, f = mean, idx = idx),
@@ -36,13 +35,11 @@ test_that("       |--------]------->", {
 
   expect_identical(
     runner(x1, f = mean)[at],
-    runner(x1, f = mean, at = at)
-  )
+    runner(x1, f = mean, at = at))
 
   expect_identical(
     runner(x1, f = mean, idx = idx)[at],
-    runner(x1, f = mean, at = at)
-  )
+    runner(x1, f = mean, at = at))
 
 })
 
@@ -994,6 +991,7 @@ test_that("runner with df", {
 
 })
 
+# runner with matrix -----
 test_that("runner with matrix", {
   data <- matrix(data = runif(100, 0, 1), nrow = 20, ncol = 5)
   res <- runner(
