@@ -1022,7 +1022,7 @@ test_that("Parallel", {
     b = runif(100),
     idx = cumsum(sample(rpois(100, 5)))
   )
-  cl <- parallel::makeCluster(1, type = "FORK")
+  cl <- parallel::makeCluster(1)
 
 
   # vector
@@ -1044,7 +1044,7 @@ test_that("Parallel", {
   parallel::stopCluster(cl)
 
   # data.frame
-  cl <- parallel::makeCluster(1, type = "FORK")
+  cl <- parallel::makeCluster(1)
   expect_identical(
     runner(
       x = data,
