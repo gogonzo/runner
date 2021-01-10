@@ -22,14 +22,15 @@ Input in runner custom function \code{f}.}
 Denoting size of the running window. If \code{k} is a single value then window
 size is constant for all elements, otherwise if \code{length(k) == length(x)}
 different window size for each element. One can also specify \code{k} in the same
-way as \code{by} argument in \code{\link[base]{seq.POSIXt}}. More in details.}
+way as \code{by} argument in \code{\link[base]{seq.POSIXt}}.
+See 'Specifying time-intervals' in details section.}
 
 \item{lag}{(\code{integer} vector or single value)\cr
 Denoting window lag. If \code{lag} is a single value then window lag is constant
 for all elements, otherwise if \code{length(lag) == length(x)} different window
 size for each element. Negative value shifts window forward. One can also
 specify \code{lag} in the same way as \code{by} argument in \code{\link[base]{seq.POSIXt}}.
-More in details.}
+See 'Specifying time-intervals' in details section.}
 
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr
 Optional integer vector containing sorted (ascending) index of observation.
@@ -41,7 +42,7 @@ are depending on \code{idx}. Length of \code{idx} have to be equal of length \co
 Vector of any size and any value defining output data points. Values of the
 vector defines the indexes which data is computed at. Can be also \code{POSIXt}
 sequence increment used in \code{at} argument in \code{\link[base]{seq.POSIXt}}.
-More in details.}
+See 'Specifying time-intervals' in details section.}
 
 \item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) -
 if \code{TRUE} sum is calculating excluding \code{NA}.}

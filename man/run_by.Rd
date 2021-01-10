@@ -20,14 +20,15 @@ are depending on \code{idx}. Length of \code{idx} have to be equal of length \co
 Denoting size of the running window. If \code{k} is a single value then window
 size is constant for all elements, otherwise if \code{length(k) == length(x)}
 different window size for each element. One can also specify \code{k} in the same
-way as \code{by} argument in \code{\link[base]{seq.POSIXt}}. More in details.}
+way as \code{by} argument in \code{\link[base]{seq.POSIXt}}.
+See 'Specifying time-intervals' in details section.}
 
 \item{lag}{(\code{integer} vector or single value)\cr
 Denoting window lag. If \code{lag} is a single value then window lag is constant
 for all elements, otherwise if \code{length(lag) == length(x)} different window
 size for each element. Negative value shifts window forward. One can also
 specify \code{lag} in the same way as \code{by} argument in \code{\link[base]{seq.POSIXt}}.
-More in details.}
+See 'Specifying time-intervals' in details section.}
 
 \item{na_pad}{(\code{logical} single value)\cr
 Whether incomplete window should return \code{NA} (if \code{na_pad = TRUE})
@@ -37,7 +38,7 @@ Incomplete window is when some parts of the window are out of range.}
 Vector of any size and any value defining output data points. Values of the
 vector defines the indexes which data is computed at. Can be also \code{POSIXt}
 sequence increment used in \code{at} argument in \code{\link[base]{seq.POSIXt}}.
-More in details.}
+See 'Specifying time-intervals' in details section.}
 }
 \value{
 x object which \link{runner} can be executed on.

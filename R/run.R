@@ -8,14 +8,15 @@
 #'  Denoting size of the running window. If `k` is a single value then window
 #'  size is constant for all elements, otherwise if `length(k) == length(x)`
 #'  different window size for each element. One can also specify `k` in the same
-#'  way as `by` argument in \code{\link[base]{seq.POSIXt}}. More in details.
+#'  way as `by` argument in \code{\link[base]{seq.POSIXt}}.
+#'  See 'Specifying time-intervals' in details section.
 #'
 #' @param lag (`integer` vector or single value)\cr
 #'  Denoting window lag. If `lag` is a single value then window lag is constant
 #'  for all elements, otherwise if `length(lag) == length(x)` different window
 #'  size for each element. Negative value shifts window forward. One can also
 #'  specify `lag` in the same way as `by` argument in \code{\link[base]{seq.POSIXt}}.
-#'  More in details.
+#'  See 'Specifying time-intervals' in details section.
 #'
 #' @param idx (`integer`, `Date`, `POSIXt`)\cr
 #'  Optional integer vector containing sorted (ascending) index of observation.
@@ -33,7 +34,7 @@
 #'  Vector of any size and any value defining output data points. Values of the
 #'  vector defines the indexes which data is computed at. Can be also `POSIXt`
 #'  sequence increment used in `at` argument in \code{\link[base]{seq.POSIXt}}.
-#'  More in details.
+#'  See 'Specifying time-intervals' in details section.
 #'
 #' @param na_pad (`logical` single value)\cr
 #'  Whether incomplete window should return `NA` (if `na_pad = TRUE`)
@@ -44,9 +45,9 @@
 #'  `runner` by default guess type automatically. In case of failure of `"auto"`
 #'  please specify desired type.
 #'
-#' @param cl (`logical` single value)\cr
+#' @param cl (`cluster`) *experimental*\cr
 #'  Create and pass the cluster to the `runner` function to run each window
-#'  calculation in parallel.
+#'  calculation in parallel. See \code{\link[parallel]{makeCluster}} in details.
 #'
 #'
 #' @param ... (optional)\cr
@@ -92,7 +93,7 @@
 #'  }
 #'  \cr
 #' }
-#' # Specifying time-intervals
+#' ## Specifying time-intervals
 #'  `at` can also be specified as interval of the output defined by `at = "<increment>"`
 #'  which results in indices sequence defined by
 #'  `seq.POSIXt(min(idx), max(idx), by = "<increment>")`. Increment of sequence
@@ -107,13 +108,20 @@
 #'  To increment by number of units one can also specify `<number> <unit>s`
 #'  for example `lag = "-2 days"`, `k = "5 weeks"`.
 #'
-#'  Setting `k` and `lag` as a sequence increment can be also a vector can be a vector which allows to
-#'  stretch and lag/lead each window freely on in time (on indices).
+#'  Setting `k` and `lag` as a sequence increment can be also a vector can be a
+#'  vector which allows to stretch and lag/lead each window freely on in time
+#'  (on indices).
 #' \cr
-#' # Parallel computing
+#' ## Parallel computing
 #'  Beware that executing R call in parallel not always
 #'  have the edge over single-thread even if the
 #'  `cl <- registerCluster(detectCores())` was specified before.
+#'  \cr
+#'  Parallel windows are executed in the independent environment, which means that
+#'  objects other than function arguments needs to be copied to the parallel
+#'  environment using \code{\link[parallel]{clusterExport}}`. For example using
+#'  `f = function(x) x + y + z` will result in error as
+#'  `clusterExport(cl, varlist = c("y", "z"))` needs to be called before.
 #'
 #' @return vector with aggregated values for each window. Length of output is the
 #'  same as `length(x)` or `length(at)` if specified. Type of the output
@@ -122,6 +130,7 @@
 #' @md
 #' @rdname runner
 #' @importFrom methods is
+#' @importFrom parallel clusterExport parSapply
 #' @export
 runner <- function (
   x,
@@ -264,11 +273,11 @@ runner.default <- function(
     }
 
   } else {
-    res <- sapply(w, function(ww)
-      if (is.null(ww)) {
+    res <- sapply(w, function(.thisWindow)
+      if (is.null(.thisWindow)) {
         NA
       } else {
-        f(ww, ...)
+        f(.thisWindow, ...)
       }
     )
   }
@@ -293,6 +302,27 @@ runner.default <- function(
 #'     cor(x$a, x$b)
 #'   }
 #' )
+#'
+#' # parallel computing
+#' data <- data.frame(
+#'   a = runif(size),
+#'   b = runif(size),
+#'   idx = cumsum(sample(rpois(size, 5)))
+#' )
+#' const <- 0
+#' cl <- makeCluster(detectCores())
+#' clusterExport(cl, "const", envir = environment())
+#'
+#' runner(
+#'   x = data,
+#'   k = k,
+#'   f = function(x) {
+#'     cor(x$a, x$b) + const
+#'   },
+#'   idx = "idx",
+#'   cl = cl
+#' )
+#'
 #' @export
 runner.data.frame <- function(
   x,
@@ -303,7 +333,7 @@ runner.data.frame <- function(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
-  parallel = FALSE,
+  cl = NULL,
   ...
 ) {
   # set arguments from attrs (set by run_by)
@@ -340,13 +370,31 @@ runner.data.frame <- function(
     na_pad = na_pad
   )
 
-  res <- sapply(w, function(ww) {
-    if (length(ww) == 0) {
-      NA
-    } else {
-      f(x[ww, ], ...)
-    }
-  })
+  if (!is.null(cl) && is(cl, "cluster")) {
+    clusterExport(cl, varlist = c("x", "f"), envir = environment())
+    res <- parSapply(
+      cl = cl,
+      X = w,
+      FUN = function(.thisWindowIdx) {
+        if (length(.thisWindowIdx) == 0) {
+          NA
+        } else {
+          f(x[.thisWindowIdx,], ...)
+        }
+      }
+    )
+
+  } else {
+    res <- sapply(w, function(.thisWindowIdx) {
+      if (length(.thisWindowIdx) == 0) {
+        NA
+      } else {
+        f(x[.thisWindowIdx, ], ...)
+      }
+
+    })
+  }
+
 
   return(res)
 
@@ -363,7 +411,7 @@ runner.grouped_df <- function(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
-  parallel = FALSE,
+  cl = NULL,
   ...
 ) {
   runner.data.frame(
@@ -374,7 +422,7 @@ runner.grouped_df <- function(
     at = at,
     na_pad = na_pad,
     type = type,
-    parallel = parallel,
+    cl = cl,
     ...
   )
 }
@@ -402,7 +450,7 @@ runner.matrix <- function(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
-  parallel = FALSE,
+  cl = NULL,
   ...
 ) {
   if (any(is.na(k))) {
@@ -432,13 +480,30 @@ runner.matrix <- function(
     na_pad = na_pad
   )
 
-  res <- sapply(w, function(ww) {
-    if (length(ww) == 0) {
-      NA
-    } else {
-      f(x[ww, ], ...)
-    }
-  })
+  if (!is.null(cl) && is(cl, "cluster"))  {
+    clusterExport(cl, varlist = c("x", "f"))
+    res <- parSapply(
+      cl = cl,
+      X = w,
+      FUN = function(.thisWindowIdx) {
+        if (length(.thisWindowIdx) == 0) {
+          NA
+        } else {
+          f(x[.thisWindowIdx, ], ...)
+        }
+      },
+      ...
+    )
+  } else {
+    res <- sapply(w, function(.thisWindowIdx) {
+      if (length(.thisWindowIdx) == 0) {
+        NA
+      } else {
+        f(x[.thisWindowIdx, ], ...)
+      }
+    })
+  }
+
 
   return(res)
 }

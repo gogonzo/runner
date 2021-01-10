@@ -1015,6 +1015,56 @@ test_that("runner with matrix", {
   expect_identical(res, expected)
 })
 
+# parallel -----
+test_that("Parallel", {
+  data <- data.frame(
+    a = runif(100),
+    b = runif(100),
+    idx = cumsum(sample(rpois(100, 5)))
+  )
+  cl <- parallel::makeCluster(1, type = "FORK")
+
+
+  # vector
+  expect_identical(
+    runner::runner(
+      x = data$a,
+      k = 10,
+      f = sum,
+      idx = data$idx
+    ),
+    runner::runner(
+      x = data$a,
+      k = 10,
+      f = sum,
+      idx = data$idx,
+      cl = cl
+    )
+  )
+  parallel::stopCluster(cl)
+
+  # data.frame
+  cl <- parallel::makeCluster(1, type = "FORK")
+  expect_identical(
+    runner(
+      x = data,
+      k = k,
+      f = sum,
+      idx = "idx",
+      cl = cl
+    ),
+    runner(
+      x = data,
+      k = k,
+      f = sum,
+      idx = "idx"
+    )
+  )
+  parallel::stopCluster(cl)
+
+
+})
+
 # test errors  -----
 test_that("Errors", {
   expect_error(runner(x = letters[1:5], f = ""))
