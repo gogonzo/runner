@@ -3,6 +3,11 @@
 language: R
 sudo: false
 
+addons:
+  apt:
+    packages:
+      - libgit2-dev
+
 cache: packages
 
 r_packages:
