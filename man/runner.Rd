@@ -3,6 +3,7 @@
 \name{runner}
 \alias{runner}
 \alias{runner.default}
+\alias{runner.data.frame}
 \alias{runner.grouped_df}
 \alias{runner.matrix}
 \title{Apply running function}
@@ -16,6 +17,7 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  parallel = FALSE,
   ...
 )
 
@@ -28,6 +30,20 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  cl = NULL,
+  ...
+)
+
+\method{runner}{data.frame}(
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  type = "auto",
+  parallel = FALSE,
   ...
 )
 
@@ -40,6 +56,7 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  parallel = FALSE,
   ...
 )
 
@@ -52,6 +69,7 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  parallel = FALSE,
   ...
 )
 }
@@ -101,6 +119,10 @@ please specify desired type.}
 
 \item{...}{(optional)\cr
 other arguments passed to the function \code{f}.}
+
+\item{cl}{(\code{logical} single value)\cr
+Create and pass the cluster to the \code{runner} function to run each window
+calculation in parallel.}
 }
 \value{
 vector with aggregated values for each window. Length of output is the
@@ -147,7 +169,11 @@ which gives windows in ranges enclosed in square brackets. Range for
 \code{at = 27} is \verb{[22, 26]} which is not available in current indices. \cr
 \if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}}
 \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
+}
 \cr
+}
+}
+\section{Specifying time-intervals}{
 \code{at} can also be specified as interval of the output defined by \code{at = "<increment>"}
 which results in indices sequence defined by
 \code{seq.POSIXt(min(idx), max(idx), by = "<increment>")}. Increment of sequence
@@ -164,9 +190,15 @@ for example \code{lag = "-2 days"}, \code{k = "5 weeks"}.
 
 Setting \code{k} and \code{lag} as a sequence increment can be also a vector can be a vector which allows to
 stretch and lag/lead each window freely on in time (on indices).
+\cr
 }
+
+\section{Parallel computing}{
+Beware that executing R call in parallel not always
+have the edge over single-thread even if the
+\code{cl <- registerCluster(detectCores())} was specified before.
 }
-}
+
 \examples{
 
 # runner returns windows as is by default
@@ -230,6 +262,21 @@ runner::runner(
   idx = idx,
   at = c(18, 27, 48, 31),
   f = mean
+)
+
+# runner with data.frame
+df <- data.frame(
+  a = 1:13,
+  b = 1:13 + rnorm(13, sd = 5),
+  idx = seq(Sys.Date(), Sys.Date() + 365, by = "1 month")
+)
+runner(
+  x = df,
+  idx = "idx",
+  at = "6 months",
+  f = function(x) {
+    cor(x$a, x$b)
+  }
 )
 
 # runner with matrix

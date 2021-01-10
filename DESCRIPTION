@@ -18,6 +18,7 @@ BugReports: https://github.com/gogonzo/runner/issues
 LinkingTo: Rcpp
 Imports: 
   methods,
+  parallel,
   Rcpp 
 Suggests:
   dplyr,

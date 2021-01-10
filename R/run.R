@@ -44,6 +44,11 @@
 #'  `runner` by default guess type automatically. In case of failure of `"auto"`
 #'  please specify desired type.
 #'
+#' @param cl (`logical` single value)\cr
+#'  Create and pass the cluster to the `runner` function to run each window
+#'  calculation in parallel.
+#'
+#'
 #' @param ... (optional)\cr
 #'   other arguments passed to the function `f`.
 #'
@@ -84,25 +89,31 @@
 #'    `at = 27` is `[22, 26]` which is not available in current indices. \cr
 #'    \if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}}
 #'    \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
-#'    \cr
-#'    `at` can also be specified as interval of the output defined by `at = "<increment>"`
-#'    which results in indices sequence defined by
-#'    `seq.POSIXt(min(idx), max(idx), by = "<increment>")`. Increment of sequence
-#'    is the same as in \code{\link[base]{seq.POSIXt}} function.
-#'    It's worth noting that increment interval can't be more frequent than
-#'    interval of `idx` - for `Date` the most frequent time-unit is a `"day"`,
-#'    for `POSIXt` a `sec`.
-#'
-#'    `k` and `lag` can also be specified as using time sequence increment.
-#'    Available time units are
-#'    `"sec", "min", "hour", "day", "DSTday", "week", "month", "quarter" or "year"`.
-#'    To increment by number of units one can also specify `<number> <unit>s`
-#'    for example `lag = "-2 days"`, `k = "5 weeks"`.
-#'
-#'    Setting `k` and `lag` as a sequence increment can be also a vector can be a vector which allows to
-#'    stretch and lag/lead each window freely on in time (on indices).
 #'  }
+#'  \cr
 #' }
+#' # Specifying time-intervals
+#'  `at` can also be specified as interval of the output defined by `at = "<increment>"`
+#'  which results in indices sequence defined by
+#'  `seq.POSIXt(min(idx), max(idx), by = "<increment>")`. Increment of sequence
+#'  is the same as in \code{\link[base]{seq.POSIXt}} function.
+#'  It's worth noting that increment interval can't be more frequent than
+#'  interval of `idx` - for `Date` the most frequent time-unit is a `"day"`,
+#'  for `POSIXt` a `sec`.
+#'
+#'  `k` and `lag` can also be specified as using time sequence increment.
+#'  Available time units are
+#'  `"sec", "min", "hour", "day", "DSTday", "week", "month", "quarter" or "year"`.
+#'  To increment by number of units one can also specify `<number> <unit>s`
+#'  for example `lag = "-2 days"`, `k = "5 weeks"`.
+#'
+#'  Setting `k` and `lag` as a sequence increment can be also a vector can be a vector which allows to
+#'  stretch and lag/lead each window freely on in time (on indices).
+#' \cr
+#' # Parallel computing
+#'  Beware that executing R call in parallel not always
+#'  have the edge over single-thread even if the
+#'  `cl <- registerCluster(detectCores())` was specified before.
 #'
 #' @return vector with aggregated values for each window. Length of output is the
 #'  same as `length(x)` or `length(at)` if specified. Type of the output
@@ -121,6 +132,7 @@ runner <- function (
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  parallel = FALSE,
   ...
   ) {
   UseMethod("runner", x)
@@ -201,6 +213,7 @@ runner.default <- function(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  cl = NULL,
   ...
 ) {
   if (any(is.na(k))) {
@@ -230,7 +243,15 @@ runner.default <- function(
     na_pad = na_pad
   )
 
-  if (type != "auto") {
+  if (!is.null(cl)) {
+    res <- parSapply(
+      cl = cl,
+      X = w,
+      FUN = f,
+      ...
+    )
+
+  } else if (type != "auto") {
     n <- length(w)
     res <- vector(mode = type, length = n)
     for (i in seq_len(n)) {
@@ -256,6 +277,7 @@ runner.default <- function(
 }
 
 #' @rdname runner
+#' @examples
 #'
 #' # runner with data.frame
 #' df <- data.frame(
@@ -281,6 +303,7 @@ runner.data.frame <- function(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  parallel = FALSE,
   ...
 ) {
   # set arguments from attrs (set by run_by)
@@ -340,6 +363,7 @@ runner.grouped_df <- function(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  parallel = FALSE,
   ...
 ) {
   runner.data.frame(
@@ -350,6 +374,7 @@ runner.grouped_df <- function(
     at = at,
     na_pad = na_pad,
     type = type,
+    parallel = parallel,
     ...
   )
 }
@@ -377,6 +402,7 @@ runner.matrix <- function(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  parallel = FALSE,
   ...
 ) {
   if (any(is.na(k))) {
