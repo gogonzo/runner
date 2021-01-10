@@ -288,6 +288,7 @@ runner.data.frame <- function(
     stop("f should be a function")
   }
 
+  # use POSIXt.seq
   at  <- seq_at(at, idx)
   k   <- k_by(k, if (length(at) > 0) at else idx, "k")
   lag <- k_by(lag, if (length(at) > 0) at else idx, "lag")
@@ -364,6 +365,7 @@ runner.matrix <- function(
     stop("f should be a function")
   }
 
+  # use POSIXt.seq
   at  <- seq_at(at, idx)
   k   <- k_by(k,   if (length(at) > 0) at else idx, "k")
   lag <- k_by(lag, if (length(at) > 0) at else idx, "lag")
