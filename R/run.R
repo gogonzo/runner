@@ -121,7 +121,7 @@
 #'  objects other than function arguments needs to be copied to the parallel
 #'  environment using \code{\link[parallel]{clusterExport}}`. For example using
 #'  `f = function(x) x + y + z` will result in error as
-#'  `clusterExport(cl, varlist = c("y", "z"))` needs to be called before.
+#'  \code{clusterExport(cl, varlist = c("y", "z"))} needs to be called before.
 #'
 #' @return vector with aggregated values for each window. Length of output is the
 #'  same as `length(x)` or `length(at)` if specified. Type of the output
@@ -304,25 +304,26 @@ runner.default <- function(
 #' )
 #'
 #' # parallel computing
+#' library(parallel)
 #' data <- data.frame(
 #'   a = runif(100),
 #'   b = runif(100),
 #'   idx = cumsum(sample(rpois(100, 5)))
 #' )
 #' const <- 0
-#' cl <- parallel::makeCluster(detectCores())
-#' parallel::clusterExport(cl, "const", envir = environment())
+#' cl <- makeCluster(1)
+#' clusterExport(cl, "const", envir = environment())
 #'
 #' runner(
 #'   x = data,
-#'   k = k,
+#'   k = 10,
 #'   f = function(x) {
 #'     cor(x$a, x$b) + const
 #'   },
 #'   idx = "idx",
 #'   cl = cl
 #' )
-#' parallel::stopCluster(cl)
+#' stopCluster(cl)
 #' @export
 runner.data.frame <- function(
   x,
@@ -612,7 +613,7 @@ k_by <- function(k, idx, param) {
 #'
 #' Formats time-unit-interval to valid for runner. User specifies \code{k} as
 #' positive number but this means that this interval needs to be substracted
-#' from idx - because windows length extends window backwards in time.
+#' from \code{idx} - because windows length extends window backwards in time.
 #' The same situation for lag.
 #' @param k (k or lag) object from runner to be formatted
 #' @param only_positive for \code{k} is \code{TRUE}, for \code{lag} is \code{FALSE}

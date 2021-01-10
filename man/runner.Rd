@@ -203,7 +203,8 @@ have the edge over single-thread even if the
 \cr
 Parallel windows are executed in the independent environment, which means that
 objects other than function arguments needs to be copied to the parallel
-environment using \code{\link[parallel]{clusterExport}}\verb{. For example using }f = function(x) x + y + z\verb{will result in error as}clusterExport(cl, varlist = c("y", "z"))` needs to be called before.
+environment using \code{\link[parallel]{clusterExport}}\verb{. For example using }f = function(x) x + y + z` will result in error as
+\code{clusterExport(cl, varlist = c("y", "z"))} needs to be called before.
 }
 }
 \examples{
@@ -287,25 +288,26 @@ runner(
 )
 
 # parallel computing
+library(parallel)
 data <- data.frame(
   a = runif(100),
   b = runif(100),
   idx = cumsum(sample(rpois(100, 5)))
 )
 const <- 0
-cl <- parallel::makeCluster(detectCores())
-parallel::clusterExport(cl, "const", envir = environment())
+cl <- makeCluster(1)
+clusterExport(cl, "const", envir = environment())
 
 runner(
   x = data,
-  k = k,
+  k = 10,
   f = function(x) {
     cor(x$a, x$b) + const
   },
   idx = "idx",
   cl = cl
 )
-parallel::stopCluster(cl)
+stopCluster(cl)
 
 # runner with matrix
 data <- matrix(data = runif(100, 0, 1), nrow = 20, ncol = 5)
