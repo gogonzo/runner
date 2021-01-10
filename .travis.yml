@@ -3,12 +3,9 @@
 language: R
 sudo: false
 
-addons:
-  apt:
-    packages:
-      - libgit2-dev
-      - libharfbuzz-dev
-      - libfribidi-dev
+before_deploy:
+  - sudo apt update
+  - sudo apt install libgit2-dev libharfbuzz-dev libfribidi-dev
 
 cache: packages
 
