@@ -5,6 +5,7 @@
 \alias{runner.default}
 \alias{runner.grouped_df}
 \alias{runner.matrix}
+\alias{runner.xts}
 \title{Apply running function}
 \usage{
 runner(
@@ -52,6 +53,19 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  ...
+)
+
+\method{runner}{xts}(
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  type = "auto",
+  cl = NULL,
   ...
 )
 }

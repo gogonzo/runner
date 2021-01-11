@@ -417,6 +417,44 @@ runner.matrix <- function(
   return(res)
 }
 
+#' @rdname runner
+#' @export
+runner.xts <- function(
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  type = "auto",
+  ...
+) {
+  if (!identical(idx, integer(0))) {
+    warning(
+      "'idx' argument has been specified and will mask index
+      of the 'xts' object."
+    )
+  } else {
+    idx <- structure(
+      .Data = as.vector(attr(x, "index")),
+      class = attr(attr(x, "index"), "tclass"),
+      tz = attr(attr(x, "index"), "tzone")
+    )
+  }
+
+  runner.matrix(
+    x = x,
+    f = f,
+    lag = lag,
+    idx = idx,
+    at = at,
+    na_pad = na_pad,
+    type = type,
+    ...
+  )
+}
+
 # utilities -----
 get_runner_call_arg_names <- function() {
   runner_call_idx <- which(
