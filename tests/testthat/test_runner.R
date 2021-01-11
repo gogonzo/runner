@@ -1015,6 +1015,7 @@ test_that("runner with matrix", {
   expect_identical(res, expected)
 })
 
+# runner with xts -----
 test_that("runner with xts", {
   xts_object <- structure(
     .Data = matrix(
