@@ -1,3 +1,8 @@
+# runner 0.3.8
+* implement parallel windows computation.
+* add runner for `xts` objects.
+* fix runner for matrix.
+
 # runner 0.3.7
 * add `run_by` function to prespecify arguments for multiple runner calls
 * `runner` supports `grouped_df`
