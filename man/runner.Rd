@@ -18,6 +18,7 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  simplify = TRUE,
   cl = NULL,
   ...
 )
@@ -131,6 +132,15 @@ Incomplete window is when some parts of the window are out of range.}
 output type (\code{"auto"}, \code{"logical"}, \code{"numeric"}, \code{"integer"}, \code{"character"}).
 \code{runner} by default guess type automatically. In case of failure of \code{"auto"}
 please specify desired type.}
+
+\item{simplify}{logical or character string; should the result be
+    simplified to a vector, matrix or higher dimensional array if
+    possible?  For \code{sapply} it must be named and not abbreviated.
+    The default value, \code{TRUE}, returns a vector or matrix if appropriate,
+    whereas if \code{simplify = "array"} the result may be an
+    \code{\link[base]{array}} of \dQuote{rank}
+    (\eqn{=}\code{length(dim(.))}) one higher than the result
+    of \code{FUN(X[[i]])}.}
 
 \item{cl}{(\code{cluster}) \emph{experimental}\cr
 Create and pass the cluster to the \code{runner} function to run each window
