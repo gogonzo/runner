@@ -141,7 +141,7 @@ please specify desired type.}
     \code{\link[base]{array}} of \dQuote{rank}
     (\eqn{=}\code{length(dim(.))}) one higher than the result
     of \code{FUN(X[[i]])}.}
-
+  
 \item{cl}{(\code{cluster}) \emph{experimental}\cr
 Create and pass the cluster to the \code{runner} function to run each window
 calculation in parallel. See \code{\link[parallel]{makeCluster}} in details.}

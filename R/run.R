@@ -528,7 +528,6 @@ runner.matrix <- function(
       }
     })
   }
-
   if (!isFALSE(simplify) && length(answer)) {
     simplify2array(answer, higher = (simplify == "array"))
   } else {
