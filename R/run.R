@@ -410,7 +410,7 @@ runner.matrix <- function(
     if (length(ww) == 0) {
       NA
     } else {
-      f(x[ww, ], ...)
+      f(x[ww, , drop = FALSE], ...)
     }
   })
 
