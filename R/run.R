@@ -495,7 +495,9 @@ runner.matrix <- function(
       ...
     )
   } else {
-    res <- sapply(w, function(.thisWindowIdx) {
+    res <- sapply(
+      X = w,
+      FUN = function(.thisWindowIdx) {
       if (length(.thisWindowIdx) == 0) {
         NA
       } else {

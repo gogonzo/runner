@@ -1007,10 +1007,10 @@ test_that("runner with matrix", {
     X = 1:20,
     FUN = function(i) {
       tryCatch(
-        cor(data[1:i, ]),
+        cor(data[1:i, , drop = FALSE]),
         error = function(e) NA
       )
-    })
+    }, simplify = TRUE)
 
   expect_identical(res, expected)
 })

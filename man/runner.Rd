@@ -83,6 +83,7 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  cl = NULL,
   ...
 )
 }
