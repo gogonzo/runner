@@ -3,6 +3,7 @@
 \name{runner}
 \alias{runner}
 \alias{runner.default}
+\alias{runner.data.frame}
 \alias{runner.grouped_df}
 \alias{runner.matrix}
 \alias{runner.xts}
@@ -17,6 +18,7 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  cl = NULL,
   ...
 )
 
@@ -29,6 +31,20 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  cl = NULL,
+  ...
+)
+
+\method{runner}{data.frame}(
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  type = "auto",
+  cl = NULL,
   ...
 )
 
@@ -41,6 +57,7 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  cl = NULL,
   ...
 )
 
@@ -53,6 +70,7 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  cl = NULL,
   ...
 )
 
@@ -65,6 +83,7 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  cl = NULL,
   ...
 )
 }
@@ -82,14 +101,15 @@ By default runner returns windows as is (\verb{f = function(x)}).}
 Denoting size of the running window. If \code{k} is a single value then window
 size is constant for all elements, otherwise if \code{length(k) == length(x)}
 different window size for each element. One can also specify \code{k} in the same
-way as \code{by} argument in \code{\link[base]{seq.POSIXt}}. More in details.}
+way as \code{by} argument in \code{\link[base]{seq.POSIXt}}.
+See 'Specifying time-intervals' in details section.}
 
 \item{lag}{(\code{integer} vector or single value)\cr
 Denoting window lag. If \code{lag} is a single value then window lag is constant
 for all elements, otherwise if \code{length(lag) == length(x)} different window
 size for each element. Negative value shifts window forward. One can also
 specify \code{lag} in the same way as \code{by} argument in \code{\link[base]{seq.POSIXt}}.
-More in details.}
+See 'Specifying time-intervals' in details section.}
 
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr
 Optional integer vector containing sorted (ascending) index of observation.
@@ -101,7 +121,7 @@ are depending on \code{idx}. Length of \code{idx} have to be equal of length \co
 Vector of any size and any value defining output data points. Values of the
 vector defines the indexes which data is computed at. Can be also \code{POSIXt}
 sequence increment used in \code{at} argument in \code{\link[base]{seq.POSIXt}}.
-More in details.}
+See 'Specifying time-intervals' in details section.}
 
 \item{na_pad}{(\code{logical} single value)\cr
 Whether incomplete window should return \code{NA} (if \code{na_pad = TRUE})
@@ -111,6 +131,10 @@ Incomplete window is when some parts of the window are out of range.}
 output type (\code{"auto"}, \code{"logical"}, \code{"numeric"}, \code{"integer"}, \code{"character"}).
 \code{runner} by default guess type automatically. In case of failure of \code{"auto"}
 please specify desired type.}
+
+\item{cl}{(\code{cluster}) \emph{experimental}\cr
+Create and pass the cluster to the \code{runner} function to run each window
+calculation in parallel. See \code{\link[parallel]{makeCluster}} in details.}
 
 \item{...}{(optional)\cr
 other arguments passed to the function \code{f}.}
@@ -160,7 +184,10 @@ which gives windows in ranges enclosed in square brackets. Range for
 \code{at = 27} is \verb{[22, 26]} which is not available in current indices. \cr
 \if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}}
 \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
-\cr
+}
+}
+\subsection{Specifying time-intervals}{
+
 \code{at} can also be specified as interval of the output defined by \code{at = "<increment>"}
 which results in indices sequence defined by
 \code{seq.POSIXt(min(idx), max(idx), by = "<increment>")}. Increment of sequence
@@ -175,9 +202,22 @@ Available time units are
 To increment by number of units one can also specify \verb{<number> <unit>s}
 for example \code{lag = "-2 days"}, \code{k = "5 weeks"}.
 
-Setting \code{k} and \code{lag} as a sequence increment can be also a vector can be a vector which allows to
-stretch and lag/lead each window freely on in time (on indices).
+Setting \code{k} and \code{lag} as a sequence increment can be also a vector can be a
+vector which allows to stretch and lag/lead each window freely on in time
+(on indices).
+\cr
 }
+
+\subsection{Parallel computing}{
+
+Beware that executing R call in parallel not always
+have the edge over single-thread even if the
+\code{cl <- registerCluster(detectCores())} was specified before.
+\cr
+Parallel windows are executed in the independent environment, which means that
+objects other than function arguments needs to be copied to the parallel
+environment using \code{\link[parallel]{clusterExport}}\verb{. For example using }f = function(x) x + y + z` will result in error as
+\code{clusterExport(cl, varlist = c("y", "z"))} needs to be called before.
 }
 }
 \examples{
@@ -244,6 +284,43 @@ runner::runner(
   at = c(18, 27, 48, 31),
   f = mean
 )
+
+# runner with data.frame
+df <- data.frame(
+  a = 1:13,
+  b = 1:13 + rnorm(13, sd = 5),
+  idx = seq(Sys.Date(), Sys.Date() + 365, by = "1 month")
+)
+runner(
+  x = df,
+  idx = "idx",
+  at = "6 months",
+  f = function(x) {
+    cor(x$a, x$b)
+  }
+)
+
+# parallel computing
+library(parallel)
+data <- data.frame(
+  a = runif(100),
+  b = runif(100),
+  idx = cumsum(sample(rpois(100, 5)))
+)
+const <- 0
+cl <- makeCluster(1)
+clusterExport(cl, "const", envir = environment())
+
+runner(
+  x = data,
+  k = 10,
+  f = function(x) {
+    cor(x$a, x$b) + const
+  },
+  idx = "idx",
+  cl = cl
+)
+stopCluster(cl)
 
 # runner with matrix
 data <- matrix(data = runif(100, 0, 1), nrow = 20, ncol = 5)

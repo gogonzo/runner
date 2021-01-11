@@ -14,7 +14,7 @@ reformat_k(k, only_positive = TRUE)
 \description{
 Formats time-unit-interval to valid for runner. User specifies \code{k} as
 positive number but this means that this interval needs to be substracted
-from idx - because windows length extends window backwards in time.
+from \code{idx} - because windows length extends window backwards in time.
 The same situation for lag.
 }
 \examples{
