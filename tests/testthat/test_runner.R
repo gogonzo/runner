@@ -1015,6 +1015,46 @@ test_that("runner with matrix", {
   expect_identical(res, expected)
 })
 
+test_that("runner with xts", {
+  xts_object <- structure(
+    .Data = matrix(
+      data = runif(100, 0, 1),
+      nrow = 20,
+      ncol = 5,
+      dimnames = list(NULL, c("open", "close", "high", "low", "volume"))
+    ),
+    index = structure(
+      .Data = as.vector(seq.POSIXt(Sys.time(), by = "1 month", length.out = 20)),
+      tclass = c("POSIXct", "POSIXt"),
+      tzone = ""
+    ),
+    class = c("xts", "zoo")
+  )
+
+  res <- runner(
+    x = xts_object,
+    f = function(x) {
+      tryCatch(
+        x,
+        error = function(e) NA
+      )
+    })
+
+  expected <- sapply(
+    X = 1:20,
+    FUN = function(i) {
+      tryCatch(
+        xts_object[1:i, , drop = FALSE],
+        error = function(e) NA
+      )
+    },
+    simplify = TRUE
+  )
+
+  expect_identical(res, expected)
+})
+
+
 # parallel -----
 test_that("Parallel", {
   data <- data.frame(

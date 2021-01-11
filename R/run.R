@@ -540,6 +540,7 @@ runner.xts <- function(
   runner.matrix(
     x = x,
     f = f,
+    k = k,
     lag = lag,
     idx = idx,
     at = at,
