@@ -930,7 +930,7 @@ test_that("runner with df", {
   index <- 101:200
 
   expect_equal(
-    runner(elo, k = 10, lag = 1, f = function(x) x),
+    runner(elo, k = 10, lag = 1, f = function(x) x[1, 1], simplify = TRUE),
     runner(
       1:nrow(elo),
       k = 10,
@@ -938,10 +938,27 @@ test_that("runner with df", {
       f = function(idx) if (length(idx) == 0 || all(is.na(idx))) {
         NA
       } else {
-        elo[idx,]
-      }
+        elo[idx, 1][1]
+      },
+      simplify = TRUE
     )
   )
+
+  expect_equal(
+    runner(elo, k = 10, lag = 1, f = function(x) x[1, 1], simplify = FALSE),
+    runner(
+      1:nrow(elo),
+      k = 10,
+      lag = 1,
+      f = function(idx) if (length(idx) == 0 || all(is.na(idx))) {
+        NA
+      } else {
+        elo[idx, 1][1]
+      },
+      simplify = FALSE
+    )
+  )
+
 
   expect_equal(
     runner(elo, k = 10, lag = 1, f = function(x) x)[[50]],
@@ -1144,20 +1161,38 @@ test_that("Parallel", {
   expect_identical(
     runner(
       x = data,
-      k = k,
+      k = 10,
       f = sum,
       idx = "idx",
       cl = cl
     ),
     runner(
       x = data,
-      k = k,
+      k = 10,
       f = sum,
       idx = "idx"
     )
   )
   parallel::stopCluster(cl)
 
+  # matrix
+  cl <- parallel::makeCluster(1)
+  expect_identical(
+    runner(
+      x = matrix(1:100, nrow = 20, ncol = 5),
+      f = sum,
+      k = 10,
+      idx = 1:20,
+      cl = cl
+    ),
+    runner(
+      x = matrix(1:100, nrow = 20, ncol = 5),
+      f = sum,
+      k = 10,
+      idx = 1:20
+    )
+  )
+  parallel::stopCluster(cl)
 
 })
 
@@ -1203,4 +1238,32 @@ test_that("Errors", {
     runner(1:10, lag = rep(5, 10),idx = 1:10, at = c(4, 5), f = mean),
     "length\\(lag\\) should be 1 or equal to"
   )
+})
+test_that("Test deprecate", {
+  expect_warning(
+    runner(
+      1:10,
+      f = function(x) x,
+      type = "numeric",
+      cl = ""
+    )
+  )
+
+  expect_warning(
+    runner(
+      1:10,
+      f = function(x) x,
+      type = "numeric"
+    )
+  )
+
+  expect_warning(
+    runner(
+      1:10,
+      f = function(x) x,
+      simplify = TRUE,
+      type = "numeric"
+    )
+  )
+
 })

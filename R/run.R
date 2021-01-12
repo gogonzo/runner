@@ -519,7 +519,7 @@ runner.matrix <- function(
   )
 
   answer <- if (!is.null(cl) && is(cl, "cluster"))  {
-    clusterExport(cl, varlist = c("x", "f"))
+    clusterExport(cl, varlist = c("x", "f"), envir = environment())
     parLapply(
       cl = cl,
       X = w,
