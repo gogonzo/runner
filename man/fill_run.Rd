@@ -7,7 +7,7 @@
 fill_run(x, run_for_first = FALSE, only_within = FALSE)
 }
 \arguments{
-\item{x}{(\code{vector}, \code{data.frame}, \code{matrix})\cr
+\item{x}{(\code{vector}, \code{data.frame}, \code{matrix}, \code{xts})\cr
 Input in runner custom function \code{f}.}
 
 \item{run_for_first}{If first elements are filled with \code{NA}, \code{run_for_first = TRUE}

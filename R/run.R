@@ -1,7 +1,7 @@
 #' Apply running function
 #'
 #' Applies custom function on running windows.
-#' @param x (`vector`, `data.frame`, `matrix`)\cr
+#' @param x (`vector`, `data.frame`, `matrix`, `xts`)\cr
 #'  Input in runner custom function `f`.
 #'
 #' @param k (`integer` vector or single value)\cr
@@ -44,6 +44,13 @@
 #'  output type (`"auto"`, `"logical"`, `"numeric"`, `"integer"`, `"character"`).
 #'  `runner` by default guess type automatically. In case of failure of `"auto"`
 #'  please specify desired type.
+#'
+#' @param simplify (`logical` or `character` value)\cr
+#'  should the result be simplified to a vector, matrix or higher dimensional
+#'  array if possible. The default value, `simplify = TRUE`, returns a vector or
+#'  matrix if appropriate, whereas if `simplify = "array"` the result may be an
+#'  array of “rank” `(=length(dim(.)))` one higher than the result of output
+#'  from the function `f` for each window.
 #'
 #' @param cl (`cluster`) *experimental*\cr
 #'  Create and pass the cluster to the `runner` function to run each window
@@ -129,7 +136,7 @@
 #' @md
 #' @rdname runner
 #' @importFrom methods is
-#' @importFrom parallel clusterExport parSapply
+#' @importFrom parallel clusterExport parLapply
 #' @export
 runner <- function (
   x,
@@ -140,9 +147,30 @@ runner <- function (
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  simplify = TRUE,
   cl = NULL,
   ...
   ) {
+  if (!is.null(cl) && type != "auto") {
+    warning(
+      "There is no option to specify the type of the output using type in parallel mode.
+      Please use 'simplify' instead"
+    )
+    type <- "auto"
+  }
+  if (!isFALSE(simplify) && type != "auto") {
+    warning(
+      "When 'simplify != FALSE' 'type' argument is set to 'auto'"
+    )
+    type <- "auto"
+  }
+  if (type != "auto") {
+    warning(
+      "Argument 'type'is deprecated and will be defunct in the next release.
+    Please use 'simplify' argument to manage the output type."
+    )
+  }
+
   UseMethod("runner", x)
 }
 
@@ -221,6 +249,7 @@ runner.default <- function(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  simplify = TRUE,
   cl = NULL,
   ...
 ) {
@@ -251,20 +280,20 @@ runner.default <- function(
     na_pad = na_pad
   )
 
-  if (!is.null(cl)) {
-    res <- parSapply(
+  if (!is.null(cl) && is(cl, "cluster")) {
+    answer <- parLapply(
       cl = cl,
       X = w,
-      FUN = f,
+      fun = f,
       ...
     )
 
   } else if (type != "auto") {
     n <- length(w)
-    res <- vector(mode = type, length = n)
+    answer <- vector(mode = type, length = n)
     for (i in seq_len(n)) {
       ww <- w[[i]]
-      res[i] <- if (length(ww) == 0) {
+      answer[i] <- if (length(ww) == 0) {
         NA
       } else {
         f(ww, ...)
@@ -272,7 +301,7 @@ runner.default <- function(
     }
 
   } else {
-    res <- sapply(w, function(.thisWindow)
+    answer <- lapply(w, function(.thisWindow)
       if (is.null(.thisWindow)) {
         NA
       } else {
@@ -281,7 +310,11 @@ runner.default <- function(
     )
   }
 
-  return(res)
+  if (!isFALSE(simplify) && length(answer) && type == "auto") {
+    simplify2array(answer, higher = (simplify == "array"))
+  } else {
+    answer
+  }
 }
 
 #' @rdname runner
@@ -333,6 +366,7 @@ runner.data.frame <- function(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  simplify = TRUE,
   cl = NULL,
   ...
 ) {
@@ -370,12 +404,12 @@ runner.data.frame <- function(
     na_pad = na_pad
   )
 
-  if (!is.null(cl) && is(cl, "cluster")) {
+  answer <- if (!is.null(cl) && is(cl, "cluster")) {
     clusterExport(cl, varlist = c("x", "f"), envir = environment())
-    res <- parSapply(
+    parLapply(
       cl = cl,
       X = w,
-      FUN = function(.thisWindowIdx) {
+      fun = function(.thisWindowIdx) {
         if (length(.thisWindowIdx) == 0) {
           NA
         } else {
@@ -385,19 +419,20 @@ runner.data.frame <- function(
     )
 
   } else {
-    res <- sapply(w, function(.thisWindowIdx) {
+    lapply(w, function(.thisWindowIdx) {
       if (length(.thisWindowIdx) == 0) {
         NA
       } else {
         f(x[.thisWindowIdx, ], ...)
       }
-
     })
   }
 
-
-  return(res)
-
+  if (!isFALSE(simplify) && length(answer)) {
+    simplify2array(answer, higher = (simplify == "array"))
+  } else {
+    answer
+  }
 }
 
 #' @rdname runner
@@ -411,6 +446,7 @@ runner.grouped_df <- function(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  simplify = TRUE,
   cl = NULL,
   ...
 ) {
@@ -422,6 +458,7 @@ runner.grouped_df <- function(
     at = at,
     na_pad = na_pad,
     type = type,
+    simplify = simplify,
     cl = cl,
     ...
   )
@@ -450,6 +487,7 @@ runner.matrix <- function(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  simplify = TRUE,
   cl = NULL,
   ...
 ) {
@@ -480,12 +518,12 @@ runner.matrix <- function(
     na_pad = na_pad
   )
 
-  if (!is.null(cl) && is(cl, "cluster"))  {
-    clusterExport(cl, varlist = c("x", "f"))
-    res <- parSapply(
+  answer <- if (!is.null(cl) && is(cl, "cluster"))  {
+    clusterExport(cl, varlist = c("x", "f"), envir = environment())
+    parLapply(
       cl = cl,
       X = w,
-      FUN = function(.thisWindowIdx) {
+      fun = function(.thisWindowIdx) {
         if (length(.thisWindowIdx) == 0) {
           NA
         } else {
@@ -495,7 +533,7 @@ runner.matrix <- function(
       ...
     )
   } else {
-    res <- sapply(
+    lapply(
       X = w,
       FUN = function(.thisWindowIdx) {
       if (length(.thisWindowIdx) == 0) {
@@ -505,9 +543,11 @@ runner.matrix <- function(
       }
     })
   }
-
-
-  return(res)
+  if (!isFALSE(simplify) && length(answer)) {
+    simplify2array(answer, higher = (simplify == "array"))
+  } else {
+    answer
+  }
 }
 
 #' @rdname runner
@@ -521,6 +561,7 @@ runner.xts <- function(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  simplify = TRUE,
   cl = NULL,
   ...
 ) {
@@ -546,6 +587,7 @@ runner.xts <- function(
     at = at,
     na_pad = na_pad,
     type = type,
+    simplify = simplify,
     cl,
     ...
   )

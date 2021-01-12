@@ -18,6 +18,7 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  simplify = TRUE,
   cl = NULL,
   ...
 )
@@ -31,6 +32,7 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  simplify = TRUE,
   cl = NULL,
   ...
 )
@@ -44,6 +46,7 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  simplify = TRUE,
   cl = NULL,
   ...
 )
@@ -57,6 +60,7 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  simplify = TRUE,
   cl = NULL,
   ...
 )
@@ -70,6 +74,7 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  simplify = TRUE,
   cl = NULL,
   ...
 )
@@ -83,12 +88,13 @@ runner(
   at = integer(0),
   na_pad = FALSE,
   type = "auto",
+  simplify = TRUE,
   cl = NULL,
   ...
 )
 }
 \arguments{
-\item{x}{(\code{vector}, \code{data.frame}, \code{matrix})\cr
+\item{x}{(\code{vector}, \code{data.frame}, \code{matrix}, \code{xts})\cr
 Input in runner custom function \code{f}.}
 
 \item{f}{(\code{function})\cr
@@ -131,6 +137,13 @@ Incomplete window is when some parts of the window are out of range.}
 output type (\code{"auto"}, \code{"logical"}, \code{"numeric"}, \code{"integer"}, \code{"character"}).
 \code{runner} by default guess type automatically. In case of failure of \code{"auto"}
 please specify desired type.}
+
+\item{simplify}{(\code{logical} or \code{character} value)\cr
+should the result be simplified to a vector, matrix or higher dimensional
+array if possible. The default value, \code{simplify = TRUE}, returns a vector or
+matrix if appropriate, whereas if \code{simplify = "array"} the result may be an
+array of “rank” \verb{(=length(dim(.)))} one higher than the result of output
+from the function \code{f} for each window.}
 
 \item{cl}{(\code{cluster}) \emph{experimental}\cr
 Create and pass the cluster to the \code{runner} function to run each window

@@ -560,9 +560,6 @@ test_that("date - lag + k", {
 
 
 
-
-
-
   out <- window_run(x2, k = 3, lag = 3, idx = idx, at = at_date, na_pad = FALSE)
   test <- lapply(seq_along(x2), function(i) find_idx_date(x2, i = i, k = 3, lag = 3, idx = idx, na_pad = FALSE))
   expect_identical(out, test[ids])

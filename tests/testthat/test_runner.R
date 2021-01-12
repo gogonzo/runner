@@ -459,21 +459,21 @@ test_that("date window", {
 
 # Function applied on other types-----
 test_that("Function applied on other types", {
-    expect_silent(runner(as.integer(1:100), k = 5, f = length))
-    expect_silent(runner(as.integer(1:100), k = k, f = length))
-    expect_silent(runner(as.integer(1:100), k = k, idx, f = length))
+  expect_silent(runner(as.integer(1:100), k = 5, f = length))
+  expect_silent(runner(as.integer(1:100), k = k, f = length))
+  expect_silent(runner(as.integer(1:100), k = k, idx, f = length))
 
-    expect_silent(runner(sample(letters, 100, replace = TRUE), k = 5, f = length))
-    expect_silent(runner(sample(letters, 100, replace = TRUE), k = k, f = length))
-    expect_silent(runner(sample(letters, 100, replace = TRUE), k = k, idx, f = length))
+  expect_silent(runner(sample(letters, 100, replace = TRUE), k = 5, f = length))
+  expect_silent(runner(sample(letters, 100, replace = TRUE), k = k, f = length))
+  expect_silent(runner(sample(letters, 100, replace = TRUE), k = k, idx, f = length))
 
-    expect_silent(runner(as.factor(sample(letters, 100, replace = TRUE)), k = 5, f = length))
-    expect_silent(runner(as.factor(sample(letters, 100, replace = TRUE)), k = k, f = length))
-    expect_silent(runner(as.factor(sample(letters, 100, replace = TRUE)), k = k, idx, f = length))
+  expect_silent(runner(as.factor(sample(letters, 100, replace = TRUE)), k = 5, f = length))
+  expect_silent(runner(as.factor(sample(letters, 100, replace = TRUE)), k = k, f = length))
+  expect_silent(runner(as.factor(sample(letters, 100, replace = TRUE)), k = k, idx, f = length))
 
-    expect_silent(runner(as.Date(1:100, origin = "1970-01-01"), k = 5, f = length))
-    expect_silent(runner(as.Date(1:100, origin = "1970-01-01"), k = k, f = length))
-    expect_silent(runner(as.Date(1:100, origin = "1970-01-01"), k = k, idx, f = length))
+  expect_silent(runner(as.Date(1:100, origin = "1970-01-01"), k = 5, f = length))
+  expect_silent(runner(as.Date(1:100, origin = "1970-01-01"), k = k, f = length))
+  expect_silent(runner(as.Date(1:100, origin = "1970-01-01"), k = k, idx, f = length))
 })
 
 # i/o type -----
@@ -489,70 +489,104 @@ test_that("i/o type", {
   char_function <- function(x) paste(x, collapse = "-")
 
   # <logical>
-  expect_identical(
-    as.logical(c(FALSE, TRUE, TRUE, TRUE)),
-    runner(log_input, f = log_function, type = "logical"))
+  expect_warning(
+    expect_identical(
+      as.logical(c(FALSE, TRUE, TRUE, TRUE)),
+      runner(log_input, f = log_function, type = "logical"))
 
-  expect_identical(
-    as.logical(c(FALSE, FALSE, FALSE, FALSE)),
-    runner(int_input, f = log_function, type = "logical"))
+  )
 
-  expect_identical(
-    as.logical(c(FALSE, FALSE, FALSE, FALSE)),
-    runner(num_input, f = log_function, type = "logical"))
+  expect_warning(
+    expect_identical(
+      as.logical(c(FALSE, FALSE, FALSE, FALSE)),
+      runner(int_input, f = log_function, type = "logical"))
+  )
 
-  expect_identical(
-    as.logical(c(FALSE, FALSE, FALSE, FALSE)),
-    runner(cha_input, f = log_function, type = "logical"))
+  expect_warning(
+    expect_identical(
+      as.logical(c(FALSE, FALSE, FALSE, FALSE)),
+      runner(num_input, f = log_function, type = "logical"))
+  )
+
+  expect_warning(
+    expect_identical(
+      as.logical(c(FALSE, FALSE, FALSE, FALSE)),
+      runner(cha_input, f = log_function, type = "logical"))
+  )
 
   # <integer>
-  expect_identical(
-    as.integer(c(1, 2, 3, 4)),
-    runner(log_input, f = int_function, type = "integer"))
 
-  expect_identical(
-    as.integer(c(1, 2, 3, 4)),
-    runner(int_input, f = int_function, type = "integer"))
+  expect_warning(
+    expect_identical(
+      as.integer(c(1, 2, 3, 4)),
+      runner(log_input, f = int_function, type = "integer"))
+  )
 
-  expect_identical(
-    as.integer(c(1, 2, 3, 4)),
-    runner(num_input, f = int_function, type = "integer"))
+  expect_warning(
+    expect_identical(
+      as.integer(c(1, 2, 3, 4)),
+      runner(int_input, f = int_function, type = "integer"))
+  )
 
-  expect_identical(
-    as.integer(c(1, 2, 3, 4)),
-    runner(cha_input, f = int_function, type = "integer"))
+  expect_warning(
+    expect_identical(
+      as.integer(c(1, 2, 3, 4)),
+      runner(num_input, f = int_function, type = "integer"))
+  )
+
+  expect_warning(
+    expect_identical(
+      as.integer(c(1, 2, 3, 4)),
+      runner(cha_input, f = int_function, type = "integer"))
+  )
 
   # <numeric>
-  expect_identical(
-    as.numeric(c(1, 2, 2, 2)),
-    runner(log_input, f = num_function, type = "numeric"))
+  expect_warning(
+    expect_identical(
+      as.numeric(c(1, 2, 2, 2)),
+      runner(log_input, f = num_function, type = "numeric"))
+  )
 
-  expect_identical(
-    as.numeric(c(1, 3, 6, 10)),
-    runner(int_input, f = num_function, type = "numeric"))
+  expect_warning(
+    expect_identical(
+      as.numeric(c(1, 3, 6, 10)),
+      runner(int_input, f = num_function, type = "numeric"))
+  )
 
-  expect_identical(
-    as.numeric(c(1.5, 4, 7.5, 12)),
-    runner(num_input, f = num_function, type = "numeric"))
+  expect_warning(
+    expect_identical(
+      as.numeric(c(1.5, 4, 7.5, 12)),
+      runner(num_input, f = num_function, type = "numeric"))
+  )
 
-  expect_error(runner(cha_input, f = num_function, type = "numeric"))
+  expect_warning(
+    expect_error(runner(cha_input, f = num_function, type = "numeric"))
+  )
 
   # <character>
-  expect_identical(
-    c("TRUE", "TRUE-TRUE", "TRUE-TRUE-FALSE", "TRUE-TRUE-FALSE-FALSE"),
-    runner(log_input, f = char_function, type = "character"))
+  expect_warning(
+    expect_identical(
+      c("TRUE", "TRUE-TRUE", "TRUE-TRUE-FALSE", "TRUE-TRUE-FALSE-FALSE"),
+      runner(log_input, f = char_function, type = "character"))
+  )
 
-  expect_identical(
-    c("1", "1-2", "1-2-3", "1-2-3-4"),
-    runner(int_input, f = char_function, type = "character"))
+  expect_warning(
+    expect_identical(
+      c("1", "1-2", "1-2-3", "1-2-3-4"),
+      runner(int_input, f = char_function, type = "character"))
+  )
 
-  expect_identical(
-    c("1.5", "1.5-2.5", "1.5-2.5-3.5", "1.5-2.5-3.5-4.5"),
-    runner(num_input, f = char_function, type = "character"))
+  expect_warning(
+    expect_identical(
+      c("1.5", "1.5-2.5", "1.5-2.5-3.5", "1.5-2.5-3.5-4.5"),
+      runner(num_input, f = char_function, type = "character"))
+  )
 
-  expect_identical(
-    c("a", "a-b", "a-b-c", "a-b-c-d"),
-    runner(cha_input, f = char_function, type = "character"))
+  expect_warning(
+    expect_identical(
+      c("a", "a-b", "a-b-c", "a-b-c-d"),
+      runner(cha_input, f = char_function, type = "character"))
+  )
 
 })
 
@@ -570,71 +604,92 @@ test_that("i/o type at", {
 
   at <- c(2, 3)
   # <logical>
-  expect_identical(
-    as.logical(c(FALSE, TRUE, TRUE, TRUE))[at],
-    runner(log_input, f = log_function, type = "logical", at = at))
+  expect_warning(
+    expect_identical(
+      as.logical(c(FALSE, TRUE, TRUE, TRUE))[at],
+      runner(log_input, f = log_function, type = "logical", at = at))
+  )
 
-  expect_identical(
-    as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
-    runner(int_input, f = log_function, type = "logical", at = at))
+  expect_warning(
+    expect_identical(
+      as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
+      runner(int_input, f = log_function, type = "logical", at = at))
+  )
 
-  expect_identical(
-    as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
-    runner(num_input, f = log_function, type = "logical", at = at))
+  expect_warning(
+    expect_identical(
+      as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
+      runner(num_input, f = log_function, type = "logical", at = at))
+  )
 
-  expect_identical(
-    as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
-    runner(cha_input, f = log_function, type = "logical", at = at))
-
+  expect_warning(
+    expect_identical(
+      as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
+      runner(cha_input, f = log_function, type = "logical", at = at))
+  )
   # <integer>
-  expect_identical(
-    as.integer(c(1, 2, 3, 4))[at],
-    runner(log_input, f = int_function, type = "integer", at = at))
-
-  expect_identical(
-    as.integer(c(1, 2, 3, 4))[at],
-    runner(int_input, f = int_function, type = "integer", at = at))
-
-  expect_identical(
-    as.integer(c(1, 2, 3, 4))[at],
-    runner(num_input, f = int_function, type = "integer", at = at))
-
-  expect_identical(
-    as.integer(c(1, 2, 3, 4))[at],
-    runner(cha_input, f = int_function, type = "integer", at = at))
+  expect_warning(
+    expect_identical(
+      as.integer(c(1, 2, 3, 4))[at],
+      runner(log_input, f = int_function, type = "integer", at = at))
+  )
+  expect_warning(
+    expect_identical(
+      as.integer(c(1, 2, 3, 4))[at],
+      runner(int_input, f = int_function, type = "integer", at = at))
+  )
+  expect_warning(
+    expect_identical(
+      as.integer(c(1, 2, 3, 4))[at],
+      runner(num_input, f = int_function, type = "integer", at = at))
+  )
+  expect_warning(
+    expect_identical(
+      as.integer(c(1, 2, 3, 4))[at],
+      runner(cha_input, f = int_function, type = "integer", at = at))
+  )
 
   # <numeric>
-  expect_identical(
-    as.numeric(c(1, 2, 2, 2))[at],
-    runner(log_input, f = num_function, type = "numeric", at = at))
-
-  expect_identical(
-    as.numeric(c(1, 3, 6, 10))[at],
-    runner(int_input, f = num_function, type = "numeric", at = at))
-
-  expect_identical(
-    as.numeric(c(1.5, 4, 7.5, 12))[at],
-    runner(num_input, f = num_function, type = "numeric", at = at))
-
-  expect_error(runner(cha_input, f = num_function, type = "numeric", at = at))
-
+  expect_warning(
+    expect_identical(
+      as.numeric(c(1, 2, 2, 2))[at],
+      runner(log_input, f = num_function, type = "numeric", at = at))
+  )
+  expect_warning(
+    expect_identical(
+      as.numeric(c(1, 3, 6, 10))[at],
+      runner(int_input, f = num_function, type = "numeric", at = at))
+  )
+  expect_warning(
+    expect_identical(
+      as.numeric(c(1.5, 4, 7.5, 12))[at],
+      runner(num_input, f = num_function, type = "numeric", at = at))
+  )
+  expect_warning(
+    expect_error(runner(cha_input, f = num_function, type = "numeric", at = at))
+  )
   # <character>
-  expect_identical(
-    c("TRUE", "TRUE-TRUE", "TRUE-TRUE-FALSE", "TRUE-TRUE-FALSE-FALSE")[at],
-    runner(log_input, f = char_function, type = "character", at = at))
+  expect_warning(
+    expect_identical(
+      c("TRUE", "TRUE-TRUE", "TRUE-TRUE-FALSE", "TRUE-TRUE-FALSE-FALSE")[at],
+      runner(log_input, f = char_function, type = "character", at = at))
+  )
+  expect_warning(
+    expect_identical(
+      c("1", "1-2", "1-2-3", "1-2-3-4")[at],
+      runner(int_input, f = char_function, type = "character", at = at))
+  )
 
-  expect_identical(
-    c("1", "1-2", "1-2-3", "1-2-3-4")[at],
-    runner(int_input, f = char_function, type = "character", at = at))
-
-  expect_identical(
-    c("1.5", "1.5-2.5", "1.5-2.5-3.5", "1.5-2.5-3.5-4.5")[at],
-    runner(num_input, f = char_function, type = "character", at = at))
-
-  expect_identical(
-    c("a", "a-b", "a-b-c", "a-b-c-d")[at],
-    runner(cha_input, f = char_function, type = "character", at = at))
-
+  expect_warning(
+    expect_identical(
+      c("1.5", "1.5-2.5", "1.5-2.5-3.5", "1.5-2.5-3.5-4.5")[at],
+      runner(num_input, f = char_function, type = "character", at = at))
+  )
+  expect_warning(
+    expect_identical(
+      c("a", "a-b", "a-b-c", "a-b-c-d")[at],
+      runner(cha_input, f = char_function, type = "character", at = at))
+  )
 })
 
 # at date window ------
@@ -875,7 +930,7 @@ test_that("runner with df", {
   index <- 101:200
 
   expect_equal(
-    runner(elo, k = 10, lag = 1, f = function(x) x),
+    res <- runner(elo, k = 10, lag = 1, f = function(x) x[1, 1], simplify = TRUE),
     runner(
       1:nrow(elo),
       k = 10,
@@ -883,10 +938,28 @@ test_that("runner with df", {
       f = function(idx) if (length(idx) == 0 || all(is.na(idx))) {
         NA
       } else {
-        elo[idx,]
-      }
+        elo[idx, 1][1]
+      },
+      simplify = TRUE
     )
   )
+  expect_type(res, "integer")
+
+  expect_equal(
+    res <- runner(elo, k = 10, lag = 1, f = function(x) x[1, 1], simplify = FALSE),
+    runner(
+      1:nrow(elo),
+      k = 10,
+      lag = 1,
+      f = function(idx) if (length(idx) == 0 || all(is.na(idx))) {
+        NA
+      } else {
+        elo[idx, 1][1]
+      },
+      simplify = FALSE
+    )
+  )
+  expect_type(res, "list")
 
   expect_equal(
     runner(elo, k = 10, lag = 1, f = function(x) x)[[50]],
@@ -1063,46 +1136,135 @@ test_that("Parallel", {
     b = runif(100),
     idx = cumsum(sample(rpois(100, 5)))
   )
-  cl <- parallel::makeCluster(1)
-
 
   # vector
+  cl <- parallel::makeCluster(1)
   expect_identical(
-    runner::runner(
+    res <- runner::runner(
       x = data$a,
       k = 10,
       f = sum,
-      idx = data$idx
+      idx = data$idx,
+      simplify = TRUE
     ),
     runner::runner(
       x = data$a,
       k = 10,
       f = sum,
       idx = data$idx,
-      cl = cl
+      cl = cl,
+      simplify = TRUE
     )
   )
   parallel::stopCluster(cl)
+  expect_type(res, "double")
+
+  cl <- parallel::makeCluster(1)
+  expect_identical(
+    res <- runner::runner(
+      x = data$a,
+      k = 10,
+      f = sum,
+      idx = data$idx,
+      simplify = FALSE
+    ),
+    runner::runner(
+      x = data$a,
+      k = 10,
+      f = sum,
+      idx = data$idx,
+      cl = cl,
+      simplify = FALSE
+    )
+  )
+  parallel::stopCluster(cl)
+  expect_type(res, "list")
 
   # data.frame
   cl <- parallel::makeCluster(1)
   expect_identical(
-    runner(
+    res <- runner(
       x = data,
-      k = k,
+      k = 10,
       f = sum,
       idx = "idx",
-      cl = cl
+      cl = cl,
+      simplify = TRUE
     ),
     runner(
       x = data,
-      k = k,
+      k = 10,
       f = sum,
-      idx = "idx"
+      idx = "idx",
+      simplify = TRUE
     )
   )
   parallel::stopCluster(cl)
+  expect_type(res, "double")
 
+  cl <- parallel::makeCluster(1)
+  expect_identical(
+    res <- runner(
+      x = data,
+      k = 10,
+      f = sum,
+      idx = "idx",
+      cl = cl,
+      simplify = FALSE
+    ),
+    runner(
+      x = data,
+      k = 10,
+      f = sum,
+      idx = "idx",
+      simplify = FALSE
+    )
+  )
+  parallel::stopCluster(cl)
+  expect_type(res, "list")
+
+  # matrix
+  cl <- parallel::makeCluster(1)
+  expect_identical(
+    res <- runner(
+      x = matrix(seq_len(100), nrow = 20, ncol = 5),
+      f = sum,
+      k = 10,
+      idx = 1:20,
+      cl = cl,
+      simplify = TRUE
+    ),
+    runner(
+      x = matrix(seq_len(100), nrow = 20, ncol = 5),
+      f = sum,
+      k = 10,
+      idx = 1:20,
+      simplify = TRUE
+    )
+  )
+  parallel::stopCluster(cl)
+  expect_type(res, "integer")
+
+  cl <- parallel::makeCluster(1)
+  expect_identical(
+    res <- runner(
+      x = matrix(1:100, nrow = 20, ncol = 5),
+      f = sum,
+      k = 10,
+      idx = 1:20,
+      cl = cl,
+      simplify = FALSE
+    ),
+    runner(
+      x = matrix(1:100, nrow = 20, ncol = 5),
+      f = sum,
+      k = 10,
+      idx = 1:20,
+      simplify = FALSE
+    )
+  )
+  parallel::stopCluster(cl)
+  expect_type(res, "list")
 
 })
 
@@ -1111,10 +1273,10 @@ test_that("Errors", {
   expect_error(runner(x = letters[1:5], f = ""))
 
   expect_error(runner(list(1:10), k = 5, f = mean), "Invalid \\'x\\' type")
-  expect_error(runner(list(1:10), k = 5, f = mean, type = "character"), "Invalid \\'x\\' type")
-  expect_error(runner(list(1:10), k = 5, f = mean, type = "integer"), "Invalid \\'x\\' type")
-  expect_error(runner(list(1:10), k = 5, f = mean, type = "logical"), "Invalid \\'x\\' type")
-  expect_error(runner(1:10, k = 5, f = mean, type = "wrong type"), "cannot make a vector of mode")
+  expect_warning(expect_error(runner(list(1:10), k = 5, f = mean, type = "character"), "Invalid \\'x\\' type"))
+  expect_warning(expect_error(runner(list(1:10), k = 5, f = mean, type = "integer"), "Invalid \\'x\\' type"))
+  expect_warning(expect_error(runner(list(1:10), k = 5, f = mean, type = "logical"), "Invalid \\'x\\' type"))
+  expect_warning(expect_error(runner(1:10, k = 5, f = mean, type = "wrong type"), "cannot make a vector of mode"))
 
   expect_error(runner(1:10, k = -5, f = mean),
                "k can't be negative")
@@ -1148,4 +1310,32 @@ test_that("Errors", {
     runner(1:10, lag = rep(5, 10),idx = 1:10, at = c(4, 5), f = mean),
     "length\\(lag\\) should be 1 or equal to"
   )
+})
+test_that("Test deprecate", {
+  expect_warning(
+    runner(
+      1:10,
+      f = function(x) x,
+      type = "numeric",
+      cl = ""
+    )
+  )
+
+  expect_warning(
+    runner(
+      1:10,
+      f = function(x) x,
+      type = "numeric"
+    )
+  )
+
+  expect_warning(
+    runner(
+      1:10,
+      f = function(x) x,
+      simplify = TRUE,
+      type = "numeric"
+    )
+  )
+
 })
