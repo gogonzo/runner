@@ -7,7 +7,7 @@
 run_by(x, idx, k, lag, na_pad, at)
 }
 \arguments{
-\item{x}{(\code{vector}, \code{data.frame}, \code{matrix})\cr
+\item{x}{(\code{vector}, \code{data.frame}, \code{matrix}, \code{xts})\cr
 Input in runner custom function \code{f}.}
 
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr

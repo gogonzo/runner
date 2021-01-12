@@ -14,7 +14,7 @@ window_run(
 )
 }
 \arguments{
-\item{x}{(\code{vector}, \code{data.frame}, \code{matrix})\cr
+\item{x}{(\code{vector}, \code{data.frame}, \code{matrix}, \code{xts})\cr
 Input in runner custom function \code{f}.}
 
 \item{k}{(\code{integer} vector or single value)\cr

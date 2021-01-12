@@ -49,12 +49,13 @@ test_that("       |--------+---]--->", {
 test_that("  [...]|--------+------->", {
   expect_equal(
     mean_run(x2, lag = 100),
-    runner(x2, lag = 100, f = mean2, type = "numeric"))
+    suppressWarnings(runner(x2, lag = 100, f = mean2, type = "numeric"))
+  )
 
   expect_equal(
     mean_run(x2, lag = 100, na_pad = TRUE),
-    runner(x2, lag = 100, f = mean2, na_pad = TRUE, type = "numeric"))
-
+    suppressWarnings(runner(x2, lag = 100, f = mean2, na_pad = TRUE, type = "numeric"))
+  )
 
   expect_equal(
     mean_run(x2, lag = -100),
@@ -62,7 +63,8 @@ test_that("  [...]|--------+------->", {
 
   expect_equal(
     mean_run(x2, lag = -100, na_pad = TRUE),
-    runner(x2, lag = -100, f = mean2, na_pad = TRUE, type = "numeric"))
+    suppressWarnings(runner(x2, lag = -100, f = mean2, na_pad = TRUE, type = "numeric"))
+  )
 })
 
 test_that("       |----[...]------->", {

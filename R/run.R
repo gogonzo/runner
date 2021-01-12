@@ -1,8 +1,7 @@
 #' Apply running function
 #'
 #' Applies custom function on running windows.
-#' @inheritParams base::lapply
-#' @param x (`vector`, `data.frame`, `matrix`)\cr
+#' @param x (`vector`, `data.frame`, `matrix`, `xts`)\cr
 #'  Input in runner custom function `f`.
 #'
 #' @param k (`integer` vector or single value)\cr
@@ -137,7 +136,7 @@
 #' @md
 #' @rdname runner
 #' @importFrom methods is
-#' @importFrom parallel clusterExport parSapply
+#' @importFrom parallel clusterExport parLapply
 #' @export
 runner <- function (
   x,
@@ -152,10 +151,26 @@ runner <- function (
   cl = NULL,
   ...
   ) {
-  # if cl =! NULL then type="auto"
-  # if simplify not FALSE then type="auto"
-  # type will be deprecated?
-  #
+  if (!is.null(cl) && type != "auto") {
+    warning(
+      "There is no option to specify the type of the output using type in parallel mode.
+      Please use 'simplify' instead"
+    )
+    type <- "auto"
+  }
+  if (!isFALSE(simplify) && type != "auto") {
+    warning(
+      "When 'simplify != FALSE' 'type' argument is set to 'auto'"
+    )
+    type <- "auto"
+  }
+  if (type != "auto") {
+    warning(
+      "Argument 'type'is deprecated and will be defunct in the next release.
+    Please use 'simplify' argument to manage the output type."
+    )
+  }
+
   UseMethod("runner", x)
 }
 
@@ -269,7 +284,7 @@ runner.default <- function(
     answer <- parLapply(
       cl = cl,
       X = w,
-      FUN = f,
+      fun = f,
       ...
     )
 
@@ -394,7 +409,7 @@ runner.data.frame <- function(
     parLapply(
       cl = cl,
       X = w,
-      FUN = function(.thisWindowIdx) {
+      fun = function(.thisWindowIdx) {
         if (length(.thisWindowIdx) == 0) {
           NA
         } else {
@@ -508,7 +523,7 @@ runner.matrix <- function(
     parLapply(
       cl = cl,
       X = w,
-      FUN = function(.thisWindowIdx) {
+      fun = function(.thisWindowIdx) {
         if (length(.thisWindowIdx) == 0) {
           NA
         } else {
