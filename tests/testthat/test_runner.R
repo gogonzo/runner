@@ -930,7 +930,7 @@ test_that("runner with df", {
   index <- 101:200
 
   expect_equal(
-    runner(elo, k = 10, lag = 1, f = function(x) x[1, 1], simplify = TRUE),
+    res <- runner(elo, k = 10, lag = 1, f = function(x) x[1, 1], simplify = TRUE),
     runner(
       1:nrow(elo),
       k = 10,
@@ -943,9 +943,10 @@ test_that("runner with df", {
       simplify = TRUE
     )
   )
+  expect_type(res, "integer")
 
   expect_equal(
-    runner(elo, k = 10, lag = 1, f = function(x) x[1, 1], simplify = FALSE),
+    res <- runner(elo, k = 10, lag = 1, f = function(x) x[1, 1], simplify = FALSE),
     runner(
       1:nrow(elo),
       k = 10,
@@ -958,7 +959,7 @@ test_that("runner with df", {
       simplify = FALSE
     )
   )
-
+  expect_type(res, "list")
 
   expect_equal(
     runner(elo, k = 10, lag = 1, f = function(x) x)[[50]],
@@ -1135,64 +1136,135 @@ test_that("Parallel", {
     b = runif(100),
     idx = cumsum(sample(rpois(100, 5)))
   )
-  cl <- parallel::makeCluster(1)
-
 
   # vector
+  cl <- parallel::makeCluster(1)
   expect_identical(
-    runner::runner(
+    res <- runner::runner(
       x = data$a,
       k = 10,
       f = sum,
-      idx = data$idx
+      idx = data$idx,
+      simplify = TRUE
     ),
     runner::runner(
       x = data$a,
       k = 10,
       f = sum,
       idx = data$idx,
-      cl = cl
+      cl = cl,
+      simplify = TRUE
     )
   )
   parallel::stopCluster(cl)
+  expect_type(res, "double")
+
+  cl <- parallel::makeCluster(1)
+  expect_identical(
+    res <- runner::runner(
+      x = data$a,
+      k = 10,
+      f = sum,
+      idx = data$idx,
+      simplify = FALSE
+    ),
+    runner::runner(
+      x = data$a,
+      k = 10,
+      f = sum,
+      idx = data$idx,
+      cl = cl,
+      simplify = FALSE
+    )
+  )
+  parallel::stopCluster(cl)
+  expect_type(res, "list")
 
   # data.frame
   cl <- parallel::makeCluster(1)
   expect_identical(
+    res <- runner(
+      x = data,
+      k = 10,
+      f = sum,
+      idx = "idx",
+      cl = cl,
+      simplify = TRUE
+    ),
     runner(
       x = data,
       k = 10,
       f = sum,
       idx = "idx",
-      cl = cl
+      simplify = TRUE
+    )
+  )
+  parallel::stopCluster(cl)
+  expect_type(res, "double")
+
+  cl <- parallel::makeCluster(1)
+  expect_identical(
+    res <- runner(
+      x = data,
+      k = 10,
+      f = sum,
+      idx = "idx",
+      cl = cl,
+      simplify = FALSE
     ),
     runner(
       x = data,
       k = 10,
       f = sum,
-      idx = "idx"
+      idx = "idx",
+      simplify = FALSE
     )
   )
   parallel::stopCluster(cl)
+  expect_type(res, "list")
 
   # matrix
   cl <- parallel::makeCluster(1)
   expect_identical(
+    res <- runner(
+      x = matrix(seq_len(100), nrow = 20, ncol = 5),
+      f = sum,
+      k = 10,
+      idx = 1:20,
+      cl = cl,
+      simplify = TRUE
+    ),
     runner(
+      x = matrix(seq_len(100), nrow = 20, ncol = 5),
+      f = sum,
+      k = 10,
+      idx = 1:20,
+      simplify = TRUE
+    )
+  )
+  parallel::stopCluster(cl)
+  expect_type(res, "integer")
+
+  cl <- parallel::makeCluster(1)
+  expect_identical(
+    res <- runner(
       x = matrix(1:100, nrow = 20, ncol = 5),
       f = sum,
       k = 10,
       idx = 1:20,
-      cl = cl
+      cl = cl,
+      simplify = FALSE
     ),
     runner(
       x = matrix(1:100, nrow = 20, ncol = 5),
       f = sum,
       k = 10,
-      idx = 1:20
+      idx = 1:20,
+      simplify = FALSE
     )
   )
   parallel::stopCluster(cl)
+  expect_type(res, "list")
 
 })
 
