@@ -112,8 +112,7 @@ same length as `x` of class `Date` or `integer`. Including `idx` can be
 combined with varying window size, than k will denote number of periods
 in window different for each data point. Example below illustrates
 window of size `k = 5` lagged by `lag = 2`. In parentheses ranges for
-each
-window.
+each window.
 
 ![](man/figures/runningdatewindows.png)
 
@@ -201,6 +200,31 @@ slope <- runner(
 
 plot(slope)
 abline(h = 30, col = "blue")
+```
+
+### Parallel computation
+
+The `runner` function can also compute windows in parallel mode. THe
+function doesn’t initialize the parallel cluster automatically but one
+have to do this outside and pass it to the `runner` through `cl`
+argument.
+
+``` r
+library(parallel)
+
+# 
+numCores <- detectCores()
+cl <- makeForkCluster(numCores)
+
+runner(
+  x = df,
+  k = 10,
+  idx = "date",
+  f = function(x) sum(x$x),
+  cl = cl
+)
+
+stopCluster(cl)
 ```
 
 ### Build-in functions
