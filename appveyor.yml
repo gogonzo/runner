@@ -38,12 +38,6 @@ environment:
   - R_VERSION: 3.6.1
     RTOOLS_VERSION: 35
 
-  - R_VERSION: 3.3
-    RTOOLS_VERSION: 33
-
-  - R_VERSION: 3.0
-    RTOOLS_VERSION: 30
-
 matrix:
   fast_finish: true
 
