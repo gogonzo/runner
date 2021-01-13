@@ -205,6 +205,31 @@ plot(slope)
 abline(h = 30, col = "blue")
 ```
 
+### Parallel computation
+
+The `runner` function can also compute windows in parallel mode. THe function
+doesn't initialize the parallel cluster automatically but one have to
+do this outside and pass it to the `runner` through `cl` argument.
+
+```{r eval=FALSE}
+library(parallel)
+
+# 
+numCores <- detectCores()
+cl <- makeForkCluster(numCores)
+
+runner(
+  x = df,
+  k = 10,
+  idx = "date",
+  f = function(x) sum(x$x),
+  cl = cl
+)
+
+stopCluster(cl)
+```
+
+
 ### Build-in functions
 With `runner` one can use any R functions, but some of them are optimized for 
 speed reasons.

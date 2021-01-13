@@ -1,3 +1,10 @@
+# runner 0.3.8
+* implement parallel windows computation.
+* added `simplify` identical to argument used in `sapply`.
+* add runner for `xts` objects.
+* fix runner for matrix.
+* `type` argument is being deprecated.
+
 # runner 0.3.7
 * add `run_by` function to prespecify arguments for multiple runner calls
 * `runner` supports `grouped_df`

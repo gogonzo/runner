@@ -11,7 +11,8 @@ k_by(k, idx, param)
 Denoting size of the running window. If \code{k} is a single value then window
 size is constant for all elements, otherwise if \code{length(k) == length(x)}
 different window size for each element. One can also specify \code{k} in the same
-way as by in \code{\link[base]{seq.POSIXt}}. More in details.}
+way as \code{by} argument in \code{\link[base]{seq.POSIXt}}.
+See 'Specifying time-intervals' in details section.}
 
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr
 Optional integer vector containing sorted (ascending) index of observation.

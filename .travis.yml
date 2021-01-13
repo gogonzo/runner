@@ -3,6 +3,10 @@
 language: R
 sudo: false
 
+before_install:
+  - sudo apt update
+  - sudo apt install libgit2-dev libharfbuzz-dev libfribidi-dev
+
 cache: packages
 
 r_packages:

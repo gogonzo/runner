@@ -15,6 +15,9 @@ test_that("dplyr::group_by - dplyr keeps attributes", {
     dplyr::group_by(group1, group2) %>%
     run_by(idx = "index")
 
+  expect_s3_class(grouped_index, "grouped_df")
+  expect_s3_class(grouped_index, "data.frame")
+
   expect_identical(
     dplyr::groups(grouped_index),
     list(as.name("group1"), as.name("group2"))
@@ -38,21 +41,6 @@ test_that("dplyr::group_by - dplyr keeps attributes", {
     attr(grouped_index, "idx"),
     "index"
   )
-
-
-  res <- grouped_index %>%
-    dplyr::mutate(
-      x = runner(
-        .,
-        f = function(x) {
-          unique(paste(x$group1, x$group2))
-        }
-      )
-    )
-  expect_identical(
-    res$x,
-    paste(grouped_index$group1, grouped_index$group2)
-  )
 })
 
 test_that("correct grouping results", {
@@ -65,20 +53,35 @@ test_that("correct grouping results", {
     x = 1:20
   )
 
-  #
+  # running on grouped_df
+  res <- data %>%
+    dplyr::group_by(group1, group2) %>%
+    run_by(idx = "index") %>%
+    dplyr::mutate(
+      x = runner(
+        .,
+        f = function(x) {
+          unique(paste(x$group1, x$group2))
+        }
+      )
+    )
+  expect_identical(
+    res$x,
+    paste(data$group1, data$group2)
+  )
+
+  # running on columns from grouped_df
   grouped_dplyr <- data %>%
     dplyr::group_by(group1, group2) %>%
     run_by(idx = "index") %>%
     dplyr::mutate(
-      xx = runner(x, f = mean)
+      xx = runner(
+        x = unique(paste(group1, group2)),
+        f = paste, collapse = "")
     )
-
 
   expect_equal(
     grouped_dplyr$xx,
-    c(1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5,
-      8.0, 8.5, 9.0, 9.5, 10.0, 10.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5,
-      5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0, 10.5)
+    paste(data$group1, data$group2)
   )
-
 })

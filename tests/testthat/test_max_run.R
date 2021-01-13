@@ -49,20 +49,23 @@ test_that("       |--------+---]--->", {
 test_that("  [...]|--------+------->", {
   expect_identical(
     max_run(x2, lag = 100),
-    runner(x2, lag = 100, f = max2, type = "numeric"))
+    suppressWarnings(runner(x2, lag = 100, f = max2, type = "numeric"))
+  )
 
   expect_identical(
     max_run(x2, lag = 100, na_pad = TRUE),
-    runner(x2, lag = 100, f = max2, na_pad = TRUE, type = "numeric"))
-
+    suppressWarnings(runner(x2, lag = 100, f = max2, na_pad = TRUE, type = "numeric"))
+  )
 
   expect_identical(
     max_run(x2, lag = -100),
-    runner(x2, lag = -100, f = max2, type = "numeric"))
+    suppressWarnings(runner(x2, lag = -100, f = max2, type = "numeric"))
+  )
 
   expect_identical(
     max_run(x2, lag = -100, na_pad = TRUE),
-    runner(x2, lag = -100, f = max2, na_pad = TRUE, type = "numeric"))
+    suppressWarnings(runner(x2, lag = -100, f = max2, na_pad = TRUE, type = "numeric"))
+  )
 })
 
 test_that("       |----[...]------->", {
@@ -113,11 +116,13 @@ test_that("       [...|----]---+------->", {
 
   expect_equal(
     max_run(x2, k = 5, lag = 3, na_rm = FALSE),
-    runner(x2, k = 5, lag = 3, f = max, type = "numeric"))
+    suppressWarnings(runner(x2, k = 5, lag = 3, f = max, type = "numeric"))
+  )
 
   expect_equal(
     max_run(x2, k = 5, lag = 3, na_pad = TRUE, na_rm = FALSE),
-    runner(x2, k = 5, lag = 3, f = max, na_pad = TRUE, type = "numeric"))
+    suppressWarnings(runner(x2, k = 5, lag = 3, f = max, na_pad = TRUE, type = "numeric"))
+  )
 })
 
 test_that("       |-----[--+---]--->", {
@@ -135,7 +140,8 @@ test_that("       |-----[--+---]--->", {
 
   expect_equal(
     max_run(x2, k = 5, lag = -3, na_pad = TRUE, na_rm = FALSE),
-    runner(x2, k = 5, lag = -3, f = max, na_pad = TRUE, type = "numeric"))
+    suppressWarnings(runner(x2, k = 5, lag = -3, f = max, na_pad = TRUE, type = "numeric"))
+  )
 })
 
 test_that("       |--------+-[---]->", {

@@ -31,6 +31,7 @@ window is defined by all elements appearing before current.
 In `runner` this can be achieved as simple by:
 
 ```{r eval=FALSE}
+library(runner)
 # full windows
 runner(1:15)
 
@@ -295,7 +296,7 @@ providing column name where indices (dates) are kept.
 ```{r eval=FALSE}
 library(dplyr)
 
-df <- df %>%
+summ <- df %>%
   group_by(group) %>%
   mutate(
     cumulative_mse = runner(
@@ -309,7 +310,7 @@ df <- df %>%
   )
 
 library(ggplot2)
-df %>%
+summ %>%
   ggplot(aes(x = date, y = cumulative_mse, group = group, color = group)) +
   geom_line()
 
@@ -349,6 +350,34 @@ df %>%
 
 
 ```
+
+### Parallel mode
+The `runner` function can also compute windows in parallel mode. THe function
+doesn't initialize the parallel cluster automatically but one have to
+do this outside and pass it to the `runner` through `cl` argument.
+
+```{r eval=FALSE}
+library(parallel)
+
+numCores <- detectCores()
+cl <- makeForkCluster(numCores)
+
+runner(
+  x = df,
+  k = 10,
+  idx = "date",
+  f = function(x) sum(x$x),
+  cl = cl
+)
+
+stopCluster(cl)
+```
+
+*Executing `runner` in parallel mode isn't always faster than a single thread.*
+*Multiple-thread computation generates some overhead due to managing the nodes.* 
+*In general, complex functions which bases on processor (eg. loops) used to be* 
+*quicker in parallel mode but one should assess itself which option has the*
+*edge in specific situation. *
 
 ### Build-in functions
 With `runner` one can use any R functions, but some of them are optimized for 
