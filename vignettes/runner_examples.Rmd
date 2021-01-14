@@ -15,7 +15,7 @@ to original topic on [stack-overflow](https://stackoverflow.com).
 
 ### Number of unique elements in 7 days window
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r eval=FALSE}
 library(runner)
 
 x <- sample(letters, 20, replace = TRUE)
@@ -31,7 +31,7 @@ runner(
 
 ### weekly trimmed mean
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r eval=FALSE}
 library(runner)
 
 x <- cumsum(rnorm(20))
@@ -47,13 +47,13 @@ runner(
 
 ### Prediction on current day based on preceding 2-weeks regression
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r eval=FALSE}
 library(runner)
 
 # sample data
 x <- cumsum(rnorm(20))
 data <- data.frame(
-  date = Sys.Date() + cumsum(sample(1:3, 20, replace = TRUE)), # unequaly spaced time series, 
+  date = Sys.Date() + cumsum(sample(1:3, 20, replace = TRUE)), # unequally spaced time series, 
   y = 3 * x + rnorm(20), 
   x = cumsum(rnorm(20))
 )
@@ -63,7 +63,7 @@ data$pred <- runner(
   data,
   lag = "1 days",
   k = "2 weeks",
-  idx = date,
+  idx = data$date,
   f = function(data) {
     predict(
       lm(y ~ x, data = data)
@@ -81,7 +81,7 @@ lines(data$date, data$pred, col = "blue")
 
 [SO discussion](https://stackoverflow.com/a/58167952/3495076)
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r eval=FALSE}
 library(runner)
 library(dplyr)
 
@@ -106,7 +106,7 @@ df %>%
 
 [SO discussion](https://stackoverflow.com/questions/41693081/)
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r eval=FALSE}
 library(runner)
 library(dplyr)
 
@@ -142,7 +142,7 @@ df %>%
 
 ### runner with group_by mutate
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r eval=FALSE}
 library(dplyr)
 
 x <- cumsum(rnorm(20))
@@ -172,7 +172,7 @@ data.frame(date, group, y, x) %>%
 
 ### Aggregating values from another data.frame in `grouped_df`
 [SO Discussion](https://stackoverflow.com/questions/61024712/do-a-rolling-regression-only-on-specific-dates/61045233#61045233)
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r eval=FALSE}
 library(runner)
 library(dplyr)
 

@@ -204,7 +204,7 @@ abline(h = 30, col = "blue")
 
 ### Parallel computation
 
-The `runner` function can also compute windows in parallel mode. THe
+The `runner` function can also compute windows in parallel mode. The
 function doesn’t initialize the parallel cluster automatically but one
 have to do this outside and pass it to the `runner` through `cl`
 argument.

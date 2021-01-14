@@ -29,4 +29,11 @@ reference:
      - fill_run
      - lag_run
      - which_run
-
+  - title: "Private functions"
+    desc: "Unexported functions used in the package"
+    contents:
+     - k_by
+     - reformat_k
+     - run_by
+     - seq_at
+     - this_group

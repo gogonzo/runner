@@ -4,7 +4,7 @@ author: "Dawid Kałędkowski"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{The runner package}
+  %\VignetteIndexEntry{Apply any R function on rolling windows}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -352,7 +352,7 @@ df %>%
 ```
 
 ### Parallel mode
-The `runner` function can also compute windows in parallel mode. THe function
+The `runner` function can also compute windows in parallel mode. The function
 doesn't initialize the parallel cluster automatically but one have to
 do this outside and pass it to the `runner` through `cl` argument.
 
@@ -375,7 +375,7 @@ stopCluster(cl)
 
 *Executing `runner` in parallel mode isn't always faster than a single thread.*
 *Multiple-thread computation generates some overhead due to managing the nodes.* 
-*In general, complex functions which bases on processor (eg. loops) used to be* 
+*In general, complex functions which bases on processor (e.g. loops) used to be* 
 *quicker in parallel mode but one should assess itself which option has the*
 *edge in specific situation. *
 
