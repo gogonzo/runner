@@ -1,7 +1,7 @@
 Package: runner
 Title: Running Operations for Vectors
 Type: Package
-Version: 0.3.7.9000
+Version: 0.3.8
 Depends: R (>= 3.0)
 Language: en-US
 Encoding: UTF-8
@@ -22,11 +22,9 @@ Imports:
   parallel,
   Rcpp 
 Suggests:
-  dplyr,
   knitr,
-  magrittr,
   rmarkdown,
   spelling,
-  testthat
+  tinytest
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1

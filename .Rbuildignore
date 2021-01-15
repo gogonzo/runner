@@ -18,3 +18,4 @@ TODO
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+inst/tinytest/test_external*
