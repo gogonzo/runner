@@ -22,9 +22,6 @@ Imports:
   parallel,
   Rcpp 
 Suggests:
-  knitr,
-  rmarkdown,
   spelling,
   tinytest
-VignetteBuilder: knitr
 RoxygenNote: 7.1.1
