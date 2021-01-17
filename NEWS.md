@@ -4,6 +4,7 @@
 * add runner for `xts` objects.
 * fix runner for matrix.
 * `type` argument is being deprecated.
+* reduce number of dependencies.
 
 # runner 0.3.7
 * add `run_by` function to prespecify arguments for multiple runner calls

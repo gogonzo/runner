@@ -1,24 +1,25 @@
+# compiled objs
 \.o$
 \.so$
 \.dll$
+
+# Rstudio project
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^data-raw$
+
+# Rmd
 ^README\.Rmd$
 ^README-.*\.png$
-^cran-comments\.md$
-^\.travis\.yml$
-^\.drone.
-^codecov\.yml$
-^appveyor\.yml$
-\.gitignore
-\.xcf
-TODO
-\.ods
-^_pkgdown\.yml$
 ^docs$
+
+# automation
+^appveyor\.yml$
+^codecov\.yml$
+\.gitignore
+.*Makefile$
 ^pkgdown$
+^_pkgdown\.yml$
+^\.travis\.yml$
 
 # exclude
 inst/tinytest/test_external*
-^\.github$

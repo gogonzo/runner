@@ -49,6 +49,7 @@ attributes to \code{x} (only \code{data.frame}) object and saves user effort
 to specify window parameters in further multiple \link{runner} calls.
 }
 \examples{
+\dontrun{
 library(dplyr)
 
 data <- data.frame(
@@ -74,4 +75,5 @@ data \%>\%
      }
    )
  )
+}
 }

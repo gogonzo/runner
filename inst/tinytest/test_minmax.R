@@ -1,5 +1,3 @@
-context("Running minmax")
-
 x <- cumsum(rnorm(100))
 minmax_test <- function(price, what = "max", na_rm = TRUE) {
   last_min <- price[1]
@@ -39,7 +37,7 @@ minmax_test <- function(price, what = "max", na_rm = TRUE) {
   }
 }
 
-test_that("correct minmax", {
+# correct minmax -------
   expect_identical(
     minmax_run(x, metric = "min"),
     minmax_test(x, what = "min")
@@ -50,10 +48,7 @@ test_that("correct minmax", {
     minmax_test(x, what = "max")
   )
 
-})
-
-test_that("minmax dealing with NA", {
+# minmax dealing with NA ------
   x[sample(1:100, 20)] <- NA
   expect_silent(minmax_run(x, metric = "min"))
   expect_silent(minmax_run(x, metric = "max"))
-})

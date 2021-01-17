@@ -6,6 +6,7 @@
 #' @inheritParams runner
 #' @return x object which \link{runner} can be executed on.
 #' @examples
+#' \dontrun{
 #' library(dplyr)
 #'
 #' data <- data.frame(
@@ -31,6 +32,7 @@
 #'      }
 #'    )
 #'  )
+#' }
 #' @export
 run_by <- function(x, idx, k, lag, na_pad, at) {
   if (!is.data.frame(x)) {
