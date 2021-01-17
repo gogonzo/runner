@@ -18,3 +18,7 @@ TODO
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+
+# exclude
+inst/tinytest/test_external*
+^\.github$
