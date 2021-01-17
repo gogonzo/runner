@@ -15,6 +15,7 @@
 # automation
 ^appveyor\.yml$
 ^codecov\.yml$
+\.github
 \.gitignore
 .*Makefile$
 ^pkgdown$
