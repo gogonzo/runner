@@ -86,11 +86,11 @@ runner(1:15, k = 4)
 
 `lag` denotes how many observations windows will be lagged by. If `lag`
 is a single value than it is constant for all elements of x. For varying
-lag size one should specify `lag` as integer vector of `length(lag) ==
-length(x)` where each element of `lag` defines lag of window. Default
-value of `lag = 0`. Example below illustrates window of `k = 4` lagged
-by `lag = 2` for 10-th element of vector `x`. Lag can also be negative
-value, which shifts window forward instead of backward.
+lag size one should specify `lag` as integer vector of
+`length(lag) == length(x)` where each element of `lag` defines lag of
+window. Default value of `lag = 0`. Example below illustrates window of
+`k = 4` lagged by `lag = 2` for 10-th element of vector `x`. Lag can
+also be negative value, which shifts window forward instead of backward.
 
 ![](man/figures/laggedwindowklag.png)
 
@@ -231,6 +231,6 @@ stopCluster(cl)
 
 With `runner` one can use any R functions, but some of them are
 optimized for speed reasons. These functions are:  
-\- aggregating functions - `length_run`, `min_run`, `max_run`,
+- aggregating functions - `length_run`, `min_run`, `max_run`,
 `minmax_run`, `sum_run`, `mean_run`, `streak_run`  
-\- utility functions - `fill_run`, `lag_run`, `which_run`
+- utility functions - `fill_run`, `lag_run`, `which_run`
