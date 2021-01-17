@@ -18,9 +18,9 @@ r_github_packages:
   - rstudio/rmarkdown
 
 after_success:
-  - Rscript -e 'covr::codecov()'
-  - R CMD INSTALL .
-  - Rscript -e 'pkgdown::build_site()'
+  on:
+    branch: master
+  - make pkgdown
 
 deploy:
   provider: pages

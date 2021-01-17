@@ -22,6 +22,8 @@ Imports:
   parallel,
   Rcpp 
 Suggests:
+  knitr,
   spelling,
   tinytest
 RoxygenNote: 7.1.1
+VignetteBuilder: knitr

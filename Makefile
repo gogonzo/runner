@@ -8,35 +8,26 @@ all: check clean
 deps:
 	Rscript -e 'if (!require("Rd2roxygen")) install.packages("Rd2roxygen", repos="http://cran.rstudio.com")'
 
-build:
-	cd ..;\
-	R CMD build --no-manual $(PKGSRC)
-
-build-cran: render-vignettes
+build: docs
 	cd ..;\
 	R CMD build $(PKGSRC)
-
-install: build
-	cd ..;\
-	R CMD INSTALL $(PKGNAME)_$(PKGVERS).tar.gz
 
 check: build
 	cd ..;\
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --as-cran
 
-travis: build
-	cd ..;\
-	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --no-manual
-
 pkgdown:
-	Rscript -e 'if (!require("pkgdown")) install.packages("knitr", repos = "http://cran.rstudio.com")'
-	Rscript -e 'pkgdown::build_site()'
+	$(R_HOME)/bin/Rscript -e 'if (!require("dplyr")) install.packages("dplyr", repos = "http://cran.rstudio.com")'
+	$(R_HOME)/bin/Rscript -e 'pkgdown::build_site()'
 
-readme:
-	Rscript -e 'rmarkdown("README.Rmd")'
+docs: render-readme
+
+render-readme:
+	$(R_HOME)/bin/Rscript -e 'if (!require("rmarkdown")) install.packages("rmarkdown", repos = "http://cran.rstudio.com")'
+	$(R_HOME)/bin/Rscript -e 'rmarkdown::render("README.Rmd")'
 
 render-vignettes:
-	$(MAKE) -C vignettes/rmd
+	$(MAKE) -C vignettes/
 
 clean:
 	cd ..;\
