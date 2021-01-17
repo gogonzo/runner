@@ -15,9 +15,23 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  check-r-base-devel:
     runs-on: ubuntu-18.04
-    container: rocker/verse:latest
+    container: rocker/r-devel
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          install.packages(c("remotes", "rcmdcheck"))
+          remotes::install_deps(dependencies = TRUE)
+        shell: Rscript {0}
+      - name: Check
+        run: make all
+  check-r-base-latest:
+    runs-on: ubuntu-18.04
+    container: rocker/r-base:latest
 
     steps:
       - name: Checkout repository
