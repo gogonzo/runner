@@ -15,9 +15,9 @@ on:
     branches: [ main ]
 
 jobs:
-  check-r-base-devel:
+  check-r-devel:
     runs-on: ubuntu-18.04
-    container: rocker/r-devel
+    container: rocker/r-verse:devel
 
     steps:
       - name: Checkout repository
@@ -31,7 +31,7 @@ jobs:
         run: make all
   check-r-base-latest:
     runs-on: ubuntu-18.04
-    container: rocker/r-base:latest
+    container: rocker/r-verse:3.6.3
 
     steps:
       - name: Checkout repository
