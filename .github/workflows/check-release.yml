@@ -29,7 +29,7 @@ jobs:
         shell: Rscript {0}
       - name: Check
         run: make all
-  check-r-verse-3.6.3:
+  check-r-verse-3-6:
     runs-on: ubuntu-18.04
     container: rocker/verse:3.6.3
 
