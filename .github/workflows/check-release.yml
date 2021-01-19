@@ -15,7 +15,7 @@ on:
     branches: [ main ]
 
 jobs:
-  check-r-devel:
+  check-r-verse-devel:
     runs-on: ubuntu-18.04
     container: rocker/verse:devel
 
@@ -29,7 +29,7 @@ jobs:
         shell: Rscript {0}
       - name: Check
         run: make all
-  check-r-base-latest:
+  check-r-verse-3.6.3:
     runs-on: ubuntu-18.04
     container: rocker/verse:3.6.3
 
