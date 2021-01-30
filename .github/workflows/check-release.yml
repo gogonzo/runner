@@ -30,6 +30,7 @@ jobs:
       - name: Check
         run: |
           devtools::check()
+        shell: Rscript {0}
   check-r-verse-3-6:
     runs-on: ubuntu-18.04
     container: rocker/verse:3.6.3
@@ -45,3 +46,4 @@ jobs:
       - name: Check
         run: |
           devtools::check()
+        shell: Rscript {0}
