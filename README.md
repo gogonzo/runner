@@ -6,7 +6,6 @@
 <!-- badges: start -->
 
 [![](https://cranlogs.r-pkg.org/badges/runner)](https://CRAN.R-project.org/package=runner)
-[![](https://travis-ci.org/gogonzo/runner.svg?branch=master)](https://travis-ci.org/gogonzo/runner)
 [![](https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&svg=true)](https://ci.appveyor.com/project/gogonzo/runner)
 [![](https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg)](https://codecov.io/gh/gogonzo/runner/branch/master)
 <!-- badges: end -->

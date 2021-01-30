@@ -1,17 +1,7 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-#
-# See https://github.com/r-lib/actions/tree/master/examples#readme for
-# additional example workflows available for the R community.
-
-name: R
-
+name: Check release
 on:
   pull_request:
     branches: [main]
-
 jobs:
   check-r-verse-devel:
     runs-on: ubuntu-18.04
@@ -52,7 +42,7 @@ jobs:
         shell: Rscript {0}
         run: |
           install.packages("rhub")
-          validate_email(
+          rhub::validate_email(
             email = "dawid.kaledkowski@gmail.com",
             token = "${{secrets.RHUB_TOKEN}}"
           )

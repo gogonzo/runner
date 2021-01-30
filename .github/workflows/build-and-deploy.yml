@@ -1,0 +1,41 @@
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - [main]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    container: rocker/tidyverse:latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2.3.1
+        with:
+          persist-credentials: false
+      - name: Install dependencies
+        shell: Rscript {0}
+        run: |
+          remotes::install_deps(dependencies = TRUE)
+          install.packages("pkgdown", type = "binary")
+
+      - name: Install package
+        run: R CMD INSTALL .
+
+      - name: Build docs 🔧
+        shell: Rscript {0}
+        run: |
+          pkgdown::build_site()
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_PAT}}
+          BRANCH: gh-pages
+          FOLDER: docs
+          CLEAN: true
+
+      - name: Release CRAN
+        shell: Rscript {0}
+        run: |
+          release(pkg = ".", check = FALSE, args = NULL)
+

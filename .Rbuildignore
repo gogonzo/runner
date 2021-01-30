@@ -15,6 +15,7 @@
 # automation
 ^appveyor\.yml$
 ^codecov\.yml$
+^cran-comments.md$
 \.github
 \.gitignore
 .*Makefile$
