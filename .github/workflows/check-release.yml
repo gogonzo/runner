@@ -9,22 +9,18 @@
 name: R
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   check-r-verse-devel:
     runs-on: ubuntu-18.04
     container: rocker/verse:devel
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Install dependencies
         run: |
-          install.packages(c("devtools", "remotes"))
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       - name: Check
@@ -34,16 +30,50 @@ jobs:
   check-r-verse-3-6:
     runs-on: ubuntu-18.04
     container: rocker/verse:3.6.3
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Install dependencies
         run: |
-          install.packages(c("remotes", "devtools"))
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       - name: Check
         run: |
           devtools::check()
         shell: Rscript {0}
+  r-hub-checks:
+    needs: check-r-verse-devel
+    runs-on: ubuntu-18.04
+    container: rocker/tidyverse:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Initialize rhub
+        shell: Rscript {0}
+        run: |
+          install.packages("rhub")
+          validate_email(
+            email = "dawid.kaledkowski@gmail.com",
+            token = "${{secrets.RHUB_SECRET}}"
+          )
+      - name: Check solaris
+        shell: Rscript {0}
+        run: |
+          rhub::check(
+            path = ".",
+            platform = "solaris-x86-patched",
+            email = "dawid.kaledkowski@gmail.com",
+            check_args = "--no-build-vignettes"
+          )
+  r-covr:
+    needs: check-r-verse-devel
+    runs-on: ubuntu-18.04
+    container: rocker/tidyverse:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Initialize rhub
+        shell: Rscript {0}
+        run: |
+          install.packages("covr")
+          covr::codecov()
