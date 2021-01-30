@@ -24,11 +24,12 @@ jobs:
         uses: actions/checkout@v2
       - name: Install dependencies
         run: |
-          install.packages(c("remotes", "rcmdcheck"))
+          install.packages(c("devtools", "remotes", "rcmdcheck"))
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       - name: Check
-        run: make all
+        run: |
+          devtools::check()
   check-r-verse-3-6:
     runs-on: ubuntu-18.04
     container: rocker/verse:3.6.3
@@ -42,4 +43,5 @@ jobs:
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       - name: Check
-        run: make all
+        run: |
+          devtools::check()
