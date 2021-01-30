@@ -54,7 +54,7 @@ jobs:
           install.packages("rhub")
           validate_email(
             email = "dawid.kaledkowski@gmail.com",
-            token = "${{secrets.RHUB_SECRET}}"
+            token = "${{secrets.RHUB_TOKEN}}"
           )
       - name: Check solaris
         shell: Rscript {0}
