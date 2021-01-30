@@ -1,5 +1,11 @@
 # k by ------
-idx <- seq(as.POSIXct("2019-01-01 03:02:01"), as.POSIXct("2020-01-01 03:02:01"), by = "month")
+idx <- seq(
+  as.POSIXct("2019-01-01 03:02:01"),
+  as.POSIXct("2020-01-01 03:02:01"),
+  by = "month"
+)
+attr(idx, "tzone") <- ""
+
 
 new_k <- runner:::k_by(k = "2 months", idx = idx, param = "k")
 expected <- as.POSIXct(
@@ -12,7 +18,13 @@ expected <- as.POSIXct(
 
 expect_equal(idx - new_k, expected)
 
-idx <- seq(as.POSIXct("2019-01-01 03:02:01"), as.POSIXct("2020-01-01 03:02:01"), by = "month")
+idx <- seq(
+  as.POSIXct("2019-01-01 03:02:01"),
+  as.POSIXct("2020-01-01 03:02:01"),
+  by = "month"
+)
+attr(idx, "tzone") <- ""
+
 new_k <- runner:::k_by(k = "month", idx = idx, param = "k")
 expected <- as.POSIXct(
   c("2018-12-01 03:02:01", "2019-01-01 03:02:01",
@@ -25,7 +37,12 @@ expected <- as.POSIXct(
 expect_equal(idx - new_k, expected)
 
 
-idx <- seq(as.POSIXct("2019-01-01 03:02:01"), as.POSIXct("2020-01-01 03:02:01"), by = "month")
+idx <- seq(
+  as.POSIXct("2019-01-01 03:02:01"),
+  as.POSIXct("2020-01-01 03:02:01"),
+  by = "month"
+)
+attr(idx, "tzone") <- ""
 new_k <- runner:::k_by(k = "month", idx = idx, param = "lag")
 expected <- as.POSIXct(
   c("2018-12-01 03:02:01", "2019-01-01 03:02:01",
@@ -38,7 +55,12 @@ expected <- as.POSIXct(
 expect_equal(idx - new_k, expected)
 
 
-idx <- seq(as.POSIXct("2019-01-01 03:02:01"), as.POSIXct("2020-01-01 03:02:01"), by = "month")
+idx <- seq(
+  as.POSIXct("2019-01-01 03:02:01"),
+  as.POSIXct("2020-01-01 03:02:01"),
+  by = "month"
+)
+attr(idx, "tzone") <- ""
 new_k <- runner:::k_by(k = "-1 month", idx = idx, param = "lag")
 expected <- as.POSIXct(
   c("2019-02-01 03:02:01", "2019-03-01 03:02:01", "2019-04-01 03:02:01",
@@ -51,7 +73,12 @@ expected <- as.POSIXct(
 expect_equal(idx - new_k, expected)
 
 
-idx <- seq(as.POSIXct("2020-01-01 03:02:01"), as.POSIXct("2020-02-01 03:02:01"), by = "month")
+idx <- seq(
+  as.POSIXct("2020-01-01 03:02:01"),
+  as.POSIXct("2020-02-01 03:02:01"),
+  by = "month"
+)
+attr(idx, "tzone") <- ""
 new_k <- runner:::k_by(k = c("-1 month", "1 week"), idx = idx, param = "lag")
 expected <- as.POSIXct(
   c("2020-02-01 03:02:01", "2020-01-25 03:02:01")
@@ -141,16 +168,24 @@ expect_error(
 )
 
 # runner:::seq_at ------
-idx <- seq(as.POSIXct("2019-01-01 03:02:01"), as.POSIXct("2020-01-01 03:02:01"), by = "month")
+idx <- seq(
+  as.POSIXct("2019-01-01 03:02:01"),
+  as.POSIXct("2020-01-01 03:02:01"),
+  by = "month"
+)
+
 out <- runner:::seq_at(at = "2 months", idx = idx)
 expected <- as.POSIXct(
   c("2019-01-01 03:02:01", "2019-03-01 03:02:01", "2019-05-01 03:02:01",
     "2019-07-01 03:02:01", "2019-09-01 03:02:01", "2019-11-01 03:02:01",
     "2020-01-01 03:02:01")
 )
+attr(expected, "tzone") <- ""
+attr(out, "tzone") <- ""
 expect_equal(out, expected)
 
 out <- runner:::seq_at(at = "-2 months", idx = idx)
+attr(out, "tzone") <- ""
 expect_equal(out, rev(expected))
 
 expect_error(
