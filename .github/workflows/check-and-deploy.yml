@@ -33,35 +33,35 @@ jobs:
           devtools::check()
         shell: Rscript {0}
 
-  # r-hub-checks:
-  #   needs: check-r-verse-devel
-  #   runs-on: ubuntu-18.04
-  #   container: rocker/tidyverse:latest
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v2
-  #     - name: Initialize r-hub
-  #       shell: Rscript {0}
-  #       run: |
-  #         install.packages("rhub")
-  #         rhub::validate_email(
-  #           email = "dawid.kaledkowski@gmail.com",
-  #           token = "${{secrets.RHUB_TOKEN}}"
-  #         )
-  #     - name: Check r-hub
-  #       shell: Rscript {0}
-  #       run: |
-  #         devtools::check_rhub(
-  #           pkg = ".",
-  #           platforms = c(
-  #             "solaris-x86-patched",
-  #             "debian-gcc-release",
-  #             "debian-clang-devel",
-  #             "fedora-gcc-devel"
-  #           ),
-  #           build_args = "--no-build-vignettes",
-  #           interactive = FALSE
-  #         )
+  r-hub-checks:
+    needs: check-r-verse-devel
+    runs-on: ubuntu-18.04
+    container: rocker/tidyverse:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Initialize r-hub
+        shell: Rscript {0}
+        run: |
+          install.packages("rhub")
+          rhub::validate_email(
+            email = "dawid.kaledkowski@gmail.com",
+            token = "${{secrets.RHUB_TOKEN}}"
+          )
+      - name: Check r-hub
+        shell: Rscript {0}
+        run: |
+          devtools::check_rhub(
+            pkg = ".",
+            platforms = c(
+              "solaris-x86-patched",
+              "debian-gcc-release",
+              "debian-clang-devel",
+              "fedora-gcc-devel"
+            ),
+            build_args = "--no-build-vignettes",
+            interactive = FALSE
+          )
 
   build-and-deploy:
     needs: check-r-verse-devel
@@ -69,15 +69,16 @@ jobs:
     runs-on: ubuntu-latest
     container: rocker/tidyverse:latest
     steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2.3.1
+        with:
+          persist-credentials: false
+
       - name: Set env
         run: |
           PKGNAME=$(sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
           PKGVERS=$(sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
           PKGNEWS=$(sed -n '2,/^$/p' NEWS.md)
-      - name: Checkout 🛎️
-        uses: actions/checkout@v2.3.1
-        with:
-          persist-credentials: false
 
       - name: Install package
         run: R CMD INSTALL .
