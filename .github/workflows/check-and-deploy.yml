@@ -22,7 +22,7 @@ jobs:
       - name: Build docs 🔧
         shell: Rscript {0}
         run: |
-          install.packages("pkgdown", type = "binary")
+          install.packages("pkgdown")
           pkgdown::build_site()
       - name: Test coverage
         shell: Rscript {0}
