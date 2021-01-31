@@ -71,9 +71,9 @@ jobs:
     steps:
       - name: Set env
         run: |
-        PKGNAME=$(sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
-        PKGVERS=$(sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
-        PKGNEWS=$(sed -n '2,/^$/p' NEWS.md)
+          PKGNAME=$(sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
+          PKGVERS=$(sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
+          PKGNEWS=$(sed -n '2,/^$/p' NEWS.md)
       - name: Checkout 🛎️
         uses: actions/checkout@v2.3.1
         with:
