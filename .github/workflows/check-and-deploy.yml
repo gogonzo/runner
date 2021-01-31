@@ -15,9 +15,9 @@ jobs:
           echo "PKGNAME=$(sed -n 's/Package: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
           echo "PKGVERS=$(sed -n 's/Version: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
           echo "PKGNEWS=$(sed -n '2,/^$/p' NEWS.md)" >> $GITHUB_ENV
-          echo ${{ env.PKGNAME }}
-          echo ${{ env.PKGVERS }}
-          echo ${{ env.PKGNEWS }}
+          echo "${{ env.PKGNAME }}"
+          echo "${{ env.PKGVERS }}"
+          echo "${{ env.PKGNEWS }}"
 
       - name: Install dependencies
         shell: Rscript {0}
@@ -89,6 +89,7 @@ jobs:
           echo "PKGNAME=$(sed -n 's/Package: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
           echo "PKGVERS=$(sed -n 's/Version: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
           echo "PKGNEWS=$(sed -n '2,/^$/p' NEWS.md)" >> $GITHUB_ENV
+          echo {{ env.PKGNAME }}
 
       - name: Install package
         run: R CMD INSTALL .
