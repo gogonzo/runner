@@ -102,6 +102,10 @@ jobs:
           github_token: ${{ secrets.GH_TOKEN }}
           publish_dir: docs
 
+      - name: Parse News
+        run: |
+          echo "$(sed -n '2,/^$/p' NEWS.md)" > news.txt
+
       - name: GH Release
         id: create_release
         uses: actions/create-release@v1
@@ -110,7 +114,7 @@ jobs:
         with:
           tag_name: "v${{ env.PKGVERS }}"
           release_name: "${{ env.PKGNAME }} ${{ env.PKGVERS }}"
-          body: echo "$(sed -n '2,/^$/p' NEWS.md)"
+          body_path: news.txt
           draft: false
           prerelease: false
 
