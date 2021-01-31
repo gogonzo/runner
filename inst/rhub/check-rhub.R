@@ -15,10 +15,12 @@ if (!is.element(platform, rhub::platforms()[[1L]])) {
 
 # Run the check on the selected platform
 # Use show_status = TRUE to wait for results
-cr <- rhub::check(
-  platform = platform,
-  check_args = "--no-build-vignettes",
-  show_status = TRUE
+cr <- capture.output(
+  rhub::check(
+    platform = platform,
+    check_args = "--no-build-vignettes",
+    show_status = TRUE
+  )
 )
 
 # Get the statuses from private field status_
