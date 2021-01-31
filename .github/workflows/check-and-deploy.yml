@@ -11,7 +11,10 @@ jobs:
         run: |
           PKGNAME=$(sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
           PKGVERS=$(sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
-
+          PKGNEWS=$(sed -n "s/#.+\n\([^#]*\)#/\1/" NEWS.md)
+          echo $PKGNAME
+          echo $PKGVERS
+          echo $PKGNEWS
   check-r-verse-devel:
     runs-on: ubuntu-18.04
     container: rocker/verse:latest
@@ -81,7 +84,7 @@ jobs:
               "fedora-gcc-devel"
             ),
             build_args = "--no-build-vignettes",
-            interactive = TRUE
+            interactive = FALSE
           )
 
 
@@ -97,6 +100,7 @@ jobs:
           persist-credentials: false
       - name: list dirs
         run: ls -al
+
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
@@ -105,12 +109,7 @@ jobs:
           FOLDER: docs
           CLEAN: true
 
-  gh-release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Create Release
+      - name: GH Release
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -118,10 +117,7 @@ jobs:
         with:
           tag_name: "v${{ env.PKGVERS }}"
           release_name: "${{ env.PKGNAME }} ${{ env.PKGVERS }}"
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
+          body: {{ env.PKGNEWS }}
           draft: false
           prerelease: false
 
