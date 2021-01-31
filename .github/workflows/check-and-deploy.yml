@@ -15,6 +15,7 @@ jobs:
           echo $PKGNAME
           echo $PKGVERS
           echo $PKGNEWS
+
   check-r-verse-devel:
     runs-on: ubuntu-18.04
     container: rocker/verse:latest
@@ -45,38 +46,38 @@ jobs:
           devtools::check()
         shell: Rscript {0}
 
-  r-hub-checks:
-    needs: check-r-verse-devel
-    runs-on: ubuntu-18.04
-    container: rocker/tidyverse:latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Initialize r-hub
-        shell: Rscript {0}
-        run: |
-          install.packages("rhub")
-          rhub::validate_email(
-            email = "dawid.kaledkowski@gmail.com",
-            token = "${{secrets.RHUB_TOKEN}}"
-          )
-      - name: Check r-hub
-        shell: Rscript {0}
-        run: |
-          devtools::check_rhub(
-            pkg = ".",
-            platforms = c(
-              "solaris-x86-patched",
-              "debian-gcc-release",
-              "debian-clang-devel",
-              "fedora-gcc-devel"
-            ),
-            build_args = "--no-build-vignettes",
-            interactive = FALSE
-          )
+  # r-hub-checks:
+  #   needs: check-r-verse-devel
+  #   runs-on: ubuntu-18.04
+  #   container: rocker/tidyverse:latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: Initialize r-hub
+  #       shell: Rscript {0}
+  #       run: |
+  #         install.packages("rhub")
+  #         rhub::validate_email(
+  #           email = "dawid.kaledkowski@gmail.com",
+  #           token = "${{secrets.RHUB_TOKEN}}"
+  #         )
+  #     - name: Check r-hub
+  #       shell: Rscript {0}
+  #       run: |
+  #         devtools::check_rhub(
+  #           pkg = ".",
+  #           platforms = c(
+  #             "solaris-x86-patched",
+  #             "debian-gcc-release",
+  #             "debian-clang-devel",
+  #             "fedora-gcc-devel"
+  #           ),
+  #           build_args = "--no-build-vignettes",
+  #           interactive = FALSE
+  #         )
 
   build-and-deploy:
-    needs: r-hub-checks
+    needs: check-r-verse-devel
     #  if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     container: rocker/tidyverse:latest
@@ -115,8 +116,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: "v${{ env.PKGVERS }}"
-          release_name: "${{ env.PKGNAME }} ${{ env.PKGVERS }}"
+          tag_name: v${{ env.PKGVERS }}
+          release_name: ${{ env.PKGNAME }} ${{ env.PKGVERS }}
           body: {{ env.PKGNEWS }}
           draft: false
           prerelease: false
