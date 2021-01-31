@@ -1,0 +1,103 @@
+name: Check and deploy
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  check-r-verse-devel:
+    runs-on: ubuntu-18.04
+    container: rocker/verse:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          remotes::install_deps(dependencies = TRUE)
+        shell: Rscript {0}
+      - name: Check
+        run: |
+          devtools::check()
+        shell: Rscript {0}
+      - name: Install package
+        run: R CMD INSTALL .
+      - name: Build docs 🔧
+        shell: Rscript {0}
+        run: |
+          install.packages("pkgdown", type = "binary")
+          pkgdown::build_site()
+      - name: Test coverage
+        shell: Rscript {0}
+        run: |
+          install.packages("covr")
+          covr::codecov()
+
+  check-r-verse-3-6:
+    runs-on: ubuntu-18.04
+    container: rocker/verse:3.6.3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          remotes::install_deps(dependencies = TRUE)
+        shell: Rscript {0}
+      - name: Check
+        run: |
+          devtools::check()
+        shell: Rscript {0}
+
+  r-hub-checks:
+    needs: check-r-verse-devel
+    runs-on: ubuntu-18.04
+    container: rocker/tidyverse:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Initialize r-hub
+        shell: Rscript {0}
+        run: |
+          install.packages("rhub")
+          rhub::validate_email(
+            email = "dawid.kaledkowski@gmail.com",
+            token = "${{secrets.RHUB_TOKEN}}"
+          )
+      - name: Check r-hub
+        shell: Rscript {0}
+        run: |
+          devtools::check_rhub(
+            path = ".",
+            platforms = c(
+              "solaris-x86-patched",
+              "debian-gcc-release",
+              "debian-clang-devel",
+              "fedora-gcc-devel"
+            ),
+            check_args = "--no-build-vignettes",
+            show_status = TRUE
+          )
+
+  build-and-deploy:
+    needs: r-hub-checks
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    container: rocker/tidyverse:latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2.3.1
+        with:
+          persist-credentials: false
+      - name: Install dependencies
+        shell: Rscript {0}
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_PAT}}
+          BRANCH: gh-pages
+          FOLDER: docs
+          CLEAN: true
+
+      # - name: Release CRAN
+      #   shell: Rscript {0}
+      #   run: |
+      #     release(pkg = ".", check = FALSE, args = NULL)
+
