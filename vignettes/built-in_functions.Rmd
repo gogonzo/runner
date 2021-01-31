@@ -1,9 +1,8 @@
 ---
 title: "Built-in functions"
-output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Built-in functions}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
 ---
 

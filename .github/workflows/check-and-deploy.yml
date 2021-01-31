@@ -17,7 +17,7 @@ jobs:
       - name: Check
         shell: Rscript {0}
         run: |
-          devtools::check()
+          devtools::check(cran = TRUE, vignettes = TRUE)
 
   check-r-verse-3-6:
     runs-on: ubuntu-18.04
@@ -26,16 +26,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Install dependencies
+        shell: Rscript {0}
         run: |
           remotes::install_deps(dependencies = TRUE)
-        shell: Rscript {0}
       - name: Check
-        run: |
-          devtools::check()
         shell: Rscript {0}
+        run: |
+          devtools::check(cran = TRUE, vignettes = TRUE)
 
   r-hub-checks:
-    needs: check-r-verse-devel
+    needs: [check-r-verse-devel, check-r-verse-3-6]
     runs-on: ubuntu-18.04
     container: rocker/tidyverse:latest
     steps:
