@@ -105,7 +105,7 @@ jobs:
           FOLDER: docs
           CLEAN: true
 
-  gh-release
+  gh-release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
