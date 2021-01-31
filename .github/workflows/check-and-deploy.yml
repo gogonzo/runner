@@ -14,7 +14,7 @@ jobs:
         run: |
           echo "PKGNAME=$(sed -n 's/Package: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
           echo "PKGVERS=$(sed -n 's/Version: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
-          echo "PKGNEWS=$(sed -n '2,/^$/p' NEWS.md)" >> $GITHUB_ENV
+          echo "PKGNEWS=\"$(sed -n '2,/^$/p' NEWS.md)\"" >> $GITHUB_ENV
 
       - name: use values
         run: |
