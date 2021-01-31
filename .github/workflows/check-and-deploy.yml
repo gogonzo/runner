@@ -34,35 +34,35 @@ jobs:
           devtools::check()
         shell: Rscript {0}
 
-  r-hub-checks:
-    needs: check-r-verse-devel
-    runs-on: ubuntu-18.04
-    container: rocker/tidyverse:latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Initialize r-hub
-        shell: Rscript {0}
-        run: |
-          install.packages("rhub")
-          rhub::validate_email(
-            email = "dawid.kaledkowski@gmail.com",
-            token = "${{secrets.RHUB_TOKEN}}"
-          )
-      - name: Check rhub/debian-clang-devel
-        run: Rscript --vanilla inst/rhub/check-rhub.R "debian-clang-devel"
-
-      - name: Check r-hub/debian-gcc-devel
-        run: Rscript --vanilla inst/rhub/check-rhub.R "debian-gcc-devel"
-
-      - name: Check r-hub/linux-x86_64-rocker-gcc-san
-        run: Rscript --vanilla inst/rhub/check-rhub.R "linux-x86_64-rocker-gcc-san"
-
-      - name: Check r-hub/solaris-x86-patched
-        run: Rscript --vanilla inst/rhub/check-rhub.R "solaris-x86-patched"
-
-      - name: Check r-hub/fedora-clang-devel
-        run: Rscript --vanilla inst/rhub/check-rhub.R "fedora-clang-devel"
+  # r-hub-checks:
+  #   needs: check-r-verse-devel
+  #   runs-on: ubuntu-18.04
+  #   container: rocker/tidyverse:latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: Initialize r-hub
+  #       shell: Rscript {0}
+  #       run: |
+  #         install.packages("rhub")
+  #         rhub::validate_email(
+  #           email = "dawid.kaledkowski@gmail.com",
+  #           token = "${{secrets.RHUB_TOKEN}}"
+  #         )
+  #     - name: Check rhub/debian-clang-devel
+  #       run: Rscript --vanilla inst/rhub/check-rhub.R "debian-clang-devel"
+  #
+  #     - name: Check r-hub/debian-gcc-devel
+  #       run: Rscript --vanilla inst/rhub/check-rhub.R "debian-gcc-devel"
+  #
+  #     - name: Check r-hub/linux-x86_64-rocker-gcc-san
+  #       run: Rscript --vanilla inst/rhub/check-rhub.R "linux-x86_64-rocker-gcc-san"
+  #
+  #     - name: Check r-hub/solaris-x86-patched
+  #       run: Rscript --vanilla inst/rhub/check-rhub.R "solaris-x86-patched"
+  #
+  #     - name: Check r-hub/fedora-clang-devel
+  #       run: Rscript --vanilla inst/rhub/check-rhub.R "fedora-clang-devel"
 
   build-and-deploy:
     needs: r-hub-checks
