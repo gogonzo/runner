@@ -3,6 +3,15 @@ on:
   pull_request:
     branches: [main]
 jobs:
+  set-vars:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@master
+      - name: Set env
+        run: |
+          PKGNAME=$(sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
+          PKGVERS=$(sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
+
   check-r-verse-devel:
     runs-on: ubuntu-18.04
     container: rocker/verse:latest
@@ -64,20 +73,21 @@ jobs:
         shell: Rscript {0}
         run: |
           devtools::check_rhub(
-            path = ".",
+            pkg = ".",
             platforms = c(
               "solaris-x86-patched",
               "debian-gcc-release",
               "debian-clang-devel",
               "fedora-gcc-devel"
             ),
-            check_args = "--no-build-vignettes",
-            show_status = TRUE
+            build_args = "--no-build-vignettes",
+            interactive = TRUE
           )
+
 
   build-and-deploy:
     needs: r-hub-checks
-  #  if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    #  if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     container: rocker/tidyverse:latest
     steps:
@@ -94,6 +104,26 @@ jobs:
           BRANCH: gh-pages
           FOLDER: docs
           CLEAN: true
+
+  gh-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: "v${{ env.PKGVERS }}"
+          release_name: "${{ env.PKGNAME }} ${{ env.PKGVERS }}"
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: false
 
       # - name: Release CRAN
       #   shell: Rscript {0}
