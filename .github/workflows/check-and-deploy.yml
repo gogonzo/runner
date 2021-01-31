@@ -49,22 +49,9 @@ jobs:
             token = "${{secrets.RHUB_TOKEN}}"
           )
       - name: Check r-hub
-        shell: Rscript {0}
-        run: |
-          devtools::check_rhub(
-            pkg = ".",
-            platforms = c(
-              "solaris-x86-patched",
-              "debian-gcc-release",
-              "debian-clang-devel",
-              "fedora-gcc-devel"
-            ),
-            build_args = "--no-build-vignettes",
-            interactive = FALSE
-          )
-
+        shell: Rscript --vanilla inst/rhub/check-rhub.R "debian-clang-devel"
   build-and-deploy:
-    needs: check-r-verse-devel
+    needs: r-hub-checks
     #  if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     container: rocker/tidyverse:latest
@@ -76,9 +63,9 @@ jobs:
 
       - name: Set env
         run: |
-          PKGNAME=$(sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
-          PKGVERS=$(sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
-          PKGNEWS=$(sed -n '2,/^$/p' NEWS.md)
+          echo 'PKGNAME=$(sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)' >> $GITHUB_ENV
+          echo 'PKGVERS=$(sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)' >> $GITHUB_ENV
+          echo 'PKGNEWS=$(sed -n '2,/^$/p' NEWS.md)' >> $GITHUB_ENV
 
       - name: Install package
         run: R CMD INSTALL .

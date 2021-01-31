@@ -21,7 +21,7 @@
 .*Makefile$
 ^pkgdown$
 ^_pkgdown\.yml$
-^\.travis\.yml$
+inst/rhub
 
 # exclude
 inst/tinytest/test_external*
