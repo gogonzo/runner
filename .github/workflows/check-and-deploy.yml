@@ -118,7 +118,7 @@ jobs:
         with:
           tag_name: v${{ env.PKGVERS }}
           release_name: ${{ env.PKGNAME }} ${{ env.PKGVERS }}
-          body: {{ env.PKGNEWS }}
+          body: ${{ env.PKGNEWS }}
           draft: false
           prerelease: false
 
@@ -126,4 +126,3 @@ jobs:
       #   shell: Rscript {0}
       #   run: |
       #     release(pkg = ".", check = FALSE, args = NULL)
-
