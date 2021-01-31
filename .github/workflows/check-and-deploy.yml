@@ -10,18 +10,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@master
 
-      - name: Set env
-        run: |
-          echo "PKGNAME=$(sed -n 's/Package: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
-          echo "PKGVERS=$(sed -n 's/Version: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
-          echo "PKGNEWS=\"$(sed -n '2,/^$/p' NEWS.md)\"" >> $GITHUB_ENV
-
-      - name: use values
-        run: |
-          echo "${{ env.PKGNAME }}"
-          echo "${{ env.PKGVERS }}"
-          echo "${{ env.PKGNEWS }}"
-
       - name: Install dependencies
         shell: Rscript {0}
         run: |
@@ -91,7 +79,7 @@ jobs:
         run: |
           echo "PKGNAME=$(sed -n 's/Package: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
           echo "PKGVERS=$(sed -n 's/Version: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
-          echo "PKGNEWS=$(sed -n '2,/^$/p' NEWS.md)" >> $GITHUB_ENV
+
 
       - name: Install package
         run: R CMD INSTALL .
@@ -122,7 +110,7 @@ jobs:
         with:
           tag_name: "v${{ env.PKGVERS }}"
           release_name: "${{ env.PKGNAME }} ${{ env.PKGVERS }}"
-          body: "${{ env.PKGNEWS }}"
+          body: echo "$(sed -n '2,/^$/p' NEWS.md)"
           draft: false
           prerelease: false
 
