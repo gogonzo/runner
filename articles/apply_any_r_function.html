@@ -44,6 +44,12 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -85,13 +91,13 @@
 
       
 
-      </header><div class="row">
+      </header><script src="apply_any_r_function_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Apply any R function on rolling windows</h1>
                         <h4 class="author">Dawid Kałędkowski</h4>
             
-            <h4 class="date">2021-01-17</h4>
+            <h4 class="date">2021-01-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/gogonzo/runner/blob/master/vignettes/apply_any_r_function.Rmd"><code>vignettes/apply_any_r_function.Rmd</code></a></small>
       <div class="hidden name"><code>apply_any_r_function.Rmd</code></div>
@@ -162,7 +168,7 @@ Following diagram illustrates running windows of length <code>k = 4</code>. Each
 <div id="windows-depending-on-date" class="section level3">
 <h3 class="hasAnchor">
 <a href="#windows-depending-on-date" class="anchor"></a>Windows depending on date</h3>
-<p>By default <code>runner</code> calculates on assumption that index increments by one, but sometimes data points in dataset are not equally spaced (missing weekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies <code>idx</code> argument, than running functions are applied on windows depending on date rather on a sequence 1-n. <code>idx</code> should be the same length as <code>x</code> and should be of type <code>Date</code>, <code>POSIXt</code> or <code>integer</code>. Example below illustrates window of size <code>k = 5</code> lagged by <code>lag = 1</code>. Note that one can specify also <code>k = "5 days"</code> and <code>lag = "day"</code> as in <code>seq.POSIXt</code>.<br>
+<p>By default <code>runner</code> calculates on assumption that index increments by one, but sometimes data points in dataset are not equally spaced (missing weekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies <code>idx</code> argument, than running functions are applied on windows depending on date rather on a sequence 1-n.  <code>idx</code> should be the same length as <code>x</code> and should be of type <code>Date</code>, <code>POSIXt</code> or <code>integer</code>. Example below illustrates window of size <code>k = 5</code> lagged by <code>lag = 1</code>. Note that one can specify also <code>k = "5 days"</code> and <code>lag = "day"</code> as in <code>seq.POSIXt</code>.<br>
 In the example below in square brackets ranges for each window.</p>
 <p><img src="images/running_date_windows.png"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -338,10 +344,10 @@ In the example below in square brackets ranges for each window.</p>
     <span class="op">)</span>
   <span class="op">)</span>
 
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ggplot2</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 <span class="va">summ</span> <span class="op">%&gt;%</span>
-  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">cumulative_mse</span>, group <span class="op">=</span> <span class="va">group</span>, color <span class="op">=</span> <span class="va">group</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">cumulative_mse</span>, group <span class="op">=</span> <span class="va">group</span>, color <span class="op">=</span> <span class="va">group</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>When user executes multiple <code>runner</code> calls in <code>dplyr</code> mutate, one can also use <code>run_by</code> function to prespecify arguments in <code>tidyverse</code> pipeline. In the example below <code>runner</code> functions are applied on <code>k = "20 days"</code> calculated on <code>"date"</code> column.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">df</span> <span class="op">%&gt;%</span>
@@ -416,7 +422,7 @@ In the example below in square brackets ranges for each window.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
