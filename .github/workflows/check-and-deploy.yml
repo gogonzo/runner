@@ -11,10 +11,7 @@ jobs:
         run: |
           PKGNAME=$(sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
           PKGVERS=$(sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
-          PKGNEWS=$(sed -n "s/#.+\n\([^#]*\)#/\1/" NEWS.md)
-          echo $PKGNAME
-          echo $PKGVERS
-          echo $PKGNEWS
+          PKGNEWS=$(sed -n '2,/^$/p' NEWS.md)
 
   check-r-verse-devel:
     runs-on: ubuntu-18.04
@@ -102,13 +99,11 @@ jobs:
           install.packages("covr")
           covr::codecov()
 
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@3.7.1
+      - name: Deploy Docs 🚀
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
-          BRANCH: gh-pages
-          FOLDER: docs
-          CLEAN: true
+          github_token: ${{ secrets.GH_TOKEN }}
+          publish_dir: docs
 
       - name: GH Release
         id: create_release
@@ -125,4 +120,4 @@ jobs:
       # - name: Release CRAN
       #   shell: Rscript {0}
       #   run: |
-      #     release(pkg = ".", check = FALSE, args = NULL)
+      #     devtools::release(pkg = ".", check = FALSE, args = NULL)
