@@ -12,15 +12,11 @@ jobs:
 
       - name: Set env
         run: |
-          echo $(sed -n 's/Package: *\([^ ]*\)/\1/p' DESCRIPTION)
-          # echo "PKGNAME=$(sed -n 's/Package: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
-          # echo "PKGVERS=$(sed -n 's/Version: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
-          # echo "PKGNEWS=$(sed -n '2,/^$/p' NEWS.md)" >> $GITHUB_ENV
-          echo "ELO=shit" >> $GITHUB_ENV
+          echo "PKGNAME=$(sed -n 's/Package: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
 
       - name: use values
         run: |
-          echo "${{ env.ELO }}"
+          echo "${{ env.PKGNAME }}"
 
       - name: Install dependencies
         shell: Rscript {0}
