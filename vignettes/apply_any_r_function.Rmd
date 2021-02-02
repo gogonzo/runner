@@ -2,9 +2,10 @@
 title: "Apply any R function on rolling windows"
 author: "Dawid Kałędkowski"
 date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Apply any R function on rolling windows}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 

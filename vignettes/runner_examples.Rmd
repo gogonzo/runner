@@ -1,8 +1,9 @@
 ---
 title: "Runner examples"
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Runner examples}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
   

@@ -1,4 +1,3 @@
-
 # `runner` an R package for running operations.
 
 # <img src="man/figures/hexlogo.png" align="right" />
