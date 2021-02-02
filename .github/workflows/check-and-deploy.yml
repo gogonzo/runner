@@ -2,6 +2,7 @@ name: Check and deploy
 on:
   pull_request:
     branches: [main]
+
 jobs:
   check-r-verse-devel:
     runs-on: ubuntu-18.04

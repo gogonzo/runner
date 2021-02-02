@@ -29,6 +29,13 @@ render-readme:
 render-vignettes:
 	$(MAKE) -C vignettes/
 
+check-win:
+	Rscript -e "\
+	if (!require("devtools")) install.packages('devtools', repos = 'http://cran.rstudio.com')\n\
+	devtools::check_win_devel()\n\
+	devtools::check_win_oldrelease()\n\
+	devtools::check_win_release()\n"
+
 clean:
 	cd ..;\
 	$(RM) -r $(PKGNAME).Rcheck/

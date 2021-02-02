@@ -50,6 +50,6 @@ res <- do.call(rbind, lapply(statuses, function(thisStatus) {
 print(res)
 
 # Fail if any errors, warnings or notes found
-if (any(colSums(res[2L:4L]) > 0)) {
+if (any(colSums(res[c("errors", "warnings")]) > 0)) {
   stop("Some checks had errors, warnings or notes. See above for details.")
 }
