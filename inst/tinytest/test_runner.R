@@ -1020,7 +1020,7 @@ index <- 101:200
 expect_equal(
   res <- runner(elo, k = 10, lag = 1, f = function(x) x[1, 1], simplify = TRUE),
   runner(
-    seq_len(elo),
+    seq_along(elo),
     k = 10,
     lag = 1,
     f = function(idx) if (length(idx) == 0 || all(is.na(idx))) {
@@ -1037,7 +1037,7 @@ expect_equal(
   res <- runner(elo, k = 10, lag = 1,
                 f = function(x) x[1, 1], simplify = FALSE),
   runner(
-    seq_len(elo),
+    seq_along(elo),
     k = 10,
     lag = 1,
     f = function(idx) if (length(idx) == 0 || all(is.na(idx))) {
