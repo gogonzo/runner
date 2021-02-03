@@ -25,3 +25,4 @@ inst/rhub
 
 # exclude
 inst/tinytest/test_external*
+^codemeta\.json$

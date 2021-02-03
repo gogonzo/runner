@@ -80,16 +80,11 @@ jobs:
         run: R CMD INSTALL .
 
       - name: Build docs 🔧
-        shell: Rscript {0}
-        run: |
-          install.packages("pkgdown")
-          pkgdown::build_site()
+        run: make render-pkgdown
 
       - name: Test coverage
         shell: Rscript {0}
-        run: |
-          install.packages("covr")
-          covr::codecov()
+        run: make code-coverage
 
       - name: Deploy Docs 🚀
         uses: peaceiris/actions-gh-pages@v3
@@ -114,8 +109,3 @@ jobs:
           body_path: news.txt
           draft: false
           prerelease: false
-
-      - name: Release CRAN
-        shell: Rscript {0}
-        run: |
-          devtools::release(pkg = ".", check = FALSE, args = NULL)

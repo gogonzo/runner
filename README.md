@@ -126,7 +126,7 @@ runner(
 )
 ```
 
-### running at
+### Running at
 
 Runner by default returns vector of the same size as `x` unless one puts
 any-size vector to `at` argument. Each element of `at` is an index on
