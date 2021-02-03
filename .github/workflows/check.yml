@@ -1,4 +1,4 @@
-name: Check and deploy
+name: Check
 on:
   pull_request:
     branches: [main]
