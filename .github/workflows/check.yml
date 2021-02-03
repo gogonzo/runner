@@ -73,9 +73,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Initialize r-hub
+      - name: Send package to win-builder
         shell: Rscript {0}
         run: |
-        	devtools::check_win_devel()
-        	devtools::check_win_oldrelease()
-        	devtools::check_win_release()
+          devtools::check_win_devel()
+          devtools::check_win_oldrelease()
+          devtools::check_win_release()
