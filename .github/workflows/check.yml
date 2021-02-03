@@ -45,7 +45,7 @@ jobs:
       - name: Initialize r-hub
         shell: Rscript {0}
         run: |
-          install.packages("rhub")
+          if (!require("rhub")) install.packages("rhub", repos = 'http://cran.rstudio.com')
           rhub::validate_email(
             email = "dawid.kaledkowski@gmail.com",
             token = "${{secrets.RHUB_TOKEN}}"
@@ -64,3 +64,18 @@ jobs:
 
       - name: Check r-hub/fedora-clang-devel
         run: Rscript --vanilla inst/rhub/check-rhub.R "fedora-clang-devel"
+
+  win-builder-checks:
+    needs: [check-r-verse-devel, check-r-verse-3-6]
+    if: "contains(github.event.head_commit.message, 'release')"
+    runs-on: ubuntu-18.04
+    container: rocker/tidyverse:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Initialize r-hub
+        shell: Rscript {0}
+        run: |
+        	devtools::check_win_devel()
+        	devtools::check_win_oldrelease()
+        	devtools::check_win_release()
