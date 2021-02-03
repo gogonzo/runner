@@ -2,7 +2,7 @@ name: Check
 on:
   push:
     branches-ignore:
-      - [main]
+      - main
 jobs:
   check-r-verse-devel:
     runs-on: ubuntu-18.04
