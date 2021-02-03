@@ -4,19 +4,19 @@ x2 <- sample(c(NA, 1, 2, 3), 100, replace = TRUE)
 k <- sample(1:100, 100, replace = TRUE)
 lag <- sample(-15:15, 100, replace = TRUE)
 idx <- cumsum(sample(c(1, 2, 3, 4), 100, replace = TRUE))
-streak2 <- function(x, na_rm = TRUE) {
+streak2 <- function(x, na_rm = TRUE) {  #nolint
   if (all(is.na(x))) return(NA)
   xx <- x[length(x)]
   astreak <- 0L
   if (na_rm) {
-    for (i in length(x):1) {
+    for (i in rev(seq_along(x))) {
       if (is.na(x[i])) next
       if (is.na(xx)) xx <- x[i]
       if (x[i] != xx) break
       astreak <- astreak + 1L
     }
   } else {
-    for (i in length(x):1) {
+    for (i in rev(seq_along(x))) {
       if (is.na(x[i])) return(NA)
       if (x[i] != xx) break
       astreak <- astreak + 1L

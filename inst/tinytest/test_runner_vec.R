@@ -67,7 +67,7 @@ expect_equal(
 expect_equal(
   sum_run(x2, lag = -100, na_pad = TRUE),
   suppressWarnings(
-    runner(x2, lag = -100, f = sum2, na_pad = TRUE, type = "numeric")\
+    runner(x2, lag = -100, f = sum2, na_pad = TRUE, type = "numeric")
   )
 )
 

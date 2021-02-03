@@ -180,9 +180,14 @@ expect_identical(lag_run(x4, lag = lag, idx = idx, nearest = FALSE),
                  lag_run2(x4, lag = lag, idx = idx, nearest = FALSE))
 
 # errors ------
-expect_error(lag_run(x, lag = (1:9)), "length of lag and length of x differs")
-expect_error(min_run(x, lag = c(NA, lag[-1])), "Function doesn't accept NA values in lag vector")
+expect_error(lag_run(x, lag = (1:9)),
+             "length of lag and length of x differs")
+expect_error(min_run(x, lag = c(NA, lag[-1])),
+             "Function doesn't accept NA values in lag vector")
 
-expect_error(lag_run(x, idx = (1:9)), "length of idx and length of x differs")
-expect_error(lag_run(x, idx = c(NA, 1:29)), "Function doesn't accept NA values in idx vector")
-expect_error(lag_run(x, idx = sample(1:30)), "idx have to be in ascending order")
+expect_error(lag_run(x, idx = (1:9)),
+             "length of idx and length of x differs")
+expect_error(lag_run(x, idx = c(NA, 1:29)),
+             "Function doesn't accept NA values in idx vector")
+expect_error(lag_run(x, idx = sample(1:30)),
+             "idx have to be in ascending order")

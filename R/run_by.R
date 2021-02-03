@@ -51,9 +51,12 @@ run_by <- function(x, idx, k, lag, na_pad, at) {
 
 set_run_by_index <- function(x, arg) {
   arg_name <- deparse(substitute(arg))
-  attr(x, arg_name) <- if (is.character(arg) && length(arg) == 1 && arg %in% names(x)) {
+  attr(x, arg_name) <- if (is.character(arg) &&
+                           length(arg) == 1 &&
+                           arg %in% names(x)) {
     arg
-  } else if (is.numeric(arg) || inherits(arg, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
+  } else if (is.numeric(arg) ||
+             inherits(arg, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
     arg
   } else {
     stop(
@@ -82,7 +85,7 @@ set_run_by_difftime <- function(x, arg) {
         sprintf(
           "`%s` is invalid, should be either:
            - column name of `x`
-           - `difftime` class or character describing diffitme (see at argument in `seq.POSIXt`)
+           - `difftime` class or character describing diffitme (see at argument in `seq.POSIXt`) #nolint
            - `numeric` or `integer` vector",
           arg_name
         ),
@@ -96,7 +99,7 @@ set_run_by_difftime <- function(x, arg) {
       sprintf(
         "`%s` is invalid, should be either:
            - column name of `x`
-           - `difftime` class or character describing diffitme (see at argument in `seq.POSIXt`)
+           - `difftime` class or character describing diffitme (see at argument in `seq.POSIXt`) #nolint
            - `numeric` or `integer` `vector`",
         arg_name
       ),

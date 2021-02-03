@@ -12,21 +12,25 @@ expect_identical(
   as.complex(c(1, 1, 1:10, 10, 10))
 )
 
-expect_warning(fill_run( c(NA, NA, NA, NA)))
+expect_warning(fill_run(c(NA, NA, NA, NA)))
 
 expect_equal(
-  fill_run(factor(c(NA, NA, 1, 2, NA, NA, 2, 2, NA, NA, 1, NA, NA)), run_for_first = TRUE, only_within = TRUE),
+  fill_run(factor(c(NA, NA, 1, 2, NA, NA, 2, 2, NA, NA, 1, NA, NA)),
+           run_for_first = TRUE,
+           only_within = TRUE),
   c(1, 1, 1, 2, 2, 2, 2, 2, NA, NA, 1, NA, NA)
 )
 
 expect_equal(
-  fill_run(as.complex(c(NA, NA, 1, 2, NA, NA, 2, 2, NA, NA, 1, NA, NA)), run_for_first = TRUE, only_within = TRUE),
+  fill_run(as.complex(c(NA, NA, 1, 2, NA, NA, 2, 2, NA, NA, 1, NA, NA)),
+           run_for_first = TRUE,
+           only_within = TRUE),
   as.complex(c(1, 1, 1, 2, 2, 2, 2, 2, NA, NA, 1, NA, NA))
 )
 
 expect_equal(
-  fill_run(c(NA, NA, T, T, NA, NA, T, T, NA, NA, T, NA, NA), run_for_first = TRUE, only_within = TRUE),
+  fill_run(c(NA, NA, T, T, NA, NA, T, T, NA, NA, T, NA, NA),
+           run_for_first = TRUE,
+           only_within = TRUE),
   c(T, T, T, T, T, T, T, T, T, T, T, NA, NA)
 )
-
-
