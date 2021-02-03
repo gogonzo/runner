@@ -1,7 +1,8 @@
 name: Check
 on:
-  pull_request:
-    branches: [main]
+  push:
+    branches-ignore:
+      - [main]
 jobs:
   check-r-verse-devel:
     runs-on: ubuntu-18.04
