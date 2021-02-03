@@ -6,28 +6,45 @@ PKGSRC  := $(shell basename `pwd`)
 all: check clean
 
 deps:
-	Rscript -e 'if (!require("Rd2roxygen")) install.packages("Rd2roxygen", repos="http://cran.rstudio.com")'
+	devtools::install_deps(dependencies = TRUE)
 
 build: docs
 	cd ..;\
-	R CMD build $(PKGSRC)
+	R CMD build $(PKGSRC) -no-build-vignettes
 
 check: build
 	cd ..;\
-	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --as-cran
+	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --as-cran -no-build-vignettes
 
-pkgdown:
-	$(R_HOME)/bin/Rscript -e 'if (!require("dplyr")) install.packages("dplyr", repos = "http://cran.rstudio.com")'
-	$(R_HOME)/bin/Rscript -e 'pkgdown::build_site()'
+install:
+	R CMD INSTALL . --no-multiarch --with-keep.source
+
+pkgdown: install
+	Rscript -e 'if (!require("pkgdown")) install.packages("pkgdown", repos = "http://cran.rstudio.com")'
+	Rscript -e 'pkgdown::build_site()'
+
+covr: install
+	Rscript -e '\
+	if (!require("covr")) install.packages("covr", repos = "http://cran.rstudio.com")\n\
+  covr::codecov()'
 
 docs: render-readme
 
 render-readme:
-	$(R_HOME)/bin/Rscript -e 'if (!require("rmarkdown")) install.packages("rmarkdown", repos = "http://cran.rstudio.com")'
-	$(R_HOME)/bin/Rscript -e 'rmarkdown::render("README.Rmd")'
+	Rscript -e '\
+	if (!require("rmarkdown"))\n\
+	install.packages("rmarkdown", repos="http://cran.rstudio.com")\n\
+	rmarkdown::render("README.Rmd", output_format = rmarkdown::md_document("gfm"))'
 
-render-vignettes:
-	$(MAKE) -C vignettes/
+#render-vignettes:
+#	$(MAKE) -C vignettes/
+
+check-win:
+	Rscript -e "\
+	if (!require("devtools")) install.packages('devtools', repos = 'http://cran.rstudio.com')\n\
+	devtools::check_win_devel()\n\
+	devtools::check_win_oldrelease()\n\
+	devtools::check_win_release()"
 
 clean:
 	cd ..;\

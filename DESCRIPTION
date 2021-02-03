@@ -23,6 +23,7 @@ Imports:
   Rcpp 
 Suggests:
   knitr,
+  rmarkdown,
   spelling,
   tinytest
 RoxygenNote: 7.1.1

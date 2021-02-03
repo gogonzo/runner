@@ -1,0 +1,121 @@
+name: Check and deploy
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-r-verse-devel:
+    runs-on: ubuntu-18.04
+    container: rocker/verse:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@master
+
+      - name: Install dependencies
+        shell: Rscript {0}
+        run: |
+          remotes::install_deps(dependencies = TRUE)
+      - name: Check
+        shell: Rscript {0}
+        run: |
+          devtools::check(cran = TRUE, vignettes = TRUE)
+
+  check-r-verse-3-6:
+    runs-on: ubuntu-18.04
+    container: rocker/verse:3.6.3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        shell: Rscript {0}
+        run: |
+          remotes::install_deps(dependencies = TRUE)
+      - name: Check
+        shell: Rscript {0}
+        run: |
+          devtools::check(cran = TRUE, vignettes = TRUE)
+
+  r-hub-checks:
+    needs: [check-r-verse-devel, check-r-verse-3-6]
+    runs-on: ubuntu-18.04
+    container: rocker/tidyverse:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Initialize r-hub
+        shell: Rscript {0}
+        run: |
+          install.packages("rhub")
+          rhub::validate_email(
+            email = "dawid.kaledkowski@gmail.com",
+            token = "${{secrets.RHUB_TOKEN}}"
+          )
+      - name: Check rhub/debian-clang-devel
+        run: Rscript --vanilla inst/rhub/check-rhub.R "debian-clang-devel"
+
+      - name: Check r-hub/debian-gcc-devel
+        run: Rscript --vanilla inst/rhub/check-rhub.R "debian-gcc-devel"
+
+      - name: Check r-hub/linux-x86_64-rocker-gcc-san
+        run: Rscript --vanilla inst/rhub/check-rhub.R "linux-x86_64-rocker-gcc-san"
+
+      - name: Check r-hub/solaris-x86-patched
+        run: Rscript --vanilla inst/rhub/check-rhub.R "solaris-x86-patched"
+
+      - name: Check r-hub/fedora-clang-devel
+        run: Rscript --vanilla inst/rhub/check-rhub.R "fedora-clang-devel"
+
+  build-and-deploy:
+    needs: r-hub-checks
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    container: rocker/tidyverse:latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2.3.1
+        with:
+          persist-credentials: false
+
+      - name: Install package
+        run: R CMD INSTALL .
+
+      - name: Build docs 🔧
+        shell: Rscript {0}
+        run: |
+          install.packages("pkgdown")
+          pkgdown::build_site()
+
+      - name: Test coverage
+        shell: Rscript {0}
+        run: |
+          install.packages("covr")
+          covr::codecov()
+
+      - name: Deploy Docs 🚀
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          publish_dir: docs
+
+      - name: Prepare release vars
+        run: |
+          echo "PKGNAME=$(sed -n 's/Package: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
+          echo "PKGVERS=$(sed -n 's/Version: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
+          echo "$(sed -n '2,/^$/p' NEWS.md)" > news.txt
+
+      - name: GH Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: "v${{ env.PKGVERS }}"
+          release_name: "${{ env.PKGNAME }} ${{ env.PKGVERS }}"
+          body_path: news.txt
+          draft: false
+          prerelease: false
+
+      - name: Release CRAN
+        shell: Rscript {0}
+        run: |
+          devtools::release(pkg = ".", check = FALSE, args = NULL)
