@@ -15,8 +15,9 @@
 #'  Denoting window lag. If `lag` is a single value then window lag is constant
 #'  for all elements, otherwise if `length(lag) == length(x)` different window
 #'  size for each element. Negative value shifts window forward. One can also
-#'  specify `lag` in the same way as `by` argument in \code{\link[base]{seq.POSIXt}}.
-#'  See 'Specifying time-intervals' in details section.
+#'  specify `lag` in the same way as `by` argument in
+#'  \code{\link[base]{seq.POSIXt}}. See 'Specifying time-intervals' in details
+#'  section.
 #'
 #' @param idx (`integer`, `Date`, `POSIXt`)\cr
 #'  Optional integer vector containing sorted (ascending) index of observation.
@@ -41,9 +42,10 @@
 #'  Incomplete window is when some parts of the window are out of range.
 #'
 #' @param type (`character` single value)\cr
-#'  output type (`"auto"`, `"logical"`, `"numeric"`, `"integer"`, `"character"`).
-#'  `runner` by default guess type automatically. In case of failure of `"auto"`
-#'  please specify desired type.
+#'  output type
+#'  (`"auto"`, `"logical"`, `"numeric"`, `"integer"`, `"character"`). `runner`
+#'  by default guess type automatically. In case of failure of `"auto"` please
+#'  specify desired type.
 #'
 #' @param simplify (`logical` or `character` value)\cr
 #'  should the result be simplified to a vector, matrix or higher dimensional
@@ -100,8 +102,8 @@
 #'  }
 #' }
 #' ## Specifying time-intervals
-#'  `at` can also be specified as interval of the output defined by `at = "<increment>"`
-#'  which results in indices sequence defined by
+#'  `at` can also be specified as interval of the output defined by
+#'  `at = "<increment>"` which results in indices sequence defined by
 #'  `seq.POSIXt(min(idx), max(idx), by = "<increment>")`. Increment of sequence
 #'  is the same as in \code{\link[base]{seq.POSIXt}} function.
 #'  It's worth noting that increment interval can't be more frequent than
@@ -138,7 +140,7 @@
 #' @importFrom methods is
 #' @importFrom parallel clusterExport parLapply
 #' @export
-runner <- function (
+runner <- function(
   x,
   f = function(x) x,
   k = integer(0),
@@ -958,7 +960,8 @@ set_from_attribute_logical <- function(x, attrib) {
 
 #' Access group data in mutate
 #'
-#' Access group data in `dplyr::mutate` after `dplyr::group_by`.
+#' Access group data in `dplyr::mutate` after
+#' `dplyr::group_by`.
 #' Function created because data available in `dplyr::group_by %>% mutate` scheme
 #' is not filtered by group - in mutate function `.` is still initial dataset.
 #' This function creates `data.frame` using `dplyr::groups` information.
@@ -984,4 +987,3 @@ this_group <- function(x) {
   }
   return(x)
 }
-

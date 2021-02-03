@@ -24,7 +24,7 @@ which2 <- function(x, arg_which = "last", na_rm = TRUE) {
       head(which(x), 1)
     }
   }
-  if(length(x) == 0) {
+  if (length(x) == 0) {
     x <- NA_integer_
   }
   return(x)
@@ -49,7 +49,9 @@ expect_identical(
 
 expect_identical(
   which_run(x2, which = "first", na_pad = TRUE),
-  as.integer(runner(x2, function(x) which2(x, arg_which = "first"), na_pad = TRUE))
+  as.integer(
+    runner(x2, function(x) which2(x, arg_which = "first"), na_pad = TRUE)
+  )
 )
 
 expect_identical(
@@ -60,7 +62,9 @@ expect_identical(
 
 expect_identical(
   which_run(x1, which = "first", na_rm = FALSE),
-  as.integer(runner(x1, function(x) which2(x, arg_which = "first", na_rm = FALSE)))
+  as.integer(
+    runner(x1, function(x) which2(x, arg_which = "first", na_rm = FALSE))
+  )
 )
 
 #    [...|----]---+------->-----
@@ -117,7 +121,10 @@ test[10:100] <- test[10:100] + 10:100L - 10L
 expect_equal(out, test)
 
 out <- which_run(x2, k = 10, na_pad = TRUE, which = "first")
-test <- runner(x2, k = 10, f = function(x) which2(x = x, arg_which = "first"), na_pad = TRUE)
+test <- runner(x2,
+               k = 10,
+               f = function(x) which2(x = x, arg_which = "first"),
+               na_pad = TRUE)
 test[10:100] <- test[10:100] + 10:100L - 10L
 expect_equal(out, test)
 
@@ -144,7 +151,8 @@ test[(5 + 3):100] <- test[(5 + 3):100] + (5 + 3):100L - (5L + 3)
 expect_equal(out, test)
 
 out <- which_run(x2, k = 5, lag = 3, na_pad = TRUE, na_rm = FALSE)
-test <- runner(x2, k = 5, lag = 3, f = function(x) which2(x, na_rm = FALSE), na_pad = TRUE)
+test <- runner(x2, k = 5, lag = 3,
+               f = function(x) which2(x, na_rm = FALSE), na_pad = TRUE)
 test[(5 + 3):100] <- test[(5 + 3):100] + (5 + 3):100L - (5L + 3)
 expect_equal(out, test)
 
@@ -160,7 +168,8 @@ test[(5 - 3):100] <- test[(5 - 3):100] + (5 - 3):100L - (5L - 3)
 expect_equal(out, test)
 
 out <- which_run(x2, k = 5, lag = -3, na_pad = TRUE, na_rm = FALSE)
-test <- runner(x2, k = 5, lag = -3, f = function(x) which2(x, na_rm = FALSE), na_pad = TRUE)
+test <- runner(x2, k = 5, lag = -3,
+               f = function(x) which2(x, na_rm = FALSE), na_pad = TRUE)
 test[(5 - 3):100] <- test[(5 - 3):100] + (5 - 3):100L - (5L - 3)
 expect_equal(out, test)
 
@@ -239,12 +248,19 @@ expect_equal(
   which_run(x2, k = k, lag = lag, na_pad = TRUE, na_rm = FALSE))
 
 # Errors-----
-expect_error(which_run(x1, which = "any"), "which value should be either")
-expect_error(which_run(x1, k = (1:999)), "length of k and length of x differs")
-expect_error(which_run(x1, k = c(NA, k[-1])), "Function doesn't accept NA values in k vector")
+expect_error(which_run(x1, which = "any"),
+             "which value should be either")
+expect_error(which_run(x1, k = (1:999)),
+             "length of k and length of x differs")
+expect_error(which_run(x1, k = c(NA, k[-1])),
+             "Function doesn't accept NA values in k vector")
 
-expect_error(which_run(x1, lag = (1:99)), "length of lag and length of x differs")
-expect_error(which_run(x1, lag = c(NA, lag[-1])), "Function doesn't accept NA values in lag vector")
+expect_error(which_run(x1, lag = (1:99)),
+             "length of lag and length of x differs")
+expect_error(which_run(x1, lag = c(NA, lag[-1])),
+             "Function doesn't accept NA values in lag vector")
 
-expect_error(which_run(x1, idx = (1:99)), "length of idx and length of x differs")
-expect_error(which_run(x1, idx = c(NA, 1:99)), "Function doesn't accept NA values in idx vector")
+expect_error(which_run(x1, idx = (1:99)),
+             "length of idx and length of x differs")
+expect_error(which_run(x1, idx = c(NA, 1:99)),
+             "Function doesn't accept NA values in idx vector")

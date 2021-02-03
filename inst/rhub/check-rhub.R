@@ -27,22 +27,22 @@ out <- capture.output({
 statuses <- cr[[".__enclos_env__"]][["private"]][["status_"]]
 
 # Create and print a data frame with results
-res <- do.call(rbind, lapply(statuses, function(thisStatus) {
-  if (length(thisStatus[["result"]][["errors"]]) > 0) {
-    print(thisStatus[["result"]][["errors"]])
+res <- do.call(rbind, lapply(statuses, function(this_status) {
+  if (length(this_status[["result"]][["errors"]]) > 0) {
+    print(this_status[["result"]][["errors"]])
   }
-  if (length(thisStatus[["result"]][["warnings"]]) > 0) {
-    print(thisStatus[["result"]][["warnings"]])
+  if (length(this_status[["result"]][["warnings"]]) > 0) {
+    print(this_status[["result"]][["warnings"]])
   }
-  if (length(thisStatus[["result"]][["notes"]]) > 0) {
-    print(thisStatus[["result"]][["notes"]])
+  if (length(this_status[["result"]][["notes"]]) > 0) {
+    print(this_status[["result"]][["notes"]])
   }
 
   data.frame(
-    Plaform  = thisStatus[["platform"]][["name"]],
-    Errors   = length(thisStatus[["result"]][["errors"]]),
-    Warnings = length(thisStatus[["result"]][["warnings"]]),
-    Notes    = length(thisStatus[["result"]][["notes"]]),
+    Plaform  = this_status[["platform"]][["name"]],
+    Errors   = length(this_status[["result"]][["errors"]]),
+    Warnings = length(this_status[["result"]][["warnings"]]),
+    Notes    = length(this_status[["result"]][["notes"]]),
     stringsAsFactors = FALSE
   )
 }))

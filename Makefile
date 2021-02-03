@@ -3,7 +3,7 @@ PKGNAME := $(shell sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGVERS := $(shell sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGSRC  := $(shell basename `pwd`)
 
-all: check clean
+all: generate-codemeta render-readme check clean
 
 deps:
 	devtools::install_deps(dependencies = TRUE)
@@ -56,6 +56,12 @@ generate-codemeta:
 	Rscript -e "\
 	if (!require('codemetar')) install.packages('codemetar', repos = 'http://cran.rstudio.com')\n\
 	codemetar::write_codemeta()"
+
+check-linters:
+	Rscript -e "\
+	if (!require('lintr')) install.packages('lintr', repos = 'http://cran.rstudio.com')\n\
+	lintr::lint_package()"
+
 
 clean:
 	cd ..;\

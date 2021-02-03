@@ -64,7 +64,9 @@ expect_equal(
 
 expect_equal(
   streak_run(x2, lag = 100, na_pad = TRUE),
-  suppressWarnings(runner(x2, lag = 100, f = streak2, na_pad = TRUE, type = "numeric"))
+  suppressWarnings(
+    runner(x2, lag = 100, f = streak2, na_pad = TRUE, type = "numeric")
+  )
 )
 
 
@@ -74,7 +76,9 @@ expect_equal(
 
 expect_equal(
   streak_run(x2, lag = -100, na_pad = TRUE),
-  suppressWarnings(runner(x2, lag = -100, f = streak2, na_pad = TRUE, type = "numeric"))
+  suppressWarnings(
+    runner(x2, lag = -100, f = streak2, na_pad = TRUE, type = "numeric")
+    )
 )
 
 #       |----[...]-------> ------
@@ -126,7 +130,8 @@ expect_equal(
 
 expect_equal(
   streak_run(x2, k = 5, lag = 3, na_pad = TRUE, na_rm = FALSE),
-  runner(x2, k = 5, lag = 3, f = function(x) streak2(x, na_rm = FALSE), na_pad = TRUE))
+  runner(x2, k = 5, lag = 3,
+         f = function(x) streak2(x, na_rm = FALSE), na_pad = TRUE))
 
 #       |-----[--+---]---> ------
 expect_equal(
@@ -143,7 +148,8 @@ expect_equal(
 
 expect_equal(
   streak_run(x2, k = 5, lag = -3, na_pad = TRUE, na_rm = FALSE),
-  runner(x2, k = 5, lag = -3, f = function(x) streak2(x, na_rm = FALSE), na_pad = TRUE))
+  runner(x2, k = 5, lag = -3,
+         f = function(x) streak2(x, na_rm = FALSE), na_pad = TRUE))
 
 #       |--------+-[---]-> ------
 expect_equal(
@@ -204,7 +210,8 @@ expect_equal(
 
 expect_equal(
   streak_run(x2, k = k, lag = lag, na_rm = FALSE, na_pad = TRUE),
-  runner(x2, k = k, lag = lag, f = function(x) streak2(x, na_rm = FALSE), na_pad = TRUE))
+  runner(x2, k = k, lag = lag,
+         f = function(x) streak2(x, na_rm = FALSE), na_pad = TRUE))
 
 #date window ------
 expect_equal(
@@ -327,11 +334,17 @@ expect_equal(
 
 
 #Errors ------
-expect_error(streak_run(x1, k = (1:999)), "length of k and length of x differs")
-expect_error(streak_run(x1, k = c(NA, k[-1])), "Function doesn't accept NA values in k vector")
+expect_error(streak_run(x1, k = (1:999)),
+             "length of k and length of x differs")
+expect_error(streak_run(x1, k = c(NA, k[-1])),
+             "Function doesn't accept NA values in k vector")
 
-expect_error(streak_run(x1, lag = (1:99)), "length of lag and length of x differs")
-expect_error(streak_run(x1, lag = c(NA, lag[-1])), "Function doesn't accept NA values in lag vector")
+expect_error(streak_run(x1, lag = (1:99)),
+             "length of lag and length of x differs")
+expect_error(streak_run(x1, lag = c(NA, lag[-1])),
+             "Function doesn't accept NA values in lag vector")
 
-expect_error(streak_run(x1, idx = (1:99)), "length of idx and length of x differs")
-expect_error(streak_run(x1, idx = c(NA, 1:99)), "Function doesn't accept NA values in idx vector")
+expect_error(streak_run(x1, idx = (1:99)),
+             "length of idx and length of x differs")
+expect_error(streak_run(x1, idx = c(NA, 1:99)),
+             "Function doesn't accept NA values in idx vector")

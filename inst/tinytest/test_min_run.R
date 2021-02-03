@@ -49,7 +49,9 @@ expect_equal(
 )
 expect_equal(
   min_run(x2, lag = 100, na_pad = TRUE),
-  suppressWarnings(runner(x2, lag = 100, f = min2, na_pad = TRUE, type = "numeric"))
+  suppressWarnings(
+    runner(x2, lag = 100, f = min2, na_pad = TRUE, type = "numeric")
+  )
 )
 
 expect_equal(
@@ -58,7 +60,9 @@ expect_equal(
 )
 expect_equal(
   min_run(x2, lag = -100, na_pad = TRUE),
-  suppressWarnings(runner(x2, lag = -100, f = min2, na_pad = TRUE, type = "numeric"))
+  suppressWarnings(
+    runner(x2, lag = -100, f = min2, na_pad = TRUE, type = "numeric")
+  )
 )
 
 #        |----[...]-------> -------
@@ -111,7 +115,9 @@ expect_equal(
 
 expect_equal(
   min_run(x2, k = 5, lag = 3, na_pad = TRUE, na_rm = FALSE),
-  suppressWarnings(runner(x2, k = 5, lag = 3, f = min, na_pad = TRUE, type = "numeric"))
+  suppressWarnings(
+    runner(x2, k = 5, lag = 3, f = min, na_pad = TRUE, type = "numeric")
+  )
 )
 
 #        |-----[--+---]---> -------
@@ -129,7 +135,9 @@ expect_equal(
 
 expect_equal(
   min_run(x2, k = 5, lag = -3, na_pad = TRUE, na_rm = FALSE),
-  suppressWarnings(runner(x2, k = 5, lag = -3, f = min, na_pad = TRUE, type = "numeric"))
+  suppressWarnings(
+    runner(x2, k = 5, lag = -3, f = min, na_pad = TRUE, type = "numeric")
+  )
 )
 
 #        |--------+-[---]-> -------
