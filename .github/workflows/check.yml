@@ -20,6 +20,19 @@ jobs:
         run: |
           devtools::check(cran = TRUE, vignettes = TRUE)
 
+      - name: Install package 🏗
+        run: R CMD INSTALL .
+
+      - name: Check spelling 📖
+        run: make check-spelling
+
+      - name: Build docs 🔧
+        run: make render-pkgdown
+
+      - name: Test coverage
+        shell: Rscript {0}
+        run: make code-coverage
+
   check-r-verse-3-6:
     runs-on: ubuntu-18.04
     container: rocker/verse:3.6.3

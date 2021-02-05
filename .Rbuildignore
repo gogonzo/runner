@@ -23,6 +23,7 @@
 ^_pkgdown\.yml$
 inst/rhub
 inst/checks
+inst/WORDLIST
 
 # exclude
 inst/tinytest/test_external*

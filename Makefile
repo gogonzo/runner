@@ -29,6 +29,14 @@ code-coverage:
 	if (!require("covr")) install.packages("covr", repos = "http://cran.rstudio.com")\n\
   covr::codecov()'
 
+check-spelling:
+	Rscript -e '\
+	if (!require("spelling")) install.packages("spelling", repos = "http://cran.rstudio.com")\n\
+  out <- capture.output(spelling::spell_check_package())\n\
+  if (!identical(out, "No spelling errors found.")) {\n\
+  stop(paste(out, collapse = "\n"))\n\
+  }'
+
 docs: render-readme
 
 render-readme:

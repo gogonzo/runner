@@ -21,10 +21,11 @@ lintr_single <- function(file, ...) {
 }
 
 files <- commandArgs(trailingOnly = TRUE)
-files <- grep("\\.R", x = files, value = TRUE)
+files <- grep("\\.R$", x = files, value = TRUE)
 outputs <- lapply(files, lintr_single)
 is_error <- vapply(outputs, function(x) x[[2]], FUN.VALUE = logical(1))
-if (any(isTRUE(is_error))) {
+
+if (length(is_error) > 0 && any(isTRUE(is_error))) {
   errors <- c("Some lint errors:", unlist(lapply(outputs, function(x) x[[3]])))
   stop(paste(errors, collapse = "\n\n"))
 }
