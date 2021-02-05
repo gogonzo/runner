@@ -5,7 +5,7 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "runner",
-  "description": "Lightweight library for rolling windowss operations. Package enables\n  full control over the window length, window lag and a time indices. With a runner \n  one can apply any R function on a rolling windows. The package eases work with \n  equally and unequally spaced time series.",
+  "description": "Lightweight library for rolling windows operations. Package enables\n  full control over the window length, window lag and a time indices. With a runner \n  one can apply any R function on a rolling windows. The package eases work with \n  equally and unequally spaced time series.",
   "name": "runner: Running operations for vectors",
   "issueTracker": "https://github.com/gogonzo/runner/issues",
   "license": "https://spdx.org/licenses/GPL-2.0",

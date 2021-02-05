@@ -10,7 +10,7 @@ Authors@R: person("Dawid", "Kałędkowski",
                   comment = c(ORCID = "0000-0001-9533-457X"),
                   role = c("aut", "cre"))
 Maintainer: Dawid Kałędkowski <dawid.kaledkowski@gmail.com>
-Description: Lightweight library for rolling windowss operations. Package enables
+Description: Lightweight library for rolling windows operations. Package enables
   full control over the window length, window lag and a time indices. With a runner 
   one can apply any R function on a rolling windows. The package eases work with 
   equally and unequally spaced time series.

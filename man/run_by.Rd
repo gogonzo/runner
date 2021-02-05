@@ -13,8 +13,9 @@ Input in runner custom function \code{f}.}
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr
 Optional integer vector containing sorted (ascending) index of observation.
 By default \code{idx} is index incremented by one. User can provide index with
-varying increment and with duplicated values. If specified then \code{k} and \code{lag}
-are depending on \code{idx}. Length of \code{idx} have to be equal of length \code{x}.}
+varying increment and with duplicated values. If specified then \code{k} and
+\code{lag} are depending on \code{idx}. Length of \code{idx} have to be equal of length
+\code{x}.}
 
 \item{k}{(\code{integer} vector or single value)\cr
 Denoting size of the running window. If \code{k} is a single value then window
@@ -27,8 +28,9 @@ See 'Specifying time-intervals' in details section.}
 Denoting window lag. If \code{lag} is a single value then window lag is constant
 for all elements, otherwise if \code{length(lag) == length(x)} different window
 size for each element. Negative value shifts window forward. One can also
-specify \code{lag} in the same way as \code{by} argument in \code{\link[base]{seq.POSIXt}}.
-See 'Specifying time-intervals' in details section.}
+specify \code{lag} in the same way as \code{by} argument in
+\code{\link[base]{seq.POSIXt}}. See 'Specifying time-intervals' in details
+section.}
 
 \item{na_pad}{(\code{logical} single value)\cr
 Whether incomplete window should return \code{NA} (if \code{na_pad = TRUE})

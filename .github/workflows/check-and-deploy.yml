@@ -76,7 +76,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install package
+      - name: Install package 🏗
         run: R CMD INSTALL .
 
       - name: Build docs 🔧

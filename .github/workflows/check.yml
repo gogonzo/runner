@@ -8,14 +8,14 @@ jobs:
     runs-on: ubuntu-18.04
     container: rocker/verse:latest
     steps:
-      - name: Checkout repository
+      - name: Checkout repository 🛎
         uses: actions/checkout@master
 
       - name: Install dependencies
         shell: Rscript {0}
         run: |
           remotes::install_deps(dependencies = TRUE)
-      - name: Check
+      - name: Check 🔍
         shell: Rscript {0}
         run: |
           devtools::check(cran = TRUE, vignettes = TRUE)
@@ -37,13 +37,13 @@ jobs:
     runs-on: ubuntu-18.04
     container: rocker/verse:3.6.3
     steps:
-      - name: Checkout repository
+      - name: Checkout repository 🛎
         uses: actions/checkout@v2
       - name: Install dependencies
         shell: Rscript {0}
         run: |
           remotes::install_deps(dependencies = TRUE)
-      - name: Check
+      - name: Check 🔍
         shell: Rscript {0}
         run: |
           devtools::check(cran = TRUE, vignettes = TRUE)
@@ -54,7 +54,7 @@ jobs:
     runs-on: ubuntu-18.04
     container: rocker/tidyverse:latest
     steps:
-      - name: Checkout repository
+      - name: Checkout repository 🛎
         uses: actions/checkout@v2
       - name: Initialize r-hub
         shell: Rscript {0}
