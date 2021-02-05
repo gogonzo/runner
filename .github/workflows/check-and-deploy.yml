@@ -83,7 +83,6 @@ jobs:
         run: make render-pkgdown
 
       - name: Test coverage
-        shell: Rscript {0}
         run: make code-coverage
 
       - name: Deploy Docs 🚀
