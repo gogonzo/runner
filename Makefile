@@ -34,7 +34,7 @@ check-spelling:
 	if (!require("spelling")) install.packages("spelling", repos = "http://cran.rstudio.com")\n\
   out <- capture.output(spelling::spell_check_package())\n\
   if (!identical(out, "No spelling errors found.")) {\n\
-  stop(paste(out, collapse = "\n"))\n\
+  stop(paste(out, collapse = "\\n"))\n\
   }'
 
 docs: render-readme
