@@ -30,10 +30,7 @@ code-coverage:
   covr::codecov()'
 
 check-spelling:
-	Rscript -e '\
-	if (!require("spelling")) install.packages("spelling", repos = "http://cran.rstudio.com")\n\
-  out <- capture.output(spelling::spell_check_package())\n\
-  if (!identical(out, "No spelling errors found.")) stop(paste(out, collapse = "\n"))'
+	Rscript "inst/checks/spelling.R"
 
 docs: render-readme
 
