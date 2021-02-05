@@ -2,6 +2,7 @@
 PKGNAME := $(shell sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGVERS := $(shell sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGSRC  := $(shell basename `pwd`)
+GITFIL := $(shell git diff --cached --name-only --diff-filter=ACM)
 
 all: generate-codemeta render-readme check clean
 
@@ -57,10 +58,8 @@ generate-codemeta:
 	if (!require('codemetar')) install.packages('codemetar', repos = 'http://cran.rstudio.com')\n\
 	codemetar::write_codemeta()"
 
-check-linters:
-	Rscript -e "\
-	if (!require('lintr')) install.packages('lintr', repos = 'http://cran.rstudio.com')\n\
-	lintr::lint_package()"
+check-commit-linters:
+	Rscript "inst/checks/lintr.R" $(shell git diff --cached --name-only --diff-filter=ACM)
 
 
 clean:

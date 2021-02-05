@@ -22,6 +22,7 @@
 ^pkgdown$
 ^_pkgdown\.yml$
 inst/rhub
+inst/checks
 
 # exclude
 inst/tinytest/test_external*
