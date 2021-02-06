@@ -21,29 +21,30 @@ install:
 	R CMD INSTALL . --no-multiarch --with-keep.source
 
 render-pkgdown:
-	Rscript -e 'if (!require("pkgdown")) install.packages("pkgdown", repos = "http://cran.rstudio.com")'
-	Rscript -e 'pkgdown::build_site()'
+	Rscript -e "\
+	if (!require('pkgdown')) install.packages('pkgdown', repos = 'http://cran.rstudio.com')\n\
+	pkgdown::build_site()"
 
 code-coverage:
-	Rscript -e '\
-	if (!require("covr")) install.packages("covr", repos = "http://cran.rstudio.com")\n\
-  covr::codecov()'
+	Rscript -e "\
+	if (!require('covr')) install.packages('covr', repos = 'http://cran.rstudio.com')\n\
+  covr::codecov()"
 
 check-spelling:
-	Rscript -e '\
-	if (!require("spelling")) install.packages("spelling", repos = "http://cran.rstudio.com")\n\
+	Rscript -e "\
+	if (!require('spelling')) install.packages('spelling', repos = 'http://cran.rstudio.com')\n\
   out <- capture.output(spelling::spell_check_package())\n\
-  if (!identical(out, "No spelling errors found.")) {\n\
-  stop(paste(out, collapse = "\n"))\n\
-  }'
+  if (!identical(out, 'No spelling errors found.')) {\n\
+  stop(paste(out, collapse = '\n'))\n\
+  }"
 
 docs: render-readme
 
 render-readme:
-	Rscript -e '\
-	if (!require("rmarkdown"))\n\
-	install.packages("rmarkdown", repos="http://cran.rstudio.com")\n\
-	rmarkdown::render("README.Rmd", output_format = rmarkdown::md_document("gfm"))'
+	Rscript -e "\
+	if (!require('rmarkdown'))\n\
+	install.packages('rmarkdown', repos='http://cran.rstudio.com')\n\
+	rmarkdown::render('README.Rmd', output_format = rmarkdown::md_document('gfm'))"
 
 #render-vignettes:
 #	$(MAKE) -C vignettes/
