@@ -27,7 +27,7 @@ jobs:
       - name: Check spelling 📖
         shell: Rscript {0}
         run: |
-        	if (!require("spelling")) install.packages("spelling", repos = "http://cran.rstudio.com")
+          if (!require("spelling")) install.packages("spelling", repos = "http://cran.rstudio.com")
           out <- capture.output(spelling::spell_check_package())
           if (!identical(out, "No spelling errors found.")) stop(paste(out, collapse = "\n"))
 
@@ -102,6 +102,6 @@ jobs:
         shell: Rscript {0}
         run: |
           if (!require("devtools")) install.packages('devtools', repos = 'http://cran.rstudio.com')
-        	devtools::check_win_devel()
-        	devtools::check_win_oldrelease()
-        	devtools::check_win_release()
+          devtools::check_win_devel()
+          devtools::check_win_oldrelease()
+          devtools::check_win_release()
