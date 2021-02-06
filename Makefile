@@ -7,7 +7,7 @@ GITFIL := $(shell git diff --cached --name-only --diff-filter=ACM)
 all: generate-codemeta render-readme check clean
 
 deps:
-	devtools::install_deps(dependencies = TRUE)
+	Rscript -e "devtools::install_deps(dependencies = TRUE)"
 
 build: docs
 	cd ..;\
@@ -21,14 +21,10 @@ install:
 	R CMD INSTALL . --no-multiarch --with-keep.source
 
 render-pkgdown:
-	Rscript -e "\
-	if(!require('pkgdown')) install.packages('pkgdown', repos = 'http://cran.rstudio.com')\n\
-	pkgdown::build_site()"
+		Rscript "inst/checks/pkgdown.R"
 
 code-coverage:
-	Rscript -e "\
-	if(!require('covr')) install.packages('covr', repos = 'http://cran.rstudio.com')\n\
-  covr::codecov()"
+	Rscript "inst/checks/code-coverage.R"
 
 check-spelling:
 	Rscript "inst/checks/spelling.R"
@@ -45,11 +41,7 @@ render-readme:
 #	$(MAKE) -C vignettes/
 
 check-win:
-	Rscript -e "\
-	if (!require("devtools")) install.packages('devtools', repos = 'http://cran.rstudio.com')\n\
-	devtools::check_win_devel()\n\
-	devtools::check_win_oldrelease()\n\
-	devtools::check_win_release()"
+		Rscript "inst/checks/check-win.R"
 
 cran-release:
 	Rscript -e "\
