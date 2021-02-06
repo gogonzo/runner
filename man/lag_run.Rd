@@ -14,14 +14,16 @@ Input in runner custom function \code{f}.}
 Denoting window lag. If \code{lag} is a single value then window lag is constant
 for all elements, otherwise if \code{length(lag) == length(x)} different window
 size for each element. Negative value shifts window forward. One can also
-specify \code{lag} in the same way as \code{by} argument in \code{\link[base]{seq.POSIXt}}.
-See 'Specifying time-intervals' in details section.}
+specify \code{lag} in the same way as \code{by} argument in
+\code{\link[base]{seq.POSIXt}}. See 'Specifying time-intervals' in details
+section.}
 
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr
 Optional integer vector containing sorted (ascending) index of observation.
 By default \code{idx} is index incremented by one. User can provide index with
-varying increment and with duplicated values. If specified then \code{k} and \code{lag}
-are depending on \code{idx}. Length of \code{idx} have to be equal of length \code{x}.}
+varying increment and with duplicated values. If specified then \code{k} and
+\code{lag} are depending on \code{idx}. Length of \code{idx} have to be equal of length
+\code{x}.}
 
 \item{nearest}{\code{logical} single value. Applied when \code{idx} is used,
 then \code{nearest = FALSE} returns observation lagged exactly by the

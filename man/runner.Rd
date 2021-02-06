@@ -114,14 +114,16 @@ See 'Specifying time-intervals' in details section.}
 Denoting window lag. If \code{lag} is a single value then window lag is constant
 for all elements, otherwise if \code{length(lag) == length(x)} different window
 size for each element. Negative value shifts window forward. One can also
-specify \code{lag} in the same way as \code{by} argument in \code{\link[base]{seq.POSIXt}}.
-See 'Specifying time-intervals' in details section.}
+specify \code{lag} in the same way as \code{by} argument in
+\code{\link[base]{seq.POSIXt}}. See 'Specifying time-intervals' in details
+section.}
 
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr
 Optional integer vector containing sorted (ascending) index of observation.
 By default \code{idx} is index incremented by one. User can provide index with
-varying increment and with duplicated values. If specified then \code{k} and \code{lag}
-are depending on \code{idx}. Length of \code{idx} have to be equal of length \code{x}.}
+varying increment and with duplicated values. If specified then \code{k} and
+\code{lag} are depending on \code{idx}. Length of \code{idx} have to be equal of length
+\code{x}.}
 
 \item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character} vector)\cr
 Vector of any size and any value defining output data points. Values of the
@@ -134,9 +136,10 @@ Whether incomplete window should return \code{NA} (if \code{na_pad = TRUE})
 Incomplete window is when some parts of the window are out of range.}
 
 \item{type}{(\code{character} single value)\cr
-output type (\code{"auto"}, \code{"logical"}, \code{"numeric"}, \code{"integer"}, \code{"character"}).
-\code{runner} by default guess type automatically. In case of failure of \code{"auto"}
-please specify desired type.}
+output type
+(\code{"auto"}, \code{"logical"}, \code{"numeric"}, \code{"integer"}, \code{"character"}). \code{runner}
+by default guess type automatically. In case of failure of \code{"auto"} please
+specify desired type.}
 
 \item{simplify}{(\code{logical} or \code{character} value)\cr
 should the result be simplified to a vector, matrix or higher dimensional
@@ -153,8 +156,8 @@ calculation in parallel. See \code{\link[parallel]{makeCluster}} in details.}
 other arguments passed to the function \code{f}.}
 }
 \value{
-vector with aggregated values for each window. Length of output is the
-same as \code{length(x)} or \code{length(at)} if specified. Type of the output
+vector with aggregated values for each window. Length of output is
+the same as \code{length(x)} or \code{length(at)} if specified. Type of the output
 is taken from \code{type} argument.
 }
 \description{
@@ -168,23 +171,24 @@ on several ways:
 \item{\strong{Cumulative windows}}{\cr
 applied when user doesn't specify \code{k} argument or specify \code{k = length(x)},
 this would mean that \code{k} is equal to number of available elements \cr
-\if{html}{\figure{cumulativewindows.png}{options: width="75\%" alt="Figure: cumulativewindows.png"}}
+\if{html}{\figure{cumulativewindows.png}{options: width="75\%" alt="Figure: cumulativewindows.png"}} #nolint
 \if{latex}{\figure{cumulativewindows.pdf}{options: width=7cm}}
 }
 \item{\strong{Constant sliding windows}}{\cr
 applied when user specify \code{k} as constant value keeping \code{idx} and
 \code{at} unspecified. \code{lag} argument shifts windows left (\code{lag > 0})
 or right (\code{lag < 0}). \cr
-\if{html}{\figure{incrementalindex.png}{options: width="75\%" alt="Figure: incrementalindex.png"}}
+\if{html}{\figure{incrementalindex.png}{options: width="75\%" alt="Figure: incrementalindex.png"}} #nolint
 \if{latex}{\figure{incrementalindex.pdf}{options: width=7cm}}
 }
 \item{\strong{Windows depending on date}}{\cr
 If one specifies \code{idx} this would mean that output windows size might
 change in size because of unequally spaced indexes. Fox example 5-period
 window is different than 5-element window, because 5-period window might
-contain any number of observation (7-day mean is not the same as 7-element mean)
+contain any number of observation (7-day mean is not the same as 7-element
+mean)
 \cr
-\if{html}{\figure{runningdatewindows.png}{options: width="75\%" alt="Figure: runningdatewindows.png"}}
+\if{html}{\figure{runningdatewindows.png}{options: width="75\%" alt="Figure: runningdatewindows.png"}} #nolint
 \if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
 }
 \item{\strong{Window at specific indices}}{\cr
@@ -192,17 +196,18 @@ contain any number of observation (7-day mean is not the same as 7-element mean)
 specifies \code{at} argument. Each element of \code{at} is an index on which runner
 calculates function - which means that output of the runner is now of
 length equal to \code{at}. Note that one can change index of \code{x} by specifying
-\code{idx}. Illustration below shows output of \code{runner} for \code{at = c(18, 27, 45, 31)}
-which gives windows in ranges enclosed in square brackets. Range for
-\code{at = 27} is \verb{[22, 26]} which is not available in current indices. \cr
-\if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}}
+\code{idx}. Illustration below shows output of \code{runner} for
+\code{at = c(18, 27, 45, 31)} which gives windows in ranges enclosed in square
+brackets. Range for \code{at = 27} is \verb{[22, 26]} which is not available in
+current indices. \cr
+\if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}} #nolint
 \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
 }
 }
 \subsection{Specifying time-intervals}{
 
-\code{at} can also be specified as interval of the output defined by \code{at = "<increment>"}
-which results in indices sequence defined by
+\code{at} can also be specified as interval of the output defined by
+\code{at = "<increment>"} which results in indices sequence defined by
 \code{seq.POSIXt(min(idx), max(idx), by = "<increment>")}. Increment of sequence
 is the same as in \code{\link[base]{seq.POSIXt}} function.
 It's worth noting that increment interval can't be more frequent than
@@ -227,9 +232,9 @@ Beware that executing R call in parallel not always
 have the edge over single-thread even if the
 \code{cl <- registerCluster(detectCores())} was specified before.
 \cr
-Parallel windows are executed in the independent environment, which means that
-objects other than function arguments needs to be copied to the parallel
-environment using \code{\link[parallel]{clusterExport}}\verb{. For example using }f = function(x) x + y + z` will result in error as
+Parallel windows are executed in the independent environment, which means
+that objects other than function arguments needs to be copied to the
+parallel environment using \code{\link[parallel]{clusterExport}}\verb{. For example using }f = function(x) x + y + z` will result in error as
 \code{clusterExport(cl, varlist = c("y", "z"))} needs to be called before.
 }
 }

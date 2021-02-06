@@ -14,8 +14,10 @@ object which can be \code{grouped_df} in special case.}
 data.frame filtered by current \code{dplyr::groups()}
 }
 \description{
-Access group data in \code{dplyr::mutate} after \code{dplyr::group_by}.
-Function created because data available in \code{dplyr::group_by \%>\% mutate} scheme
-is not filtered by group - in mutate function \code{.} is still initial dataset.
-This function creates \code{data.frame} using \code{dplyr::groups} information.
+Access group data in \code{dplyr::mutate} after
+\code{dplyr::group_by}.
+Function created because data available in \code{dplyr::group_by \%>\% mutate}
+scheme is not filtered by group - in mutate function \code{.} is still initial
+dataset. This function creates \code{data.frame} using \code{dplyr::groups}
+information.
 }

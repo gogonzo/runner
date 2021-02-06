@@ -28,14 +28,16 @@ See 'Specifying time-intervals' in details section.}
 Denoting window lag. If \code{lag} is a single value then window lag is constant
 for all elements, otherwise if \code{length(lag) == length(x)} different window
 size for each element. Negative value shifts window forward. One can also
-specify \code{lag} in the same way as \code{by} argument in \code{\link[base]{seq.POSIXt}}.
-See 'Specifying time-intervals' in details section.}
+specify \code{lag} in the same way as \code{by} argument in
+\code{\link[base]{seq.POSIXt}}. See 'Specifying time-intervals' in details
+section.}
 
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr
 Optional integer vector containing sorted (ascending) index of observation.
 By default \code{idx} is index incremented by one. User can provide index with
-varying increment and with duplicated values. If specified then \code{k} and \code{lag}
-are depending on \code{idx}. Length of \code{idx} have to be equal of length \code{x}.}
+varying increment and with duplicated values. If specified then \code{k} and
+\code{lag} are depending on \code{idx}. Length of \code{idx} have to be equal of length
+\code{x}.}
 
 \item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character} vector)\cr
 Vector of any size and any value defining output data points. Values of the

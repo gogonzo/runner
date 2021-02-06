@@ -84,11 +84,9 @@ jobs:
         run: |
         	if (!require("spelling")) install.packages("spelling", repos = "http://cran.rstudio.com")
           out <- capture.output(spelling::spell_check_package())
-          if (!identical(out, "No spelling errors found.")) {
-          stop(paste(out, collapse = "\n"))
-          }
+          if (!identical(out, "No spelling errors found.")) stop(paste(out, collapse = "\n"))
 
-      - name: Build docs 🔧
+      - name: Build docs
         shell: Rscript {0}
         run: |
           if (!require("pkgdown")) install.packages("pkgdown", repos = "http://cran.rstudio.com")
