@@ -22,12 +22,12 @@ install:
 
 render-pkgdown:
 	Rscript -e "\
-	if (!require('pkgdown')) install.packages('pkgdown', repos = 'http://cran.rstudio.com')\n\
+	if(!require('pkgdown')) install.packages('pkgdown', repos = 'http://cran.rstudio.com')\n\
 	pkgdown::build_site()"
 
 code-coverage:
 	Rscript -e "\
-	if (!require('covr')) install.packages('covr', repos = 'http://cran.rstudio.com')\n\
+	if(!require('covr')) install.packages('covr', repos = 'http://cran.rstudio.com')\n\
   covr::codecov()"
 
 check-spelling:
@@ -37,7 +37,7 @@ docs: render-readme
 
 render-readme:
 	Rscript -e "\
-	if (!require("rmarkdown"))\n\
+	if(!require("rmarkdown"))\n\
 	install.packages('rmarkdown', repos = 'http://cran.rstudio.com')\n\
 	rmarkdown::render('README.Rmd', output_format = rmarkdown::md_document('gfm'))"
 
