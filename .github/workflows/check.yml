@@ -16,12 +16,12 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
 
-      - name: Check
+      - name: Check 🔍
         shell: Rscript {0}
         run: |
           devtools::check(cran = TRUE, vignettes = TRUE)
 
-      - name: Install package 🏗
+      - name: Install package 🔧
         run: R CMD INSTALL .
 
       - name: Check spelling 📖
@@ -31,7 +31,7 @@ jobs:
           out <- capture.output(spelling::spell_check_package())
           if (!identical(out, "No spelling errors found.")) stop(paste(out, collapse = "\n"))
 
-      - name: Build docs
+      - name: Build docs 🖨️
         shell: Rscript {0}
         run: |
           if (!require("pkgdown")) install.packages("pkgdown", repos = "http://cran.rstudio.com")
@@ -47,13 +47,15 @@ jobs:
     runs-on: ubuntu-18.04
     container: rocker/verse:3.6.3
     steps:
-      - name: Checkout repository
+      - name: Checkout repository 🛎
         uses: actions/checkout@v2
+
       - name: Install dependencies
         shell: Rscript {0}
         run: |
           remotes::install_deps(dependencies = TRUE)
-      - name: Check
+
+      - name: Check 🔍
         shell: Rscript {0}
         run: |
           devtools::check(cran = TRUE, vignettes = TRUE)
