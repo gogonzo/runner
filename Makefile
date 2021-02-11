@@ -9,7 +9,7 @@ all: generate-codemeta render-readme check clean
 deps:
 	devtools::install_deps(dependencies = TRUE)
 
-build: docs
+build:
 	cd ..;\
 	R CMD build $(PKGSRC) -no-build-vignettes
 
@@ -38,7 +38,7 @@ check-spelling:
   stop(paste(out, collapse = '\n'))\n\
   }"
 
-docs: render-readme
+docs: render-readme render-pkgdown
 
 render-readme:
 	Rscript -e "\
@@ -68,7 +68,7 @@ generate-codemeta:
 	codemetar::write_codemeta()"
 
 check-commit-linters:
-	Rscript "inst/checks/lintr.R" $(shell git diff --cached --name-only --diff-filter=ACM)
+	Rscript "inst/automation-checks/lintr.R" $(shell git diff --cached --name-only --diff-filter=ACM)
 
 
 clean:

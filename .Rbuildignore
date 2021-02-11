@@ -12,19 +12,21 @@
 ^README-.*\.png$
 ^docs$
 
+# git files
+\.git
+\.github
+\.gitignore
+
 # automation
 ^appveyor\.yml$
 ^codecov\.yml$
+^codemeta\.json$
 ^cran-comments.md$
-\.github
-\.gitignore
 .*Makefile$
 ^pkgdown$
 ^_pkgdown\.yml$
-inst/rhub
-inst/checks
-inst/WORDLIST
 
 # exclude
+inst/automation-checks
 inst/tinytest/test_external*
-^codemeta\.json$
+inst/WORDLIST
