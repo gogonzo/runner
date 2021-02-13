@@ -70,7 +70,6 @@ jobs:
 
   build-and-deploy:
     needs: r-hub-checks
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     container: rocker/tidyverse:latest
     steps:
