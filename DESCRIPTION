@@ -1,5 +1,5 @@
 Package: runner
-Title: Running operations for vectors
+Title: Running Operations for Vectors
 Type: Package
 Version: 0.3.8
 Depends: R (>= 3.0)
