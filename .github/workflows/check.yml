@@ -63,6 +63,7 @@ jobs:
   r-hub-checks:
     needs: [check-r-verse-devel, check-r-verse-3-6]
     runs-on: ubuntu-18.04
+    if: "contains(github.event.head_commit.message, 'release')"
     container: rocker/tidyverse:latest
     steps:
       - name: Checkout repository 🛎
@@ -113,8 +114,8 @@ jobs:
     runs-on: ubuntu-18.04
     container: rocker/tidyverse:latest
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v2.3.1
+      - name: Checkout repository
+        uses: actions/checkout@master
         with:
           persist-credentials: false
 
@@ -122,6 +123,11 @@ jobs:
         shell: Rscript {0}
         run: |
           remotes::install_deps(dependencies = TRUE)
+
+      - name: Check 🔍
+        shell: Rscript {0}
+        run: |
+          devtools::check(cran = TRUE, vignettes = TRUE)
 
       - name: Install package 🔧
         run: R CMD INSTALL .
@@ -144,6 +150,7 @@ jobs:
         run: |
           if (!require("pkgdown")) install.packages("pkgdown", repos = "http://cran.rstudio.com")
           pkgdown::build_site()
+
 
       - name: Deploy Docs 🚀
         uses: peaceiris/actions-gh-pages@v3
