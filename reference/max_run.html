@@ -183,16 +183,18 @@ See 'Specifying time-intervals' in details section.</p></td>
 Denoting window lag. If <code>lag</code> is a single value then window lag is constant
 for all elements, otherwise if <code>length(lag) == length(x)</code> different window
 size for each element. Negative value shifts window forward. One can also
-specify <code>lag</code> in the same way as <code>by</code> argument in <code><a href='https://rdrr.io/r/base/seq.POSIXt.html'>seq.POSIXt</a></code>.
-See 'Specifying time-intervals' in details section.</p></td>
+specify <code>lag</code> in the same way as <code>by</code> argument in
+<code><a href='https://rdrr.io/r/base/seq.POSIXt.html'>seq.POSIXt</a></code>. See 'Specifying time-intervals' in details
+section.</p></td>
     </tr>
     <tr>
       <th>idx</th>
       <td><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>)<br />
 Optional integer vector containing sorted (ascending) index of observation.
 By default <code>idx</code> is index incremented by one. User can provide index with
-varying increment and with duplicated values. If specified then <code>k</code> and <code>lag</code>
-are depending on <code>idx</code>. Length of <code>idx</code> have to be equal of length <code>x</code>.</p></td>
+varying increment and with duplicated values. If specified then <code>k</code> and
+<code>lag</code> are depending on <code>idx</code>. Length of <code>idx</code> have to be equal of length
+<code>x</code>.</p></td>
     </tr>
     <tr>
       <th>at</th>
