@@ -77,19 +77,19 @@ jobs:
             token = "${{secrets.RHUB_TOKEN}}"
           )
       - name: Check rhub/debian-clang-devel
-        shell: Rscript --vanilla inst/automation-checks/check-rhub.R "debian-clang-devel"
+        run: Rscript --vanilla inst/automation-checks/check-rhub.R "debian-clang-devel"
 
       - name: Check r-hub/debian-gcc-devel
-        shell: Rscript --vanilla inst/automation-checks/check-rhub.R "debian-gcc-devel"
+        run: Rscript --vanilla inst/automation-checks/check-rhub.R "debian-gcc-devel"
 
       - name: Check r-hub/linux-x86_64-rocker-gcc-san
-        shell: Rscript --vanilla inst/automation-checks/check-rhub.R "linux-x86_64-rocker-gcc-san"
+        run: Rscript --vanilla inst/automation-checks/check-rhub.R "linux-x86_64-rocker-gcc-san"
 
       - name: Check r-hub/solaris-x86-patched
-        shell: Rscript --vanilla inst/automation-checks/check-rhub.R "solaris-x86-patched"
+        run: Rscript --vanilla inst/automation-checks/check-rhub.R "solaris-x86-patched"
 
       - name: Check r-hub/fedora-clang-devel
-        shell: Rscript --vanilla inst/automation-checks/check-rhub.R "fedora-clang-devel"
+        run: Rscript --vanilla inst/automation-checks/check-rhub.R "fedora-clang-devel"
 
   win-builder-checks:
     needs: [check-r-verse-devel, check-r-verse-3-6]
