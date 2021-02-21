@@ -166,7 +166,6 @@ jobs:
           devtools::check_win_release()
 
   build-and-deploy:
-#    needs: r-hub-checks
     runs-on: ubuntu-latest
     container: rocker/verse:latest
     steps:
