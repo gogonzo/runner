@@ -38,28 +38,6 @@ jobs:
         run: |
           devtools::check(cran = TRUE, vignettes = TRUE)
 
-      - name: Install package 🔧
-        run: R CMD INSTALL .
-
-      - name: Check spelling 📖
-        shell: Rscript {0}
-        run: |
-          if (!require("spelling")) install.packages("spelling", repos = "http://cran.rstudio.com")
-          out <- capture.output(spelling::spell_check_package())
-          if (!identical(out, "No spelling errors found.")) stop(paste(out, collapse = "\n"))
-
-      - name: Test coverage
-        shell: Rscript {0}
-        run: |
-          if (!require("covr")) install.packages("covr", repos = "http://cran.rstudio.com")
-          covr::codecov()
-
-      - name: Build docs 🖨️
-        shell: Rscript {0}
-        run: |
-          if (!require("pkgdown")) install.packages("pkgdown", repos = "http://cran.rstudio.com")
-          pkgdown::build_site()
-
   check-r-verse-3-6:
     runs-on: ubuntu-18.04
     container: rocker/verse:3.6.3
