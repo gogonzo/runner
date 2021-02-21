@@ -62,26 +62,34 @@ jobs:
 
   r-hub-checks:
     needs: [check-r-verse-devel, check-r-verse-3-6]
-    #if: "contains(github.event.head_commit.message, 'release')"
     runs-on: ubuntu-18.04
-    container: rhub/debian-gcc-devel
+    container: rocker/tidyverse:latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@master
+      - name: Checkout repository 🛎
+        uses: actions/checkout@v2
 
-      - name: Install dependencies
+      - name: Initialize r-hub
         shell: Rscript {0}
         run: |
-          remotes::install_deps(dependencies = TRUE)
+          install.packages("rhub")
+          rhub::validate_email(
+            email = "dawid.kaledkowski@gmail.com",
+            token = "${{secrets.RHUB_TOKEN}}"
+          )
+      - name: Check rhub/debian-clang-devel
+        shell: Rscript --vanilla inst/automation-checks/check-rhub.R "debian-clang-devel"
 
-      - name: Check 🔍
-        shell: Rscript {0}
-        run: |
-          devtools::check(cran = TRUE, vignettes = TRUE)
+      - name: Check r-hub/debian-gcc-devel
+        shell: Rscript --vanilla inst/automation-checks/check-rhub.R "debian-gcc-devel"
 
+      - name: Check r-hub/linux-x86_64-rocker-gcc-san
+        shell: Rscript --vanilla inst/automation-checks/check-rhub.R "linux-x86_64-rocker-gcc-san"
+
+      - name: Check r-hub/solaris-x86-patched
+        shell: Rscript --vanilla inst/automation-checks/check-rhub.R "solaris-x86-patched"
 
       - name: Check r-hub/fedora-clang-devel
-        run: Rscript --vanilla inst/automation-checks/check-rhub.R "fedora-clang-devel"
+        shell: Rscript --vanilla inst/automation-checks/check-rhub.R "fedora-clang-devel"
 
   win-builder-checks:
     needs: [check-r-verse-devel, check-r-verse-3-6]
