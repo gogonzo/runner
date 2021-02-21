@@ -4,14 +4,14 @@ on:
     branches: [main]
 
 jobs:
-  check-r-verse-devel:
+  check-r-verse-latest:
     runs-on: ubuntu-18.04
     container: rocker/verse:latest
     steps:
-      - name: Checkout repository 🛎
+      - name: Checkout repository
         uses: actions/checkout@master
 
-      - name: Install dependencies 🔧
+      - name: Install dependencies
         shell: Rscript {0}
         run: |
           remotes::install_deps(dependencies = TRUE)
@@ -20,6 +20,45 @@ jobs:
         shell: Rscript {0}
         run: |
           devtools::check(cran = TRUE, vignettes = TRUE)
+
+  check-r-verse-devel:
+    runs-on: ubuntu-18.04
+    container: rocker/verse:devel
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@master
+
+      - name: Install dependencies
+        shell: Rscript {0}
+        run: |
+          remotes::install_deps(dependencies = TRUE)
+
+      - name: Check 🔍
+        shell: Rscript {0}
+        run: |
+          devtools::check(cran = TRUE, vignettes = TRUE)
+
+      - name: Install package 🔧
+        run: R CMD INSTALL .
+
+      - name: Check spelling 📖
+        shell: Rscript {0}
+        run: |
+          if (!require("spelling")) install.packages("spelling", repos = "http://cran.rstudio.com")
+          out <- capture.output(spelling::spell_check_package())
+          if (!identical(out, "No spelling errors found.")) stop(paste(out, collapse = "\n"))
+
+      - name: Test coverage
+        shell: Rscript {0}
+        run: |
+          if (!require("covr")) install.packages("covr", repos = "http://cran.rstudio.com")
+          covr::codecov()
+
+      - name: Build docs 🖨️
+        shell: Rscript {0}
+        run: |
+          if (!require("pkgdown")) install.packages("pkgdown", repos = "http://cran.rstudio.com")
+          pkgdown::build_site()
 
   check-r-verse-3-6:
     runs-on: ubuntu-18.04
@@ -28,17 +67,18 @@ jobs:
       - name: Checkout repository 🛎
         uses: actions/checkout@v2
 
-      - name: Install dependencies 🔧
+      - name: Install dependencies
         shell: Rscript {0}
         run: |
           remotes::install_deps(dependencies = TRUE)
+
       - name: Check 🔍
         shell: Rscript {0}
         run: |
           devtools::check(cran = TRUE, vignettes = TRUE)
 
   r-hub-checks:
-    needs: [check-r-verse-devel, check-r-verse-3-6]
+    needs: [check-r-verse-latest, check-r-verse-devel, check-r-verse-3-6]
     runs-on: ubuntu-18.04
     container: rocker/tidyverse:latest
     steps:
@@ -71,17 +111,12 @@ jobs:
   build-and-deploy:
     needs: r-hub-checks
     runs-on: ubuntu-latest
-    container: rocker/tidyverse:latest
+    container: rocker/verse:latest
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2.3.1
         with:
           persist-credentials: false
-
-      - name: Install dependencies
-        shell: Rscript {0}
-        run: |
-          remotes::install_deps(dependencies = TRUE)
 
       - name: Install package 🔧
         run: R CMD INSTALL .
@@ -99,7 +134,7 @@ jobs:
           if (!require("covr")) install.packages("covr", repos = "http://cran.rstudio.com")
           covr::codecov()
 
-      - name: Build docs 🖨️
+      - name: Build docs 🖨
         shell: Rscript {0}
         run: |
           if (!require("pkgdown")) install.packages("pkgdown", repos = "http://cran.rstudio.com")
