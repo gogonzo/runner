@@ -110,24 +110,21 @@ jobs:
           devtools::check_win_release()
 
   build-and-deploy:
-    needs: check-r-verse-devel
     runs-on: ubuntu-18.04
     container: rocker/tidyverse:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@master
-        with:
-          persist-credentials: false
 
       - name: Install dependencies
         shell: Rscript {0}
         run: |
           remotes::install_deps(dependencies = TRUE)
 
-      - name: Check 🔍
+      - name: Roxygenize 🔍
         shell: Rscript {0}
         run: |
-          devtools::check(cran = TRUE, vignettes = TRUE)
+          devtools::document()
 
       - name: Install package 🔧
         run: R CMD INSTALL .
