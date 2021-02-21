@@ -107,3 +107,64 @@ jobs:
           devtools::check_win_devel()
           devtools::check_win_oldrelease()
           devtools::check_win_release()
+
+  build-and-deploy:
+    needs: check-r-verse-devel
+    runs-on: ubuntu-18.04
+    container: rocker/tidyverse:latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2.3.1
+        with:
+          persist-credentials: false
+
+      - name: Install dependencies
+        shell: Rscript {0}
+        run: |
+          remotes::install_deps(dependencies = TRUE)
+
+      - name: Install package 🔧
+        run: R CMD INSTALL .
+
+      - name: Check spelling 📖
+        shell: Rscript {0}
+        run: |
+          if (!require("spelling")) install.packages("spelling", repos = "http://cran.rstudio.com")
+          out <- capture.output(spelling::spell_check_package())
+          if (!identical(out, "No spelling errors found.")) stop(paste(out, collapse = "\n"))
+
+      - name: Test coverage
+        shell: Rscript {0}
+        run: |
+          if (!require("covr")) install.packages("covr", repos = "http://cran.rstudio.com")
+          covr::codecov()
+
+      - name: Build docs 🖨️
+        shell: Rscript {0}
+        run: |
+          if (!require("pkgdown")) install.packages("pkgdown", repos = "http://cran.rstudio.com")
+          pkgdown::build_site()
+
+      - name: Deploy Docs 🚀
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          publish_dir: docs
+
+      - name: Prepare release vars
+        run: |
+          echo "PKGNAME=$(sed -n 's/Package: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
+          echo "PKGVERS=$(sed -n 's/Version: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
+          echo "$(sed -n '2,/^$/p' NEWS.md)" > news.txt
+
+      - name: GH Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: "v${{ env.PKGVERS }}"
+          release_name: "${{ env.PKGNAME }} ${{ env.PKGVERS }}"
+          body_path: news.txt
+          draft: false
+          prerelease: false
