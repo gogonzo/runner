@@ -73,10 +73,14 @@ jobs:
     runs-on: ubuntu-latest
     container: rocker/tidyverse:latest
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v2.3.1
-        with:
-          persist-credentials: false
+
+      - name: Checkout repository 🛎️
+        uses: actions/checkout@master
+
+      - name: Install dependencies
+        shell: Rscript {0}
+        run: |
+          remotes::install_deps(dependencies = TRUE)
 
       - name: Install package 🔧
         run: R CMD INSTALL .
@@ -94,7 +98,7 @@ jobs:
           if (!require("covr")) install.packages("covr", repos = "http://cran.rstudio.com")
           covr::codecov()
 
-      - name: Build docs 🖨
+      - name: Build docs 🖨️
         shell: Rscript {0}
         run: |
           if (!require("pkgdown")) install.packages("pkgdown", repos = "http://cran.rstudio.com")
