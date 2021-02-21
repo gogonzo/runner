@@ -259,7 +259,8 @@ expect_identical(
   )
 )
 
-# arg by name, while obj of the same name in global env (by column name should be first)
+# arg by name, while obj of the same name
+# in global env (by column name should be first)
 index <- 1:10
 x <- run_by(data, idx = "index", k = "k", lag = "lag", na_pad = FALSE)
 expect_identical(

@@ -1,0 +1,3 @@
+# no automation tests
+inst/automation-checks
+inst/tinytest/test_external*

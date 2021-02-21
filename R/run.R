@@ -15,14 +15,16 @@
 #'  Denoting window lag. If `lag` is a single value then window lag is constant
 #'  for all elements, otherwise if `length(lag) == length(x)` different window
 #'  size for each element. Negative value shifts window forward. One can also
-#'  specify `lag` in the same way as `by` argument in \code{\link[base]{seq.POSIXt}}.
-#'  See 'Specifying time-intervals' in details section.
+#'  specify `lag` in the same way as `by` argument in
+#'  \code{\link[base]{seq.POSIXt}}. See 'Specifying time-intervals' in details
+#'  section.
 #'
 #' @param idx (`integer`, `Date`, `POSIXt`)\cr
 #'  Optional integer vector containing sorted (ascending) index of observation.
 #'  By default `idx` is index incremented by one. User can provide index with
-#'  varying increment and with duplicated values. If specified then `k` and `lag`
-#'  are depending on `idx`. Length of `idx` have to be equal of length `x`.
+#'  varying increment and with duplicated values. If specified then `k` and
+#'  `lag` are depending on `idx`. Length of `idx` have to be equal of length
+#'  `x`.
 #'
 #' @param f (`function`)\cr
 #'  Applied on windows created from `x`. This function is meant to summarize
@@ -41,9 +43,10 @@
 #'  Incomplete window is when some parts of the window are out of range.
 #'
 #' @param type (`character` single value)\cr
-#'  output type (`"auto"`, `"logical"`, `"numeric"`, `"integer"`, `"character"`).
-#'  `runner` by default guess type automatically. In case of failure of `"auto"`
-#'  please specify desired type.
+#'  output type
+#'  (`"auto"`, `"logical"`, `"numeric"`, `"integer"`, `"character"`). `runner`
+#'  by default guess type automatically. In case of failure of `"auto"` please
+#'  specify desired type.
 #'
 #' @param simplify (`logical` or `character` value)\cr
 #'  should the result be simplified to a vector, matrix or higher dimensional
@@ -82,7 +85,8 @@
 #'    If one specifies `idx` this would mean that output windows size might
 #'    change in size because of unequally spaced indexes. Fox example 5-period
 #'    window is different than 5-element window, because 5-period window might
-#'    contain any number of observation (7-day mean is not the same as 7-element mean)
+#'    contain any number of observation (7-day mean is not the same as 7-element
+#'    mean)
 #'     \cr
 #'    \if{html}{\figure{runningdatewindows.png}{options: width="75\%" alt="Figure: runningdatewindows.png"}}
 #'    \if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
@@ -92,16 +96,17 @@
 #'    specifies `at` argument. Each element of `at` is an index on which runner
 #'    calculates function - which means that output of the runner is now of
 #'    length equal to `at`. Note that one can change index of `x` by specifying
-#'    `idx`. Illustration below shows output of `runner` for `at = c(18, 27, 45, 31)`
-#'    which gives windows in ranges enclosed in square brackets. Range for
-#'    `at = 27` is `[22, 26]` which is not available in current indices. \cr
+#'    `idx`. Illustration below shows output of `runner` for
+#'    `at = c(18, 27, 45, 31)` which gives windows in ranges enclosed in square
+#'    brackets. Range for `at = 27` is `[22, 26]` which is not available in
+#'    current indices. \cr
 #'    \if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}}
 #'    \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
 #'  }
 #' }
 #' ## Specifying time-intervals
-#'  `at` can also be specified as interval of the output defined by `at = "<increment>"`
-#'  which results in indices sequence defined by
+#'  `at` can also be specified as interval of the output defined by
+#'  `at = "<increment>"` which results in indices sequence defined by
 #'  `seq.POSIXt(min(idx), max(idx), by = "<increment>")`. Increment of sequence
 #'  is the same as in \code{\link[base]{seq.POSIXt}} function.
 #'  It's worth noting that increment interval can't be more frequent than
@@ -110,7 +115,7 @@
 #'
 #'  `k` and `lag` can also be specified as using time sequence increment.
 #'  Available time units are
-#'  `"sec", "min", "hour", "day", "DSTday", "week", "month", "quarter" or "year"`.
+#'`"sec", "min", "hour", "day", "DSTday", "week", "month", "quarter" or "year"`.
 #'  To increment by number of units one can also specify `<number> <unit>s`
 #'  for example `lag = "-2 days"`, `k = "5 weeks"`.
 #'
@@ -123,14 +128,14 @@
 #'  have the edge over single-thread even if the
 #'  `cl <- registerCluster(detectCores())` was specified before.
 #'  \cr
-#'  Parallel windows are executed in the independent environment, which means that
-#'  objects other than function arguments needs to be copied to the parallel
-#'  environment using \code{\link[parallel]{clusterExport}}`. For example using
-#'  `f = function(x) x + y + z` will result in error as
+#'  Parallel windows are executed in the independent environment, which means
+#'  that objects other than function arguments needs to be copied to the
+#'  parallel environment using \code{\link[parallel]{clusterExport}}`. For
+#'  example using `f = function(x) x + y + z` will result in error as
 #'  \code{clusterExport(cl, varlist = c("y", "z"))} needs to be called before.
 #'
-#' @return vector with aggregated values for each window. Length of output is the
-#'  same as `length(x)` or `length(at)` if specified. Type of the output
+#' @return vector with aggregated values for each window. Length of output is
+#'  the same as `length(x)` or `length(at)` if specified. Type of the output
 #'  is taken from `type` argument.
 #'
 #' @md
@@ -138,7 +143,7 @@
 #' @importFrom methods is
 #' @importFrom parallel clusterExport parLapply
 #' @export
-runner <- function (
+runner <- function(
   x,
   f = function(x) x,
   k = integer(0),
@@ -153,7 +158,7 @@ runner <- function (
   ) {
   if (!is.null(cl) && type != "auto") {
     warning(
-      "There is no option to specify the type of the output using type in parallel mode.
+      "There is no option to specify the type of the output using type in parallel mode. #nolint
       Please use 'simplify' instead"
     )
     type <- "auto"
@@ -240,7 +245,7 @@ runner <- function (
 #'   f = mean
 #' )
 #' @export
-runner.default <- function(
+runner.default <- function(  #nolint
   x,
   f = function(x) x,
   k = integer(0),
@@ -301,11 +306,11 @@ runner.default <- function(
     }
 
   } else {
-    answer <- lapply(w, function(.thisWindow)
-      if (is.null(.thisWindow)) {
+    answer <- lapply(w, function(.this_window)
+      if (is.null(.this_window)) {
         NA
       } else {
-        f(.thisWindow, ...)
+        f(.this_window, ...)
       }
     )
   }
@@ -357,7 +362,7 @@ runner.default <- function(
 #' )
 #' stopCluster(cl)
 #' @export
-runner.data.frame <- function(
+runner.data.frame <- function( #nolint
   x,
   f = function(x) x,
   k = integer(0),
@@ -409,21 +414,21 @@ runner.data.frame <- function(
     parLapply(
       cl = cl,
       X = w,
-      fun = function(.thisWindowIdx) {
-        if (length(.thisWindowIdx) == 0) {
+      fun = function(.this_window_idx) {
+        if (length(.this_window_idx) == 0) {
           NA
         } else {
-          f(x[.thisWindowIdx,], ...)
+          f(x[.this_window_idx, ], ...)
         }
       }
     )
 
   } else {
-    lapply(w, function(.thisWindowIdx) {
-      if (length(.thisWindowIdx) == 0) {
+    lapply(w, function(.this_window_idx) {
+      if (length(.this_window_idx) == 0) {
         NA
       } else {
-        f(x[.thisWindowIdx, ], ...)
+        f(x[.this_window_idx, ], ...)
       }
     })
   }
@@ -523,11 +528,11 @@ runner.matrix <- function(
     parLapply(
       cl = cl,
       X = w,
-      fun = function(.thisWindowIdx) {
-        if (length(.thisWindowIdx) == 0) {
+      fun = function(.this_window_idx) {
+        if (length(.this_window_idx) == 0) {
           NA
         } else {
-          f(x[.thisWindowIdx, , drop = FALSE], ...)
+          f(x[.this_window_idx, , drop = FALSE], ...)
         }
       },
       ...
@@ -535,11 +540,11 @@ runner.matrix <- function(
   } else {
     lapply(
       X = w,
-      FUN = function(.thisWindowIdx) {
-      if (length(.thisWindowIdx) == 0) {
+      FUN = function(.this_window_idx) {
+      if (length(.this_window_idx) == 0) {
         NA
       } else {
-        f(x[.thisWindowIdx, , drop = FALSE], ...)
+        f(x[.this_window_idx, , drop = FALSE], ...)
       }
     })
   }
@@ -615,8 +620,10 @@ get_runner_call_arg_names <- function() {
 
 is_datetime_valid <- function(x) {
   all(
-    grepl("^(sec|min|hour|day|DSTday|week|month|quarter|year)$", x = x) |
-      grepl("^-*[0-9]+ (sec|min|hour|day|DSTday|week|month|quarter|year)s", x = x)
+    grepl("^(sec|min|hour|day|DSTday|week|month|quarter|year)$",
+          x = x) |
+      grepl("^-*[0-9]+ (sec|min|hour|day|DSTday|week|month|quarter|year)s",
+            x = x)
   )
 }
 
@@ -628,7 +635,11 @@ is_datetime_valid <- function(x) {
 #' @param param name of the parameter to be printed in error message
 #' @examples
 #' k <-  "1 month"
-#' idx <- seq(as.POSIXct("2019-01-01 03:02:01"), as.POSIXct("2020-01-01 03:02:01"), by = "month")
+#' idx <- seq(
+#'   as.POSIXct("2019-01-01 03:02:01"),
+#'   as.POSIXct("2020-01-01 03:02:01"),
+#'   by = "month"
+#' )
 #' k_difftime <- runner:::k_by(k, idx, param = "k")
 #' idx - k_difftime
 k_by <- function(k, idx, param) {
@@ -642,7 +653,10 @@ k_by <- function(k, idx, param) {
     from <- if (length(k) != 1) {
       if (length(idx) == 0) {
         stop(
-          sprintf("`idx` can't be empty while specifying `%s` as time interval", param)
+          sprintf(
+            "`idx` can't be empty while specifying `%s` as time interval",
+            param
+          )
         )
       }
 
@@ -656,7 +670,10 @@ k_by <- function(k, idx, param) {
     } else if (length(k) == 1) {
       if (length(idx) == 0) {
         stop(
-          sprintf("`idx` can't be empty while specifying `%s` as time interval", param)
+          sprintf(
+            "`idx` can't be empty while specifying `%s` as time interval",
+            param
+          )
         )
       }
 
@@ -700,7 +717,8 @@ k_by <- function(k, idx, param) {
 #' from \code{idx} - because windows length extends window backwards in time.
 #' The same situation for lag.
 #' @param k (k or lag) object from runner to be formatted
-#' @param only_positive for \code{k} is \code{TRUE}, for \code{lag} is \code{FALSE}
+#' @param only_positive for \code{k} is \code{TRUE},
+#'   for \code{lag} is \code{FALSE}
 #' @examples
 #' runner:::reformat_k("1 days")
 #' runner:::reformat_k("day")
@@ -728,7 +746,7 @@ reformat_k <- function(k, only_positive = TRUE) {
 #' Creates sequence for at as time-unit-interval
 #' @param at object from runner
 #' @param idx object from runner
-seq_at <- function(at, idx) {
+seq_at <- function(at, idx) { # nolint
   if (length(at) == 1 &&
       (
         (is.character(at) && is_datetime_valid(at)) ||
@@ -755,7 +773,7 @@ seq_at <- function(at, idx) {
   return(at)
 }
 
-set_from_attribute_at <- function(x, attrib) {
+set_from_attribute_at <- function(x, attrib) { #nolint
   runner_args <- get_runner_call_arg_names()
   arg_name <- deparse(substitute(attrib))
 
@@ -772,7 +790,7 @@ set_from_attribute_at <- function(x, attrib) {
           "`%s` should be either:
          - column name of `x`
          - vector of type `numeric`, `Date`, `POSIXct` or `POSIXlt`
-         - character value describing dates sequence step as in `by` argument of `seq.POSIXct`",
+         - character value describing dates sequence step as in `by` argument of `seq.POSIXct`", #nolint
           arg_name
         ),
         call. = FALSE
@@ -786,7 +804,7 @@ set_from_attribute_at <- function(x, attrib) {
     if (!is.null(attr(x, arg_name))) {
       warning(
         sprintf(
-          "`%1$s` set in run_by() will be ignored in favour of `%1$s` specified in runner() call",
+          "`%1$s` set in run_by() will be ignored in favour of `%1$s` specified in runner() call", #nolint
           arg_name
         )
       )
@@ -796,7 +814,8 @@ set_from_attribute_at <- function(x, attrib) {
       attrib <- x[[attrib]]
     } else if (length(attrib) == 1 && all(is_datetime_valid(attrib))) {
       # do nothing
-    } else if (is.numeric(attrib) || inherits(attrib, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
+    } else if (is.numeric(attrib) ||
+               inherits(attrib, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
       # do nothing
     } else {
       stop(
@@ -815,7 +834,7 @@ set_from_attribute_at <- function(x, attrib) {
 }
 
 
-set_from_attribute_difftime <- function(x, attrib) {
+set_from_attribute_difftime <- function(x, attrib) { #nolint
   runner_args <- get_runner_call_arg_names()
   arg_name <- deparse(substitute(attrib))
 
@@ -834,7 +853,7 @@ set_from_attribute_difftime <- function(x, attrib) {
     if (!is.null(attr(x, arg_name))) {
       warning(
         sprintf(
-          "`%1$s` set in run_by() will be ignored in favour of `%1$s` specified in runner() call",
+          "`%1$s` set in run_by() will be ignored in favour of `%1$s` specified in runner() call", #nolint
           arg_name
         )
       )
@@ -851,7 +870,7 @@ set_from_attribute_difftime <- function(x, attrib) {
           sprintf(
             "`%s` is invalid, should be either:
            - column name of `x`
-           - difftime class or character describing diffitme (see at argument in seq.POSIXt)
+           - difftime class or character describing diffitme (see at argument in seq.POSIXt) #nolint
            - numeric or integer vector",
             arg_name
           ),
@@ -865,7 +884,7 @@ set_from_attribute_difftime <- function(x, attrib) {
         sprintf(
           "`%s` is invalid, should be either:
            - column name of `x`
-           - difftime class or character describing diffitme (see at argument in `seq.POSIXt`)
+           - difftime class or character describing diffitme (see at argument in `seq.POSIXt`) #nolint
            - numeric or integer vector",
           arg_name
         ),
@@ -877,7 +896,7 @@ set_from_attribute_difftime <- function(x, attrib) {
   return(attrib)
 }
 
-set_from_attribute_index <- function(x, attrib) {
+set_from_attribute_index <- function(x, attrib) { #nolint
   arg_name <- deparse(substitute(attrib))
   runner_args <- get_runner_call_arg_names()
 
@@ -908,7 +927,7 @@ set_from_attribute_index <- function(x, attrib) {
     if (!is.null(attr(x, arg_name))) {
       warning(
         sprintf(
-          "`%1$s` set in run_by() will be ignored in favour of `%1$s` specified in runner() call",
+          "`%1$s` set in run_by() will be ignored in favour of `%1$s` specified in runner() call", # nolint
           arg_name
         )
       )
@@ -916,7 +935,8 @@ set_from_attribute_index <- function(x, attrib) {
 
     if (is.character(attrib) && length(attrib) == 1 && attrib %in% names(x)) {
       attrib <- x[[attrib]]
-    } else if (is.numeric(attrib) || inherits(attrib, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
+    } else if (is.numeric(attrib) ||
+               inherits(attrib, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
       # do nothing
     } else {
       stop(
@@ -946,7 +966,7 @@ set_from_attribute_logical <- function(x, attrib) {
   } else if (!is.null(attr(x, arg_name))) {
     warning(
       sprintf(
-        "`%1$s` set in run_by() will be ignored in favour of `%1$s` specified in runner() call",
+        "`%1$s` set in run_by() will be ignored in favour of `%1$s` specified in runner() call",  #nolint
         arg_name
       )
     )
@@ -958,10 +978,12 @@ set_from_attribute_logical <- function(x, attrib) {
 
 #' Access group data in mutate
 #'
-#' Access group data in `dplyr::mutate` after `dplyr::group_by`.
-#' Function created because data available in `dplyr::group_by %>% mutate` scheme
-#' is not filtered by group - in mutate function `.` is still initial dataset.
-#' This function creates `data.frame` using `dplyr::groups` information.
+#' Access group data in `dplyr::mutate` after
+#' `dplyr::group_by`.
+#' Function created because data available in `dplyr::group_by %>% mutate`
+#' scheme is not filtered by group - in mutate function `.` is still initial
+#' dataset. This function creates `data.frame` using `dplyr::groups`
+#' information.
 #' @param x (`data.frame`)\cr
 #'   object which can be `grouped_df` in special case.
 #' @md
@@ -984,4 +1006,3 @@ this_group <- function(x) {
   }
   return(x)
 }
-

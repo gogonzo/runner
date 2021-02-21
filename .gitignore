@@ -8,6 +8,7 @@ man/.Rapp.history
 .Rhistory
 .RData
 .Ruserdata
+
 # C++ files
 src/*.o
 src/*.so
@@ -45,3 +46,6 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 docs/
+
+#
+*.swp

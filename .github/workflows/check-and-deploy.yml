@@ -8,14 +8,15 @@ jobs:
     runs-on: ubuntu-18.04
     container: rocker/verse:latest
     steps:
-      - name: Checkout repository
+      - name: Checkout repository 🛎
         uses: actions/checkout@master
 
-      - name: Install dependencies
+      - name: Install dependencies 🔧
         shell: Rscript {0}
         run: |
           remotes::install_deps(dependencies = TRUE)
-      - name: Check
+
+      - name: Check 🔍
         shell: Rscript {0}
         run: |
           devtools::check(cran = TRUE, vignettes = TRUE)
@@ -24,13 +25,14 @@ jobs:
     runs-on: ubuntu-18.04
     container: rocker/verse:3.6.3
     steps:
-      - name: Checkout repository
+      - name: Checkout repository 🛎
         uses: actions/checkout@v2
-      - name: Install dependencies
+
+      - name: Install dependencies 🔧
         shell: Rscript {0}
         run: |
           remotes::install_deps(dependencies = TRUE)
-      - name: Check
+      - name: Check 🔍
         shell: Rscript {0}
         run: |
           devtools::check(cran = TRUE, vignettes = TRUE)
@@ -40,8 +42,9 @@ jobs:
     runs-on: ubuntu-18.04
     container: rocker/tidyverse:latest
     steps:
-      - name: Checkout repository
+      - name: Checkout repository 🛎
         uses: actions/checkout@v2
+
       - name: Initialize r-hub
         shell: Rscript {0}
         run: |
@@ -51,23 +54,22 @@ jobs:
             token = "${{secrets.RHUB_TOKEN}}"
           )
       - name: Check rhub/debian-clang-devel
-        run: Rscript --vanilla inst/rhub/check-rhub.R "debian-clang-devel"
+        run: Rscript --vanilla inst/automation-checks/check-rhub.R "debian-clang-devel"
 
       - name: Check r-hub/debian-gcc-devel
-        run: Rscript --vanilla inst/rhub/check-rhub.R "debian-gcc-devel"
+        run: Rscript --vanilla inst/automation-checks/check-rhub.R "debian-gcc-devel"
 
       - name: Check r-hub/linux-x86_64-rocker-gcc-san
-        run: Rscript --vanilla inst/rhub/check-rhub.R "linux-x86_64-rocker-gcc-san"
+        run: Rscript --vanilla inst/automation-checks/check-rhub.R "linux-x86_64-rocker-gcc-san"
 
       - name: Check r-hub/solaris-x86-patched
-        run: Rscript --vanilla inst/rhub/check-rhub.R "solaris-x86-patched"
+        run: Rscript --vanilla inst/automation-checks/check-rhub.R "solaris-x86-patched"
 
       - name: Check r-hub/fedora-clang-devel
-        run: Rscript --vanilla inst/rhub/check-rhub.R "fedora-clang-devel"
+        run: Rscript --vanilla inst/automation-checks/check-rhub.R "fedora-clang-devel"
 
   build-and-deploy:
     needs: r-hub-checks
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     container: rocker/tidyverse:latest
     steps:
@@ -76,20 +78,27 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install package
+      - name: Install package 🔧
         run: R CMD INSTALL .
 
-      - name: Build docs 🔧
+      - name: Check spelling 📖
         shell: Rscript {0}
         run: |
-          install.packages("pkgdown")
-          pkgdown::build_site()
+          if (!require("spelling")) install.packages("spelling", repos = "http://cran.rstudio.com")
+          out <- capture.output(spelling::spell_check_package())
+          if (!identical(out, "No spelling errors found.")) stop(paste(out, collapse = "\n"))
 
       - name: Test coverage
         shell: Rscript {0}
         run: |
-          install.packages("covr")
+          if (!require("covr")) install.packages("covr", repos = "http://cran.rstudio.com")
           covr::codecov()
+
+      - name: Build docs 🖨
+        shell: Rscript {0}
+        run: |
+          if (!require("pkgdown")) install.packages("pkgdown", repos = "http://cran.rstudio.com")
+          pkgdown::build_site()
 
       - name: Deploy Docs 🚀
         uses: peaceiris/actions-gh-pages@v3
@@ -114,8 +123,3 @@ jobs:
           body_path: news.txt
           draft: false
           prerelease: false
-
-      - name: Release CRAN
-        shell: Rscript {0}
-        run: |
-          devtools::release(pkg = ".", check = FALSE, args = NULL)

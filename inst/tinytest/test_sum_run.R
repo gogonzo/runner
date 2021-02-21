@@ -87,7 +87,9 @@ expect_equal(
 
 expect_equal(
   sum_run(x2, lag = 100, na_pad = TRUE),
-  suppressWarnings(runner(x2, lag = 100, f = sum2, na_pad = TRUE, type = "numeric"))
+  suppressWarnings(
+    runner(x2, lag = 100, f = sum2, na_pad = TRUE, type = "numeric")
+  )
 )
 
 expect_equal(
@@ -96,7 +98,9 @@ expect_equal(
 
 expect_equal(
   sum_run(x2, lag = -100, na_pad = TRUE),
-  suppressWarnings(runner(x2, lag = -100, f = sum2, na_pad = TRUE, type = "numeric"))
+  suppressWarnings(
+    runner(x2, lag = -100, f = sum2, na_pad = TRUE, type = "numeric")
+  )
 )
 
 
@@ -202,7 +206,9 @@ expect_equal(
 
 expect_equal(
   sum_run(x2, k = 5, lag = 3, na_pad = TRUE, na_rm = FALSE),
-  suppressWarnings(runner(x2, k = 5, lag = 3, f = sum, na_pad = TRUE, type = "numeric"))
+  suppressWarnings(
+    runner(x2, k = 5, lag = 3, f = sum, na_pad = TRUE, type = "numeric")
+  )
 )
 
 
@@ -221,7 +227,8 @@ expect_equal(
 
 expect_equal(
   sum_run(x2, k = 5, lag = 3, na_pad = TRUE, na_rm = FALSE)[ids],
-  sum_run(x2, k = 5, lag = 3, at = seq_along(x2)[ids], na_pad = TRUE, na_rm = FALSE))
+  sum_run(x2, k = 5, lag = 3,
+          at = seq_along(x2)[ids], na_pad = TRUE, na_rm = FALSE))
 
 #        |-----[--+---]---> -------
 expect_equal(
@@ -238,7 +245,9 @@ expect_equal(
 
 expect_equal(
   sum_run(x2, k = 5, lag = -3, na_pad = TRUE, na_rm = FALSE),
-  suppressWarnings(runner(x2, k = 5, lag = -3, f = sum, na_pad = TRUE, type = "numeric"))
+  suppressWarnings(
+    runner(x2, k = 5, lag = -3, f = sum, na_pad = TRUE, type = "numeric")
+  )
 )
 
 
@@ -257,7 +266,8 @@ expect_equal(
 
 expect_equal(
   sum_run(x2, k = 5, lag = -3, na_pad = TRUE, na_rm = FALSE)[ids],
-  sum_run(x2, k = 5, lag = -3, at = seq_along(x2)[ids], na_pad = TRUE, na_rm = FALSE))
+  sum_run(x2, k = 5, lag = -3,
+          at = seq_along(x2)[ids], na_pad = TRUE, na_rm = FALSE))
 
 #        |--------+-[---]-> -------
 expect_equal(

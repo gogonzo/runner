@@ -1,0 +1,119 @@
+{
+  "@context": [
+    "https://doi.org/10.5063/schema/codemeta-2.0",
+    "http://schema.org"
+  ],
+  "@type": "SoftwareSourceCode",
+  "identifier": "runner",
+  "description": "Lightweight library for rolling windows operations. Package enables\n  full control over the window length, window lag and a time indices. With a runner \n  one can apply any R function on a rolling windows. The package eases work with \n  equally and unequally spaced time series.",
+  "name": "runner: Running Operations for Vectors",
+  "issueTracker": "https://github.com/gogonzo/runner/issues",
+  "license": "https://spdx.org/licenses/GPL-2.0",
+  "version": "0.3.8",
+  "programmingLanguage": {
+    "@type": "ComputerLanguage",
+    "name": "R",
+    "url": "https://r-project.org"
+  },
+  "runtimePlatform": "R version 4.0.2 (2020-06-22)",
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Dawid",
+      "familyName": "Ka<U+0142><U+0119>dkowski",
+      "email": "dawid.kaledkowski@gmail.com",
+      "@id": "https://orcid.org/0000-0001-9533-457X"
+    }
+  ],
+  "contributor": {},
+  "copyrightHolder": {},
+  "funder": {},
+  "maintainer": [
+    {
+      "@type": "Person",
+      "givenName": "Dawid",
+      "familyName": "Ka<U+0142><U+0119>dkowski",
+      "email": "dawid.kaledkowski@gmail.com",
+      "@id": "https://orcid.org/0000-0001-9533-457X"
+    }
+  ],
+  "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "knitr",
+      "name": "knitr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=knitr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "rmarkdown",
+      "name": "rmarkdown",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "tinytest",
+      "name": "tinytest",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=tinytest"
+    }
+  ],
+  "softwareRequirements": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "R",
+      "name": "R",
+      "version": ">= 3.0"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "methods",
+      "name": "methods"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "parallel",
+      "name": "parallel"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "Rcpp",
+      "name": "Rcpp",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=Rcpp"
+    }
+  ],
+  "codeRepository": "https://github.com/gogonzo/runner",
+  "releaseNotes": "https://github.com/gogonzo/runner/blob/master/NEWS.md",
+  "readme": "https://github.com/gogonzo/runner/blob/main/README.md",
+  "fileSize": "0KB",
+  "contIntegration": ["https://ci.appveyor.com/project/gogonzo/runner", "https://codecov.io/gh/gogonzo/runner/branch/master"]
+}

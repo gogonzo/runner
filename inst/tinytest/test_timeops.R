@@ -111,7 +111,9 @@ expect_equal(
 )
 
 
-idx <- seq(as.POSIXct("2019-01-01 03:02:01"), as.POSIXct("2020-01-01 03:02:01"), by = "month")
+idx <- seq(as.POSIXct("2019-01-01 03:02:01"),
+           as.POSIXct("2020-01-01 03:02:01"),
+           by = "month")
 expect_error(
   runner:::k_by(k = "-1 month", idx = idx, param = "k"),
   "k can't be negative"
@@ -163,7 +165,7 @@ expect_error(
 
 
 expect_error(
-  runner:::reformat_k(c("2 days","-2 days"), only_positive = TRUE),
+  runner:::reformat_k(c("2 days", "-2 days"), only_positive = TRUE),
   "k can't be negative"
 )
 
