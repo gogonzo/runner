@@ -45,13 +45,13 @@ expect_equal(
 #  [...]|--------+-------> ------
 expect_equal(
   mean_run(x2, lag = 100),
-  suppressWarnings(runner(x2, lag = 100, f = mean2, type = "numeric"))
+  as.numeric(runner(x2, lag = 100, f = mean2))
 )
 
 expect_equal(
   mean_run(x2, lag = 100, na_pad = TRUE),
-  suppressWarnings(
-    runner(x2, lag = 100, f = mean2, na_pad = TRUE, type = "numeric")
+  as.numeric(
+    runner(x2, lag = 100, f = mean2, na_pad = TRUE)
   )
 )
 
@@ -61,8 +61,8 @@ expect_equal(
 
 expect_equal(
   mean_run(x2, lag = -100, na_pad = TRUE),
-  suppressWarnings(
-    runner(x2, lag = -100, f = mean2, na_pad = TRUE, type = "numeric")
+  as.numeric(
+    runner(x2, lag = -100, f = mean2, na_pad = TRUE)
   )
 )
 
