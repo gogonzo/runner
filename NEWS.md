@@ -1,6 +1,6 @@
 # runner 0.4.0
-* defunct `type` argument in favor or `simplify`
-* fixed error when using `runner::runner`
+* defunct `type` argument in favor of `simplify`.
+* fixed error when using `runner::runner`.
 * fixed `max_run` to return `NA` instead of `NaN` in incomplete or `NA` windows.
 
 # runner 0.3.8
