@@ -603,14 +603,17 @@ get_runner_call_arg_names <- function() {
   runner_call_idx <- which(
     vapply(
       X =  rev(sys.calls()),
-      FUN = function(x) x[[1]] == as.name("runner"),
+      FUN = function(x) {
+        x[[1]] == as.name("runner") ||
+          x[[1]] == as.name("runner::runner")
+      },
       FUN.VALUE = logical(1)
     )
   ) - 1
 
   cl <- sys.call(-runner_call_idx)
   f <- get(
-    x = as.character(cl[[1]]),
+    x = as.character("runner"),
     mode = "function",
     envir = sys.frame(-runner_call_idx)
   )
