@@ -1,3 +1,8 @@
+# runner 0.4.0
+* defunct `type` argument in favor of `simplify`.
+* fixed error when using `runner::runner`.
+* fixed `max_run` to return `NA` instead of `NaN` in incomplete or `NA` windows.
+
 # runner 0.3.8
 * implement parallel windows computation.
 * added `simplify` identical to argument used in `sapply`.
@@ -14,7 +19,8 @@
 * `runner` function to be applied on `data.frame` or `matrix` - running windows
 constructed by subsetting rows.
 * `runner` output can be a list.
-* `at` `lag` and `k` allows to specify values as `POSIXt` sequence increment - same as `by` in `seq.POSIXt`.
+* `at` `lag` and `k` allows to specify values as `POSIXt` sequence increment - 
+same as `by` in `seq.POSIXt`.
 * enhanced function documentation by images.
 
 # runner 0.3.2

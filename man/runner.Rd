@@ -17,7 +17,7 @@ runner(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type = "auto",
+  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -31,7 +31,7 @@ runner(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type = "auto",
+  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -45,7 +45,7 @@ runner(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type = "auto",
+  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -59,7 +59,7 @@ runner(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type = "auto",
+  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -73,7 +73,7 @@ runner(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type = "auto",
+  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -87,7 +87,7 @@ runner(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type = "auto",
+  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -135,18 +135,16 @@ See 'Specifying time-intervals' in details section.}
 Whether incomplete window should return \code{NA} (if \code{na_pad = TRUE})
 Incomplete window is when some parts of the window are out of range.}
 
-\item{type}{(\code{character} single value)\cr
-output type
-(\code{"auto"}, \code{"logical"}, \code{"numeric"}, \code{"integer"}, \code{"character"}). \code{runner}
-by default guess type automatically. In case of failure of \code{"auto"} please
-specify desired type.}
+\item{type}{(defunct)\cr
+argument defunct from version 0.4.0. Use \code{simplify} instead.}
 
 \item{simplify}{(\code{logical} or \code{character} value)\cr
 should the result be simplified to a vector, matrix or higher dimensional
 array if possible. The default value, \code{simplify = TRUE}, returns a vector or
 matrix if appropriate, whereas if \code{simplify = "array"} the result may be an
-array of “rank” \verb{(=length(dim(.)))} one higher than the result of output
-from the function \code{f} for each window.}
+array of "rank" \verb{(=length(dim(.)))} one higher than the result of output
+from the function \code{f} for each window. Consequences of \code{simplify} in \code{runner}
+are identical to \code{sapply}.}
 
 \item{cl}{(\code{cluster}) \emph{experimental}\cr
 Create and pass the cluster to the \code{runner} function to run each window
@@ -158,7 +156,7 @@ other arguments passed to the function \code{f}.}
 \value{
 vector with aggregated values for each window. Length of output is
 the same as \code{length(x)} or \code{length(at)} if specified. Type of the output
-is taken from \code{type} argument.
+depends on the output from a function \code{f}.
 }
 \description{
 Applies custom function on running windows.
@@ -255,8 +253,7 @@ runner(
     a = letters[1:10],
     b = 1:10
   ),
-  f = function(x) paste(paste0(x$a, x$b), collapse = "+"),
-  type = "character"
+  f = function(x) paste(paste0(x$a, x$b), collapse = "+")
 )
 
 # concatenate two columns with additional argument
@@ -268,8 +265,7 @@ runner(
   f = function(x, xxx) {
     paste(paste0(x$a, xxx, x$b), collapse = " + ")
   },
-  xxx = "...",
-  type = "character"
+  xxx = "..."
 )
 
 # number of unique values in each window (varying window size)
@@ -280,8 +276,7 @@ runner(letters[1:10],
 # concatenate only on selected windows index
 runner(letters[1:10],
        f = function(x) paste(x, collapse = "-"),
-       at = c(1, 5, 8),
-       type = "character")
+       at = c(1, 5, 8))
 
 # 5 days mean
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)

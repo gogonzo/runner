@@ -577,103 +577,84 @@ num_function  <- function(x) as.double(sum(x))
 char_function <- function(x) paste(x, collapse = "-")
 
 # <logical>
-expect_warning(
-  expect_identical(
-    as.logical(c(FALSE, TRUE, TRUE, TRUE)),
-    runner(log_input, f = log_function, type = "logical"))
-
+expect_identical(
+  as.logical(c(FALSE, TRUE, TRUE, TRUE)),
+  runner(log_input, f = log_function)
 )
 
-expect_warning(
-  expect_identical(
-    as.logical(c(FALSE, FALSE, FALSE, FALSE)),
-    runner(int_input, f = log_function, type = "logical"))
+expect_identical(
+  as.logical(c(FALSE, FALSE, FALSE, FALSE)),
+  runner(int_input, f = log_function)
 )
 
-expect_warning(
-  expect_identical(
-    as.logical(c(FALSE, FALSE, FALSE, FALSE)),
-    runner(num_input, f = log_function, type = "logical"))
+expect_identical(
+  as.logical(c(FALSE, FALSE, FALSE, FALSE)),
+  runner(num_input, f = log_function)
 )
 
-expect_warning(
-  expect_identical(
-    as.logical(c(FALSE, FALSE, FALSE, FALSE)),
-    runner(cha_input, f = log_function, type = "logical"))
+expect_identical(
+  as.logical(c(FALSE, FALSE, FALSE, FALSE)),
+  runner(cha_input, f = log_function)
 )
 
 # <integer>
 
-expect_warning(
-  expect_identical(
-    as.integer(c(1, 2, 3, 4)),
-    runner(log_input, f = int_function, type = "integer"))
+expect_identical(
+  as.integer(c(1, 2, 3, 4)),
+  runner(log_input, f = int_function)
 )
 
-expect_warning(
-  expect_identical(
-    as.integer(c(1, 2, 3, 4)),
-    runner(int_input, f = int_function, type = "integer"))
+expect_identical(
+  as.integer(c(1, 2, 3, 4)),
+  runner(int_input, f = int_function)
 )
 
-expect_warning(
-  expect_identical(
-    as.integer(c(1, 2, 3, 4)),
-    runner(num_input, f = int_function, type = "integer"))
+expect_identical(
+  as.integer(c(1, 2, 3, 4)),
+  runner(num_input, f = int_function)
 )
 
-expect_warning(
-  expect_identical(
-    as.integer(c(1, 2, 3, 4)),
-    runner(cha_input, f = int_function, type = "integer"))
+expect_identical(
+  as.integer(c(1, 2, 3, 4)),
+  runner(cha_input, f = int_function)
 )
 
 # <numeric>
-expect_warning(
-  expect_identical(
-    as.numeric(c(1, 2, 2, 2)),
-    runner(log_input, f = num_function, type = "numeric"))
+expect_identical(
+  as.numeric(c(1, 2, 2, 2)),
+  runner(log_input, f = num_function)
 )
 
-expect_warning(
-  expect_identical(
-    as.numeric(c(1, 3, 6, 10)),
-    runner(int_input, f = num_function, type = "numeric"))
+expect_identical(
+  as.numeric(c(1, 3, 6, 10)),
+  runner(int_input, f = num_function)
 )
 
-expect_warning(
-  expect_identical(
-    as.numeric(c(1.5, 4, 7.5, 12)),
-    runner(num_input, f = num_function, type = "numeric"))
-)
+expect_identical(
+  as.numeric(c(1.5, 4, 7.5, 12)),
+  runner(num_input, f = num_function))
 
-expect_warning(
-  expect_error(runner(cha_input, f = num_function, type = "numeric"))
-)
+expect_error(runner(cha_input, f = num_function))
 
 # <character>
-expect_warning(
-  expect_identical(
-    c("TRUE", "TRUE-TRUE", "TRUE-TRUE-FALSE", "TRUE-TRUE-FALSE-FALSE"),
-    runner(log_input, f = char_function, type = "character"))
+expect_identical(
+  c("TRUE", "TRUE-TRUE", "TRUE-TRUE-FALSE", "TRUE-TRUE-FALSE-FALSE"),
+  runner(log_input, f = char_function)
 )
 
-expect_warning(
-  expect_identical(
-    c("1", "1-2", "1-2-3", "1-2-3-4"),
-    runner(int_input, f = char_function, type = "character"))
+expect_identical(
+  c("1", "1-2", "1-2-3", "1-2-3-4"),
+  runner(int_input, f = char_function)
 )
 
-expect_warning(
-  expect_identical(
-    c("1.5", "1.5-2.5", "1.5-2.5-3.5", "1.5-2.5-3.5-4.5"),
-    runner(num_input, f = char_function, type = "character"))
+expect_identical(
+  c("1.5", "1.5-2.5", "1.5-2.5-3.5", "1.5-2.5-3.5-4.5"),
+  runner(num_input, f = char_function)
 )
 
-expect_warning(
-  expect_identical(
-    c("a", "a-b", "a-b-c", "a-b-c-d"),
-    runner(cha_input, f = char_function, type = "character"))
+expect_identical(
+  c("a", "a-b", "a-b-c", "a-b-c-d"),
+  runner(cha_input, f = char_function)
 )
 
 #i/o type at -------
@@ -689,91 +670,74 @@ char_function <- function(x) paste(x, collapse = "-")
 
 at <- c(2, 3)
 # <logical>
-expect_warning(
-  expect_identical(
-    as.logical(c(FALSE, TRUE, TRUE, TRUE))[at],
-    runner(log_input, f = log_function, type = "logical", at = at))
+expect_identical(
+  as.logical(c(FALSE, TRUE, TRUE, TRUE))[at],
+  runner(log_input, f = log_function, at = at)
 )
 
-expect_warning(
-  expect_identical(
-    as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
-    runner(int_input, f = log_function, type = "logical", at = at))
+expect_identical(
+  as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
+  runner(int_input, f = log_function, at = at)
 )
 
-expect_warning(
-  expect_identical(
-    as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
-    runner(num_input, f = log_function, type = "logical", at = at))
+expect_identical(
+  as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
+  runner(num_input, f = log_function, at = at)
 )
 
-expect_warning(
-  expect_identical(
-    as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
-    runner(cha_input, f = log_function, type = "logical", at = at))
+expect_identical(
+  as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
+  runner(cha_input, f = log_function, at = at)
 )
 # <integer>
-expect_warning(
-  expect_identical(
-    as.integer(c(1, 2, 3, 4))[at],
-    runner(log_input, f = int_function, type = "integer", at = at))
+expect_identical(
+  as.integer(c(1, 2, 3, 4))[at],
+  runner(log_input, f = int_function, at = at)
 )
-expect_warning(
-  expect_identical(
-    as.integer(c(1, 2, 3, 4))[at],
-    runner(int_input, f = int_function, type = "integer", at = at))
+expect_identical(
+  as.integer(c(1, 2, 3, 4))[at],
+  runner(int_input, f = int_function, at = at)
 )
-expect_warning(
-  expect_identical(
-    as.integer(c(1, 2, 3, 4))[at],
-    runner(num_input, f = int_function, type = "integer", at = at))
+expect_identical(
+  as.integer(c(1, 2, 3, 4))[at],
+  runner(num_input, f = int_function, at = at)
 )
-expect_warning(
-  expect_identical(
-    as.integer(c(1, 2, 3, 4))[at],
-    runner(cha_input, f = int_function, type = "integer", at = at))
+expect_identical(
+  as.integer(c(1, 2, 3, 4))[at],
+  runner(cha_input, f = int_function, at = at)
 )
 
 # <numeric>
-expect_warning(
-  expect_identical(
-    as.numeric(c(1, 2, 2, 2))[at],
-    runner(log_input, f = num_function, type = "numeric", at = at))
+expect_identical(
+  as.numeric(c(1, 2, 2, 2))[at],
+  runner(log_input, f = num_function, at = at)
 )
-expect_warning(
-  expect_identical(
-    as.numeric(c(1, 3, 6, 10))[at],
-    runner(int_input, f = num_function, type = "numeric", at = at))
+expect_identical(
+  as.numeric(c(1, 3, 6, 10))[at],
+  runner(int_input, f = num_function, at = at)
 )
-expect_warning(
-  expect_identical(
-    as.numeric(c(1.5, 4, 7.5, 12))[at],
-    runner(num_input, f = num_function, type = "numeric", at = at))
+expect_identical(
+  as.numeric(c(1.5, 4, 7.5, 12))[at],
+  runner(num_input, f = num_function, at = at)
 )
-expect_warning(
-  expect_error(runner(cha_input, f = num_function, type = "numeric", at = at))
-)
+expect_error(runner(cha_input, f = num_function, at = at))
 # <character>
-expect_warning(
-  expect_identical(
-    c("TRUE", "TRUE-TRUE", "TRUE-TRUE-FALSE", "TRUE-TRUE-FALSE-FALSE")[at],
-    runner(log_input, f = char_function, type = "character", at = at))
+expect_identical(
+  c("TRUE", "TRUE-TRUE", "TRUE-TRUE-FALSE", "TRUE-TRUE-FALSE-FALSE")[at],
+  runner(log_input, f = char_function, at = at)
 )
-expect_warning(
-  expect_identical(
-    c("1", "1-2", "1-2-3", "1-2-3-4")[at],
-    runner(int_input, f = char_function, type = "character", at = at))
+expect_identical(
+  c("1", "1-2", "1-2-3", "1-2-3-4")[at],
+  runner(int_input, f = char_function, at = at)
 )
 
-expect_warning(
-  expect_identical(
-    c("1.5", "1.5-2.5", "1.5-2.5-3.5", "1.5-2.5-3.5-4.5")[at],
-    runner(num_input, f = char_function, type = "character", at = at))
+expect_identical(
+  c("1.5", "1.5-2.5", "1.5-2.5-3.5", "1.5-2.5-3.5-4.5")[at],
+  runner(num_input, f = char_function, at = at)
 )
-expect_warning(
-  expect_identical(
-    c("a", "a-b", "a-b-c", "a-b-c-d")[at],
-    runner(cha_input, f = char_function, type = "character", at = at))
+expect_identical(
+  c("a", "a-b", "a-b-c", "a-b-c-d")[at],
+  runner(cha_input, f = char_function, at = at)
 )
 
 #at date window -------
@@ -1350,30 +1314,6 @@ expect_true(is(res, "list"))
 expect_error(runner(x = letters[1:5], f = ""))
 
 expect_error(runner(list(1:10), k = 5, f = mean), "Invalid \\'x\\' type")
-expect_warning(
-  expect_error(
-    runner(list(1:10), k = 5, f = mean, type = "character"),
-    "Invalid \\'x\\' type"
-  )
-)
-expect_warning(
-  expect_error(
-    runner(list(1:10), k = 5, f = mean, type = "integer"),
-    "Invalid \\'x\\' type"
-  )
-)
-expect_warning(
-  expect_error(
-    runner(list(1:10), k = 5, f = mean, type = "logical"),
-    "Invalid \\'x\\' type"
-    )
-  )
-expect_warning(
-  expect_error(
-    runner(1:10, k = 5, f = mean, type = "wrong type"),
-    "cannot make a vector of mode"
-    )
-  )
 
 expect_error(runner(1:10, k = -5, f = mean),
              "k can't be negative")
@@ -1408,29 +1348,11 @@ expect_error(
   "length\\(lag\\) should be 1 or equal to"
 )
 
-#Test deprecate -------
+#Test defunct -------
 expect_warning(
   runner(
     1:10,
     f = function(x) x,
-    type = "numeric",
-    cl = ""
-  )
-)
-
-expect_warning(
-  runner(
-    1:10,
-    f = function(x) x,
-    type = "numeric"
-  )
-)
-
-expect_warning(
-  runner(
-    1:10,
-    f = function(x) x,
-    simplify = TRUE,
     type = "numeric"
   )
 )

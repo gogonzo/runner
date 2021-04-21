@@ -59,26 +59,23 @@ expect_equal(
 #  [...]|--------+-------> ------
 expect_equal(
   streak_run(x2, lag = 100),
-  suppressWarnings(runner(x2, lag = 100, f = streak2, type = "numeric"))
+  as.numeric(runner(x2, lag = 100, f = streak2))
 )
 
 expect_equal(
   streak_run(x2, lag = 100, na_pad = TRUE),
-  suppressWarnings(
-    runner(x2, lag = 100, f = streak2, na_pad = TRUE, type = "numeric")
-  )
+  as.numeric(runner(x2, lag = 100, f = streak2, na_pad = TRUE))
 )
 
 
 expect_equal(
   streak_run(x2, lag = -100),
-  runner(x2, lag = -100, f = streak2))
+  runner(x2, lag = -100, f = streak2)
+)
 
 expect_equal(
   streak_run(x2, lag = -100, na_pad = TRUE),
-  suppressWarnings(
-    runner(x2, lag = -100, f = streak2, na_pad = TRUE, type = "numeric")
-    )
+  as.numeric(runner(x2, lag = -100, f = streak2, na_pad = TRUE))
 )
 
 #       |----[...]-------> ------

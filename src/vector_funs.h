@@ -117,21 +117,21 @@ namespace aggr {
     }
 
     double calc_max(Rcpp::NumericVector const& x, int u, int l, bool na_rm) {
-      double cur_max = NAN;
+      double cur_max = NA_REAL;
 
       if (na_rm) {
         for (int i = l; i <= u ; ++i) {
-          if (x(i) > cur_max or std::isnan(cur_max)) {
+          if (x(i) > cur_max or Rcpp::NumericVector::is_na(cur_max)) {
             cur_max = x(i);
           }
         }
       } else {
         for (int i = l; i <= u; ++i) {
           if (Rcpp::NumericVector::is_na(x(i))) {
-            cur_max = NAN;
+            cur_max = NA_REAL;
             return cur_max;
           }
-          if (std::isnan(cur_max) or x(i) > cur_max) {
+          if (Rcpp::NumericVector::is_na(cur_max) or x(i) > cur_max) {
             cur_max = x(i);
           }
         }
