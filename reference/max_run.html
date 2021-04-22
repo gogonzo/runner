@@ -83,7 +83,7 @@ specified k window size." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -230,7 +230,7 @@ Incomplete window is when some parts of the window are out of range.</p></td>
 </div><div class='output co'>#&gt;  [1] 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3</div><div class='input'><span class='fu'>max_run</span><span class='op'>(</span><span class='va'>x2</span>, na_rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='co'># cumulative maximum with removing NA.</span>
 </div><div class='output co'>#&gt;  [1] 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3</div><div class='input'><span class='fu'>max_run</span><span class='op'>(</span><span class='va'>x2</span>, na_rm <span class='op'>=</span> <span class='cn'>TRUE</span>, k<span class='op'>=</span><span class='fl'>4</span><span class='op'>)</span> <span class='co'># maximum in 4-element window</span>
 </div><div class='output co'>#&gt;  [1] 2 2 2 2 2 2 3 3 3 3 2 2 2 2 2</div><div class='input'><span class='fu'>max_run</span><span class='op'>(</span><span class='va'>x2</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span>, k<span class='op'>=</span><span class='va'>k</span><span class='op'>)</span> <span class='co'># maximum in varying k window size</span>
-</div><div class='output co'>#&gt;  [1]   2   2 NaN NaN NaN NaN   3   3   2   1   2   2   2   2   2</div></pre>
+</div><div class='output co'>#&gt;  [1]  2  2 NA NA NA NA  3  3  2  1  2  2  2  2  2</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

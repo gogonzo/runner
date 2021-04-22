@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -156,7 +156,7 @@
   idx <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   na_pad <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  type <span class='op'>=</span> <span class='st'>"auto"</span>,
+  <span class='va'>type</span>,
   simplify <span class='op'>=</span> <span class='cn'>TRUE</span>,
   cl <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
@@ -171,7 +171,7 @@
   idx <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   na_pad <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  type <span class='op'>=</span> <span class='st'>"auto"</span>,
+  <span class='va'>type</span>,
   simplify <span class='op'>=</span> <span class='cn'>TRUE</span>,
   cl <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
@@ -186,7 +186,7 @@
   idx <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   na_pad <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  type <span class='op'>=</span> <span class='st'>"auto"</span>,
+  <span class='va'>type</span>,
   simplify <span class='op'>=</span> <span class='cn'>TRUE</span>,
   cl <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
@@ -201,7 +201,7 @@
   idx <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   na_pad <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  type <span class='op'>=</span> <span class='st'>"auto"</span>,
+  <span class='va'>type</span>,
   simplify <span class='op'>=</span> <span class='cn'>TRUE</span>,
   cl <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
@@ -216,7 +216,7 @@
   idx <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   na_pad <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  type <span class='op'>=</span> <span class='st'>"auto"</span>,
+  <span class='va'>type</span>,
   simplify <span class='op'>=</span> <span class='cn'>TRUE</span>,
   cl <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
@@ -231,7 +231,7 @@
   idx <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   na_pad <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  type <span class='op'>=</span> <span class='st'>"auto"</span>,
+  <span class='va'>type</span>,
   simplify <span class='op'>=</span> <span class='cn'>TRUE</span>,
   cl <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
@@ -297,11 +297,8 @@ Incomplete window is when some parts of the window are out of range.</p></td>
     </tr>
     <tr>
       <th>type</th>
-      <td><p>(<code>character</code> single value)<br />
-output type
-(<code>"auto"</code>, <code>"logical"</code>, <code>"numeric"</code>, <code>"integer"</code>, <code>"character"</code>). <code>runner</code>
-by default guess type automatically. In case of failure of <code>"auto"</code> please
-specify desired type.</p></td>
+      <td><p>(defunct)<br />
+argument defunct from version 0.4.0. Use <code>simplify</code> instead.</p></td>
     </tr>
     <tr>
       <th>simplify</th>
@@ -309,8 +306,9 @@ specify desired type.</p></td>
 should the result be simplified to a vector, matrix or higher dimensional
 array if possible. The default value, <code>simplify = TRUE</code>, returns a vector or
 matrix if appropriate, whereas if <code>simplify = "array"</code> the result may be an
-array of “rank” <code>(=length(dim(.)))</code> one higher than the result of output
-from the function <code>f</code> for each window.</p></td>
+array of "rank" <code>(=length(dim(.)))</code> one higher than the result of output
+from the function <code>f</code> for each window. Consequences of <code>simplify</code> in <code>runner</code>
+are identical to <code>sapply</code>.</p></td>
     </tr>
     <tr>
       <th>cl</th>
@@ -329,7 +327,7 @@ other arguments passed to the function <code>f</code>.</p></td>
 
     <p>vector with aggregated values for each window. Length of output is
 the same as <code><a href='https://rdrr.io/r/base/length.html'>length(x)</a></code> or <code><a href='https://rdrr.io/r/base/length.html'>length(at)</a></code> if specified. Type of the output
-is taken from <code>type</code> argument.</p>
+depends on the output from a function <code>f</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Function can apply any R function on running windows defined by <code>x</code>,
@@ -442,10 +440,9 @@ parallel environment using <code><a href='https://rdrr.io/r/parallel/clusterAppl
     a <span class='op'>=</span> <span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>]</span>,
     b <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>
   <span class='op'>)</span>,
-  f <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>a</span>, <span class='va'>x</span><span class='op'>$</span><span class='va'>b</span><span class='op'>)</span>, collapse <span class='op'>=</span> <span class='st'>"+"</span><span class='op'>)</span>,
-  type <span class='op'>=</span> <span class='st'>"character"</span>
+  f <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>a</span>, <span class='va'>x</span><span class='op'>$</span><span class='va'>b</span><span class='op'>)</span>, collapse <span class='op'>=</span> <span class='st'>"+"</span><span class='op'>)</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: When 'simplify != FALSE' 'type' argument is set to 'auto'</span></div><div class='output co'>#&gt; <span class='error'>Error in x[[1]] == as.name("runner"): comparison (1) is possible only for atomic and list types</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='error'>Error in x[[1]] == as.name("runner"): comparison (1) is possible only for atomic and list types</span></div><div class='input'>
 <span class='co'># concatenate two columns with additional argument</span>
 <span class='fu'>runner</span><span class='op'>(</span>
   <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
@@ -455,10 +452,9 @@ parallel environment using <code><a href='https://rdrr.io/r/parallel/clusterAppl
   f <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>xxx</span><span class='op'>)</span> <span class='op'>{</span>
     <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>a</span>, <span class='va'>xxx</span>, <span class='va'>x</span><span class='op'>$</span><span class='va'>b</span><span class='op'>)</span>, collapse <span class='op'>=</span> <span class='st'>" + "</span><span class='op'>)</span>
   <span class='op'>}</span>,
-  xxx <span class='op'>=</span> <span class='st'>"..."</span>,
-  type <span class='op'>=</span> <span class='st'>"character"</span>
+  xxx <span class='op'>=</span> <span class='st'>"..."</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: When 'simplify != FALSE' 'type' argument is set to 'auto'</span></div><div class='output co'>#&gt; <span class='error'>Error in x[[1]] == as.name("runner"): comparison (1) is possible only for atomic and list types</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='error'>Error in x[[1]] == as.name("runner"): comparison (1) is possible only for atomic and list types</span></div><div class='input'>
 <span class='co'># number of unique values in each window (varying window size)</span>
 <span class='fu'>runner</span><span class='op'>(</span><span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>]</span>,
        k <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>4</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>5</span><span class='op'>)</span>,
@@ -467,9 +463,8 @@ parallel environment using <code><a href='https://rdrr.io/r/parallel/clusterAppl
 <span class='co'># concatenate only on selected windows index</span>
 <span class='fu'>runner</span><span class='op'>(</span><span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>]</span>,
        f <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>x</span>, collapse <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>,
-       at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>5</span>, <span class='fl'>8</span><span class='op'>)</span>,
-       type <span class='op'>=</span> <span class='st'>"character"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: When 'simplify != FALSE' 'type' argument is set to 'auto'</span></div><div class='output co'>#&gt; [1] "a"               "a-b-c-d-e"       "a-b-c-d-e-f-g-h"</div><div class='input'>
+       at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>5</span>, <span class='fl'>8</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "a"               "a-b-c-d-e"       "a-b-c-d-e-f-g-h"</div><div class='input'>
 <span class='co'># 5 days mean</span>
 <span class='va'>idx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>13</span>, <span class='fl'>17</span>, <span class='fl'>18</span>, <span class='fl'>18</span>, <span class='fl'>21</span>, <span class='fl'>27</span>, <span class='fl'>31</span>, <span class='fl'>37</span>, <span class='fl'>42</span>, <span class='fl'>44</span>, <span class='fl'>47</span>, <span class='fl'>48</span><span class='op'>)</span>
 <span class='fu'>runner</span><span class='fu'>::</span><span class='fu'>runner</span><span class='op'>(</span>
