@@ -42,18 +42,16 @@
 #'  Whether incomplete window should return `NA` (if `na_pad = TRUE`)
 #'  Incomplete window is when some parts of the window are out of range.
 #'
-#' @param type (`character` single value)\cr
-#'  output type
-#'  (`"auto"`, `"logical"`, `"numeric"`, `"integer"`, `"character"`). `runner`
-#'  by default guess type automatically. In case of failure of `"auto"` please
-#'  specify desired type.
+#' @param type (defunct)\cr
+#'  argument defunct from version 0.4.0. Use `simplify` instead.
 #'
 #' @param simplify (`logical` or `character` value)\cr
 #'  should the result be simplified to a vector, matrix or higher dimensional
 #'  array if possible. The default value, `simplify = TRUE`, returns a vector or
 #'  matrix if appropriate, whereas if `simplify = "array"` the result may be an
-#'  array of “rank” `(=length(dim(.)))` one higher than the result of output
-#'  from the function `f` for each window.
+#'  array of "rank" `(=length(dim(.)))` one higher than the result of output
+#'  from the function `f` for each window. Consequences of `simplify` in `runner`
+#'  are identical to `sapply`.
 #'
 #' @param cl (`cluster`) *experimental*\cr
 #'  Create and pass the cluster to the `runner` function to run each window
@@ -136,7 +134,7 @@
 #'
 #' @return vector with aggregated values for each window. Length of output is
 #'  the same as `length(x)` or `length(at)` if specified. Type of the output
-#'  is taken from `type` argument.
+#'  depends on the output from a function `f`.
 #'
 #' @md
 #' @rdname runner
@@ -151,28 +149,15 @@ runner <- function(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type = "auto",
+  type,
   simplify = TRUE,
   cl = NULL,
   ...
   ) {
-  if (!is.null(cl) && type != "auto") {
+  if (!missing(type)) {
     warning(
-      "There is no option to specify the type of the output using type in parallel mode. #nolint
-      Please use 'simplify' instead"
-    )
-    type <- "auto"
-  }
-  if (!isFALSE(simplify) && type != "auto") {
-    warning(
-      "When 'simplify != FALSE' 'type' argument is set to 'auto'"
-    )
-    type <- "auto"
-  }
-  if (type != "auto") {
-    warning(
-      "Argument 'type'is deprecated and will be defunct in the next release.
-    Please use 'simplify' argument to manage the output type."
+      "Argument 'type' is defunct and will be completely removed in the next release. #nolint
+      Please use 'simplify' argument to manage the output type."
     )
   }
 
@@ -197,8 +182,7 @@ runner <- function(
 #'     a = letters[1:10],
 #'     b = 1:10
 #'   ),
-#'   f = function(x) paste(paste0(x$a, x$b), collapse = "+"),
-#'   type = "character"
+#'   f = function(x) paste(paste0(x$a, x$b), collapse = "+")
 #' )
 #'
 #' # concatenate two columns with additional argument
@@ -210,8 +194,7 @@ runner <- function(
 #'   f = function(x, xxx) {
 #'     paste(paste0(x$a, xxx, x$b), collapse = " + ")
 #'   },
-#'   xxx = "...",
-#'   type = "character"
+#'   xxx = "..."
 #' )
 #'
 #' # number of unique values in each window (varying window size)
@@ -222,8 +205,7 @@ runner <- function(
 #' # concatenate only on selected windows index
 #' runner(letters[1:10],
 #'        f = function(x) paste(x, collapse = "-"),
-#'        at = c(1, 5, 8),
-#'        type = "character")
+#'        at = c(1, 5, 8))
 #'
 #' # 5 days mean
 #' idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
@@ -253,7 +235,7 @@ runner.default <- function(  #nolint
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type = "auto",
+  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -292,19 +274,6 @@ runner.default <- function(  #nolint
       fun = f,
       ...
     )
-
-  } else if (type != "auto") {
-    n <- length(w)
-    answer <- vector(mode = type, length = n)
-    for (i in seq_len(n)) {
-      ww <- w[[i]]
-      answer[i] <- if (length(ww) == 0) {
-        NA
-      } else {
-        f(ww, ...)
-      }
-    }
-
   } else {
     answer <- lapply(w, function(.this_window)
       if (is.null(.this_window)) {
@@ -315,7 +284,7 @@ runner.default <- function(  #nolint
     )
   }
 
-  if (!isFALSE(simplify) && length(answer) && type == "auto") {
+  if (!isFALSE(simplify) && length(answer)) {
     simplify2array(answer, higher = (simplify == "array"))
   } else {
     answer
@@ -370,7 +339,7 @@ runner.data.frame <- function( #nolint
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type = "auto",
+  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -450,7 +419,7 @@ runner.grouped_df <- function(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type = "auto",
+  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -462,7 +431,6 @@ runner.grouped_df <- function(
     idx = idx,
     at = at,
     na_pad = na_pad,
-    type = type,
     simplify = simplify,
     cl = cl,
     ...
@@ -491,7 +459,7 @@ runner.matrix <- function(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type = "auto",
+  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -565,7 +533,7 @@ runner.xts <- function(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type = "auto",
+  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -591,7 +559,6 @@ runner.xts <- function(
     idx = idx,
     at = at,
     na_pad = na_pad,
-    type = type,
     simplify = simplify,
     cl,
     ...
@@ -603,14 +570,17 @@ get_runner_call_arg_names <- function() {
   runner_call_idx <- which(
     vapply(
       X =  rev(sys.calls()),
-      FUN = function(x) x[[1]] == as.name("runner"),
+      FUN = function(x) {
+        x[[1]] == as.name("runner") ||
+          x[[1]] == as.name("runner::runner")
+      },
       FUN.VALUE = logical(1)
     )
   ) - 1
 
   cl <- sys.call(-runner_call_idx)
   f <- get(
-    x = as.character(cl[[1]]),
+    x = as.character("runner"),
     mode = "function",
     envir = sys.frame(-runner_call_idx)
   )
