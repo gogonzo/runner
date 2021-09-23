@@ -427,6 +427,7 @@ runner.grouped_df <- function(
   runner.data.frame(
     x = this_group(x),
     f = f,
+    k = k,
     lag = lag,
     idx = idx,
     at = at,

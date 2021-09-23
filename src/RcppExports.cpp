@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // fill_run
 SEXP fill_run(SEXP x, bool run_for_first, bool only_within);
 RcppExport SEXP _runner_fill_run(SEXP xSEXP, SEXP run_for_firstSEXP, SEXP only_withinSEXP) {

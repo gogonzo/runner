@@ -1,3 +1,6 @@
+# runner 0.4.1
+* Fix `runner.grouped_df` (`dplyr` class) to not ignore `k` argument.
+
 # runner 0.4.0
 * defunct `type` argument in favor of `simplify`.
 * fixed error when using `runner::runner`.
