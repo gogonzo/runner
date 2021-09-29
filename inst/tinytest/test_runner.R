@@ -1347,12 +1347,3 @@ expect_error(
   runner(1:10, lag = rep(5, 10), idx = 1:10, at = c(4, 5), f = mean),
   "length\\(lag\\) should be 1 or equal to"
 )
-
-#Test defunct -------
-expect_warning(
-  runner(
-    1:10,
-    f = function(x) x,
-    type = "numeric"
-  )
-)
