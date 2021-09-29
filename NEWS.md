@@ -1,5 +1,6 @@
 # runner 0.4.1
 * Fix `runner.grouped_df` (`dplyr` class) to not ignore `k` argument.
+* removed defunct argument `type`.
 
 # runner 0.4.0
 * defunct `type` argument in favor of `simplify`.
