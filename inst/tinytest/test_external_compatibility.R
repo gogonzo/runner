@@ -83,3 +83,18 @@ expect_equal(
   grouped_dplyr$xx,
   paste(data$group1, data$group2)
 )
+
+# running on columns without run_by
+grouped_dplyr <- data %>%
+  dplyr::group_by(group1, group2) %>%
+  dplyr::mutate(
+    xx = runner(
+      x = unique(paste(group1, group2)),
+      f = paste, collapse = ""),
+      idx = "index"
+  )
+
+expect_equal(
+  grouped_dplyr$xx,
+  paste(data$group1, data$group2)
+)
