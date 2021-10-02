@@ -7,7 +7,7 @@
 lag_run(x, lag = 1L, idx = integer(0), nearest = FALSE)
 }
 \arguments{
-\item{x}{(\code{vector}, \code{data.frame}, \code{matrix}, \code{xts})\cr
+\item{x}{(\code{vector}, \code{data.frame}, \code{matrix}, \code{xts}, \code{grouped_df})\cr
 Input in runner custom function \code{f}.}
 
 \item{lag}{(\code{integer} vector or single value)\cr

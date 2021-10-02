@@ -17,7 +17,6 @@ runner(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -31,7 +30,6 @@ runner(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -45,7 +43,6 @@ runner(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -59,7 +56,6 @@ runner(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -73,7 +69,6 @@ runner(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -87,14 +82,13 @@ runner(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type,
   simplify = TRUE,
   cl = NULL,
   ...
 )
 }
 \arguments{
-\item{x}{(\code{vector}, \code{data.frame}, \code{matrix}, \code{xts})\cr
+\item{x}{(\code{vector}, \code{data.frame}, \code{matrix}, \code{xts}, \code{grouped_df})\cr
 Input in runner custom function \code{f}.}
 
 \item{f}{(\code{function})\cr
@@ -134,9 +128,6 @@ See 'Specifying time-intervals' in details section.}
 \item{na_pad}{(\code{logical} single value)\cr
 Whether incomplete window should return \code{NA} (if \code{na_pad = TRUE})
 Incomplete window is when some parts of the window are out of range.}
-
-\item{type}{(defunct)\cr
-argument defunct from version 0.4.0. Use \code{simplify} instead.}
 
 \item{simplify}{(\code{logical} or \code{character} value)\cr
 should the result be simplified to a vector, matrix or higher dimensional
