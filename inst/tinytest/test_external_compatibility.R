@@ -125,7 +125,7 @@ expect_equal(
 grouped_dplyr <- data %>%
   dplyr::group_by(group1, group2) %>%
   dplyr::mutate(
-    xx = runner(
+    xx = runner.grouped_df(
       x = .,
       f = function(df) {
         paste(df$x, collapse = " ")
@@ -139,7 +139,7 @@ grouped_dplyr2 <- data %>%
   dplyr::group_by(group1, group2) %>%
   run_by(idx = "index") %>%
   dplyr::mutate(
-    xx = runner(
+    xx = runner.grouped_df(
       x = .,
       f = function(df) {
         paste(df$x, collapse = " ")
@@ -147,7 +147,6 @@ grouped_dplyr2 <- data %>%
       k = 2
     )
   )
-
 
 expected <- unlist(
   use.names = FALSE,
