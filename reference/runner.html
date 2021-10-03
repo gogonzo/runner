@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -156,7 +156,6 @@
   idx <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   na_pad <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  <span class='va'>type</span>,
   simplify <span class='op'>=</span> <span class='cn'>TRUE</span>,
   cl <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
@@ -171,7 +170,6 @@
   idx <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   na_pad <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  <span class='va'>type</span>,
   simplify <span class='op'>=</span> <span class='cn'>TRUE</span>,
   cl <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
@@ -186,7 +184,6 @@
   idx <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   na_pad <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  <span class='va'>type</span>,
   simplify <span class='op'>=</span> <span class='cn'>TRUE</span>,
   cl <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
@@ -201,7 +198,6 @@
   idx <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   na_pad <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  <span class='va'>type</span>,
   simplify <span class='op'>=</span> <span class='cn'>TRUE</span>,
   cl <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
@@ -216,7 +212,6 @@
   idx <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   na_pad <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  <span class='va'>type</span>,
   simplify <span class='op'>=</span> <span class='cn'>TRUE</span>,
   cl <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
@@ -231,7 +226,6 @@
   idx <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   na_pad <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  <span class='va'>type</span>,
   simplify <span class='op'>=</span> <span class='cn'>TRUE</span>,
   cl <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
@@ -242,7 +236,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>(<code>vector</code>, <code>data.frame</code>, <code>matrix</code>, <code>xts</code>)<br />
+      <td><p>(<code>vector</code>, <code>data.frame</code>, <code>matrix</code>, <code>xts</code>, <code>grouped_df</code>)<br />
 Input in runner custom function <code>f</code>.</p></td>
     </tr>
     <tr>
@@ -294,11 +288,6 @@ See 'Specifying time-intervals' in details section.</p></td>
       <td><p>(<code>logical</code> single value)<br />
 Whether incomplete window should return <code>NA</code> (if <code>na_pad = TRUE</code>)
 Incomplete window is when some parts of the window are out of range.</p></td>
-    </tr>
-    <tr>
-      <th>type</th>
-      <td><p>(defunct)<br />
-argument defunct from version 0.4.0. Use <code>simplify</code> instead.</p></td>
     </tr>
     <tr>
       <th>simplify</th>
