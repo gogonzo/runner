@@ -61,7 +61,7 @@ expect_true(
   all(res$m == 20)
 )
 
-# running on grouped_df index set -----
+# running on grouped_df index set ------
 res <- data %>%
   dplyr::group_by(group1, group2) %>%
   run_by(idx = "index") %>%
