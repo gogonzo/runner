@@ -1,7 +1,7 @@
 #' Apply running function
 #'
 #' Applies custom function on running windows.
-#' @param x (`vector`, `data.frame`, `matrix`, `xts`)\cr
+#' @param x (`vector`, `data.frame`, `matrix`, `xts`, `grouped_df`)\cr
 #'  Input in runner custom function `f`.
 #'
 #' @param k (`integer` vector or single value)\cr
@@ -42,9 +42,6 @@
 #'  Whether incomplete window should return `NA` (if `na_pad = TRUE`)
 #'  Incomplete window is when some parts of the window are out of range.
 #'
-#' @param type (defunct)\cr
-#'  argument defunct from version 0.4.0. Use `simplify` instead.
-#'
 #' @param simplify (`logical` or `character` value)\cr
 #'  should the result be simplified to a vector, matrix or higher dimensional
 #'  array if possible. The default value, `simplify = TRUE`, returns a vector or
@@ -56,7 +53,6 @@
 #' @param cl (`cluster`) *experimental*\cr
 #'  Create and pass the cluster to the `runner` function to run each window
 #'  calculation in parallel. See \code{\link[parallel]{makeCluster}} in details.
-#'
 #'
 #' @param ... (optional)\cr
 #'   other arguments passed to the function `f`.
@@ -149,18 +145,10 @@ runner <- function(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type,
   simplify = TRUE,
   cl = NULL,
   ...
   ) {
-  if (!missing(type)) {
-    warning(
-      "Argument 'type' is defunct and will be completely removed in the next release. #nolint
-      Please use 'simplify' argument to manage the output type."
-    )
-  }
-
   UseMethod("runner", x)
 }
 
@@ -235,7 +223,6 @@ runner.default <- function(  #nolint
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -339,7 +326,6 @@ runner.data.frame <- function( #nolint
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -419,7 +405,6 @@ runner.grouped_df <- function(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -427,6 +412,7 @@ runner.grouped_df <- function(
   runner.data.frame(
     x = this_group(x),
     f = f,
+    k = k,
     lag = lag,
     idx = idx,
     at = at,
@@ -459,7 +445,6 @@ runner.matrix <- function(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -533,7 +518,6 @@ runner.xts <- function(
   idx = integer(0),
   at = integer(0),
   na_pad = FALSE,
-  type,
   simplify = TRUE,
   cl = NULL,
   ...

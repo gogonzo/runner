@@ -42,8 +42,6 @@ expect_identical(
   "index"
 )
 
-
-# correct grouping results ------
 data <- data.frame(
   index = c(2, 5, 5, 7, 10, 12, 12, 12, 15, 16, 19,
             20, 20, 21, 23, 23, 25, 27, 27, 28),
@@ -52,34 +50,127 @@ data <- data.frame(
   x = 1:20
 )
 
-# running on grouped_df
+# single column in mutate is grouped ------
+res <- data %>%
+  group_by(group1) %>%
+  mutate(
+    m = length(x)
+  )
+
+expect_true(
+  all(res$m == 20)
+)
+
+# running on grouped_df index set ------
 res <- data %>%
   dplyr::group_by(group1, group2) %>%
   run_by(idx = "index") %>%
   dplyr::mutate(
-    x = runner(
+    xx = runner(
       .,
-      f = function(x) {
-        unique(paste(x$group1, x$group2))
+      f = function(df) {
+        paste(df$x, collapse = " ")
       }
     )
   )
-expect_identical(
-  res$x,
-  paste(data$group1, data$group2)
+
+expected <- unlist(
+  use.names = FALSE,
+  tapply(
+    data$x,
+    paste(data$group1, data$group2),
+    runner,
+    f = paste,
+    collapse = " "
+  )
 )
 
-# running on columns from grouped_df
+expect_identical(
+  res$xx,
+  expected
+)
+
+
+# running on columns from grouped_df k without idx -----
 grouped_dplyr <- data %>%
   dplyr::group_by(group1, group2) %>%
-  run_by(idx = "index") %>%
   dplyr::mutate(
     xx = runner(
-      x = unique(paste(group1, group2)),
-      f = paste, collapse = "")
+      x = .,
+      f = function(df) {
+        paste(df$x, collapse = " ")
+      },
+      k = 2
+    )
   )
+
+expected <- unlist(
+  use.names = FALSE,
+  tapply(
+    data$x,
+    paste(data$group1, data$group2),
+    runner,
+    f = paste,
+    collapse = " ",
+    k = 2
+  )
+)
 
 expect_equal(
   grouped_dplyr$xx,
-  paste(data$group1, data$group2)
+  expected
+)
+
+# running on columns from grouped_df k with idx -----
+grouped_dplyr <- data %>%
+  dplyr::group_by(group1, group2) %>%
+  dplyr::mutate(
+    xx = runner.grouped_df(
+      x = .,
+      f = function(df) {
+        paste(df$x, collapse = " ")
+      },
+      k = 2,
+      idx = index
+    )
+  )
+
+grouped_dplyr2 <- data %>%
+  dplyr::group_by(group1, group2) %>%
+  run_by(idx = "index") %>%
+  dplyr::mutate(
+    xx = runner.grouped_df(
+      x = .,
+      f = function(df) {
+        paste(df$x, collapse = " ")
+      },
+      k = 2
+    )
+  )
+
+expected <- unlist(
+  use.names = FALSE,
+  tapply(
+    1:40,
+    paste(data$group1, data$group2),
+    function(idx) {
+      runner(
+        data$x[idx],
+        f = paste,
+        collapse = " ",
+        k = 2,
+        idx = data$index[idx]
+      )
+    }
+  )
+)
+
+expect_equal(
+  grouped_dplyr$xx,
+  expected
+)
+
+expect_equal(
+  grouped_dplyr2$xx,
+  expected
 )

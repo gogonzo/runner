@@ -15,7 +15,7 @@ min_run(
 )
 }
 \arguments{
-\item{x}{(\code{vector}, \code{data.frame}, \code{matrix}, \code{xts})\cr
+\item{x}{(\code{vector}, \code{data.frame}, \code{matrix}, \code{xts}, \code{grouped_df})\cr
 Input in runner custom function \code{f}.}
 
 \item{k}{(\code{integer} vector or single value)\cr
