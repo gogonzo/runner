@@ -1,9 +1,9 @@
-pandoc: 2.14.0.3
-pkgdown: 1.6.1
+pandoc: 2.17.1.1
+pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
   apply_any_r_function: apply_any_r_function.html
   built-in_functions: built-in_functions.html
   runner_examples: runner_examples.html
-last_built: 2021-10-03T16:22Z
+last_built: 2022-03-17T11:12Z
 

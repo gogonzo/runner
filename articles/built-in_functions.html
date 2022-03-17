@@ -25,6 +25,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -37,23 +39,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -76,7 +72,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/gogonzo/runner/">
+  <a href="https://github.com/gogonzo/runner/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -91,184 +87,252 @@
 
       
 
-      </header><script src="built-in_functions_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Built-in functions</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/gogonzo/runner/blob/master/vignettes/built-in_functions.Rmd"><code>vignettes/built-in_functions.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/gogonzo/runner/blob/HEAD/vignettes/built-in_functions.Rmd" class="external-link"><code>vignettes/built-in_functions.Rmd</code></a></small>
       <div class="hidden name"><code>built-in_functions.Rmd</code></div>
 
     </div>
 
     
     
-<p>This tutorial presents built-in functions in runner package which goal is to maximize performance. Even if one can apply any R function with <code><a href="../reference/runner.html">runner::runner</a></code>, built-in functions are multiple times faster than R equivalent. Before you proceed further to this tutorial, make sure you know what the <a href="../index.html">“running functions are”</a>.</p>
-<div id="running-aggregations" class="section level2">
-<h2 class="hasAnchor">
-<a href="#running-aggregations" class="anchor"></a>Running aggregations</h2>
-<div id="running-meansumminmax_run" class="section level3">
-<h3 class="hasAnchor">
-<a href="#running-meansumminmax_run" class="anchor"></a>Running <code>&lt;mean,sum,min,max&gt;_run</code>
+<p>This tutorial presents built-in functions in runner package which
+goal is to maximize performance. Even if one can apply any R function
+with <code><a href="../reference/runner.html">runner::runner</a></code>, built-in functions are multiple times
+faster than R equivalent. Before you proceed further to this tutorial,
+make sure you know what the <a href="../index.html">“running functions
+are”</a>.</p>
+<div class="section level2">
+<h2 id="running-aggregations">Running aggregations<a class="anchor" aria-label="anchor" href="#running-aggregations"></a>
+</h2>
+<div class="section level3">
+<h3 id="running-meansumminmax_run">Running <code>&lt;mean,sum,min,max&gt;_run</code><a class="anchor" aria-label="anchor" href="#running-meansumminmax_run"></a>
 </h3>
-<p>Runner provides basic aggregation methods calculated within running windows. Below example showing some functions behavior for different arguments setup. <code>min_run</code> calculates current minimum for all elements of the vector. Let’s take a look at 8’th element of the vector which <code>min_run</code> is calculated on.<br>
-First setup uses default values, so algorithm is looking for minimum value in all elements before actual (i=8). By default missing values are removed before calculations by argument <code>na_rm = TRUE</code>, and also window is not specified. The default is equivalent of <code><a href="https://rdrr.io/r/base/cumsum.html">base::cummin</a></code> with additional option to ignore <code>NA</code> values. In second example within window k=5, the lowest value is -3. In the last example minimum is not available due to existence of <code>NA</code>. Graphical example is reproduced below in the code.</p>
+<p>Runner provides basic aggregation methods calculated within running
+windows. Below example showing some functions behavior for different
+arguments setup. <code>min_run</code> calculates current minimum for all
+elements of the vector. Let’s take a look at 8’th element of the vector
+which <code>min_run</code> is calculated on.<br>
+First setup uses default values, so algorithm is looking for minimum
+value in all elements before actual (i=8). By default missing values are
+removed before calculations by argument <code>na_rm = TRUE</code>, and
+also window is not specified. The default is equivalent of
+<code><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">base::cummin</a></code> with additional option to ignore
+<code>NA</code> values. In second example within window k=5, the lowest
+value is -3. In the last example minimum is not available due to
+existence of <code>NA</code>. Graphical example is reproduced below in
+the code.</p>
 <p><img src="images/running_minimum.png"></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">runner</span><span class="op">)</span>
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">5</span>, <span class="fl">1</span>, <span class="op">-</span><span class="fl">3</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span>, <span class="cn">NA</span>, <span class="op">-</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">runner</span><span class="op">)</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">5</span>, <span class="fl">1</span>, <span class="op">-</span><span class="fl">3</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span>, <span class="cn">NA</span>, <span class="op">-</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+<span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
   <span class="va">x</span>,
   default <span class="op">=</span> <span class="fu"><a href="../reference/min_run.html">min_run</a></span><span class="op">(</span><span class="va">x</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, 
   k_5     <span class="op">=</span> <span class="fu"><a href="../reference/min_run.html">min_run</a></span><span class="op">(</span><span class="va">x</span>, k <span class="op">=</span> <span class="fl">5</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
   narm_f  <span class="op">=</span> <span class="fu"><a href="../reference/min_run.html">min_run</a></span><span class="op">(</span><span class="va">x</span>, na_rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>##     x default k_5 narm_f
-## 1   1       1   1      1
-## 2  -5      -5  -5     -5
-## 3   1      -5  -5     -5
-## 4  -3      -5  -5     -5
-## 5  NA      -5  -5     NA
-## 6  NA      -5  -5     NA
-## 7  NA      -5  -3     NA
-## 8   1      -5  -3     NA
-## 9  -1      -5  -1     NA
-## 10 NA      -5  -1     NA
-## 11 -2      -5  -2     NA
-## 12  3      -5  -2     NA</code></pre>
-<p>In above example constant <code>k = 5</code> has been used which means that for each element, current minimum is calculated on last 5-elements. It may happen that one can have time series where elements are not equally spaced in time, which effects in <code>k = 5</code> not constant. In example below 5-days sum is calculated. To achieve this, one should put date variable to <code>idx</code> argument.<br>
-Illustration below shows two sums calculated in 5-days window span. In both cases 5-days fit in 3-elements windows. Equivalent R code below.</p>
+<pre><code><span class="co">##     x default k_5 narm_f</span>
+<span class="co">## 1   1       1   1      1</span>
+<span class="co">## 2  -5      -5  -5     -5</span>
+<span class="co">## 3   1      -5  -5     -5</span>
+<span class="co">## 4  -3      -5  -5     -5</span>
+<span class="co">## 5  NA      -5  -5     NA</span>
+<span class="co">## 6  NA      -5  -5     NA</span>
+<span class="co">## 7  NA      -5  -3     NA</span>
+<span class="co">## 8   1      -5  -3     NA</span>
+<span class="co">## 9  -1      -5  -1     NA</span>
+<span class="co">## 10 NA      -5  -1     NA</span>
+<span class="co">## 11 -2      -5  -2     NA</span>
+<span class="co">## 12  3      -5  -2     NA</span></code></pre>
+<p>In above example constant <code>k = 5</code> has been used which
+means that for each element, current minimum is calculated on last
+5-elements. It may happen that one can have time series where elements
+are not equally spaced in time, which effects in <code>k = 5</code> not
+constant. In example below 5-days sum is calculated. To achieve this,
+one should put date variable to <code>idx</code> argument.<br>
+Illustration below shows two sums calculated in 5-days window span. In
+both cases 5-days fit in 3-elements windows. Equivalent R code
+below.</p>
 <p><img src="images/options_idx.png"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5910</span>, <span class="fl">0.0266</span>, <span class="op">-</span><span class="fl">1.5166</span>, <span class="op">-</span><span class="fl">1.3627</span>, <span class="fl">1.1785</span>, <span class="op">-</span><span class="fl">0.9342</span>, <span class="fl">1.3236</span>, <span class="fl">0.6249</span><span class="op">)</span>
-<span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1970-01-03"</span>, <span class="st">"1970-01-06"</span>, <span class="st">"1970-01-09"</span>, <span class="st">"1970-01-12"</span>, 
+<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5910</span>, <span class="fl">0.0266</span>, <span class="op">-</span><span class="fl">1.5166</span>, <span class="op">-</span><span class="fl">1.3627</span>, <span class="fl">1.1785</span>, <span class="op">-</span><span class="fl">0.9342</span>, <span class="fl">1.3236</span>, <span class="fl">0.6249</span><span class="op">)</span>
+<span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1970-01-03"</span>, <span class="st">"1970-01-06"</span>, <span class="st">"1970-01-09"</span>, <span class="st">"1970-01-12"</span>, 
                  <span class="st">"1970-01-13"</span>, <span class="st">"1970-01-16"</span>, <span class="st">"1970-01-17"</span>, <span class="st">"1970-01-19"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/sum_run.html">sum_run</a></span><span class="op">(</span><span class="va">x</span>, k <span class="op">=</span> <span class="fl">5</span>, idx <span class="op">=</span> <span class="va">idx</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] -0.5910 -0.5644 -1.4900 -2.8793 -1.7008 -1.1184  1.5679  1.0143</code></pre>
-<p>Specifying <code>lag</code> argument shift of the window by number of elements or time periods (if <code>idx</code> is specified).</p>
+<pre><code><span class="co">## [1] -0.5910 -0.5644 -1.4900 -2.8793 -1.7008 -1.1184  1.5679  1.0143</span></code></pre>
+<p>Specifying <code>lag</code> argument shift of the window by number of
+elements or time periods (if <code>idx</code> is specified).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5910</span>, <span class="fl">0.0266</span>, <span class="op">-</span><span class="fl">1.5166</span>, <span class="op">-</span><span class="fl">1.3627</span>, <span class="fl">1.1785</span>, <span class="op">-</span><span class="fl">0.9342</span>, <span class="fl">1.3236</span>, <span class="fl">0.6249</span><span class="op">)</span>
-<span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1970-01-03"</span>, <span class="st">"1970-01-06"</span>, <span class="st">"1970-01-09"</span>, <span class="st">"1970-01-12"</span>, 
+<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5910</span>, <span class="fl">0.0266</span>, <span class="op">-</span><span class="fl">1.5166</span>, <span class="op">-</span><span class="fl">1.3627</span>, <span class="fl">1.1785</span>, <span class="op">-</span><span class="fl">0.9342</span>, <span class="fl">1.3236</span>, <span class="fl">0.6249</span><span class="op">)</span>
+<span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1970-01-03"</span>, <span class="st">"1970-01-06"</span>, <span class="st">"1970-01-09"</span>, <span class="st">"1970-01-12"</span>, 
                  <span class="st">"1970-01-13"</span>, <span class="st">"1970-01-16"</span>, <span class="st">"1970-01-17"</span>, <span class="st">"1970-01-19"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/sum_run.html">sum_run</a></span><span class="op">(</span><span class="va">x</span>, k <span class="op">=</span> <span class="fl">5</span>, lag <span class="op">=</span> <span class="fl">2</span>, idx <span class="op">=</span> <span class="va">idx</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1]      NA -0.5910 -0.5644 -1.4900 -1.5166 -0.1842 -0.1842  1.5679</code></pre>
+<pre><code><span class="co">## [1]      NA -0.5910 -0.5644 -1.4900 -1.5166 -0.1842 -0.1842  1.5679</span></code></pre>
 </div>
-<div id="running-streak" class="section level3">
-<h3 class="hasAnchor">
-<a href="#running-streak" class="anchor"></a>Running streak</h3>
-<p>To count consecutive elements in specified window one can use <code>streak_run</code>. Following figure illustrates how streak is calculated with three different options setup for 9th element of the input vector <code>x</code>. First shows default configuration, with full window and <code>na_rm = TRUE</code>. Second example count within <code>k = 4</code> window with count reset on <code>NA</code>. Last example counting streak with continuation after <code>NA</code>. Visualization also supported with corresponding R code.</p>
+<div class="section level3">
+<h3 id="running-streak">Running streak<a class="anchor" aria-label="anchor" href="#running-streak"></a>
+</h3>
+<p>To count consecutive elements in specified window one can use
+<code>streak_run</code>. Following figure illustrates how streak is
+calculated with three different options setup for 9th element of the
+input vector <code>x</code>. First shows default configuration, with
+full window and <code>na_rm = TRUE</code>. Second example count within
+<code>k = 4</code> window with count reset on <code>NA</code>. Last
+example counting streak with continuation after <code>NA</code>.
+Visualization also supported with corresponding R code.</p>
 <p><img src="images/running_streaks.png"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="cn">NA</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="cn">NA</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
   <span class="va">x</span>, 
   s0 <span class="op">=</span> <span class="fu"><a href="../reference/streak_run.html">streak_run</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,
   s1 <span class="op">=</span> <span class="fu"><a href="../reference/streak_run.html">streak_run</a></span><span class="op">(</span><span class="va">x</span>, k <span class="op">=</span> <span class="fl">4</span>, na_rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
   s2 <span class="op">=</span> <span class="fu"><a href="../reference/streak_run.html">streak_run</a></span><span class="op">(</span><span class="va">x</span>, k <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>##       x s0 s1 s2
-## 1     A  1  1  1
-## 2     B  1  1  1
-## 3     A  1  1  1
-## 4     A  2  2  2
-## 5     B  1  1  1
-## 6     B  2  2  2
-## 7     B  3  3  3
-## 8  &lt;NA&gt;  3 NA  3
-## 9     B  4 NA  3
-## 10    B  5 NA  3
-## 11    A  1  1  1
-## 12    B  1  1  1</code></pre>
-<p>Streak is often used in sports to count number of wins or loses of the team/player. To count consecutive wins or loses in 5-days period, one have to specify <code>k = 5</code> and include dates into <code>idx</code> argument. Specifying <code>lag</code> shifts window bounds by number of elements or time periods (if <code>idx</code> is specified).</p>
+<pre><code><span class="co">##       x s0 s1 s2</span>
+<span class="co">## 1     A  1  1  1</span>
+<span class="co">## 2     B  1  1  1</span>
+<span class="co">## 3     A  1  1  1</span>
+<span class="co">## 4     A  2  2  2</span>
+<span class="co">## 5     B  1  1  1</span>
+<span class="co">## 6     B  2  2  2</span>
+<span class="co">## 7     B  3  3  3</span>
+<span class="co">## 8  &lt;NA&gt;  3 NA  3</span>
+<span class="co">## 9     B  4 NA  3</span>
+<span class="co">## 10    B  5 NA  3</span>
+<span class="co">## 11    A  1  1  1</span>
+<span class="co">## 12    B  1  1  1</span></code></pre>
+<p>Streak is often used in sports to count number of wins or loses of
+the team/player. To count consecutive wins or loses in 5-days period,
+one have to specify <code>k = 5</code> and include dates into
+<code>idx</code> argument. Specifying <code>lag</code> shifts window
+bounds by number of elements or time periods (if <code>idx</code> is
+specified).</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"W"</span>, <span class="st">"W"</span>, <span class="st">"L"</span>, <span class="st">"L"</span>, <span class="st">"L"</span>, <span class="st">"W"</span>, <span class="st">"L"</span>, <span class="st">"L"</span><span class="op">)</span>
-<span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"2019-01-03"</span>, <span class="st">"2019-01-06"</span>, <span class="st">"2019-01-09"</span>, <span class="st">"2019-01-12"</span>, 
+<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"W"</span>, <span class="st">"W"</span>, <span class="st">"L"</span>, <span class="st">"L"</span>, <span class="st">"L"</span>, <span class="st">"W"</span>, <span class="st">"L"</span>, <span class="st">"L"</span><span class="op">)</span>
+<span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2019-01-03"</span>, <span class="st">"2019-01-06"</span>, <span class="st">"2019-01-09"</span>, <span class="st">"2019-01-12"</span>, 
                  <span class="st">"2019-01-13"</span>, <span class="st">"2019-01-16"</span>, <span class="st">"2019-01-17"</span>, <span class="st">"2019-01-19"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+<span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
   <span class="va">idx</span>,
   <span class="va">x</span>,
   streak_5d     <span class="op">=</span> <span class="fu"><a href="../reference/streak_run.html">streak_run</a></span><span class="op">(</span><span class="va">x</span>, k <span class="op">=</span> <span class="fl">5</span>, idx <span class="op">=</span> <span class="va">idx</span><span class="op">)</span>,
   streak_5d_lag <span class="op">=</span> <span class="fu"><a href="../reference/streak_run.html">streak_run</a></span><span class="op">(</span><span class="va">x</span>, k <span class="op">=</span> <span class="fl">5</span>, lag <span class="op">=</span> <span class="fl">1</span>, idx <span class="op">=</span> <span class="va">idx</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>##          idx x streak_5d streak_5d_lag
-## 1 2019-01-03 W         1            NA
-## 2 2019-01-06 W         2             1
-## 3 2019-01-09 L         1             1
-## 4 2019-01-12 L         2             1
-## 5 2019-01-13 L         3             2
-## 6 2019-01-16 W         1             2
-## 7 2019-01-17 L         1             1
-## 8 2019-01-19 L         2             1</code></pre>
+<pre><code><span class="co">##          idx x streak_5d streak_5d_lag</span>
+<span class="co">## 1 2019-01-03 W         1            NA</span>
+<span class="co">## 2 2019-01-06 W         2             1</span>
+<span class="co">## 3 2019-01-09 L         1             1</span>
+<span class="co">## 4 2019-01-12 L         2             1</span>
+<span class="co">## 5 2019-01-13 L         3             2</span>
+<span class="co">## 6 2019-01-16 W         1             2</span>
+<span class="co">## 7 2019-01-17 L         1             1</span>
+<span class="co">## 8 2019-01-19 L         2             1</span></code></pre>
 </div>
 </div>
-<div id="utility-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#utility-functions" class="anchor"></a>Utility functions</h2>
-<div id="improved-lag" class="section level3">
-<h3 class="hasAnchor">
-<a href="#improved-lag" class="anchor"></a>Improved lag</h3>
-<p>Idea of <code>lag_run</code> is the same as well known <code><a href="https://rdrr.io/r/stats/lag.html">stats::lag</a></code>, with distinction that <code>lag_run</code> can depend on time or any other indexes passed to <code>idx</code> argument. This means that <code>lag_run</code> can shift by <code>lag</code> elements of the vector or by <code>lag</code> time periods (if <code>idx</code> is specified).</p>
+<div class="section level2">
+<h2 id="utility-functions">Utility functions<a class="anchor" aria-label="anchor" href="#utility-functions"></a>
+</h2>
+<div class="section level3">
+<h3 id="improved-lag">Improved lag<a class="anchor" aria-label="anchor" href="#improved-lag"></a>
+</h3>
+<p>Idea of <code>lag_run</code> is the same as well known
+<code><a href="https://rdrr.io/r/stats/lag.html" class="external-link">stats::lag</a></code>, with distinction that <code>lag_run</code> can
+depend on time or any other indexes passed to <code>idx</code> argument.
+This means that <code>lag_run</code> can shift by <code>lag</code>
+elements of the vector or by <code>lag</code> time periods (if
+<code>idx</code> is specified).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5910</span>, <span class="fl">0.0266</span>, <span class="op">-</span><span class="fl">1.5166</span>, <span class="op">-</span><span class="fl">1.3627</span>, <span class="fl">1.1785</span>, <span class="op">-</span><span class="fl">0.9342</span>, <span class="fl">1.3236</span>, <span class="fl">0.6249</span><span class="op">)</span>
-<span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1970-01-03"</span>, <span class="st">"1970-01-06"</span>, <span class="st">"1970-01-09"</span>, <span class="st">"1970-01-12"</span>, 
+<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5910</span>, <span class="fl">0.0266</span>, <span class="op">-</span><span class="fl">1.5166</span>, <span class="op">-</span><span class="fl">1.3627</span>, <span class="fl">1.1785</span>, <span class="op">-</span><span class="fl">0.9342</span>, <span class="fl">1.3236</span>, <span class="fl">0.6249</span><span class="op">)</span>
+<span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1970-01-03"</span>, <span class="st">"1970-01-06"</span>, <span class="st">"1970-01-09"</span>, <span class="st">"1970-01-12"</span>, 
                  <span class="st">"1970-01-13"</span>, <span class="st">"1970-01-16"</span>, <span class="st">"1970-01-17"</span>, <span class="st">"1970-01-19"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/lag_run.html">lag_run</a></span><span class="op">(</span><span class="va">x</span>, lag <span class="op">=</span> <span class="fl">3</span>, idx <span class="op">=</span> <span class="va">idx</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1]      NA -0.5910  0.0266 -1.5166      NA  1.1785      NA -0.9342</code></pre>
+<pre><code><span class="co">## [1]      NA -0.5910  0.0266 -1.5166      NA  1.1785      NA -0.9342</span></code></pre>
 </div>
-<div id="filling-missing-values" class="section level3">
-<h3 class="hasAnchor">
-<a href="#filling-missing-values" class="anchor"></a>Filling missing values</h3>
-<p>Function used to replace <code>NA</code> with previous non-NA element. To understand how <code>fill_run</code> works, take a look on illustration. Row ‘x’ represents input, and another rows represent output with <code>NA</code> replaced by <code>fill_run</code> with different options setup (<code>run_for_first = TRUE</code> and <code>only_within = TRUE</code> respectively). By default, <code>fill_run</code> replaces all <code>NA</code> if they were preceded by any value. If <code>NA</code> appeared in the beginning of the vector then it would not be replaced. But if user specify <code>run_for_first = TRUE</code> initial empty values values will be replaced by next non-empty value. Option <code>only_within = TRUE</code> means that <code>NA</code> values would be replaced if they were surrounded by pair of identical values. No windows provided in this functionality.</p>
+<div class="section level3">
+<h3 id="filling-missing-values">Filling missing values<a class="anchor" aria-label="anchor" href="#filling-missing-values"></a>
+</h3>
+<p>Function used to replace <code>NA</code> with previous non-NA
+element. To understand how <code>fill_run</code> works, take a look on
+illustration. Row ‘x’ represents input, and another rows represent
+output with <code>NA</code> replaced by <code>fill_run</code> with
+different options setup (<code>run_for_first = TRUE</code> and
+<code>only_within = TRUE</code> respectively). By default,
+<code>fill_run</code> replaces all <code>NA</code> if they were preceded
+by any value. If <code>NA</code> appeared in the beginning of the vector
+then it would not be replaced. But if user specify
+<code>run_for_first = TRUE</code> initial empty values values will be
+replaced by next non-empty value. Option <code>only_within = TRUE</code>
+means that <code>NA</code> values would be replaced if they were
+surrounded by pair of identical values. No windows provided in this
+functionality.</p>
 <p><img src="images/fill_run.png"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="st">"b"</span>, <span class="st">"b"</span>, <span class="st">"a"</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="cn">NA</span>, <span class="st">"a"</span>, <span class="st">"b"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">x</span>, 
+<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="st">"b"</span>, <span class="st">"b"</span>, <span class="st">"a"</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="cn">NA</span>, <span class="st">"a"</span>, <span class="st">"b"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">x</span>, 
            f1 <span class="op">=</span> <span class="fu"><a href="../reference/fill_run.html">fill_run</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, 
            f2 <span class="op">=</span> <span class="fu"><a href="../reference/fill_run.html">fill_run</a></span><span class="op">(</span><span class="va">x</span>,run_for_first <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, 
            f3 <span class="op">=</span> <span class="fu"><a href="../reference/fill_run.html">fill_run</a></span><span class="op">(</span><span class="va">x</span>, only_within <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>##       x   f1 f2   f3
-## 1  &lt;NA&gt; &lt;NA&gt;  b &lt;NA&gt;
-## 2  &lt;NA&gt; &lt;NA&gt;  b &lt;NA&gt;
-## 3     b    b  b    b
-## 4     b    b  b    b
-## 5     a    a  a    a
-## 6  &lt;NA&gt;    a  a    a
-## 7  &lt;NA&gt;    a  a    a
-## 8     a    a  a    a
-## 9     b    b  b    b
-## 10 &lt;NA&gt;    b  b &lt;NA&gt;
-## 11    a    a  a    a
-## 12    b    b  b    b</code></pre>
+<pre><code><span class="co">##       x   f1 f2   f3</span>
+<span class="co">## 1  &lt;NA&gt; &lt;NA&gt;  b &lt;NA&gt;</span>
+<span class="co">## 2  &lt;NA&gt; &lt;NA&gt;  b &lt;NA&gt;</span>
+<span class="co">## 3     b    b  b    b</span>
+<span class="co">## 4     b    b  b    b</span>
+<span class="co">## 5     a    a  a    a</span>
+<span class="co">## 6  &lt;NA&gt;    a  a    a</span>
+<span class="co">## 7  &lt;NA&gt;    a  a    a</span>
+<span class="co">## 8     a    a  a    a</span>
+<span class="co">## 9     b    b  b    b</span>
+<span class="co">## 10 &lt;NA&gt;    b  b &lt;NA&gt;</span>
+<span class="co">## 11    a    a  a    a</span>
+<span class="co">## 12    b    b  b    b</span></code></pre>
 </div>
-<div id="running-which" class="section level3">
-<h3 class="hasAnchor">
-<a href="#running-which" class="anchor"></a>Running which</h3>
-<p>To obtain index number of element matching some condition in window, one can use <code>which_run</code>, which returns index of <code>TRUE</code> element appeared before n-th element of a vector. If <code>na_rm = TRUE</code> is specified, missing is treated as <code>FALSE</code>, and is ignored while searching for <code>TRUE</code>. While user set <code>na_rm = FALSE</code> like in second example, function returns <code>NA</code>, because in following window <code>TRUE</code> appears after missing and it’s impossible to be certain which is first (missing is an element of unknown value - could be <code>TRUE</code> or <code>FALSE</code>).</p>
+<div class="section level3">
+<h3 id="running-which">Running which<a class="anchor" aria-label="anchor" href="#running-which"></a>
+</h3>
+<p>To obtain index number of element matching some condition in window,
+one can use <code>which_run</code>, which returns index of
+<code>TRUE</code> element appeared before n-th element of a vector. If
+<code>na_rm = TRUE</code> is specified, missing is treated as
+<code>FALSE</code>, and is ignored while searching for
+<code>TRUE</code>. While user set <code>na_rm = FALSE</code> like in
+second example, function returns <code>NA</code>, because in following
+window <code>TRUE</code> appears after missing and it’s impossible to be
+certain which is first (missing is an element of unknown value - could
+be <code>TRUE</code> or <code>FALSE</code>).</p>
 <p><img src="images/running_which_more.png"></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">T</span>, <span class="cn">T</span>, <span class="cn">T</span>, <span class="cn">F</span>, <span class="cn">NA</span>, <span class="cn">T</span>, <span class="cn">F</span>, <span class="cn">NA</span>, <span class="cn">T</span>, <span class="cn">F</span>, <span class="cn">T</span>, <span class="cn">F</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">T</span>, <span class="cn">T</span>, <span class="cn">T</span>, <span class="cn">F</span>, <span class="cn">NA</span>, <span class="cn">T</span>, <span class="cn">F</span>, <span class="cn">NA</span>, <span class="cn">T</span>, <span class="cn">F</span>, <span class="cn">T</span>, <span class="cn">F</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
   <span class="va">x</span>, 
   s0 <span class="op">=</span> <span class="fu"><a href="../reference/which_run.html">which_run</a></span><span class="op">(</span><span class="va">x</span>, which <span class="op">=</span> <span class="st">"first"</span><span class="op">)</span>,
   s1 <span class="op">=</span> <span class="fu"><a href="../reference/which_run.html">which_run</a></span><span class="op">(</span><span class="va">x</span>, na_rm <span class="op">=</span> <span class="cn">FALSE</span>, k <span class="op">=</span> <span class="fl">5</span>, which <span class="op">=</span> <span class="st">"first"</span><span class="op">)</span>,
   s2 <span class="op">=</span> <span class="fu"><a href="../reference/which_run.html">which_run</a></span><span class="op">(</span><span class="va">x</span>, k <span class="op">=</span> <span class="fl">5</span>, which <span class="op">=</span> <span class="st">"last"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>##        x s0 s1 s2
-## 1   TRUE  1  1  1
-## 2   TRUE  1  1  2
-## 3   TRUE  1  1  3
-## 4  FALSE  1  1  3
-## 5     NA  1  1  3
-## 6   TRUE  1  2  6
-## 7  FALSE  1  3  6
-## 8     NA  1 NA  6
-## 9   TRUE  1 NA  9
-## 10 FALSE  1  6  9
-## 11  TRUE  1 NA 11
-## 12 FALSE  1 NA 11</code></pre>
-<p><code>which</code> argument (‘first’ or ‘last’) used with <code>which_run</code> determines which index of matching element should be returned from window. In below illustration in <code>k = 4</code> elements window there are two <code>TRUE</code> values, and depending on <code>which</code> argument output is equal <code>2</code> or <code>4</code>.</p>
+<pre><code><span class="co">##        x s0 s1 s2</span>
+<span class="co">## 1   TRUE  1  1  1</span>
+<span class="co">## 2   TRUE  1  1  2</span>
+<span class="co">## 3   TRUE  1  1  3</span>
+<span class="co">## 4  FALSE  1  1  3</span>
+<span class="co">## 5     NA  1  1  3</span>
+<span class="co">## 6   TRUE  1  2  6</span>
+<span class="co">## 7  FALSE  1  3  6</span>
+<span class="co">## 8     NA  1 NA  6</span>
+<span class="co">## 9   TRUE  1 NA  9</span>
+<span class="co">## 10 FALSE  1  6  9</span>
+<span class="co">## 11  TRUE  1 NA 11</span>
+<span class="co">## 12 FALSE  1 NA 11</span></code></pre>
+<p><code>which</code> argument (‘first’ or ‘last’) used with
+<code>which_run</code> determines which index of matching element should
+be returned from window. In below illustration in <code>k = 4</code>
+elements window there are two <code>TRUE</code> values, and depending on
+<code>which</code> argument output is equal <code>2</code> or
+<code>4</code>.</p>
 <p><img src="images/options_which_first_last.png"></p>
 </div>
 </div>
@@ -285,11 +349,14 @@ Illustration below shows two sums calculated in 5-days window span. In both case
 
 
       <footer><div class="copyright">
-  <p>Developed by Dawid Kałędkowski.</p>
+  <p></p>
+<p>Developed by Dawid Kałędkowski.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer>
@@ -297,6 +364,8 @@ Illustration below shows two sums calculated in 5-days window span. In both case
 
   
 
+
+  
 
   </body>
 </html>

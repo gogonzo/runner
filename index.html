@@ -28,6 +28,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -40,23 +42,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -79,7 +75,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/gogonzo/runner/">
+  <a href="https://github.com/gogonzo/runner/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -97,40 +93,50 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="runner-an-r-package-for-running-operations" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#runner-an-r-package-for-running-operations" class="anchor"></a><code>runner</code> an R package for running operations.</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="runner-an-r-package-for-running-operations">
+<code>runner</code> an R package for running operations.<a class="anchor" aria-label="anchor" href="#runner-an-r-package-for-running-operations"></a>
+</h1></div>
 </div>
-<div id="section" class="section level1">
-<h1 class="hasAnchor">
-<a href="#section" class="anchor"></a><img src="reference/figures/hexlogo.png" align="right">
+<div class="section level1">
+<h1 id="section">
+<img src="reference/figures/hexlogo.png" align="right"><a class="anchor" aria-label="anchor" href="#section"></a>
 </h1>
 <!-- badges: start -->
 
-<div id="about" class="section level2">
-<h2 class="hasAnchor">
-<a href="#about" class="anchor"></a>About</h2>
-<p>Package contains standard running functions (aka. rolling) with additional options like varying window size, lagging, handling missings and windows depending on date. <code>runner</code> brings also rolling streak and rolling which, what extends beyond range of functions already implemented in R packages. This package can be successfully used to manipulate and aggregate time series or longitudinal data.</p>
+<div class="section level2">
+<h2 id="about">About<a class="anchor" aria-label="anchor" href="#about"></a>
+</h2>
+<p>Package contains standard running functions (aka. rolling) with
+additional options like varying window size, lagging, handling missings
+and windows depending on date. <code>runner</code> brings also rolling
+streak and rolling which, what extends beyond range of functions already
+implemented in R packages. This package can be successfully used to
+manipulate and aggregate time series or longitudinal data.</p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>Install package from from GitHub or from CRAN.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># devtools::install_github("gogonzo/runner")</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"runner"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"runner"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="using-runner" class="section level2">
-<h2 class="hasAnchor">
-<a href="#using-runner" class="anchor"></a>Using runner</h2>
-<p><code>runner</code> package provides functions applied on running windows. The most universal function is <code><a href="reference/runner.html">runner::runner</a></code> which gives user possibility to apply any R function <code>f</code> in running window. In example below 4-months correlation is calculated lagged by 1 month.</p>
+<div class="section level2">
+<h2 id="using-runner">Using runner<a class="anchor" aria-label="anchor" href="#using-runner"></a>
+</h2>
+<p><code>runner</code> package provides functions applied on running
+windows. The most universal function is <code><a href="reference/runner.html">runner::runner</a></code>
+which gives user possibility to apply any R function <code>f</code> in
+running window. In example below 4-months correlation is calculated
+lagged by 1 month.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">runner</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">runner</span><span class="op">)</span>
 
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
-  date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.Date.html">seq.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fl">365</span>, length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,
-  a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>,
-  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
+  date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.Date.html" class="external-link">seq.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fl">365</span>, length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,
+  a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>,
+  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>
 <span class="op">)</span>
 
 <span class="fu"><a href="reference/runner.html">runner</a></span><span class="op">(</span>
@@ -139,28 +145,46 @@
   k <span class="op">=</span> <span class="st">"4 months"</span>, 
   idx <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">date</span>, 
   f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">a</span>, <span class="va">x</span><span class="op">$</span><span class="va">b</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">a</span>, <span class="va">x</span><span class="op">$</span><span class="va">b</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">)</span></code></pre></div>
-<p>There are different kinds of running windows and all of them are implemented in <code>runner</code>.</p>
+<p>There are different kinds of running windows and all of them are
+implemented in <code>runner</code>.</p>
 </div>
-<div id="running-windows" class="section level2">
-<h2 class="hasAnchor">
-<a href="#running-windows" class="anchor"></a>Running windows</h2>
-<p>Following diagram illustrates what running windows are - in this case running windows of length <code>k = 4</code>. For each of 15 elements of a vector each window contains current 4 elements.</p>
+<div class="section level2">
+<h2 id="running-windows">Running windows<a class="anchor" aria-label="anchor" href="#running-windows"></a>
+</h2>
+<p>Following diagram illustrates what running windows are - in this case
+running windows of length <code>k = 4</code>. For each of 15 elements of
+a vector each window contains current 4 elements.</p>
 <p><img src="reference/figures/incrementalindex.png"></p>
-<div id="window-size" class="section level3">
-<h3 class="hasAnchor">
-<a href="#window-size" class="anchor"></a>Window size</h3>
-<p><code>k</code> denotes number of elements in window. If <code>k</code> is a single value then window size is constant for all elements of x. For varying window size one should specify <code>k</code> as integer vector of <code>length(k) == length(x)</code> where each element of <code>k</code> defines window length. If <code>k</code> is empty it means that window will be cumulative (like <code><a href="https://rdrr.io/r/base/cumsum.html">base::cumsum</a></code>). Example below illustrates window of <code>k = 4</code> for 10th element of vector <code>x</code>.</p>
+<div class="section level3">
+<h3 id="window-size">Window size<a class="anchor" aria-label="anchor" href="#window-size"></a>
+</h3>
+<p><code>k</code> denotes number of elements in window. If
+<code>k</code> is a single value then window size is constant for all
+elements of x. For varying window size one should specify <code>k</code>
+as integer vector of <code>length(k) == length(x)</code> where each
+element of <code>k</code> defines window length. If <code>k</code> is
+empty it means that window will be cumulative (like
+<code><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">base::cumsum</a></code>). Example below illustrates window of
+<code>k = 4</code> for 10th element of vector <code>x</code>.</p>
 <p><img src="reference/figures/constantwindow.png"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/runner.html">runner</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, k <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="window-lag" class="section level3">
-<h3 class="hasAnchor">
-<a href="#window-lag" class="anchor"></a>Window lag</h3>
-<p><code>lag</code> denotes how many observations windows will be lagged by. If <code>lag</code> is a single value than it is constant for all elements of x. For varying lag size one should specify <code>lag</code> as integer vector of <code>length(lag) == length(x)</code> where each element of <code>lag</code> defines lag of window. Default value of <code>lag = 0</code>. Example below illustrates window of <code>k = 4</code> lagged by <code>lag = 2</code> for 10-th element of vector <code>x</code>. Lag can also be negative value, which shifts window forward instead of backward.</p>
+<div class="section level3">
+<h3 id="window-lag">Window lag<a class="anchor" aria-label="anchor" href="#window-lag"></a>
+</h3>
+<p><code>lag</code> denotes how many observations windows will be lagged
+by. If <code>lag</code> is a single value than it is constant for all
+elements of x. For varying lag size one should specify <code>lag</code>
+as integer vector of <code>length(lag) == length(x)</code> where each
+element of <code>lag</code> defines lag of window. Default value of
+<code>lag = 0</code>. Example below illustrates window of
+<code>k = 4</code> lagged by <code>lag = 2</code> for 10-th element of
+vector <code>x</code>. Lag can also be negative value, which shifts
+window forward instead of backward.</p>
 <p><img src="reference/figures/laggedwindowklag.png"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/runner.html">runner</a></span><span class="op">(</span>
@@ -169,13 +193,22 @@
   lag <span class="op">=</span> <span class="fl">2</span>
 <span class="op">)</span></code></pre></div>
 </div>
-<div id="windows-depending-on-date" class="section level3">
-<h3 class="hasAnchor">
-<a href="#windows-depending-on-date" class="anchor"></a>Windows depending on date</h3>
-<p>Sometimes data points in dataset are not equally spaced (missing weekends, holidays, other missings) and thus window size should vary to keep expected time frame. If one specifies <code>idx</code> argument, than running functions are applied on windows depending on date. <code>idx</code> should be the same length as <code>x</code> of class <code>Date</code> or <code>integer</code>. Including <code>idx</code> can be combined with varying window size, than k will denote number of periods in window different for each data point. Example below illustrates window of size <code>k = 5</code> lagged by <code>lag = 2</code>. In parentheses ranges for each window.</p>
+<div class="section level3">
+<h3 id="windows-depending-on-date">Windows depending on date<a class="anchor" aria-label="anchor" href="#windows-depending-on-date"></a>
+</h3>
+<p>Sometimes data points in dataset are not equally spaced (missing
+weekends, holidays, other missings) and thus window size should vary to
+keep expected time frame. If one specifies <code>idx</code> argument,
+than running functions are applied on windows depending on date.
+<code>idx</code> should be the same length as <code>x</code> of class
+<code>Date</code> or <code>integer</code>. Including <code>idx</code>
+can be combined with varying window size, than k will denote number of
+periods in window different for each data point. Example below
+illustrates window of size <code>k = 5</code> lagged by
+<code>lag = 2</code>. In parentheses ranges for each window.</p>
 <p><img src="reference/figures/runningdatewindows.png"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">13</span>, <span class="fl">17</span>, <span class="fl">18</span>, <span class="fl">18</span>, <span class="fl">21</span>, <span class="fl">27</span>, <span class="fl">31</span>, <span class="fl">37</span>, <span class="fl">42</span>, <span class="fl">44</span>, <span class="fl">47</span>, <span class="fl">48</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">13</span>, <span class="fl">17</span>, <span class="fl">18</span>, <span class="fl">18</span>, <span class="fl">21</span>, <span class="fl">27</span>, <span class="fl">31</span>, <span class="fl">37</span>, <span class="fl">42</span>, <span class="fl">44</span>, <span class="fl">47</span>, <span class="fl">48</span><span class="op">)</span>
 <span class="fu"><a href="reference/runner.html">runner</a></span><span class="op">(</span>
   x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, 
   k <span class="op">=</span> <span class="st">"5 days"</span>, 
@@ -183,92 +216,118 @@
   idx <span class="op">=</span> <span class="va">idx</span>
 <span class="op">)</span></code></pre></div>
 </div>
-<div id="running-at" class="section level3">
-<h3 class="hasAnchor">
-<a href="#running-at" class="anchor"></a>Running at</h3>
-<p>Runner by default returns vector of the same size as <code>x</code> unless one puts any-size vector to <code>at</code> argument. Each element of <code>at</code> is an index on which runner calculates function. Below illustrates output of runner for <code>at = c(18, 27, 45, 31)</code> which gives windows in ranges enclosed in square brackets. Range for <code>at = 27</code> is <code>[22, 26]</code> which is not available in current indices.</p>
+<div class="section level3">
+<h3 id="running-at">Running at<a class="anchor" aria-label="anchor" href="#running-at"></a>
+</h3>
+<p>Runner by default returns vector of the same size as <code>x</code>
+unless one puts any-size vector to <code>at</code> argument. Each
+element of <code>at</code> is an index on which runner calculates
+function. Below illustrates output of runner for
+<code>at = c(18, 27, 45, 31)</code> which gives windows in ranges
+enclosed in square brackets. Range for <code>at = 27</code> is
+<code>[22, 26]</code> which is not available in current indices.</p>
 <p><img src="reference/figures/runnerat.png"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">13</span>, <span class="fl">17</span>, <span class="fl">18</span>, <span class="fl">18</span>, <span class="fl">21</span>, <span class="fl">27</span>, <span class="fl">31</span>, <span class="fl">37</span>, <span class="fl">42</span>, <span class="fl">44</span>, <span class="fl">47</span>, <span class="fl">48</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">13</span>, <span class="fl">17</span>, <span class="fl">18</span>, <span class="fl">18</span>, <span class="fl">21</span>, <span class="fl">27</span>, <span class="fl">31</span>, <span class="fl">37</span>, <span class="fl">42</span>, <span class="fl">44</span>, <span class="fl">47</span>, <span class="fl">48</span><span class="op">)</span>
 <span class="fu"><a href="reference/runner.html">runner</a></span><span class="op">(</span>
   x <span class="op">=</span> <span class="va">idx</span>, 
   k <span class="op">=</span> <span class="fl">5</span>, 
   lag <span class="op">=</span> <span class="fl">1</span>, 
   idx <span class="op">=</span> <span class="va">idx</span>, 
-  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">27</span>, <span class="fl">48</span>, <span class="fl">31</span><span class="op">)</span>
+  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">27</span>, <span class="fl">48</span>, <span class="fl">31</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 </div>
-<div id="na-padding" class="section level3">
-<h3 class="hasAnchor">
-<a href="#na-padding" class="anchor"></a><code>NA</code> padding</h3>
-<p>Using <code>runner</code> one can also specify <code>na_pad = TRUE</code> which would return <code>NA</code> for any window which is partially out of range - meaning that there is no sufficient number of observations to fill the window. By default <code>na_pad = FALSE</code>, which means that incomplete windows are calculated anyway. <code>na_pad</code> is applied on normal cumulative windows and on windows depending on date. In example below two windows exceed range given by <code>idx</code> so for these windows are empty for <code>na_pad = TRUE</code>. If used sets <code>na_pad = FALSE</code> first window will be empty (no single element within <code>[-2, 3]</code>) and last window will return elements within matching <code>idx</code>.</p>
+<div class="section level3">
+<h3 id="na-padding">
+<code>NA</code> padding<a class="anchor" aria-label="anchor" href="#na-padding"></a>
+</h3>
+<p>Using <code>runner</code> one can also specify
+<code>na_pad = TRUE</code> which would return <code>NA</code> for any
+window which is partially out of range - meaning that there is no
+sufficient number of observations to fill the window. By default
+<code>na_pad = FALSE</code>, which means that incomplete windows are
+calculated anyway. <code>na_pad</code> is applied on normal cumulative
+windows and on windows depending on date. In example below two windows
+exceed range given by <code>idx</code> so for these windows are empty
+for <code>na_pad = TRUE</code>. If used sets <code>na_pad = FALSE</code>
+first window will be empty (no single element within
+<code>[-2, 3]</code>) and last window will return elements within
+matching <code>idx</code>.</p>
 <p><img src="reference/figures/runneratdatenapad.png"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">13</span>, <span class="fl">17</span>, <span class="fl">18</span>, <span class="fl">18</span>, <span class="fl">21</span>, <span class="fl">27</span>, <span class="fl">31</span>, <span class="fl">37</span>, <span class="fl">42</span>, <span class="fl">44</span>, <span class="fl">47</span>, <span class="fl">48</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">13</span>, <span class="fl">17</span>, <span class="fl">18</span>, <span class="fl">18</span>, <span class="fl">21</span>, <span class="fl">27</span>, <span class="fl">31</span>, <span class="fl">37</span>, <span class="fl">42</span>, <span class="fl">44</span>, <span class="fl">47</span>, <span class="fl">48</span><span class="op">)</span>
 <span class="fu"><a href="reference/runner.html">runner</a></span><span class="op">(</span>
   x <span class="op">=</span> <span class="va">idx</span>, 
   k <span class="op">=</span> <span class="fl">5</span>, 
   lag <span class="op">=</span> <span class="fl">1</span>, 
   idx <span class="op">=</span> <span class="va">idx</span>, 
-  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">18</span>, <span class="fl">48</span>, <span class="fl">51</span><span class="op">)</span>,
+  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">18</span>, <span class="fl">48</span>, <span class="fl">51</span><span class="op">)</span>,
   na_pad <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span></code></pre></div>
 </div>
-<div id="using-runner-with-dataframe" class="section level3">
-<h3 class="hasAnchor">
-<a href="#using-runner-with-dataframe" class="anchor"></a>Using runner with <code>data.frame</code>
+<div class="section level3">
+<h3 id="using-runner-with-dataframe">Using runner with <code>data.frame</code>
+<a class="anchor" aria-label="anchor" href="#using-runner-with-dataframe"></a>
 </h3>
-<p>User can also put <code>data.frame</code> into <code>x</code> argument and apply functions which involve multiple columns. In example below we calculate beta parameter of <code>lm</code> model on 1, 2, …, n observations respectively. On the plot one can observe how <code>lm</code> parameter adapt with increasing number of observation.</p>
+<p>User can also put <code>data.frame</code> into <code>x</code>
+argument and apply functions which involve multiple columns. In example
+below we calculate beta parameter of <code>lm</code> model on 1, 2, …, n
+observations respectively. On the plot one can observe how
+<code>lm</code> parameter adapt with increasing number of
+observation.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">40</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="co"># unequaly spaced time series</span>
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">40</span><span class="op">)</span><span class="op">)</span>
-<span class="va">y</span> <span class="op">&lt;-</span> <span class="fl">30</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">40</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">40</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="co"># unequaly spaced time series</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">40</span><span class="op">)</span><span class="op">)</span>
+<span class="va">y</span> <span class="op">&lt;-</span> <span class="fl">30</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">40</span><span class="op">)</span>
 
-<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">y</span>, <span class="va">x</span><span class="op">)</span>
+<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">y</span>, <span class="va">x</span><span class="op">)</span>
 
 <span class="va">slope</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/runner.html">runner</a></span><span class="op">(</span>
   <span class="va">df</span>,
   k <span class="op">=</span> <span class="fl">10</span>,
   idx <span class="op">=</span> <span class="st">"date"</span>,
   <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coefficients</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>
+    <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coefficients</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>
   <span class="op">}</span>
 <span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">slope</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="fl">30</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slope</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="fl">30</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="parallel-computation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#parallel-computation" class="anchor"></a>Parallel computation</h3>
-<p>The <code>runner</code> function can also compute windows in parallel mode. The function doesn’t initialize the parallel cluster automatically but one have to do this outside and pass it to the <code>runner</code> through <code>cl</code> argument.</p>
+<div class="section level3">
+<h3 id="parallel-computation">Parallel computation<a class="anchor" aria-label="anchor" href="#parallel-computation"></a>
+</h3>
+<p>The <code>runner</code> function can also compute windows in parallel
+mode. The function doesn’t initialize the parallel cluster automatically
+but one have to do this outside and pass it to the <code>runner</code>
+through <code>cl</code> argument.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span>
 
 <span class="co"># </span>
-<span class="va">numCores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html">detectCores</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html">makeForkCluster</a></span><span class="op">(</span><span class="va">numCores</span><span class="op">)</span>
+<span class="va">numCores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeForkCluster</a></span><span class="op">(</span><span class="va">numCores</span><span class="op">)</span>
 
 <span class="fu"><a href="reference/runner.html">runner</a></span><span class="op">(</span>
   x <span class="op">=</span> <span class="va">df</span>,
   k <span class="op">=</span> <span class="fl">10</span>,
   idx <span class="op">=</span> <span class="st">"date"</span>,
-  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">x</span><span class="op">)</span>,
+  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">x</span><span class="op">)</span>,
   cl <span class="op">=</span> <span class="va">cl</span>
 <span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="build-in-functions" class="section level3">
-<h3 class="hasAnchor">
-<a href="#build-in-functions" class="anchor"></a>Build-in functions</h3>
-<p>With <code>runner</code> one can use any R functions, but some of them are optimized for speed reasons. These functions are:</p>
-<ul>
-<li>aggregating functions - <code>length_run</code>, <code>min_run</code>, <code>max_run</code>, <code>minmax_run</code>, <code>sum_run</code>, <code>mean_run</code>, <code>streak_run</code><br>
-</li>
-<li>utility functions - <code>fill_run</code>, <code>lag_run</code>, <code>which_run</code>
-</li>
-</ul>
+<div class="section level3">
+<h3 id="build-in-functions">Build-in functions<a class="anchor" aria-label="anchor" href="#build-in-functions"></a>
+</h3>
+<p>With <code>runner</code> one can use any R functions, but some of
+them are optimized for speed reasons. These functions are:<br>
+- aggregating functions - <code>length_run</code>, <code>min_run</code>,
+<code>max_run</code>, <code>minmax_run</code>, <code>sum_run</code>,
+<code>mean_run</code>, <code>streak_run</code><br>
+- utility functions - <code>fill_run</code>, <code>lag_run</code>,
+<code>which_run</code></p>
 </div>
 </div>
 </div>
@@ -277,48 +336,60 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=runner">https://​cloud.r-project.org/​package=runner</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/gogonzo/runner/">https://​github.com/​gogonzo/​runner/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/gogonzo/runner/issues">https://​github.com/​gogonzo/​runner/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=runner" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/gogonzo/runner/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/gogonzo/runner/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>GPL (&gt;= 2)</li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>Dawid Kałędkowski <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9533-457X" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html#citation">Citing runner</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/gogonzo/runner/actions"><img src="https://github.com/gogonzo/runner/workflows/Check%20and%20deploy/badge.svg" alt="Check and deploy"></a></li>
-<li><a href="https://CRAN.R-project.org/package=runner"><img src="https://cranlogs.r-pkg.org/badges/runner"></a></li>
-<li><a href="https://ci.appveyor.com/project/gogonzo/runner"><img src="https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&amp;svg=true"></a></li>
-<li><a href="https://codecov.io/gh/gogonzo/runner/branch/master"><img src="https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg"></a></li>
+<li>Dawid Kałędkowski <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9533-457X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/gogonzo/runner/actions" class="external-link"><img src="https://github.com/gogonzo/runner/workflows/Check%20and%20deploy/badge.svg" alt="Check and deploy"></a></li>
+<li><a href="https://CRAN.R-project.org/package=runner" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/runner"></a></li>
+<li><a href="https://ci.appveyor.com/project/gogonzo/runner" class="external-link"><img src="https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&amp;svg=true"></a></li>
+<li><a href="https://codecov.io/gh/gogonzo/runner/branch/master" class="external-link"><img src="https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg"></a></li>
+<li><a href="https://cran.r-project.org/package=runner" class="external-link"><img src="https://tinyverse.netlify.com/badge/runner" alt="Dependencies"></a></li>
+</ul>
 </div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Dawid Kałędkowski.</p>
+  <p></p>
+<p>Developed by Dawid Kałędkowski.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer>
@@ -326,6 +397,8 @@
 
   
 
+
+  
 
   </body>
 </html>
