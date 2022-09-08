@@ -38,12 +38,12 @@ minmax_test <- function(price, what = "max", na_rm = TRUE) {
 }
 
 # correct minmax -------
-  tinytest::expect_identical(
+  expect_identical(
     minmax_run(x, metric = "min"),
     minmax_test(x, what = "min")
   )
 
-  tinytest::expect_identical(
+  expect_identical(
     minmax_run(x, metric = "max"),
     minmax_test(x, what = "max")
   )

@@ -158,8 +158,6 @@ seq_at <- function(at, idx) { # nolint
   return(at)
 }
 
-
-
 #' Resolves at argument
 #'
 #' Resolves argument passed to the `runner` -
@@ -171,11 +169,13 @@ seq_at <- function(at, idx) { # nolint
 #' @keywords internal
 .resolve_arg <- function(x, arg) {
   if (length(arg) > 0) {
-  if (length(arg) == 1 && is.character(arg) && arg %in% names(x)) {
-    x[[arg]]
-  }
+    if (length(arg) == 1 && is.character(arg) && arg %in% names(x)) {
+      x[[arg]]
+    } else {
+      arg
+    }
   } else {
-  integer(0)
+    integer(0)
   }
 }
 
@@ -188,16 +188,13 @@ seq_at <- function(at, idx) { # nolint
 #' @inheritParams runner
 #' @return resolved `at`
 #' @keywords internal
-.resolve_arg_at <- function(x, at) { #nolint
+.check_unresolved_at <- function(x, at) { #nolint
   arg_name <- deparse(substitute(at))
 
   if (length(at) > 0) {
     if (length(at) == 1 && is.character(at) && at %in% names(x)) {
-      x[[at]]
     } else if (length(at) == 1 && all(.is_datetime_valid(at))) {
-      at
     } else if (inherits(at, c("numeric", "integer", "Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
-      at
     } else {
      stop(
         sprintf(
@@ -210,8 +207,6 @@ seq_at <- function(at, idx) { # nolint
         call. = FALSE
       )
     }
-  } else {
-    integer(0)
   }
 }
 
@@ -224,15 +219,12 @@ seq_at <- function(at, idx) { # nolint
 #' @inheritParams runner
 #' @return resolved `idx`
 #' @keywords internal
-.resolve_arg_difftime <- function(x, k) { #nolint
+.check_unresolved_difftime <- function(x, k) { #nolint
   arg_name <- deparse(substitute(k))
   if (length(k) > 0) {
     if (length(k) == 1 && is.character(k) && k %in% names(x)) {
-      x[[k]]
     } else if (all(.is_datetime_valid(k))) {
-      k
     } else if (inherits(k, c("numeric", "integer", "difftime"))) {
-      k
     } else {
       stop(
         sprintf(
@@ -245,8 +237,6 @@ seq_at <- function(at, idx) { # nolint
         call. = FALSE
       )
     }
-  } else {
-    integer(0)
   }
 }
 
@@ -259,14 +249,12 @@ seq_at <- function(at, idx) { # nolint
 #' @inheritParams runner
 #' @return resolved `idx`
 #' @keywords internal
-.resolve_arg_index <- function(x, idx) { #nolint
+.check_unresolved_index <- function(x, idx) { #nolint
   arg_name <- deparse(substitute(idx))
 
   if (length(idx) > 0) {
     if (is.character(idx) && length(idx) == 1 && idx %in% names(x)) {
-      x[[idx]]
     } else if (inherits(idx, c("numeric", "integer", "Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
-      idx
     } else {
       stop(
         sprintf(
@@ -278,8 +266,6 @@ seq_at <- function(at, idx) { # nolint
         call. = FALSE
       )
     }
-  } else {
-    integer(0)
   }
 }
 

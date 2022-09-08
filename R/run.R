@@ -331,10 +331,15 @@ runner.data.frame <- function( #nolint
   ...
 ) {
   # set arguments from attrs (set by run_by)
-  k <- .resolve_arg_difftime(x, k) # no deep copy
-  lag <- .resolve_arg_difftime(x, lag)
-  idx <- .resolve_arg_index(x, idx)
-  at <- .resolve_arg_at(x, at)
+  .check_unresolved_difftime(x, k)
+  .check_unresolved_difftime(x, lag)
+  .check_unresolved_index(x, idx)
+  .check_unresolved_at(x, at)
+
+  k   <- .resolve_arg(x, k) # no deep copy
+  lag <- .resolve_arg(x, lag)
+  idx <- .resolve_arg(x, idx)
+  at  <- .resolve_arg(x, at)
 
   if (any(is.na(k))) {
     stop("Function doesn't accept NA values in k vector");
@@ -399,11 +404,11 @@ runner.data.frame <- function( #nolint
 runner.grouped_df <- function(
   x,
   f = function(x) x,
-  k = integer(0),
-  lag = integer(1),
-  idx = integer(0),
-  at = integer(0),
-  na_pad = FALSE,
+  k = attr(x, "k"),
+  lag = if (!is.null(attr(x, "lag"))) attr(x, "lag") else integer(1),
+  idx = attr(x, "idx"),
+  at = attr(x, "at"),
+  na_pad = if (!is.null(attr(x, "na_pad"))) attr(x, "na_pad") else FALSE,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -439,11 +444,11 @@ runner.grouped_df <- function(
 runner.matrix <- function(
   x,
   f = function(x) x,
-  k = integer(0),
-  lag = integer(1),
-  idx = integer(0),
-  at = integer(0),
-  na_pad = FALSE,
+  k = attr(x, "k"),
+  lag = if (!is.null(attr(x, "lag"))) attr(x, "lag") else integer(1),
+  idx = attr(x, "idx"),
+  at = attr(x, "at"),
+  na_pad = if (!is.null(attr(x, "na_pad"))) attr(x, "na_pad") else FALSE,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -512,11 +517,11 @@ runner.matrix <- function(
 runner.xts <- function(
   x,
   f = function(x) x,
-  k = integer(0),
-  lag = integer(1),
-  idx = integer(0),
-  at = integer(0),
-  na_pad = FALSE,
+  k = attr(x, "k"),
+  lag = if (!is.null(attr(x, "lag"))) attr(x, "lag") else integer(1),
+  idx = attr(x, "idx"),
+  at = attr(x, "at"),
+  na_pad = if (!is.null(attr(x, "na_pad"))) attr(x, "na_pad") else FALSE,
   simplify = TRUE,
   cl = NULL,
   ...

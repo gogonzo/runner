@@ -6,7 +6,7 @@ data <- data.frame(
 
 # vector
 cl <- parallel::makeCluster(1)
-tinytest::expect_identical(
+expect_identical(
   res <- runner::runner(
     x = data$a,
     k = 10,
@@ -24,10 +24,10 @@ tinytest::expect_identical(
   )
 )
 parallel::stopCluster(cl)
-tinytest::expect_true(is(res, "numeric"))
+expect_true(is(res, "numeric"))
 
 cl <- parallel::makeCluster(1)
-tinytest::expect_identical(
+expect_identical(
   res <- runner::runner(
     x = data$a,
     k = 10,
@@ -45,11 +45,11 @@ tinytest::expect_identical(
   )
 )
 parallel::stopCluster(cl)
-tinytest::expect_true(is(res, "list"))
+expect_true(is(res, "list"))
 
 # data.frame
 cl <- parallel::makeCluster(1)
-tinytest::expect_identical(
+expect_identical(
   res <- runner(
     x = data,
     k = 10,
@@ -67,10 +67,10 @@ tinytest::expect_identical(
   )
 )
 parallel::stopCluster(cl)
-tinytest::expect_true(is(res, "numeric"))
+expect_true(is(res, "numeric"))
 
 cl <- parallel::makeCluster(1)
-tinytest::expect_identical(
+expect_identical(
   res <- runner(
     x = data,
     k = 10,
@@ -88,11 +88,11 @@ tinytest::expect_identical(
   )
 )
 parallel::stopCluster(cl)
-tinytest::expect_true(is(res, "list"))
+expect_true(is(res, "list"))
 
 # matrix
 cl <- parallel::makeCluster(1)
-tinytest::expect_identical(
+expect_identical(
   res <- runner(
     x = matrix(seq_len(100), nrow = 20, ncol = 5),
     f = sum,
@@ -110,10 +110,10 @@ tinytest::expect_identical(
   )
 )
 parallel::stopCluster(cl)
-tinytest::expect_true(is(res, "integer"))
+expect_true(is(res, "integer"))
 
 cl <- parallel::makeCluster(1)
-tinytest::expect_identical(
+expect_identical(
   res <- runner(
     x = matrix(1:100, nrow = 20, ncol = 5),
     f = sum,
@@ -131,4 +131,4 @@ tinytest::expect_identical(
   )
 )
 parallel::stopCluster(cl)
-tinytest::expect_true(is(res, "list"))
+expect_true(is(res, "list"))

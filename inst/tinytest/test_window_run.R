@@ -38,20 +38,20 @@ at_date <- sample(idx, 10)
 ids <- match(at_date, idx)
 
 #       |--------]-------> --------
-tinytest::expect_identical(
+expect_identical(
   window_run(x1),
   lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i)]))
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, at = at),
   lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i)])[at])
 
 #   [...|----]---+-------> --------
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = 3),
   lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = 3)]))
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = 3, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -60,14 +60,14 @@ tinytest::expect_identical(
 
 
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = 3, at = at),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, lag = 3)])[at]
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = 3, na_pad = TRUE, at = at),
   lapply(
     seq_along(x1),
@@ -75,25 +75,25 @@ tinytest::expect_identical(
 )
 
 #       |--------+---]---> --------
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = -3),
   lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = -3)]))
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = -3, na_pad = TRUE),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, lag = -3, na_pad = TRUE)])
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = lag),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, lag = lag[i])])
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = lag, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -103,22 +103,22 @@ tinytest::expect_identical(
 
 
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = -3, at = at),
   lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = -3)])[at])
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = -3, na_pad = TRUE, at = at),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, lag = -3, na_pad = TRUE)])[at]
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = lag[at], at = at),
   lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = lag[i])])[at])
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = lag[at], na_pad = TRUE, at = at),
   lapply(
     seq_along(x1),
@@ -126,11 +126,11 @@ tinytest::expect_identical(
 )
 
 #  [...]|--------+-------> --------
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = 100),
   lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = 100)]))
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = 100, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -138,11 +138,11 @@ tinytest::expect_identical(
 )
 
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = -100),
   lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = -100)]))
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = -100, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -151,22 +151,22 @@ tinytest::expect_identical(
 
 
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = 100, at = at),
   lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = 100)])[at])
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = 100, na_pad = TRUE, at = at),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, lag = 100, na_pad = TRUE)])[at]
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = -100, at = at),
   lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, lag = -100)])[at])
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, lag = -100, na_pad = TRUE, at = at),
   lapply(
     seq_along(x1),
@@ -174,11 +174,11 @@ tinytest::expect_identical(
 )
 
 #       |----[...]-------> --------
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 3),
   lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 3)]))
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 3, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -187,14 +187,14 @@ tinytest::expect_identical(
 
 
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 3, at = at),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 3)])[at]
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 3, na_pad = TRUE, at = at),
   lapply(
     seq_along(x1),
@@ -202,56 +202,56 @@ tinytest::expect_identical(
 )
 
 #       [...|--------+-------[...] --------
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 1),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 1)])
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 1, na_pad = TRUE),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 1, na_pad = TRUE)])
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 99),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 99)])
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 99, na_pad = TRUE),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 99, na_pad = TRUE)])
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 100),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 100)])
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 100, na_pad = TRUE),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 100, na_pad = TRUE)])
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 101, f = mean),
   sapply(
     seq_along(x1),
     function(i) mean(x1[find_idx(x1, i = i, k = 101)]))
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 101, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
@@ -260,56 +260,56 @@ tinytest::expect_equal(
 
 
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 1, at = at),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 1)])[at]
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 1, na_pad = TRUE, at = at),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 1, na_pad = TRUE)])[at]
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 99, at = at),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 99)])[at]
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 99, at = at, na_pad = TRUE),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 99, na_pad = TRUE)])[at]
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 100, at = at),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 100)])[at]
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 100, at = at, na_pad = TRUE),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 100, na_pad = TRUE)])[at]
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 101, at = at, f = mean),
   sapply(
     seq_along(x1),
     function(i) mean(x1[find_idx(x1, i = i, k = 101)]))[at]
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 101, at = at, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
@@ -317,14 +317,14 @@ tinytest::expect_equal(
 )
 
 #       [...|----]---+-------> --------
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 5, lag = 3),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 5, lag = 3)])
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 5, lag = 3, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -333,14 +333,14 @@ tinytest::expect_identical(
 
 
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 5, lag = 3, at = at),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 5, lag = 3)])[at]
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 5, lag = 3, at = at, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -348,14 +348,14 @@ tinytest::expect_identical(
 )
 
 #       |-----[--+---]---> --------
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 5, lag = -3),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 5, lag = -3)])
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 5, lag = -3, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -364,14 +364,14 @@ tinytest::expect_identical(
 
 
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 5, lag = -3, at = at),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 5, lag = -3)])[at]
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 5, lag = -3, at = at, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -379,14 +379,14 @@ tinytest::expect_identical(
 )
 
 #       |--------+-[---]-> --------
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 5, lag = -7),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 5, lag = -7)])
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 5, lag = -7, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -395,14 +395,14 @@ tinytest::expect_identical(
 
 
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 5, lag = -7, at = at),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 5, lag = -7)])[at]
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 5, lag = -7, at = at, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -410,14 +410,14 @@ tinytest::expect_identical(
 )
 
 #       |--------+[]-----> --------
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 1, lag = -1),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 1, lag = -1)])
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 1, lag = -1, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -426,14 +426,14 @@ tinytest::expect_identical(
 
 
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 1, lag = -1, at = at),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 1, lag = -1)])[at]
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 1, lag = -1, at = at, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -441,11 +441,11 @@ tinytest::expect_identical(
 )
 
 #       |------[]+-------> --------
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 1, lag = 1),
   lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = 1, lag = 1)]))
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 1, lag = 1, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -454,14 +454,14 @@ tinytest::expect_identical(
 
 
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 1, lag = 1, at = at),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 1, lag = 1)])[at]
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 1, lag = 1, at = at, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -469,53 +469,53 @@ tinytest::expect_identical(
 )
 
 #variou --------
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = k, lag = 1),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = k[i], lag = 1)])
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = k, lag = 1, na_pad = TRUE),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = k[i], lag = 1, na_pad = TRUE)])
 )
 
-tinytest::expect_equal(
+expect_equal(
   window_run(x1, k = 3, lag = lag),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 3, lag = lag[i])])
 )
 
-tinytest::expect_equal(
+expect_equal(
   window_run(x1, k = 3, lag = lag, na_pad = TRUE),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 3, lag = lag[i], na_pad = TRUE)])
 )
 
-tinytest::expect_equal(
+expect_equal(
   window_run(x1, k = k, lag = lag),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = k[i], lag = lag[i])])
 )
 
-tinytest::expect_equal(
+expect_equal(
   window_run(x1, k = k, lag = lag, na_pad = TRUE),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = k[i], lag = lag[i], na_pad = TRUE)])
 )
 
-tinytest::expect_equal(
+expect_equal(
   window_run(x1, k = k, lag = 4),
   lapply(seq_along(x1), function(i) x1[find_idx(x1, i = i, k = k[i], lag = 4)]))
 
-tinytest::expect_equal(
+expect_equal(
   window_run(x1, k = k, lag = 4, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -524,35 +524,35 @@ tinytest::expect_equal(
 
 
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = k[at], lag = 1, at = at),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = k[i], lag = 1)])[at]
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = k[at], lag = 1, at = at, na_pad = TRUE),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = k[i], lag = 1, na_pad = TRUE)])[at]
 )
 
-tinytest::expect_equal(
+expect_equal(
   window_run(x1, k = 3, lag = lag[at], at = at),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 3, lag = lag[i])])[at]
 )
 
-tinytest::expect_equal(
+expect_equal(
   window_run(x1, k = 3, lag = lag[at], at = at, na_pad = TRUE),
   lapply(
     seq_along(x1),
     function(i) x1[find_idx(x1, i = i, k = 3, lag = lag[i], na_pad = TRUE)])[at]
 )
 
-tinytest::expect_equal(
+expect_equal(
   window_run(x1, k = k[at], lag = lag[at], at = at),
   lapply(
     seq_along(x1),
@@ -560,7 +560,7 @@ tinytest::expect_equal(
   )[at]
 )
 
-tinytest::expect_equal(
+expect_equal(
   window_run(x1, k = k[at], lag = lag[at], at = at, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -570,7 +570,7 @@ tinytest::expect_equal(
   )[at]
 )
 
-tinytest::expect_equal(
+expect_equal(
   window_run(x1, k = k[at], lag = 4, at = at),
   lapply(
     seq_along(x1),
@@ -578,7 +578,7 @@ tinytest::expect_equal(
   )[at]
 )
 
-tinytest::expect_equal(
+expect_equal(
   window_run(x1, k = k[at], lag = 4, at = at, na_pad = TRUE),
   lapply(
     seq_along(x1),
@@ -586,40 +586,40 @@ tinytest::expect_equal(
 )
 
 #window_run with idx same as window_run with windows",{
-tinytest::expect_identical(window_run(x1, k = 3),
+expect_identical(window_run(x1, k = 3),
                  window_run(x1, k = 3, idx = 1:100))
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = k),
   window_run(x1, k = k, idx = 1:100)
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = k, lag = 5),
   window_run(x1, k = k, lag = 5, idx = 1:100)
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = k, lag = lag),
   window_run(x1, k = k, lag = lag, idx = 1:100)
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 3, na_pad = TRUE),
   window_run(x1, k = 3, idx = 1:100, na_pad = TRUE)
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = k, na_pad = TRUE),
   window_run(x1, k = k, idx = 1:100, na_pad = TRUE)
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = k, lag = 5, na_pad = TRUE),
   window_run(x1, k = k, lag = 5, idx = 1:100, na_pad = TRUE)
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = k, lag = lag, na_pad = TRUE),
   window_run(x1, k = k, lag = lag, idx = 1:100, na_pad = TRUE)
 )
@@ -627,41 +627,41 @@ tinytest::expect_identical(
 
 
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = 3, at = at),
   window_run(x1, k = 3, idx = 1:100, at = at)
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = k[at], at = at),
   window_run(x1, k = k[at], idx = 1:100, at = at)
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = k[at], lag = 5, at = at),
   window_run(x1, k = k[at], lag = 5, idx = 1:100, at = at)
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = k[at], lag = lag[at], at = at),
   window_run(x1, k = k[at], lag = lag[at], idx = 1:100, at = at)
 )
 
-tinytest::expect_identical(window_run(x1, k = 3, na_pad = TRUE, at = at),
+expect_identical(window_run(x1, k = 3, na_pad = TRUE, at = at),
                  window_run(x1, k = 3, idx = 1:100, na_pad = TRUE, at = at)
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = k[at], na_pad = TRUE, at = at),
   window_run(x1, k = k[at], idx = 1:100, na_pad = TRUE, at = at)
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = k[at], lag = 5, na_pad = TRUE, at = at),
   window_run(x1, k = k[at], lag = 5, idx = 1:100, na_pad = TRUE, at = at)
 )
 
-tinytest::expect_identical(
+expect_identical(
   window_run(x1, k = k[at], lag = lag[at], na_pad = TRUE, at = at),
   window_run(x1, k = k[at], lag = lag[at], idx = 1:100, na_pad = TRUE, at = at)
 )
@@ -677,7 +677,7 @@ test <- lapply(
     find_idx_date(x2, i = i, lag = 3, idx = idx, na_pad = FALSE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, lag = 3, idx = idx, na_pad = TRUE)
 test <- lapply(
@@ -686,7 +686,7 @@ test <- lapply(
     find_idx_date(x2, i = i, lag = 3, idx = idx, na_pad = TRUE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, lag = -3, idx = idx, na_pad = FALSE)
 test <- lapply(
@@ -695,7 +695,7 @@ test <- lapply(
     find_idx_date(x2, i = i, lag = -3, idx = idx, na_pad = FALSE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, lag = -3, idx = idx, na_pad = TRUE)
 test <- lapply(
@@ -704,7 +704,7 @@ test <- lapply(
     find_idx_date(x2, i = i, lag = -3, idx = idx, na_pad = TRUE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, lag = lag, idx = idx, na_pad = FALSE)
 test <- lapply(
@@ -713,7 +713,7 @@ test <- lapply(
     find_idx_date(x2, i = i, lag = lag[i], idx = idx, na_pad = FALSE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, lag = lag, idx = idx, na_pad = TRUE)
 test <- lapply(
@@ -722,7 +722,7 @@ test <- lapply(
     find_idx_date(x2, i = i, lag = lag[i], idx = idx, na_pad = TRUE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 
 
@@ -733,7 +733,7 @@ test <- lapply(
     find_idx_date(x2, i = i, lag = 3, idx = idx, na_pad = FALSE)
   }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, lag = 3, idx = idx, at = at_date, na_pad = TRUE)
 test <- lapply(
@@ -742,7 +742,7 @@ test <- lapply(
     find_idx_date(x2, i = i, lag = 3, idx = idx, na_pad = TRUE)
   }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, lag = -3, idx = idx, at = at_date, na_pad = FALSE)
 test <- lapply(
@@ -751,14 +751,14 @@ test <- lapply(
     find_idx_date(x2, i = i, lag = -3, idx = idx, na_pad = FALSE)
   }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, lag = -3, idx = idx, at = at_date, na_pad = TRUE)
 test <- lapply(
   seq_along(x2), function(i) {
     find_idx_date(x2, i = i, lag = -3, idx = idx, na_pad = TRUE)
   })
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, lag = lag[ids], idx = idx, at = at_date, na_pad = FALSE)
 test <- lapply(
@@ -766,7 +766,7 @@ test <- lapply(
   function(i) {
     find_idx_date(x2, i = i, lag = lag[i], idx = idx, na_pad = FALSE)
   })
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, lag = lag[ids], idx = idx, at = at_date, na_pad = TRUE)
 test <- lapply(
@@ -775,7 +775,7 @@ test <- lapply(
     find_idx_date(x2, i = i, lag = lag[i], idx = idx, na_pad = TRUE)
   }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 #date - lag + k --------
 out <- window_run(x2, k = 3, lag = 3, idx = idx, na_pad = FALSE)
@@ -785,7 +785,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 3, lag = 3, idx = idx, na_pad = FALSE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, k = 3, lag = 3, idx = idx, na_pad = TRUE)
 test <- lapply(
@@ -794,7 +794,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 3, lag = 3, idx = idx, na_pad = TRUE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, k = 3, lag = -3, idx = idx, na_pad = FALSE)
 test <- lapply(
@@ -803,7 +803,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 3, lag = -3, idx = idx, na_pad = FALSE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, k = 3, lag = -3, idx = idx, na_pad = TRUE)
 test <- lapply(
@@ -812,7 +812,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 3, lag = -3, idx = idx, na_pad = TRUE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, k = 4, lag = -3, idx = idx, na_pad = FALSE)
 test <- lapply(
@@ -820,7 +820,7 @@ test <- lapply(
   function(i) {
     find_idx_date(x2, i = i, k = 4, lag = -3, idx = idx, na_pad = FALSE)
   })
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, k = 4, lag = -3, idx = idx, na_pad = TRUE)
 test <- lapply(
@@ -828,7 +828,7 @@ test <- lapply(
   function(i) {
     find_idx_date(x2, i = i, k = 4, lag = -3, idx = idx, na_pad = TRUE)
   })
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, k = 3, lag = -4, idx = idx, na_pad = FALSE)
 test <- lapply(
@@ -837,7 +837,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 3, lag = -4, idx = idx, na_pad = FALSE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, k = 3, lag = -4, idx = idx, na_pad = TRUE)
 test <- lapply(
@@ -846,7 +846,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 3, lag = -4, idx = idx, na_pad = TRUE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, k = 3, lag = -1, idx = idx, na_pad = FALSE)
 test <- lapply(
@@ -855,7 +855,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 3, lag = -1, idx = idx, na_pad = FALSE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, k = 3, lag = -1, idx = idx, na_pad = TRUE)
 test <- lapply(
@@ -864,7 +864,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 3, lag = -1, idx = idx, na_pad = TRUE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, k = 1, lag = -1, idx = idx, na_pad = FALSE)
 test <- lapply(
@@ -873,7 +873,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 1, lag = -1, idx = idx, na_pad = FALSE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, k = 1, lag = -1, idx = idx, na_pad = TRUE)
 test <- lapply(
@@ -882,7 +882,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 1, lag = -1, idx = idx, na_pad = TRUE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, k = k, lag = lag, idx = idx, na_pad = FALSE)
 test <- lapply(
@@ -891,7 +891,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = k[i], lag = lag[i], idx = idx, na_pad = FALSE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 out <- window_run(x2, k = k, lag = lag, idx = idx, na_pad = TRUE)
 test <- lapply(
@@ -900,7 +900,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = k[i], lag = lag[i], idx = idx, na_pad = TRUE)
   }
 )
-tinytest::expect_identical(out, test)
+expect_identical(out, test)
 
 
 
@@ -911,7 +911,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 3, lag = 3, idx = idx, na_pad = FALSE)
   }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, k = 3, lag = 3, idx = idx, at = at_date, na_pad = TRUE)
 test <- lapply(
@@ -920,7 +920,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 3, lag = 3, idx = idx, na_pad = TRUE)
   }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, k = 3, lag = -3, idx = idx, at = at_date, na_pad = FALSE)
 test <- lapply(
@@ -929,14 +929,14 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 3, lag = -3, idx = idx, na_pad = FALSE)
   }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, k = 3, lag = -3, idx = idx, at = at_date, na_pad = TRUE)
 test <- lapply(seq_along(x2), function(i) {
   find_idx_date(x2, i = i, k = 3, lag = -3, idx = idx, na_pad = TRUE)
 }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, k = 4, lag = -3, idx = idx, at = at_date, na_pad = FALSE)
 test <- lapply(
@@ -945,7 +945,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 4, lag = -3, idx = idx, na_pad = FALSE)
   }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, k = 4, lag = -3, idx = idx, at = at_date, na_pad = TRUE)
 test <- lapply(
@@ -954,7 +954,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 4, lag = -3, idx = idx, na_pad = TRUE)
   }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, k = 3, lag = -4, idx = idx, at = at_date, na_pad = FALSE)
 test <- lapply(
@@ -963,7 +963,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 3, lag = -4, idx = idx, na_pad = FALSE)
   }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, k = 3, lag = -4, idx = idx, at = at_date, na_pad = TRUE)
 test <- lapply(
@@ -972,14 +972,14 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 3, lag = -4, idx = idx, na_pad = TRUE)
   }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, k = 3, lag = -1, idx = idx, at = at_date, na_pad = FALSE)
 test <- lapply(seq_along(x2), function(i) {
   find_idx_date(x2, i = i, k = 3, lag = -1, idx = idx, na_pad = FALSE)
 }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, k = 3, lag = -1, idx = idx, at = at_date, na_pad = TRUE)
 test <- lapply(
@@ -988,7 +988,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 3, lag = -1, idx = idx, na_pad = TRUE)
   }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, k = 1, lag = -1, idx = idx, at = at_date, na_pad = FALSE)
 test <- lapply(
@@ -997,14 +997,14 @@ test <- lapply(
     find_idx_date(x2, i = i, k = 1, lag = -1, idx = idx, na_pad = FALSE)
   }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, k = 1, lag = -1, idx = idx, at = at_date, na_pad = TRUE)
 test <- lapply(seq_along(x2), function(i) {
   find_idx_date(x2, i = i, k = 1, lag = -1, idx = idx, na_pad = TRUE)
 }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, k = k[ids], lag = lag[ids], idx = idx,
                   at = at_date, na_pad = FALSE)
@@ -1014,7 +1014,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = k[i], lag = lag[i], idx = idx, na_pad = FALSE)
   }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 out <- window_run(x2, k = k[ids], lag = lag[ids], idx = idx,
                   at = at_date, na_pad = TRUE)
@@ -1024,7 +1024,7 @@ test <- lapply(
     find_idx_date(x2, i = i, k = k[i], lag = lag[i], idx = idx, na_pad = TRUE)
   }
 )
-tinytest::expect_identical(out, test[ids])
+expect_identical(out, test[ids])
 
 #Test non-numeric argument --------
 expect_silent(window_run(as.integer(1:10), k = 5))
@@ -1034,20 +1034,20 @@ expect_silent(window_run(seq(Sys.Date(), Sys.Date() + 9, by = "1 day"), k = 5))
 expect_silent(window_run(sample(c(TRUE, FALSE), 10, replace = TRUE), k = 5))
 
 #Error --------
-tinytest::expect_error(window_run(list(1:10), k = 5),
+expect_error(window_run(list(1:10), k = 5),
              "Invalid \\'x\\' type")
 
-tinytest::expect_error(window_run(1:10, k = (1:9)),
+expect_error(window_run(1:10, k = (1:9)),
              "length of k and length of x differs")
-tinytest::expect_error(window_run(1:10, k = c(NA, 1:9)),
+expect_error(window_run(1:10, k = c(NA, 1:9)),
              "Function doesn't accept NA values in k vector")
 
-tinytest::expect_error(window_run(1:10, lag = (1:9)),
+expect_error(window_run(1:10, lag = (1:9)),
              "length of lag and length of x differs")
-tinytest::expect_error(window_run(1:10, lag = c(NA, 1:9)),
+expect_error(window_run(1:10, lag = c(NA, 1:9)),
              "Function doesn't accept NA values in lag vector")
 
-tinytest::expect_error(window_run(1:10, idx = (1:9)),
+expect_error(window_run(1:10, idx = (1:9)),
              "length of idx and length of x differs")
-tinytest::expect_error(window_run(1:10, idx = c(NA, 1:9)),
+expect_error(window_run(1:10, idx = c(NA, 1:9)),
              "Function doesn't accept NA values in idx vector")

@@ -24,30 +24,30 @@ for (i in 1:10) {
 }
 
 
-tinytest::expect_identical(length_run(k = 3, idx = idx), x1)
-tinytest::expect_identical(length_run(k = k, idx = idx), x2)
+expect_identical(length_run(k = 3, idx = idx), x1)
+expect_identical(length_run(k = k, idx = idx), x2)
 
 # Errors" ------
-tinytest::expect_error(length_run(idx = integer(0)), "idx should be of length > 0")
+expect_error(length_run(idx = integer(0)), "idx should be of length > 0")
 
-tinytest::expect_error(
+expect_error(
   length_run(k = 1:9, idx = idx),
   "length of k and length of idx differs"
 )
-tinytest::expect_error(
+expect_error(
   length_run(lag = 1:9, idx = idx),
   "length of lag and length of idx differs"
 )
 
-tinytest::expect_error(
+expect_error(
   length_run(k = c(NA, 1:9), idx = idx),
   "NA values in k vector"
 )
-tinytest::expect_error(
+expect_error(
   length_run(lag = c(NA, 1:9), idx = idx),
   "NA values in lag vector"
 )
-tinytest::expect_error(
+expect_error(
   length_run(lag = 1:10, idx = c(NA, 1:9)),
   "NA values in idx vector"
 )

@@ -19,11 +19,11 @@ find_idx <- function(x, i, k, lag = 0, na_pad = FALSE) {
 }
 
 #       |--------]-------> ------
-tinytest::expect_identical(
+expect_identical(
   runner(x1, f = mean),
   sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i)])))
 
-tinytest::expect_identical(
+expect_identical(
   runner(x2, f = mean, na.rm = TRUE),
   sapply(
     seq_along(x2),
@@ -31,43 +31,43 @@ tinytest::expect_identical(
   )
 )
 
-tinytest::expect_identical(
+expect_identical(
   runner(x1, f = mean, idx = idx),
   sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i)])))
 
 
-tinytest::expect_identical(
+expect_identical(
   runner(x1, f = mean)[at],
   runner(x1, f = mean, at = at))
 
-tinytest::expect_identical(
+expect_identical(
   runner(x1, f = mean, idx = idx)[at],
   runner(x1, f = mean, at = at))
 
 #   [...|----]---+-------> -------
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = 3, f = mean),
   sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, lag = 3)])))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = 3, f = mean, na_pad = TRUE),
   sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, lag = 3)])))
 
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = 3, f = mean)[at],
   runner(x1, lag = 3, f = mean, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = 3, f = mean, na_pad = TRUE)[at],
   runner(x1, lag = 3, f = mean, na_pad = TRUE, at = at))
 
 #       |--------+---]---> -------
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = -3, f = mean),
   sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, lag = -3)])))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = -3, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
@@ -75,7 +75,7 @@ tinytest::expect_equal(
   )
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = lag, f = mean),
   sapply(
     seq_along(x1),
@@ -83,7 +83,7 @@ tinytest::expect_equal(
   )
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = lag, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
@@ -92,33 +92,33 @@ tinytest::expect_equal(
 )
 
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = -3, f = mean)[at],
   runner(x1, lag = -3, f = mean, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = -3, f = mean, na_pad = TRUE)[at],
   runner(x1, lag = -3, f = mean, na_pad = TRUE, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = lag, f = mean)[at],
   runner(x1, lag = lag[at], f = mean, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = lag, f = mean, na_pad = TRUE)[at],
   runner(x1, lag = lag[at], f = mean, na_pad = TRUE, at = at))
 
 #  [...]|--------+-------> -------
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = 100, f = mean),
   sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, lag = 100)]))
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = -100, f = mean),
   sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, lag = -100)])))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = 100, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
@@ -126,7 +126,7 @@ tinytest::expect_equal(
   )
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = -100, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
@@ -135,28 +135,28 @@ tinytest::expect_equal(
 )
 
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = 100, f = mean)[at],
   runner(x1, lag = 100, f = mean, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = -100, f = mean)[at],
   runner(x1, lag = -100, f = mean, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = 100, f = mean, na_pad = TRUE)[at],
   runner(x1, lag = 100, f = mean, na_pad = TRUE, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = -100, f = mean, na_pad = TRUE)[at],
   runner(x1, lag = -100, f = mean, na_pad = TRUE, at = at))
 
 #       |----[...]-------> -------
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 3, f = mean),
   sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = 3)])))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 3, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
@@ -164,7 +164,7 @@ tinytest::expect_equal(
   )
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = k, f = mean),
   sapply(
     seq_along(x1),
@@ -174,24 +174,24 @@ tinytest::expect_equal(
 
 
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 3, f = mean)[at],
   runner(x1, k = 3, f = mean, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 3, f = mean, na_pad = TRUE)[at],
   runner(x1, k = 3, f = mean, na_pad = TRUE, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = k, f = mean)[at],
   runner(x1, k = k[at], f = mean, at = at))
 
 #       [...|--------+-------[...] -------
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 100, f = mean),
   sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = 100)])))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 100, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
@@ -199,11 +199,11 @@ tinytest::expect_equal(
   )
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 101, f = mean),
   sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = 101)])))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 101, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
@@ -213,24 +213,24 @@ tinytest::expect_equal(
 
 
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 100, f = mean)[at],
   runner(x1, k = 100, f = mean, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 100, f = mean, na_pad = TRUE)[at],
   runner(x1, k = 100, f = mean, na_pad = TRUE, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 101, f = mean)[at],
   runner(x1, k = 101, f = mean, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 101, f = mean, na_pad = TRUE)[at],
   runner(x1, k = 101, f = mean, na_pad = TRUE, at = at))
 
 #       [...|----]---+-------> -------
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 5, lag = 3, f = mean),
   sapply(
     seq_along(x1),
@@ -238,7 +238,7 @@ tinytest::expect_equal(
     )
   )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 5, lag = 3, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
@@ -247,16 +247,16 @@ tinytest::expect_equal(
 )
 
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 5, lag = 3, f = mean)[at],
   runner(x1, k = 5, lag = 3, f = mean, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 5, lag = 3, f = mean, na_pad = TRUE)[at],
   runner(x1, k = 5, lag = 3, f = mean, na_pad = TRUE, at = at))
 
 #       |-----[--+---]---> -------
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 5, lag = -3, f = mean),
   sapply(
     seq_along(x1),
@@ -264,7 +264,7 @@ tinytest::expect_equal(
     )
   )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 5, lag = -3, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
@@ -274,16 +274,16 @@ tinytest::expect_equal(
 
 
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 5, lag = -3, f = mean)[at],
   runner(x1, k = 5, lag = -3, f = mean, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 5, lag = -3, f = mean, na_pad = TRUE)[at],
   runner(x1, k = 5, lag = -3, f = mean, na_pad = TRUE, at = at))
 
 #       |--------+-[---]-> -------
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 5, lag = -7, f = mean),
   sapply(
     seq_along(x1),
@@ -291,7 +291,7 @@ tinytest::expect_equal(
     )
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 5, lag = -7, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
@@ -300,16 +300,16 @@ tinytest::expect_equal(
   )
 
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 5, lag = -7, f = mean)[at],
   runner(x1, k = 5, lag = -7, f = mean, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 5, lag = -7, f = mean, na_pad = TRUE)[at],
   runner(x1, k = 5, lag = -7, f = mean, na_pad = TRUE, at = at))
 
 #       |--------+[]-----> -------
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 1, lag = -1, f = mean),
   sapply(
     seq_along(x1),
@@ -317,7 +317,7 @@ tinytest::expect_equal(
     )
   )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 1, lag = -1, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
@@ -327,16 +327,16 @@ tinytest::expect_equal(
 
 
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 1, lag = -1, f = mean)[at],
   runner(x1, k = 1, lag = -1, f = mean, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 1, lag = -1, f = mean, na_pad = TRUE)[at],
   runner(x1, k = 1, lag = -1, f = mean, na_pad = TRUE, at = at))
 
 #       |------[]+-------> -------
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 1, lag = 1, f = mean),
   sapply(
     seq_along(x1),
@@ -344,7 +344,7 @@ tinytest::expect_equal(
     )
   )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 1, lag = 1, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
@@ -353,16 +353,16 @@ tinytest::expect_equal(
   )
 
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 1, lag = 1, f = mean)[at],
   runner(x1, k = 1, lag = 1, f = mean, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 1, lag = 1, f = mean, na_pad = TRUE)[at],
   runner(x1, k = 1, lag = 1, f = mean, na_pad = TRUE, at = at))
 
 #various -------
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = k, lag = 1, f = mean),
   sapply(
     seq_along(x1),
@@ -370,7 +370,7 @@ tinytest::expect_equal(
     )
   )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 3, lag = lag, f = mean),
   sapply(
     seq_along(x1),
@@ -378,7 +378,7 @@ tinytest::expect_equal(
     )
   )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = length(x1), lag = lag, f = mean),
   sapply(
     seq_along(x1),
@@ -386,146 +386,146 @@ tinytest::expect_equal(
     )
   )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = k, lag = lag, f = mean),
   sapply(window_run(x1, k = k, lag = lag), mean))
 
 
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = k, lag = 1, f = mean)[at],
   runner(x1, k = k[at], lag = 1, f = mean, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 3, lag = lag, f = mean)[at],
   runner(x1, k = 3, lag = lag[at], f = mean, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = length(x1), lag = lag, f = mean)[at],
   runner(x1, k = length(x1), lag = lag[at], f = mean, at = at))
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = k, lag = lag, f = mean)[at],
   runner(x1, k = k[at], lag = lag[at], f = mean, at = at))
 
 #date window -------
-tinytest::expect_equal(
+expect_equal(
   runner(x1, idx = idx, f = mean),
   sapply(window_run(x1, idx = idx), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, idx = idx, f = mean, na_pad = TRUE),
   sapply(window_run(x2, idx = idx, na_pad = TRUE), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = 3, idx = idx, f = mean),
   sapply(window_run(x1, lag = 3, idx = idx), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, lag = 3, idx = idx, f = mean, na_pad = TRUE),
   sapply(window_run(x2, lag = 3, idx = idx, na_pad = TRUE), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = -3, idx = idx, f = mean),
   sapply(window_run(x1, lag = -3, idx = idx), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, lag = -3, idx = idx, f = mean, na_pad = TRUE),
   sapply(window_run(x2, lag = -3, idx = idx, na_pad = TRUE), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = -1, idx = idx, f = mean),
   sapply(window_run(x1, lag = -1, idx = idx), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, lag = -1, idx = idx, f = mean, na_pad = TRUE),
   sapply(window_run(x2, lag = -1, idx = idx, na_pad = TRUE), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = -100, idx = idx, f = mean),
   sapply(window_run(x1, lag = -100, idx = idx), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, lag = -100, idx = idx, f = mean, na_pad = TRUE),
   sapply(window_run(x2, lag = -100, idx = idx, na_pad = TRUE), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = lag, idx = idx, f = mean),
   sapply(window_run(x1, lag = lag, idx = idx), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, lag = -lag, idx = idx, f = mean, na_pad = TRUE),
   sapply(window_run(x2, lag = -lag, idx = idx, na_pad = TRUE), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 3, lag = 3, idx = idx, f = mean),
   sapply(window_run(x1, k = 3, lag = 3, idx = idx), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, k = 3, lag = 3, idx = idx, f = mean, na_pad = TRUE),
   sapply(window_run(x2, k = 3, lag = 3, idx = idx, na_pad = TRUE), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 3, lag = -3, idx = idx, f = mean),
   sapply(window_run(x1, k = 3, lag = -3, idx = idx), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, k = 3, lag = -3, idx = idx, f = mean, na_pad = TRUE),
   sapply(window_run(x2, k = 3, lag = -3, idx = idx, na_pad = TRUE), mean)
 )
 
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 3, lag = lag, idx = idx, f = mean),
   sapply(window_run(x1, k = 3, lag = lag, idx = idx), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, k = 3, lag = lag, idx = idx, f = mean, na_pad = TRUE),
   sapply(window_run(x2, k = 3, lag = lag, idx = idx, na_pad = TRUE), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = k, lag = lag, idx = idx, f = mean),
   sapply(window_run(x1, k = k, lag = lag, idx = idx), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, k = k, lag = lag, idx = idx, f = mean, na_pad = TRUE),
   sapply(window_run(x2, k = k, lag = lag, idx = idx, na_pad = TRUE), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 3, lag = lag, idx = idx, f = mean),
   sapply(window_run(x1, k = 3, lag = lag, idx = idx), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, k = k, lag = 3, idx = idx, f = mean, na_pad = TRUE),
   sapply(window_run(x2, k = k, lag = 3, idx = idx, na_pad = TRUE), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = k, lag = lag, idx = idx, f = mean),
   sapply(window_run(x1, k = k, lag = lag, idx = idx), mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, k = k, lag = 3, idx = idx, f = mean, na_pad = TRUE),
   sapply(window_run(x2, k = k, lag = 3, idx = idx, na_pad = TRUE), mean)
 )
@@ -577,82 +577,82 @@ num_function  <- function(x) as.double(sum(x))
 char_function <- function(x) paste(x, collapse = "-")
 
 # <logical>
-tinytest::expect_identical(
+expect_identical(
   as.logical(c(FALSE, TRUE, TRUE, TRUE)),
   runner(log_input, f = log_function)
 )
 
-tinytest::expect_identical(
+expect_identical(
   as.logical(c(FALSE, FALSE, FALSE, FALSE)),
   runner(int_input, f = log_function)
 )
 
-tinytest::expect_identical(
+expect_identical(
   as.logical(c(FALSE, FALSE, FALSE, FALSE)),
   runner(num_input, f = log_function)
 )
 
-tinytest::expect_identical(
+expect_identical(
   as.logical(c(FALSE, FALSE, FALSE, FALSE)),
   runner(cha_input, f = log_function)
 )
 
 # <integer>
 
-tinytest::expect_identical(
+expect_identical(
   as.integer(c(1, 2, 3, 4)),
   runner(log_input, f = int_function)
 )
 
-tinytest::expect_identical(
+expect_identical(
   as.integer(c(1, 2, 3, 4)),
   runner(int_input, f = int_function)
 )
 
-tinytest::expect_identical(
+expect_identical(
   as.integer(c(1, 2, 3, 4)),
   runner(num_input, f = int_function)
 )
 
-tinytest::expect_identical(
+expect_identical(
   as.integer(c(1, 2, 3, 4)),
   runner(cha_input, f = int_function)
 )
 
 # <numeric>
-tinytest::expect_identical(
+expect_identical(
   as.numeric(c(1, 2, 2, 2)),
   runner(log_input, f = num_function)
 )
 
-tinytest::expect_identical(
+expect_identical(
   as.numeric(c(1, 3, 6, 10)),
   runner(int_input, f = num_function)
 )
 
-tinytest::expect_identical(
+expect_identical(
   as.numeric(c(1.5, 4, 7.5, 12)),
   runner(num_input, f = num_function))
 
-tinytest::expect_error(runner(cha_input, f = num_function))
+expect_error(runner(cha_input, f = num_function))
 
 # <character>
-tinytest::expect_identical(
+expect_identical(
   c("TRUE", "TRUE-TRUE", "TRUE-TRUE-FALSE", "TRUE-TRUE-FALSE-FALSE"),
   runner(log_input, f = char_function)
 )
 
-tinytest::expect_identical(
+expect_identical(
   c("1", "1-2", "1-2-3", "1-2-3-4"),
   runner(int_input, f = char_function)
 )
 
-tinytest::expect_identical(
+expect_identical(
   c("1.5", "1.5-2.5", "1.5-2.5-3.5", "1.5-2.5-3.5-4.5"),
   runner(num_input, f = char_function)
 )
 
-tinytest::expect_identical(
+expect_identical(
   c("a", "a-b", "a-b-c", "a-b-c-d"),
   runner(cha_input, f = char_function)
 )
@@ -670,203 +670,203 @@ char_function <- function(x) paste(x, collapse = "-")
 
 at <- c(2, 3)
 # <logical>
-tinytest::expect_identical(
+expect_identical(
   as.logical(c(FALSE, TRUE, TRUE, TRUE))[at],
   runner(log_input, f = log_function, at = at)
 )
 
-tinytest::expect_identical(
+expect_identical(
   as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
   runner(int_input, f = log_function, at = at)
 )
 
-tinytest::expect_identical(
+expect_identical(
   as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
   runner(num_input, f = log_function, at = at)
 )
 
-tinytest::expect_identical(
+expect_identical(
   as.logical(c(FALSE, FALSE, FALSE, FALSE))[at],
   runner(cha_input, f = log_function, at = at)
 )
 # <integer>
-tinytest::expect_identical(
+expect_identical(
   as.integer(c(1, 2, 3, 4))[at],
   runner(log_input, f = int_function, at = at)
 )
-tinytest::expect_identical(
+expect_identical(
   as.integer(c(1, 2, 3, 4))[at],
   runner(int_input, f = int_function, at = at)
 )
-tinytest::expect_identical(
+expect_identical(
   as.integer(c(1, 2, 3, 4))[at],
   runner(num_input, f = int_function, at = at)
 )
-tinytest::expect_identical(
+expect_identical(
   as.integer(c(1, 2, 3, 4))[at],
   runner(cha_input, f = int_function, at = at)
 )
 
 # <numeric>
-tinytest::expect_identical(
+expect_identical(
   as.numeric(c(1, 2, 2, 2))[at],
   runner(log_input, f = num_function, at = at)
 )
-tinytest::expect_identical(
+expect_identical(
   as.numeric(c(1, 3, 6, 10))[at],
   runner(int_input, f = num_function, at = at)
 )
-tinytest::expect_identical(
+expect_identical(
   as.numeric(c(1.5, 4, 7.5, 12))[at],
   runner(num_input, f = num_function, at = at)
 )
-tinytest::expect_error(runner(cha_input, f = num_function, at = at))
+expect_error(runner(cha_input, f = num_function, at = at))
 # <character>
-tinytest::expect_identical(
+expect_identical(
   c("TRUE", "TRUE-TRUE", "TRUE-TRUE-FALSE", "TRUE-TRUE-FALSE-FALSE")[at],
   runner(log_input, f = char_function, at = at)
 )
-tinytest::expect_identical(
+expect_identical(
   c("1", "1-2", "1-2-3", "1-2-3-4")[at],
   runner(int_input, f = char_function, at = at)
 )
 
-tinytest::expect_identical(
+expect_identical(
   c("1.5", "1.5-2.5", "1.5-2.5-3.5", "1.5-2.5-3.5-4.5")[at],
   runner(num_input, f = char_function, at = at)
 )
-tinytest::expect_identical(
+expect_identical(
   c("a", "a-b", "a-b-c", "a-b-c-d")[at],
   runner(cha_input, f = char_function, at = at)
 )
 
 #at date window -------
 ids <- match(at_date, idx)
-tinytest::expect_equal(
+expect_equal(
   runner(x1, idx = idx, f = mean)[ids],
   runner(x1, idx = idx, at = at_date, f = mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, idx = idx, f = mean)[ids],
   runner(x1, idx = idx, at = at_date, f = mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = 3, idx = idx, f = mean, na_pad = FALSE)[ids],
   runner(x1, lag = 3, idx = idx, at = at_date, f = mean, na_pad = FALSE)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = 3, idx = idx, f = mean, na_pad = TRUE)[ids],
   runner(x1, lag = 3, idx = idx, at = at_date, f = mean, na_pad = TRUE)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, lag = 3, idx = idx, f = mean, na_pad = TRUE)[ids],
   runner(x2, lag = 3, idx = idx, at = at_date, f = mean, na_pad = TRUE)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = -3, idx = idx, f = mean)[ids],
   runner(x1, lag = -3, idx = idx, at = at_date, f = mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, lag = -3, idx = idx, f = mean, na_pad = TRUE)[ids],
   runner(x2, lag = -3, idx = idx, at = at_date, f = mean, na_pad = TRUE)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = -1, idx = idx, f = mean)[ids],
   runner(x1, lag = -1, idx = idx, at = at_date, f = mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, lag = -1, idx = idx, f = mean, na_pad = TRUE)[ids],
   runner(x2, lag = -1, idx = idx, at = at_date, f = mean, na_pad = TRUE)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = -100, idx = idx, f = mean)[ids],
   runner(x1, lag = -100, idx = idx, at = at_date, f = mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, lag = -100, idx = idx, f = mean, na_pad = TRUE)[ids],
   runner(x2, lag = -100, idx = idx, at = at_date, f = mean, na_pad = TRUE)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, lag = lag, idx = idx, f = mean)[ids],
   runner(x1, lag = lag[ids], idx = idx, at = at_date, f = mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, lag = -lag, idx = idx, f = mean, na_pad = TRUE)[ids],
   runner(x2, lag = -lag[ids], idx = idx, at = at_date, f = mean, na_pad = TRUE)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 3, lag = 3, idx = idx, f = mean)[ids],
   runner(x1, k = 3, lag = 3, idx = idx, at = at_date, f = mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, k = 3, lag = 3, idx = idx, f = mean, na_pad = TRUE)[ids],
   runner(x2, k = 3, lag = 3, idx = idx, at = at_date, f = mean, na_pad = TRUE)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 3, lag = -3, idx = idx, f = mean)[ids],
   runner(x1, k = 3, lag = -3, idx = idx, at = at_date, f = mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, k = 3, lag = -3, idx = idx, f = mean, na_pad = TRUE)[ids],
   runner(x2, k = 3, lag = -3, idx = idx, at = at_date, f = mean, na_pad = TRUE)
 )
 
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 3, lag = lag, idx = idx, f = mean)[ids],
   runner(x1, k = 3, lag = lag[ids], idx = idx, at = at_date, f = mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, k = 3, lag = lag, idx = idx, f = mean, na_pad = TRUE)[ids],
   runner(x2, k = 3, lag = lag[ids], idx = idx,
          at = at_date, f = mean, na_pad = TRUE)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = k, lag = lag, idx = idx, f = mean)[ids],
   runner(x1, k = k[ids], lag = lag[ids], idx = idx, at = at_date, f = mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, k = k, lag = lag, idx = idx, f = mean, na_pad = TRUE)[ids],
   runner(x2, k = k[ids], lag = lag[ids], idx = idx,
          at = at_date, f = mean, na_pad = TRUE)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = 3, lag = lag, idx = idx, f = mean)[ids],
   runner(x1, k = 3, lag = lag[ids], idx = idx, at = at_date, f = mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, k = k, lag = 3, idx = idx, f = mean, na_pad = TRUE)[ids],
   runner(x2, k = k[ids], lag = 3, idx = idx,
          at = at_date, f = mean, na_pad = TRUE)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x1, k = k, lag = lag, idx = idx, f = mean)[ids],
   runner(x1, k = k[ids], lag = lag[ids], idx = idx, at = at_date, f = mean)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(x2, k = k, lag = lag, idx = idx, f = mean, na_pad = TRUE)[ids],
   runner(x2, k = k[ids], lag = lag[ids], idx = idx,
          at = at_date, f = mean, na_pad = TRUE)
@@ -874,33 +874,33 @@ tinytest::expect_equal(
 
 #at with difftime -------
 at_date <- runner:::seq_at(at = "1 months", idx = idx_date)
-tinytest::expect_identical(
+expect_identical(
   at_date,
   seq(min(idx_date), max(idx_date), by = "1 months")
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(1:100, at = "1 months", idx = idx_date, f = function(x) max(x)),
   runner(1:100, at = at_date, idx = idx_date, f = function(x) max(x))
 )
 
 at_date <- runner:::seq_at(at = "-1 months", idx = idx_date)
-tinytest::expect_identical(
+expect_identical(
   at_date,
   seq(max(idx_date), min(idx_date), by = "-1 months")
 )
-tinytest::expect_equal(
+expect_equal(
   runner(1:100, at = "-1 months", idx = idx_date, f = function(x) max(x)),
   runner(1:100, at = at_date, idx = idx_date, f = function(x) max(x))
 )
 
 #k with difftime -------
-tinytest::expect_equal(
+expect_equal(
   runner(1:100, k = "2 weeks", idx = idx_date, f = function(x) x),
   runner(1:100, k = 14, idx = idx_date, f = function(x) x)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(1:100, k = "2 weeks", idx = idx_date, f = function(x) x),
   runner(1:100, k = as.difftime(2, units = "weeks"),
          idx = idx_date, f = function(x) x)
@@ -909,17 +909,17 @@ tinytest::expect_equal(
 k_date <- sample(c("week", "day"), 100, replace = TRUE)
 k_int <- ifelse(k_date == "week", 7L, 1L)
 
-tinytest::expect_equal(
+expect_equal(
   runner(1:100, k = k_date, idx = idx_date, f = function(x) x),
   runner(1:100, k = k_int, idx = idx_date, f = function(x) x)
 )
 
-tinytest::expect_error(
+expect_error(
   runner(1:100, k = "-1 weeks", idx = idx_date, f = function(x) x),
   "negative"
 )
 
-tinytest::expect_error(
+expect_error(
   runner(1:100,
          k = as.difftime(-1, units = "weeks"),
          idx = idx_date,
@@ -928,18 +928,18 @@ tinytest::expect_error(
 )
 
 #lag with difftime -------
-tinytest::expect_equal(
+expect_equal(
   runner(1:100, lag = "week", idx = idx_date, f = function(x) x),
   runner(1:100, lag = 7, idx = idx_date, f = function(x) x)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(1:100, lag = "-1 weeks", idx = idx_date, f = function(x) x),
   runner(1:100, lag = -7, idx = idx_date, f = function(x) x)
 )
 
 
-tinytest::expect_equal(
+expect_equal(
   runner(1:100, lag = "2 weeks", idx = idx_date, f = function(x) x),
   runner(1:100,
          lag = as.difftime(2, units = "weeks"),
@@ -947,7 +947,7 @@ tinytest::expect_equal(
          f = function(x) x)
 )
 
-tinytest::expect_equal(
+expect_equal(
   runner(1:100, lag = "-2 weeks", idx = idx_date, f = function(x) x),
   runner(1:100,
          lag = as.difftime(-2, units = "weeks"),
@@ -966,7 +966,7 @@ lag_int <- vapply(
 )
 
 
-tinytest::expect_equal(
+expect_equal(
   runner(1:100, k = 5, lag = lag_date, idx = idx_date, f = function(x) x),
   runner(1:100, k = 5, lag = lag_int, idx = idx_date, f = function(x) x)
 )
@@ -993,7 +993,7 @@ expected <- sapply(
     )
   }, simplify = TRUE)
 
-tinytest::expect_identical(res, expected)
+expect_identical(res, expected)
 
 #runner with xts -------
 xts_object <- structure(
@@ -1031,44 +1031,44 @@ expected <- sapply(
   simplify = TRUE
 )
 
-tinytest::expect_identical(res, expected)
+expect_identical(res, expected)
 
 #Parallel -------
 
 #Errors -------
-tinytest::expect_error(runner(x = letters[1:5], f = ""))
+expect_error(runner(x = letters[1:5], f = ""))
 
-tinytest::expect_error(runner(list(1:10), k = 5, f = mean), "Invalid \\'x\\' type")
+expect_error(runner(list(1:10), k = 5, f = mean), "Invalid \\'x\\' type")
 
-tinytest::expect_error(runner(1:10, k = -5, f = mean),
+expect_error(runner(1:10, k = -5, f = mean),
              "k can't be negative")
 
-tinytest::expect_error(runner(1:10, k = (1:9), f = mean),
+expect_error(runner(1:10, k = (1:9), f = mean),
              "length of k and length of x differs")
-tinytest::expect_error(runner(1:10, k = c(NA, 1:9), f = mean),
+expect_error(runner(1:10, k = c(NA, 1:9), f = mean),
              "Function doesn't accept NA values in k vector")
 
-tinytest::expect_error(runner(1:10, lag = (1:9), f = mean),
+expect_error(runner(1:10, lag = (1:9), f = mean),
              "length of lag and length of x differs")
-tinytest::expect_error(runner(x1, k = k, lag = integer(0), idx = idx, f = mean),
+expect_error(runner(x1, k = k, lag = integer(0), idx = idx, f = mean),
              "length of lag should not be zero")
-tinytest::expect_error(runner(1:10, lag = c(NA, 1:9), f = mean),
+expect_error(runner(1:10, lag = c(NA, 1:9), f = mean),
              "Function doesn't accept NA values in lag vector")
 
-tinytest::expect_error(runner(1:10, idx = (1:9), f = mean),
+expect_error(runner(1:10, idx = (1:9), f = mean),
              "length of idx and length of x differs")
-tinytest::expect_error(runner(1:10, idx = c(NA, 1:9), f = mean),
+expect_error(runner(1:10, idx = c(NA, 1:9), f = mean),
              "Function doesn't accept NA values in idx vector")
-tinytest::expect_error(runner(1:10, idx = sample(1:10), f = mean),
+expect_error(runner(1:10, idx = sample(1:10), f = mean),
              "idx have to be in ascending order")
 
 
-tinytest::expect_error(
+expect_error(
   runner(1:10, k = rep(5, 10), idx = 1:10, at = c(4, 5), f = mean),
   "length\\(k\\) should be 1 or equal to"
 )
 
-tinytest::expect_error(
+expect_error(
   runner(1:10, lag = rep(5, 10), idx = 1:10, at = c(4, 5), f = mean),
   "length\\(lag\\) should be 1 or equal to"
 )
