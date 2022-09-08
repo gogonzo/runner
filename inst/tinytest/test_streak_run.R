@@ -28,320 +28,320 @@ streak2 <- function(x, na_rm = TRUE) {  #nolint
 }
 
 #       |--------]-------> ------
-expect_identical(
+tinytest::expect_identical(
   streak_run(x2),
   as.integer(runner(x2, f = streak2))
 )
 
-expect_identical(
+tinytest::expect_identical(
   streak_run(x2, na_pad = TRUE),
   as.integer(runner(x2, f = streak2, na_pad = TRUE))
 )
 
 #   [...|----]---+-------> ------
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = 3),
   runner(x2, lag = 3, f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = 3, na_pad = TRUE),
   runner(x2, lag = 3, f = streak2, na_pad = TRUE))
 
 #       |--------+---]---> ------
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = -3),
   runner(x2, lag = -3, f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = -3, na_pad = TRUE),
   runner(x2, lag = -3, f = streak2, na_pad = TRUE))
 
 #  [...]|--------+-------> ------
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = 100),
   as.numeric(runner(x2, lag = 100, f = streak2))
 )
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = 100, na_pad = TRUE),
   as.numeric(runner(x2, lag = 100, f = streak2, na_pad = TRUE))
 )
 
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = -100),
   runner(x2, lag = -100, f = streak2)
 )
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = -100, na_pad = TRUE),
   as.numeric(runner(x2, lag = -100, f = streak2, na_pad = TRUE))
 )
 
 #       |----[...]-------> ------
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 3),
   runner(x2, k = 3, f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 3, na_pad = TRUE),
   runner(x2, k = 3, f = streak2, na_pad = TRUE))
 
 #       [...|--------+-------[...] ------
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 1),
   runner(x2, k = 1, f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 1, na_pad = TRUE),
   runner(x2, k = 1, f = streak2, na_pad = TRUE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 99),
   runner(x2, k = 99, f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 99, na_pad = TRUE),
   runner(x2, k = 99, f = streak2, na_pad = TRUE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 100),
   runner(x2, k = 100, f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 100, na_pad = TRUE),
   runner(x2, k = 100, f = streak2, na_pad = TRUE))
 
 #       [...|----]---+-------> ------
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 5, lag = 3),
   runner(x2, k = 5, lag = 3, f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 5, lag = 3, na_pad = TRUE),
   runner(x2, k = 5, lag = 3, f = streak2, na_pad = TRUE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 5, lag = 3, na_rm = FALSE),
   runner(x2, k = 5, lag = 3, f = function(x) streak2(x, na_rm = FALSE)))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 5, lag = 3, na_pad = TRUE, na_rm = FALSE),
   runner(x2, k = 5, lag = 3,
          f = function(x) streak2(x, na_rm = FALSE), na_pad = TRUE))
 
 #       |-----[--+---]---> ------
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 5, lag = -3),
   runner(x2, k = 5, lag = -3, f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 5, lag = -3, na_pad = TRUE),
   runner(x2, k = 5, lag = -3, f = streak2, na_pad = TRUE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 5, lag = -3, na_rm = FALSE),
   runner(x2, k = 5, lag = -3, f = function(x) streak2(x, na_rm = FALSE)))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 5, lag = -3, na_pad = TRUE, na_rm = FALSE),
   runner(x2, k = 5, lag = -3,
          f = function(x) streak2(x, na_rm = FALSE), na_pad = TRUE))
 
 #       |--------+-[---]-> ------
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 5, lag = -7),
   runner(x2, k = 5, lag = -7, f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 5, lag = -7, na_pad = TRUE),
   runner(x2, k = 5, lag = -7, f = streak2, na_pad = TRUE))
 
 #       |--------+[]-----> ------
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 1, lag = -1),
   runner(x2, k = 1, lag = -1, f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 1, lag = -1, na_pad = TRUE),
   runner(x2, k = 1, lag = -1, f = streak2, na_pad = TRUE))
 
 #       |------[]+-------> ------
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 1, lag = 1),
   runner(x2, k = 1, lag = 1, f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 1, lag = 1, na_pad = TRUE),
   runner(x2, k = 1, lag = 1, f = streak2, na_pad = TRUE))
 
 #various ------
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = k, lag = 1),
   runner(x2, k = k, lag = 1, f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = k, lag = 1, na_pad = TRUE),
   runner(x2, k = k, lag = 1, f = streak2, na_pad = TRUE))
 
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 3, lag = lag),
   runner(x2, k = 3, lag = lag, f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 3, lag = lag, na_pad = TRUE),
   runner(x2, k = 3, lag = lag, f = streak2, na_pad = TRUE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = k, lag = lag),
   runner(x2, k = k, lag = lag, f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = k, lag = lag, na_pad = TRUE),
   runner(x2, k = k, lag = lag, f = streak2, na_pad = TRUE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = k, lag = lag, na_rm = FALSE),
   runner(x2, k = k, lag = lag, f = function(x) streak2(x, na_rm = FALSE)))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = k, lag = lag, na_rm = FALSE, na_pad = TRUE),
   runner(x2, k = k, lag = lag,
          f = function(x) streak2(x, na_rm = FALSE), na_pad = TRUE))
 
 #date window ------
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = 3, idx = idx, na_pad = FALSE),
   runner(x2, lag = 3, idx = idx, f = streak2, na_pad = FALSE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = 3, idx = idx, na_pad = TRUE),
   runner(x2, lag = 3, idx = idx, f = streak2, na_pad = TRUE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = -3, idx = idx, na_pad = FALSE),
   runner(x2, lag = -3, idx = idx, f = streak2, na_pad = FALSE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = -3, idx = idx, na_pad = TRUE),
   runner(x2, lag = -3, idx = idx, f = streak2, na_pad = TRUE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 3, idx = idx, na_pad = FALSE),
   runner(x2, k = 3, idx = idx, f = streak2, na_pad = FALSE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 3, idx = idx, na_pad = TRUE),
   runner(x2, k = 3, idx = idx, f = streak2, na_pad = TRUE))
 
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = -1, idx = idx, na_pad = FALSE),
   runner(x2, lag = -1, idx = idx, f = streak2, na_pad = FALSE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = -1, idx = idx, na_pad = TRUE),
   runner(x2, lag = -1, idx = idx, f = streak2, na_pad = TRUE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = 100, idx = idx, na_pad = FALSE),
   runner(x2, lag = 100, idx = idx, f = streak2, na_pad = FALSE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = 100, idx = idx, na_pad = TRUE),
   runner(x2, lag = 100, idx = idx, f = streak2, na_pad = TRUE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = -100, idx = idx, na_pad = FALSE),
   runner(x2, lag = -100, idx = idx, f = streak2, na_pad = FALSE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = -100, idx = idx, na_pad = TRUE),
   runner(x2, lag = -100, idx = idx, f = streak2, na_pad = TRUE))
 
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = lag, idx = idx, na_pad = FALSE),
   runner(x2, lag = lag, idx = idx, f = streak2, na_pad = FALSE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, lag = lag, idx = idx, na_pad = TRUE),
   runner(x2, lag = lag, idx = idx, f = streak2, na_pad = TRUE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 3, lag = 4, idx = idx, na_pad = FALSE),
   runner(x2, k = 3, lag = 4, idx = idx, f = streak2, na_pad = FALSE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 3, lag = 4, idx = idx, na_pad = TRUE),
   runner(x2, k = 3, lag = 4, idx = idx, f = streak2, na_pad = TRUE))
 
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 3, lag = -4, idx = idx, na_pad = FALSE),
   runner(x2, k = 3, lag = -4, idx = idx, f = streak2, na_pad = FALSE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 3, lag = -4, idx = idx, na_pad = TRUE),
   runner(x2, k = 3, lag = -4, idx = idx, f = streak2, na_pad = TRUE))
 
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = k, lag = -4, idx = idx, na_pad = FALSE),
   runner(x2, k = k, lag = -4, idx = idx, f = streak2, na_pad = FALSE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = k, lag = -4, idx = idx, na_pad = TRUE),
   runner(x2, k = k, lag = -4, idx = idx, f = streak2, na_pad = TRUE))
 
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 4, lag = lag, idx = idx, na_pad = FALSE),
   runner(x2, k = 4, lag = lag, idx = idx, f = streak2, na_pad = FALSE))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(x2, k = 4, lag = lag, idx = idx, na_pad = TRUE),
   runner(x2, k = 4, lag = lag, idx = idx, f = streak2, na_pad = TRUE))
 
 #data types ------
-expect_equal(
+tinytest::expect_equal(
   streak_run(as.integer(x2)),
   runner(as.integer(x2), f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(as.character(x2)),
   runner(as.character(x2), f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(c(TRUE, TRUE, FALSE, FALSE, TRUE)),
   runner(c(TRUE, TRUE, FALSE, FALSE, TRUE), f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(as.integer(x2), k = 2),
   runner(as.integer(x2), k = 2, f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(as.character(x2), k = 2),
   runner(as.character(x2), k = 2, f = streak2))
 
-expect_equal(
+tinytest::expect_equal(
   streak_run(c(TRUE, TRUE, FALSE, FALSE, TRUE), k = 2),
   runner(c(TRUE, TRUE, FALSE, FALSE, TRUE), k = 2, f = streak2))
 
 
 #Errors ------
-expect_error(streak_run(x1, k = (1:999)),
+tinytest::expect_error(streak_run(x1, k = (1:999)),
              "length of k and length of x differs")
-expect_error(streak_run(x1, k = c(NA, k[-1])),
+tinytest::expect_error(streak_run(x1, k = c(NA, k[-1])),
              "Function doesn't accept NA values in k vector")
 
-expect_error(streak_run(x1, lag = (1:99)),
+tinytest::expect_error(streak_run(x1, lag = (1:99)),
              "length of lag and length of x differs")
-expect_error(streak_run(x1, lag = c(NA, lag[-1])),
+tinytest::expect_error(streak_run(x1, lag = c(NA, lag[-1])),
              "Function doesn't accept NA values in lag vector")
 
-expect_error(streak_run(x1, idx = (1:99)),
+tinytest::expect_error(streak_run(x1, idx = (1:99)),
              "length of idx and length of x differs")
-expect_error(streak_run(x1, idx = c(NA, 1:99)),
+tinytest::expect_error(streak_run(x1, idx = c(NA, 1:99)),
              "Function doesn't accept NA values in idx vector")

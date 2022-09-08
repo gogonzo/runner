@@ -42,8 +42,8 @@ run_by <- function(x, idx, k, lag, na_pad, at) {
 
   if (!missing(k)) x <- set_run_by_difftime(x, k)
   if (!missing(lag)) x <- set_run_by_difftime(x, lag)
-  if (!missing(idx)) x <- set_run_by_index(x, idx)
-  if (!missing(at)) x <- set_run_by_index(x, at)
+  if (!missing(idx)) x <- set_run_by_index(x = x, idx = idx)
+  if (!missing(at)) x <- set_run_by_index(x = x, idx = at)
   if (!missing(na_pad)) attr(x, "na_pad") <- na_pad
 
   return(x)
@@ -78,7 +78,7 @@ set_run_by_difftime <- function(x, arg) {
   attr(x, arg_name) <- if (is.character(arg)) {
     if (length(arg) == 1 && arg %in% names(x)) {
       arg
-    } else if (all(is_datetime_valid(arg))) {
+    } else if (all(.is_datetime_valid(arg))) {
       arg
     } else {
       stop(

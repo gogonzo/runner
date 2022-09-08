@@ -16,7 +16,7 @@ expected <- as.POSIXct(
     "2019-11-01 03:02:01")
 )
 
-expect_equal(idx - new_k, expected)
+tinytest::expect_equal(idx - new_k, expected)
 
 idx <- seq(
   as.POSIXct("2019-01-01 03:02:01"),
@@ -34,7 +34,7 @@ expected <- as.POSIXct(
     "2019-11-01 03:02:01", "2019-12-01 03:02:01")
 )
 
-expect_equal(idx - new_k, expected)
+tinytest::expect_equal(idx - new_k, expected)
 
 
 idx <- seq(
@@ -52,7 +52,7 @@ expected <- as.POSIXct(
     "2019-11-01 03:02:01", "2019-12-01 03:02:01")
 )
 
-expect_equal(idx - new_k, expected)
+tinytest::expect_equal(idx - new_k, expected)
 
 
 idx <- seq(
@@ -70,7 +70,7 @@ expected <- as.POSIXct(
     "2020-02-01 03:02:01")
 )
 
-expect_equal(idx - new_k, expected)
+tinytest::expect_equal(idx - new_k, expected)
 
 
 idx <- seq(
@@ -84,28 +84,28 @@ expected <- as.POSIXct(
   c("2020-02-01 03:02:01", "2020-01-25 03:02:01")
 )
 
-expect_equal(idx - new_k, expected)
+tinytest::expect_equal(idx - new_k, expected)
 
 
-expect_equal(
+tinytest::expect_equal(
   runner:::k_by(k = "1 weeks", idx = idx, param = "lag"),
   runner:::k_by(k = as.difftime(1, unit = "weeks"), idx = idx, param = "lag")
 )
 
 
-expect_equal(
+tinytest::expect_equal(
   runner:::k_by(k = "2 weeks", idx = idx, param = "k"),
   runner:::k_by(k = as.difftime(2, units = "weeks"), idx = idx, param = "k")
 )
 
 
-expect_equal(
+tinytest::expect_equal(
   runner:::k_by(k = as.difftime(-2, units = "weeks"), idx = idx, param = "lag"),
   runner:::k_by(k = "-2 weeks", idx = idx, param = "lag"),
 )
 
 
-expect_equal(
+tinytest::expect_equal(
   runner:::k_by(k = as.difftime(2, units = "weeks"), idx = idx, param = "lag"),
   runner:::k_by(k = "2 weeks", idx = idx, param = "lag"),
 )
@@ -114,57 +114,57 @@ expect_equal(
 idx <- seq(as.POSIXct("2019-01-01 03:02:01"),
            as.POSIXct("2020-01-01 03:02:01"),
            by = "month")
-expect_error(
+tinytest::expect_error(
   runner:::k_by(k = "-1 month", idx = idx, param = "k"),
   "k can't be negative"
 )
 
 
-expect_error(
+tinytest::expect_error(
   runner:::k_by(k = as.difftime(-2, units = "weeks"), idx = idx, param = "k"),
   "`k` can't be negative"
 )
 
 # reformat k -------
-expect_equal(
+tinytest::expect_equal(
   runner:::reformat_k("day", only_positive = TRUE),
   "-1 days"
 )
 
-expect_equal(
+tinytest::expect_equal(
   runner:::reformat_k("2 days", only_positive = TRUE),
   "-2 days"
 )
 
-expect_equal(
+tinytest::expect_equal(
   runner:::reformat_k(c("2 days", "2 months"), only_positive = TRUE),
   c("-2 days", "-2 months")
 )
 
 
-expect_equal(
+tinytest::expect_equal(
   runner:::reformat_k("2 days", only_positive = FALSE),
   "-2 days"
 )
 
-expect_equal(
+tinytest::expect_equal(
   runner:::reformat_k(c("day", "-2 days", "2 days"), only_positive = FALSE),
   c("-1 days", "2 days", "-2 days")
 )
 
-expect_equal(
+tinytest::expect_equal(
   runner:::reformat_k("2 days", only_positive = FALSE),
   "-2 days"
 )
 
 
-expect_error(
+tinytest::expect_error(
   runner:::reformat_k("-2 days", only_positive = TRUE),
   "k can't be negative"
 )
 
 
-expect_error(
+tinytest::expect_error(
   runner:::reformat_k(c("2 days", "-2 days"), only_positive = TRUE),
   "k can't be negative"
 )
@@ -184,24 +184,24 @@ expected <- as.POSIXct(
 )
 attr(expected, "tzone") <- ""
 attr(out, "tzone") <- ""
-expect_equal(out, expected)
+tinytest::expect_equal(out, expected)
 
 out <- runner:::seq_at(at = "-2 months", idx = idx)
 attr(out, "tzone") <- ""
-expect_equal(out, rev(expected))
+tinytest::expect_equal(out, rev(expected))
 
-expect_error(
+tinytest::expect_error(
   runner:::seq_at(at = "-2 months", idx = integer(0)),
   "`idx` can't be empty while specifying `at`"
 )
 
 
-expect_identical(
+tinytest::expect_identical(
   runner:::seq_at(at = "2 weeks", idx = idx),
   runner:::seq_at(at = as.difftime(2, units = "weeks"), idx = idx)
 )
 
-expect_identical(
+tinytest::expect_identical(
   runner:::seq_at(at = "-2 weeks", idx = idx),
   runner:::seq_at(at = as.difftime(-2, units = "weeks"), idx = idx)
 )

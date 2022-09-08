@@ -36,4 +36,4 @@ reference:
      - reformat_k
      - run_by
      - seq_at
-     - this_group
+     - .this_group

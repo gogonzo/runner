@@ -15,15 +15,15 @@ grouped_index <- data %>%
   dplyr::group_by(group1, group2) %>%
   run_by(idx = "index")
 
-expect_true(is(grouped_index, "grouped_df"))
-expect_true(is(grouped_index, "data.frame"))
+tinytest::expect_true(is(grouped_index, "grouped_df"))
+tinytest::expect_true(is(grouped_index, "data.frame"))
 
-expect_identical(
+tinytest::expect_identical(
   dplyr::groups(grouped_index),
   list(as.name("group1"), as.name("group2"))
 )
 
-expect_identical(
+tinytest::expect_identical(
   attr(grouped_index, "idx"),
   "index"
 )
@@ -32,12 +32,12 @@ grouped_index <- data %>%
   run_by(idx = "index") %>%
   dplyr::group_by(group1, group2)
 
-expect_identical(
+tinytest::expect_identical(
   dplyr::groups(grouped_index),
   list(as.name("group1"), as.name("group2"))
 )
 
-expect_identical(
+tinytest::expect_identical(
   attr(grouped_index, "idx"),
   "index"
 )
@@ -57,7 +57,7 @@ res <- data %>%
     m = length(x)
   )
 
-expect_true(
+tinytest::expect_true(
   all(res$m == 20)
 )
 
@@ -85,7 +85,7 @@ expected <- unlist(
   )
 )
 
-expect_identical(
+tinytest::expect_identical(
   res$xx,
   expected
 )
@@ -116,7 +116,7 @@ expected <- unlist(
   )
 )
 
-expect_equal(
+tinytest::expect_equal(
   grouped_dplyr$xx,
   expected
 )
@@ -165,12 +165,12 @@ expected <- unlist(
   )
 )
 
-expect_equal(
+tinytest::expect_equal(
   grouped_dplyr$xx,
   expected
 )
 
-expect_equal(
+tinytest::expect_equal(
   grouped_dplyr2$xx,
   expected
 )
