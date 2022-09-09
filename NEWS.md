@@ -1,13 +1,22 @@
+# runner 0.4.2
+
+* fix `runner(..., na_pad)` for vectors to return `NA` when windows is incomplete.
+Other methods already consistent.
+* fix the problems when calling `runner::runner` using `do.call`. (#83 and #84)
+
 # runner 0.4.1
+
 * Fix `runner.grouped_df` (`dplyr` class) to not ignore `k` argument.
 * removed defunct argument `type`.
 
 # runner 0.4.0
+
 * defunct `type` argument in favor of `simplify`.
 * fixed error when using `runner::runner`.
 * fixed `max_run` to return `NA` instead of `NaN` in incomplete or `NA` windows.
 
 # runner 0.3.8
+
 * implement parallel windows computation.
 * added `simplify` identical to argument used in `sapply`.
 * add runner for `xts` objects.
@@ -16,10 +25,12 @@
 * reduce number of dependencies.
 
 # runner 0.3.7
+
 * add `run_by` function to prespecify arguments for multiple runner calls
 * `runner` supports `grouped_df`
 
 # runner 0.3.5
+
 * `runner` function to be applied on `data.frame` or `matrix` - running windows
 constructed by subsetting rows.
 * `runner` output can be a list.
@@ -28,6 +39,7 @@ same as `by` in `seq.POSIXt`.
 * enhanced function documentation by images.
 
 # runner 0.3.2
+
 * `runner` function with default `type = "auto"` which automatically guess the type
 of returned object.
 * speed up `runner` function.
@@ -56,6 +68,7 @@ of returned object.
 * improved vignettes
 
 # runner 0.2.1
+
 * added `runner` function which allows to apply custom function on running windows - so far returning only numeric
 
 # runner 0.2.0

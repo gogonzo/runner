@@ -241,29 +241,17 @@ runner.default <- function(  #nolint
   }
 
   # use POSIXt.seq
-  at <- seq_at(at, idx)
-  k <- k_by(k, if (length(at > 0)) at else idx, "k")
+  at  <- seq_at(at, idx)
+  k   <- k_by(k, if (length(at > 0)) at else idx, "k")
   lag <- k_by(lag, if (length(at > 0)) at else idx, "lag")
 
-  w <- window_run(
-    x = x,
-    k = k,
-    lag = lag,
-    idx = idx,
-    at = at,
-    na_pad = na_pad
-  )
+  w <- window_run(x = x, k = k, lag = lag, idx = idx, at = at, na_pad = na_pad)
 
-  if (!is.null(cl) && is(cl, "cluster")) {
-    answer <- parLapply(
-      cl = cl,
-      X = w,
-      fun = f,
-      ...
-    )
+  answer <- if (!is.null(cl) && is(cl, "cluster")) {
+    parLapply(cl = cl, X = w, fun = f, ...)
   } else {
-    answer <- lapply(w, function(.this_window)
-      if (is.null(.this_window)) {
+    lapply(w, function(.this_window)
+      if (length(.this_window) == 0) {
         NA
       } else {
         f(.this_window, ...)

@@ -193,15 +193,19 @@ seq_at <- function(at, idx) { # nolint
 
   if (length(at) > 0) {
     if (length(at) == 1 && is.character(at) && at %in% names(x)) {
-    } else if (length(at) == 1 && all(.is_datetime_valid(at))) {
+      at <- x[[at]]
+    }
+    if (length(at) == 1 && .is_datetime_valid(at)) {
+      NULL
     } else if (inherits(at, c("numeric", "integer", "Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
+      NULL
     } else {
      stop(
         sprintf(
-          "`%s` should be either:
-         - column name of `x`
-         - vector of type `numeric`, `Date`, `POSIXct` or `POSIXlt`
-         - character value describing dates sequence step as in `by` argument of `seq.POSIXct`", #nolint
+          "`%s` is invalid, should be either:
+          - `numeric`, `Date`, `POSIXct` or `POSIXlt` vector of any length.
+          - `character(1)` value describing dates sequence step as in `by` argument of `seq.POSIXct`.
+          - `character(1)` being a column name of `x` matching above criteria.",
           arg_name
         ),
         call. = FALSE
@@ -223,15 +227,18 @@ seq_at <- function(at, idx) { # nolint
   arg_name <- deparse(substitute(k))
   if (length(k) > 0) {
     if (length(k) == 1 && is.character(k) && k %in% names(x)) {
-    } else if (all(.is_datetime_valid(k))) {
-    } else if (inherits(k, c("numeric", "integer", "difftime"))) {
+      k <- x[[k]]
+    }
+    if (length(k) %in% c(1, nrow(x)) && all(.is_datetime_valid(k))) {
+      NULL
+    } else if (length(k) %in% c(1, nrow(x)) && inherits(k, c("numeric", "integer", "difftime"))) {
+      NULL
     } else {
       stop(
         sprintf(
           "`%s` is invalid, should be either:
-           - column name of `x`
-           - difftime class or character describing diffitme (see at argument in `seq.POSIXt`) #nolint
-           - numeric or integer vector",
+          - `numeric`, `integer` or `difftime` of length equal to `1` or `nrow(x))`
+          - `character(1)` being a column name of `x` matching above criteria.",
           arg_name
         ),
         call. = FALSE
@@ -254,13 +261,17 @@ seq_at <- function(at, idx) { # nolint
 
   if (length(idx) > 0) {
     if (is.character(idx) && length(idx) == 1 && idx %in% names(x)) {
-    } else if (inherits(idx, c("numeric", "integer", "Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
+      idx <- x[[idx]]
+    }
+    if (length(idx) == nrow(x) &&
+        inherits(idx, c("numeric", "integer", "Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
+      NULL
     } else {
       stop(
         sprintf(
-          "`%s` should be either:
-          - column name of `x`
-          - vector of type `numeric`, `Date`, `POSIXct` or `POSIXlt`",
+          "`%s` is invalid, should be a vector:
+          - with type being a `numeric`, `Date`, `POSIXct` or `POSIXlt` of length equal to `nrow(x)`
+          - `character(1)` being a column name of `x` matching above criteria.",
           arg_name
         ),
         call. = FALSE
