@@ -330,13 +330,14 @@ runner.data.frame <- function( #nolint
   cl = NULL,
   ...
 ) {
-  # set arguments from attrs (set by run_by)
+  # Check if argument is either a colname of x or valid vector of values
   .check_unresolved_difftime(x, k)
   .check_unresolved_difftime(x, lag)
   .check_unresolved_index(x, idx)
   .check_unresolved_at(x, at)
 
-  k   <- .resolve_arg(x, k) # no deep copy
+  # if argument is a name of the column in x then column of x is taken
+  k   <- .resolve_arg(x, k)
   lag <- .resolve_arg(x, lag)
   idx <- .resolve_arg(x, idx)
   at  <- .resolve_arg(x, at)
@@ -444,11 +445,11 @@ runner.grouped_df <- function(
 runner.matrix <- function(
   x,
   f = function(x) x,
-  k = attr(x, "k"),
-  lag = if (!is.null(attr(x, "lag"))) attr(x, "lag") else integer(1),
-  idx = attr(x, "idx"),
-  at = attr(x, "at"),
-  na_pad = if (!is.null(attr(x, "na_pad"))) attr(x, "na_pad") else FALSE,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -517,11 +518,11 @@ runner.matrix <- function(
 runner.xts <- function(
   x,
   f = function(x) x,
-  k = attr(x, "k"),
-  lag = if (!is.null(attr(x, "lag"))) attr(x, "lag") else integer(1),
-  idx = attr(x, "idx"),
-  at = attr(x, "at"),
-  na_pad = if (!is.null(attr(x, "na_pad"))) attr(x, "na_pad") else FALSE,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
   simplify = TRUE,
   cl = NULL,
   ...

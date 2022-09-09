@@ -165,12 +165,6 @@ expected <- unlist(
   )
 )
 
-expect_equal(
-  grouped_dplyr$xx,
-  expected
-)
+expect_equal(grouped_dplyr$xx, expected)
 
-expect_equal(
-  grouped_dplyr2$xx,
-  expected
-)
+expect_equal(grouped_dplyr2$xx, expected)

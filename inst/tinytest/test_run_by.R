@@ -135,7 +135,7 @@ expect_identical(new_x, x)
 
 expect_error(
   run_by(1:10, idx = 1:10),
-  "`run_by` should be used only for `data.frame`."
+  "`run_by` should be used only with `data.frame`."
 )
 
 # run_by %>% runner -----

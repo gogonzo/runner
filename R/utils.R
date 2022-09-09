@@ -269,7 +269,6 @@ seq_at <- function(at, idx) { # nolint
   }
 }
 
-
 #' Access group data in mutate
 #'
 #' Access group data in `dplyr::mutate` after

@@ -36,7 +36,7 @@
 #' @export
 run_by <- function(x, idx, k, lag, na_pad, at) {
   if (!is.data.frame(x)) {
-    stop("`run_by` should be used only for `data.frame`. \n Use `runner` on x directly.")
+    stop("`run_by` should be used only with `data.frame`. \n Please use `runner` on `x` directly.")
   }
 
   if (!missing(k)) {

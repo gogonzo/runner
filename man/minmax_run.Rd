@@ -20,5 +20,5 @@ list.
 }
 \description{
 \code{min_run} calculates running minimum-maximum on given \code{x} numeric
- vector, specified \code{k} window size.
+vector, specified \code{k} window size.
 }
