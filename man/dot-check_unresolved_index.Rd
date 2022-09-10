@@ -21,7 +21,7 @@ resolved \code{idx}
 }
 \description{
 Resolves \code{at} argument passed to the \code{runner} -
-checks if the argument has a valid value. If irgument is a single character
+checks if the argument has a valid value. If argument is a single character
 matching column name in the \code{x} then is replaced with the value \code{x[[idx]]}
 }
 \keyword{internal}

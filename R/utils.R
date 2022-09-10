@@ -1,6 +1,6 @@
-#' Validate datetime character
+#' Validate date time character
 #'
-#' Checks if the character is a valid datetime string
+#' Checks if the character is a valid date time string
 #' @param (`character`) can be anything but suppose to be a character.
 #' @return `logical(1)` denoting if all elements of the character vectors are valid
 #' @keywords internal
@@ -25,14 +25,15 @@
 #'   as.POSIXct("2020-01-01 03:02:01"),
 #'   by = "month"
 #' )
-#' k_difftime <- runner:::k_by(k, idx, param = "k")
+#' k_difftime <- runner:::.k_by(k, idx, param = "k")
 #' idx - k_difftime
-k_by <- function(k, idx, param) {
+#' @keywords internal
+.k_by <- function(k, idx, param) {
   if (is.character(k)) {
     k <- if (param == "k") {
-      reformat_k(k, only_positive = TRUE)
+      .reformat_k(k, only_positive = TRUE)
     } else {
-      reformat_k(k, only_positive = FALSE)
+      .reformat_k(k, only_positive = FALSE)
     }
 
     from <- if (length(k) != 1) {
@@ -105,12 +106,13 @@ k_by <- function(k, idx, param) {
 #' @param only_positive for \code{k} is \code{TRUE},
 #'   for \code{lag} is \code{FALSE}
 #' @examples
-#' runner:::reformat_k("1 days")
-#' runner:::reformat_k("day")
-#' runner:::reformat_k("10 days")
-#' runner:::reformat_k("-10 days", only_positive = FALSE)
-#' runner:::reformat_k(c("-10 days", "2 months"), only_positive = FALSE)
-reformat_k <- function(k, only_positive = TRUE) {
+#' runner:::.reformat_k("1 days")
+#' runner:::.reformat_k("day")
+#' runner:::.reformat_k("10 days")
+#' runner:::.reformat_k("-10 days", only_positive = FALSE)
+#' runner:::.reformat_k(c("-10 days", "2 months"), only_positive = FALSE)
+#' @keywords internal
+.reformat_k <- function(k, only_positive = TRUE) {
   if (only_positive && any(grepl("^-", k))) {
     stop("k can't be negative")
   }
@@ -131,7 +133,8 @@ reformat_k <- function(k, only_positive = TRUE) {
 #' Creates sequence for at as time-unit-interval
 #' @param at object from runner
 #' @param idx object from runner
-seq_at <- function(at, idx) { # nolint
+#' @keywords internal
+.seq_at <- function(at, idx) { # nolint
   if (length(at) == 1 &&
       (
         (is.character(at) && .is_datetime_valid(at)) ||
@@ -161,7 +164,7 @@ seq_at <- function(at, idx) { # nolint
 #' Resolves at argument
 #'
 #' Resolves argument passed to the `runner` -
-#' checks if the argument has a valid value. If irgument is a single character
+#' checks if the argument has a valid value. If argument is a single character
 #' matching column name in the `x` then is replaced with the value `x[[arg]]`
 #' @param x (`data.frame`)
 #' @inheritParams runner
@@ -182,7 +185,7 @@ seq_at <- function(at, idx) { # nolint
 #' Resolves at argument
 #'
 #' Resolves `at` argument passed to the `runner` -
-#' checks if the argument has a valid value. If irgument is a single character
+#' checks if the argument has a valid value. If argument is a single character
 #' matching column name in the `x` then is replaced with the value `x[[at]]`
 #' @param x (`data.frame`)
 #' @inheritParams runner
@@ -214,10 +217,10 @@ seq_at <- function(at, idx) { # nolint
   }
 }
 
-#' Resolves difftime argument
+#' Resolves time difference argument
 #'
 #' Resolves `at` argument passed to the `runner` (`k` or `lag`)
-#' checks if the argument has a valid value. If irgument is a single character
+#' checks if the argument has a valid value. If argument is a single character
 #' matching column name in the `x` then is replaced with the value `x[[idx]]`
 #' @param x (`data.frame`)
 #' @inheritParams runner
@@ -250,7 +253,7 @@ seq_at <- function(at, idx) { # nolint
 #' Resolves index argument
 #'
 #' Resolves `at` argument passed to the `runner` -
-#' checks if the argument has a valid value. If irgument is a single character
+#' checks if the argument has a valid value. If argument is a single character
 #' matching column name in the `x` then is replaced with the value `x[[idx]]`
 #' @param x (`data.frame`)
 #' @inheritParams runner

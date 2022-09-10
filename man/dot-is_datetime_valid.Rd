@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{.is_datetime_valid}
 \alias{.is_datetime_valid}
-\title{Validate datetime character}
+\title{Validate date time character}
 \usage{
 .is_datetime_valid(x)
 }
@@ -13,6 +13,6 @@
 \code{logical(1)} denoting if all elements of the character vectors are valid
 }
 \description{
-Checks if the character is a valid datetime string
+Checks if the character is a valid date time string
 }
 \keyword{internal}

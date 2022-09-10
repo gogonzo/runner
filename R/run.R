@@ -241,9 +241,9 @@ runner.default <- function(  #nolint
   }
 
   # use POSIXt.seq
-  at  <- seq_at(at, idx)
-  k   <- k_by(k, if (length(at > 0)) at else idx, "k")
-  lag <- k_by(lag, if (length(at > 0)) at else idx, "lag")
+  at  <- .seq_at(at, idx)
+  k   <- .k_by(k, if (length(at > 0)) at else idx, "k")
+  lag <- .k_by(lag, if (length(at > 0)) at else idx, "lag")
 
   w <- window_run(x = x, k = k, lag = lag, idx = idx, at = at, na_pad = na_pad)
 
@@ -344,9 +344,9 @@ runner.data.frame <- function( #nolint
   }
 
   # use POSIXt.seq
-  at  <- seq_at(at, idx)
-  k   <- k_by(k, if (length(at) > 0) at else idx, "k")
-  lag <- k_by(lag, if (length(at) > 0) at else idx, "lag")
+  at  <- .seq_at(at, idx)
+  k   <- .k_by(k, if (length(at) > 0) at else idx, "k")
+  lag <- .k_by(lag, if (length(at) > 0) at else idx, "lag")
 
   w <- window_run(
     x = seq_len(nrow(x)),
@@ -456,9 +456,9 @@ runner.matrix <- function(
   }
 
   # use POSIXt.seq
-  at  <- seq_at(at, idx)
-  k   <- k_by(k,   if (length(at) > 0) at else idx, "k")
-  lag <- k_by(lag, if (length(at) > 0) at else idx, "lag")
+  at  <- .seq_at(at, idx)
+  k   <- .k_by(k,   if (length(at) > 0) at else idx, "k")
+  lag <- .k_by(lag, if (length(at) > 0) at else idx, "lag")
 
   w <- window_run(
     x = seq_len(nrow(x)),

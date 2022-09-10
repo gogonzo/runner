@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{.check_unresolved_difftime}
 \alias{.check_unresolved_difftime}
-\title{Resolves difftime argument}
+\title{Resolves time difference argument}
 \usage{
 .check_unresolved_difftime(x, k)
 }
@@ -21,7 +21,7 @@ resolved \code{idx}
 }
 \description{
 Resolves \code{at} argument passed to the \code{runner} (\code{k} or \code{lag})
-checks if the argument has a valid value. If irgument is a single character
+checks if the argument has a valid value. If argument is a single character
 matching column name in the \code{x} then is replaced with the value \code{x[[idx]]}
 }
 \keyword{internal}

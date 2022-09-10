@@ -874,7 +874,7 @@ expect_equal(
 )
 
 #at with difftime -------
-at_date <- runner:::seq_at(at = "1 months", idx = idx_date)
+at_date <- runner:::.seq_at(at = "1 months", idx = idx_date)
 expect_identical(
   at_date,
   seq(min(idx_date), max(idx_date), by = "1 months")
@@ -885,7 +885,7 @@ expect_equal(
   runner(1:100, at = at_date, idx = idx_date, f = function(x) max(x))
 )
 
-at_date <- runner:::seq_at(at = "-1 months", idx = idx_date)
+at_date <- runner:::.seq_at(at = "-1 months", idx = idx_date)
 expect_identical(
   at_date,
   seq(max(idx_date), min(idx_date), by = "-1 months")
