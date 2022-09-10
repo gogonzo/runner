@@ -100,13 +100,7 @@ expect_equal(attr(x, "k"), 1)
 x <- run_by(data, k = 1)
 expect_equal(attr(x, "k"), 1)
 
-
-expect_error(
-  run_by(data, k = k),
-  "object 'k' not found"
-)
 k <- 1
-
 new_x <- run_by(data, k = k)
 attr(x, "k") <- k
 expect_identical(new_x, x)

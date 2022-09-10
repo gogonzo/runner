@@ -17,23 +17,32 @@ find_idx <- function(x, i, k, lag = 0, na_pad = FALSE) {
     seq_along(x) %in% seq(i - lag - k + 1, i - lag)
   }
 }
+apply_fun <- function(x, i, k, lag = 0, na_pad = FALSE, fun, ...) {
+  n <- length(x)
+  values <- x[find_idx(x, i, k, lag, na_pad)]
+  if (length(values) > 0) {
+    fun(values, ...)
+  } else {
+    NA
+  }
+}
 
 #       |--------]-------> ------
 expect_identical(
   runner(x1, f = mean),
-  sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i)])))
+  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, fun = mean)))
 
 expect_identical(
   runner(x2, f = mean, na.rm = TRUE),
   sapply(
     seq_along(x2),
-    function(i) mean(x2[find_idx(x2, i = i)], na.rm = TRUE)
+    function(i) apply_fun(x2, i = i, fun = mean, na.rm = TRUE)
   )
 )
 
 expect_identical(
   runner(x1, f = mean, idx = idx),
-  sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i)])))
+  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, fun = mean)))
 
 
 expect_identical(
@@ -47,12 +56,11 @@ expect_identical(
 #   [...|----]---+-------> -------
 expect_equal(
   runner(x1, lag = 3, f = mean),
-  sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, lag = 3)])))
+  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, lag = 3, fun = mean)))
 
 expect_equal(
   runner(x1, lag = 3, f = mean, na_pad = TRUE),
-  sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, lag = 3)])))
-
+  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, lag = 3, fun = mean)))
 
 expect_equal(
   runner(x1, lag = 3, f = mean)[at],
@@ -65,13 +73,13 @@ expect_equal(
 #       |--------+---]---> -------
 expect_equal(
   runner(x1, lag = -3, f = mean),
-  sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, lag = -3)])))
+  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, lag = -3, fun = mean)))
 
 expect_equal(
   runner(x1, lag = -3, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, lag = -3, na_pad = TRUE)])
+    function(i) apply_fun(x1, i = i, lag = -3, fun = mean, na_pad = TRUE)
   )
 )
 
@@ -79,7 +87,7 @@ expect_equal(
   runner(x1, lag = lag, f = mean),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, lag = lag[i])])
+    function(i) apply_fun(x1, i = i, lag = lag[i], fun = mean)
   )
 )
 
@@ -87,10 +95,9 @@ expect_equal(
   runner(x1, lag = lag, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, lag = lag[i], na_pad = TRUE)])
+    function(i) apply_fun(x1, i = i, lag = lag[i], na_pad = TRUE, fun = mean)
   )
 )
-
 
 expect_equal(
   runner(x1, lag = -3, f = mean)[at],
@@ -111,18 +118,18 @@ expect_equal(
 #  [...]|--------+-------> -------
 expect_equal(
   runner(x1, lag = 100, f = mean),
-  sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, lag = 100)]))
+  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, lag = 100, fun = mean))
 )
 
 expect_equal(
   runner(x1, lag = -100, f = mean),
-  sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, lag = -100)])))
+  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, lag = -100, fun = mean)))
 
 expect_equal(
   runner(x1, lag = 100, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, lag = 100, na_pad = TRUE)])
+    function(i) apply_fun(x1, i = i, lag = 100, na_pad = TRUE, fun = mean)
   )
 )
 
@@ -130,10 +137,9 @@ expect_equal(
   runner(x1, lag = -100, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, lag = -100, na_pad = TRUE)])
+    function(i) apply_fun(x1, i = i, lag = -100, na_pad = TRUE, fun = mean)
   )
 )
-
 
 expect_equal(
   runner(x1, lag = 100, f = mean)[at],
@@ -154,13 +160,13 @@ expect_equal(
 #       |----[...]-------> -------
 expect_equal(
   runner(x1, k = 3, f = mean),
-  sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = 3)])))
+  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, k = 3, fun = mean)))
 
 expect_equal(
   runner(x1, k = 3, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = 3, na_pad = TRUE)])
+    function(i) apply_fun(x1, i = i, k = 3, na_pad = TRUE, fun = mean)
   )
 )
 
@@ -168,11 +174,9 @@ expect_equal(
   runner(x1, k = k, f = mean),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = k[i], lag = 0)])
+    function(i) apply_fun(x1, i = i, k = k[i], lag = 0, fun = mean)
     )
   )
-
-
 
 expect_equal(
   runner(x1, k = 3, f = mean)[at],
@@ -189,37 +193,35 @@ expect_equal(
 #       [...|--------+-------[...] -------
 expect_equal(
   runner(x1, k = 100, f = mean),
-  sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = 100)])))
+  sapply(seq_along(x1), function(i) apply_fun(fun = mean, x1, i = i, k = 100)))
 
 expect_equal(
   runner(x1, k = 100, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = 100, na_pad = TRUE)])
+    function(i) apply_fun(fun = mean, x1, i = i, k = 100, na_pad = TRUE)
   )
 )
 
 expect_equal(
   runner(x1, k = 101, f = mean),
-  sapply(seq_along(x1), function(i) mean(x1[find_idx(x1, i = i, k = 101)])))
+  sapply(seq_along(x1), function(i) apply_fun(fun = mean, x1, i = i, k = 101)))
 
 expect_equal(
   runner(x1, k = 101, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = 101, na_pad = TRUE)])
+    function(i) apply_fun(fun = mean, x1, i = i, k = 101, na_pad = TRUE)
   )
 )
-
-
 
 expect_equal(
   runner(x1, k = 100, f = mean)[at],
   runner(x1, k = 100, f = mean, at = at))
 
 expect_equal(
-  runner(x1, k = 100, f = mean, na_pad = TRUE)[at],
-  runner(x1, k = 100, f = mean, na_pad = TRUE, at = at))
+  as.numeric(runner(x1, k = 100, f = mean, na_pad = TRUE)[at]),
+  as.numeric(runner(x1, k = 100, f = mean, na_pad = TRUE, at = at)))
 
 expect_equal(
   runner(x1, k = 101, f = mean)[at],
@@ -234,7 +236,7 @@ expect_equal(
   runner(x1, k = 5, lag = 3, f = mean),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = 5, lag = 3)])
+    function(i) apply_fun(fun = mean, x1, i = i, k = 5, lag = 3)
     )
   )
 
@@ -242,10 +244,9 @@ expect_equal(
   runner(x1, k = 5, lag = 3, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = 5, lag = 3, na_pad = TRUE)])
+    function(i) apply_fun(fun = mean, x1, i = i, k = 5, lag = 3, na_pad = TRUE)
   )
 )
-
 
 expect_equal(
   runner(x1, k = 5, lag = 3, f = mean)[at],
@@ -260,7 +261,7 @@ expect_equal(
   runner(x1, k = 5, lag = -3, f = mean),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = 5, lag = -3)])
+    function(i) apply_fun(fun = mean, x1, i = i, k = 5, lag = -3)
     )
   )
 
@@ -268,7 +269,7 @@ expect_equal(
   runner(x1, k = 5, lag = -3, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = 5, lag = -3, na_pad = TRUE)])
+    function(i) apply_fun(fun = mean, x1, i = i, k = 5, lag = -3, na_pad = TRUE)
     )
   )
 
@@ -287,7 +288,7 @@ expect_equal(
   runner(x1, k = 5, lag = -7, f = mean),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = 5, lag = -7)])
+    function(i) apply_fun(fun = mean, x1, i = i, k = 5, lag = -7)
     )
 )
 
@@ -295,7 +296,7 @@ expect_equal(
   runner(x1, k = 5, lag = -7, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = 5, lag = -7, na_pad = TRUE)])
+    function(i) apply_fun(fun = mean, x1, i = i, k = 5, lag = -7, na_pad = TRUE)
     )
   )
 
@@ -313,7 +314,7 @@ expect_equal(
   runner(x1, k = 1, lag = -1, f = mean),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = 1, lag = -1)])
+    function(i) apply_fun(fun = mean, x1, i = i, k = 1, lag = -1)
     )
   )
 
@@ -321,7 +322,7 @@ expect_equal(
   runner(x1, k = 1, lag = -1, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = 1, lag = -1, na_pad = TRUE)])
+    function(i) apply_fun(fun = mean, x1, i = i, k = 1, lag = -1, na_pad = TRUE)
     )
   )
 
@@ -340,7 +341,7 @@ expect_equal(
   runner(x1, k = 1, lag = 1, f = mean),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = 1, lag = 1)])
+    function(i) apply_fun(fun = mean, x1, i = i, k = 1, lag = 1)
     )
   )
 
@@ -348,7 +349,7 @@ expect_equal(
   runner(x1, k = 1, lag = 1, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = 1, lag = 1, na_pad = TRUE)])
+    function(i) apply_fun(fun = mean, x1, i = i, k = 1, lag = 1, na_pad = TRUE)
     )
   )
 
@@ -366,7 +367,7 @@ expect_equal(
   runner(x1, k = k, lag = 1, f = mean),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = k[i], lag = 1)])
+    function(i) apply_fun(fun = mean, x1, i = i, k = k[i], lag = 1)
     )
   )
 
@@ -374,7 +375,7 @@ expect_equal(
   runner(x1, k = 3, lag = lag, f = mean),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = 3, lag = lag[i])])
+    function(i) apply_fun(fun = mean, x1, i = i, k = 3, lag = lag[i])
     )
   )
 
@@ -382,7 +383,7 @@ expect_equal(
   runner(x1, k = length(x1), lag = lag, f = mean),
   sapply(
     seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = length(x1), lag = lag[i])])
+    function(i) apply_fun(fun = mean, x1, i = i, k = length(x1), lag = lag[i])
     )
   )
 

@@ -244,21 +244,6 @@ expect_identical(
     function(i) x1[find_idx(x1, i = i, k = 100, na_pad = TRUE)])
 )
 
-expect_equal(
-  runner(x1, k = 101, f = mean),
-  sapply(
-    seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = 101)]))
-)
-
-expect_equal(
-  runner(x1, k = 101, f = mean, na_pad = TRUE),
-  sapply(
-    seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = 101, na_pad = TRUE)]))
-)
-
-
 
 expect_identical(
   window_run(x1, k = 1, at = at),
@@ -307,13 +292,6 @@ expect_equal(
   sapply(
     seq_along(x1),
     function(i) mean(x1[find_idx(x1, i = i, k = 101)]))[at]
-)
-
-expect_equal(
-  runner(x1, k = 101, at = at, f = mean, na_pad = TRUE),
-  sapply(
-    seq_along(x1),
-    function(i) mean(x1[find_idx(x1, i = i, k = 101, na_pad = TRUE)]))[at]
 )
 
 #       [...|----]---+-------> --------
