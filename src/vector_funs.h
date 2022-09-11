@@ -164,7 +164,7 @@ namespace aggr {
       double cur_sum = NA_REAL;
       if (na_rm) {
         for (int i = l; i <= u ; ++i) {
-          if (Rcpp::NumericVector::is_na(cur_sum) & !Rcpp::NumericVector::is_na(x(i))) {
+          if (Rcpp::NumericVector::is_na(cur_sum) && !Rcpp::NumericVector::is_na(x(i))) {
             cur_sum = x(i);
           } else if (!Rcpp::NumericVector::is_na(x(i))) {
             cur_sum += x(i);
@@ -175,7 +175,7 @@ namespace aggr {
           if (Rcpp::NumericVector::is_na(x(i))) {
             return NA_REAL;
           }
-          if (Rcpp::NumericVector::is_na(cur_sum) & !Rcpp::NumericVector::is_na(x(i))) {
+          if (Rcpp::NumericVector::is_na(cur_sum) && !Rcpp::NumericVector::is_na(x(i))) {
             cur_sum = x(i);
           } else if (!Rcpp::NumericVector::is_na(x(i))) {
             cur_sum += x(i);
@@ -190,7 +190,7 @@ namespace aggr {
 
       if (na_rm) {
         for (int i = l; i <= u ; ++i) {
-          if (Rcpp::NumericVector::is_na(cur_sum) & !Rcpp::NumericVector::is_na(x(i))) {
+          if (Rcpp::NumericVector::is_na(cur_sum) && !Rcpp::NumericVector::is_na(x(i))) {
             nonna += 1;
             cur_sum = x(i);
           } else if (!Rcpp::NumericVector::is_na(x(i))) {
@@ -203,7 +203,7 @@ namespace aggr {
           if (Rcpp::NumericVector::is_na(x(i))) {
             return NA_REAL;
           }
-          if (Rcpp::NumericVector::is_na(cur_sum) & !Rcpp::NumericVector::is_na(x(i))) {
+          if (Rcpp::NumericVector::is_na(cur_sum) && !Rcpp::NumericVector::is_na(x(i))) {
             nonna += 1;
             cur_sum = x(i);
           } else if (!Rcpp::NumericVector::is_na(x(i))) {
@@ -348,7 +348,7 @@ namespace aggr {
 
       if (na_rm) {
         for (int i = 0; i < n ; ++i) {
-          if (Rcpp::NumericVector::is_na(cur_sum) & !Rcpp::NumericVector::is_na(x(i))) {
+          if (Rcpp::NumericVector::is_na(cur_sum) && !Rcpp::NumericVector::is_na(x(i))) {
             cur_sum = x(i);
           } else if (!Rcpp::NumericVector::is_na(x(i))) {
             cur_sum += x(i);
@@ -361,7 +361,7 @@ namespace aggr {
             std::fill(res.begin() + i, res.end(), NA_REAL);
             return res;
           }
-          if (Rcpp::NumericVector::is_na(cur_sum) & !Rcpp::NumericVector::is_na(x(i))) {
+          if (Rcpp::NumericVector::is_na(cur_sum) && !Rcpp::NumericVector::is_na(x(i))) {
             cur_sum = x(i);
           } else if (!Rcpp::NumericVector::is_na(x(i))) {
             cur_sum += x(i);
@@ -379,7 +379,7 @@ namespace aggr {
 
       if (na_rm) {
         for (int i = 0; i < n ; ++i) {
-          if (Rcpp::NumericVector::is_na(cur_sum) & !Rcpp::NumericVector::is_na(x(i))) {
+          if (Rcpp::NumericVector::is_na(cur_sum) && !Rcpp::NumericVector::is_na(x(i))) {
             cur_sum = x(i);
             nonna += 1;
           } else if (!Rcpp::NumericVector::is_na(x(i))) {
@@ -394,7 +394,7 @@ namespace aggr {
             std::fill(res.begin() + i, res.end(), NA_REAL);
             return res;
           }
-          if (Rcpp::NumericVector::is_na(cur_sum) & !Rcpp::NumericVector::is_na(x(i))) {
+          if (Rcpp::NumericVector::is_na(cur_sum) && !Rcpp::NumericVector::is_na(x(i))) {
             cur_sum = x(i);
             nonna += 1;
           } else if (!Rcpp::NumericVector::is_na(x(i))) {
