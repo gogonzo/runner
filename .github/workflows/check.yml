@@ -86,7 +86,7 @@ jobs:
 
   win-builder-checks:
     needs: [check-r-verse-latest, check-r-verse-devel, check-r-verse-3-6]
-    if: "contains(github.event.head_commit.message, 'release')"
+    if: "contains(github.event.head_commit.message, 'deploy')"
     runs-on: ubuntu-18.04
     container: rocker/tidyverse:latest
     steps:
