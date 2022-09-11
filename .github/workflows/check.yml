@@ -131,21 +131,3 @@ jobs:
         with:
           github_token: ${{ secrets.GH_TOKEN }}
           publish_dir: docs
-
-      - name: Prepare release vars
-        run: |
-          echo "PKGNAME=$(sed -n 's/Package: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
-          echo "PKGVERS=$(sed -n 's/Version: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
-          echo "$(sed -n '2,/^$/p' NEWS.md)" > news.txt
-
-      - name: GH Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          tag_name: "v${{ env.PKGVERS }}"
-          release_name: "${{ env.PKGNAME }} ${{ env.PKGVERS }}"
-          body_path: news.txt
-          draft: false
-          prerelease: false
