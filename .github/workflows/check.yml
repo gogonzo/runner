@@ -1,3 +1,4 @@
+# commits can contain win, rhub or deploy text for specific actions
 name: Check
 on: push
 jobs:
@@ -55,8 +56,8 @@ jobs:
   r-hub-checks:
     needs: [check-r-verse-latest, check-r-verse-devel, check-r-verse-3-6]
     runs-on: ubuntu-18.04
-    if: "contains(github.event.head_commit.message, 'deploy')"
     container: rocker/tidyverse:latest
+    if: "contains(github.event.head_commit.message, 'rhub')"
     steps:
       - name: Checkout repository 🛎
         uses: actions/checkout@v2
@@ -86,7 +87,7 @@ jobs:
 
   win-builder-checks:
     needs: [check-r-verse-latest, check-r-verse-devel, check-r-verse-3-6]
-    if: "contains(github.event.head_commit.message, 'deploy')"
+    if: "contains(github.event.head_commit.message, 'win')"
     runs-on: ubuntu-18.04
     container: rocker/tidyverse:latest
     steps:
@@ -100,54 +101,3 @@ jobs:
           devtools::check_win_devel()
           devtools::check_win_oldrelease()
           devtools::check_win_release()
-
-  pkgdown:
-    runs-on: ubuntu-latest
-    # Only restrict concurrency for non-PR jobs
-    concurrency:
-      group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
-    env:
-      GITHUB_PAT: ${{ secrets.GH_TOKEN }}
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: r-lib/actions/setup-pandoc@v2
-
-      - uses: r-lib/actions/setup-r@v2
-        with:
-          use-public-rspm: true
-
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::pkgdown, local::.
-          needs: website
-
-      - name: Build site
-        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
-        shell: Rscript {0} 
-
-      - name: Deploy to GitHub pages 🚀
-        if: github.event_name != 'pull_request'
-        uses: JamesIves/github-pages-deploy-action@4.1.4
-        with:
-          clean: false
-          branch: gh-pages
-          folder: docs
-
-      - name: Prepare release vars
-        run: |
-          echo "PKGNAME=$(sed -n 's/Package: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
-          echo "PKGVERS=$(sed -n 's/Version: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
-          echo "$(sed -n '2,/^$/p' NEWS.md)" > news.txt
-
-      - name: GH Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        with:
-          tag_name: "v${{ env.PKGVERS }}"
-          release_name: "${{ env.PKGNAME }} ${{ env.PKGVERS }}"
-          body_path: news.txt
-          draft: false
-          prerelease: false
