@@ -12,28 +12,22 @@ reference:
     desc: "Using custom R function on running window"
     contents:
       - runner
+      - run_by
       - window_run
   - title: "Running aggregations"
     desc: "Aggregating functions applied on running windows"
     contents:
       - length_run
       - mean_run
+      - minmax_run
       - min_run
       - max_run
       - streak_run
       - sum_run
-      - minmax_run
   - title: "Utility functions"
     desc: "Functions applied in running window"
     contents:
      - fill_run
      - lag_run
      - which_run
-  - title: "Private functions"
-    desc: "Unexported functions used in the package"
-    contents:
-     - .k_by
-     - .reformat_k
-     - run_by
-     - .seq_at
-     - .this_group
+
