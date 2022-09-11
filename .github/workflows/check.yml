@@ -1,8 +1,5 @@
 name: Check
-on:
-  push:
-    branches-ignore:
-      - main
+on: push
 jobs:
   check-r-verse-latest:
     runs-on: ubuntu-18.04
