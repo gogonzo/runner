@@ -55,8 +55,8 @@ jobs:
   r-hub-checks:
     needs: [check-r-verse-latest, check-r-verse-devel, check-r-verse-3-6]
     runs-on: ubuntu-18.04
-    if: "contains(github.event.head_commit.message, 'rhub')"
     container: rocker/tidyverse:latest
+    if: "contains(github.event.head_commit.message, 'rhub')"
     steps:
       - name: Checkout repository 🛎
         uses: actions/checkout@v2
@@ -108,6 +108,7 @@ jobs:
       group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
       GITHUB_PAT: ${{ secrets.GH_TOKEN }}
+    if: "contains(github.event.head_commit.message, 'deploy')"
     steps:
       - uses: actions/checkout@v2
 
@@ -135,6 +136,7 @@ jobs:
   release:
     name: Create Release
     runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, 'deploy')"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -144,15 +146,13 @@ jobs:
           echo "PKGNAME=$(sed -n 's/Package: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
           echo "PKGVERS=$(sed -n 's/Version: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
           echo "$(sed -n '2,/^$/p' NEWS.md)" > news.txt
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+  
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: "contains(github.event.head_commit.message, 'deploy')"
         with:
           tag_name: "v${{ env.PKGVERS }}"
-          release_name: "${{ env.PKGNAME }} ${{ env.PKGVERS }}"
+          name: "${{ env.PKGNAME }} ${{ env.PKGVERS }}"
           body_path: news.txt
-          draft: false
-          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} # This token is provided by Actions, you do not need to create your own token
