@@ -28,7 +28,7 @@ SEXP lag_run(SEXP x,
   checks::check_lag(lag, n, "x");
 
 
-  if ((idx.size() == 0) & (lag.size() == 1)) {
+  if ((idx.size() == 0) && (lag.size() == 1)) {
     switch (TYPEOF(x)) {
     case INTSXP:  return lag::lag_run11(as<IntegerVector>(x),   lag(0));
     case REALSXP: return lag::lag_run11(as<NumericVector>(x),   lag(0));
@@ -39,7 +39,7 @@ SEXP lag_run(SEXP x,
       stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }
     }
-  } else if ((idx.size() == 0) & (lag.size() > 1)) {
+  } else if ((idx.size() == 0) && (lag.size() > 1)) {
     switch (TYPEOF(x)) {
     case INTSXP:  return lag::lag_run12(as<IntegerVector>(x),   lag);
     case REALSXP: return lag::lag_run12(as<NumericVector>(x),   lag);
@@ -50,7 +50,7 @@ SEXP lag_run(SEXP x,
       stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }
     }
-  } else if ((idx.size() == n) & (lag.size() == 1)) {
+  } else if ((idx.size() == n) && (lag.size() == 1)) {
     switch (TYPEOF(x)) {
     case INTSXP:  return lag::lag_run21(as<IntegerVector>(x),   lag(0), idx, nearest);
     case REALSXP: return lag::lag_run21(as<NumericVector>(x),   lag(0), idx, nearest);
@@ -61,7 +61,7 @@ SEXP lag_run(SEXP x,
       stop("Invalid data type - only integer, numeric, character, factor, date, logical, complex vectors are possible.");
     }
     }
-  } else if ((idx.size() == n) & (lag.size() > 1)) {
+  } else if ((idx.size() == n) && (lag.size() > 1)) {
     switch (TYPEOF(x)) {
       case INTSXP:  return lag::lag_run22(as<IntegerVector>(x),   lag, idx, nearest);
       case REALSXP: return lag::lag_run22(as<NumericVector>(x),   lag, idx, nearest);

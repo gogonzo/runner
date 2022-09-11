@@ -52,7 +52,7 @@ Incomplete window is when some parts of the window are out of range.}
 \value{
 list of vectors (windows). Length of list is the same as
 \code{length(x)} or \code{length(at)} if specified, and length of each
- window is defined by \code{k} (unless window is out of range).
+window is defined by \code{k} (unless window is out of range).
 }
 \description{
 Creates \code{list} of windows with given arguments settings.

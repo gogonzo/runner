@@ -31,7 +31,7 @@ varying increment and with duplicated values. If specified then \code{k} and
 }
 \description{
 Number of elements in k-long window calculated on \code{idx} vector.
-If \code{idx} is an `as.integer(date)` vector, then k=number of days in window -
+If \code{idx} is an \code{as.integer(date)} vector, then k=number of days in window -
 then the result is number of observations within k days window.
 }
 \examples{

@@ -55,45 +55,6 @@ jobs:
         run: |
           devtools::check(cran = TRUE, vignettes = TRUE)
 
-  check-docs:
-    runs-on: ubuntu-18.04
-    container: rocker/verse:4.0.0
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@master
-
-      - name: Install dependencies
-        shell: Rscript {0}
-        run: |
-          remotes::install_deps(dependencies = TRUE)
-
-      - name: Roxygenize 🔍
-        shell: Rscript {0}
-        run: |
-          roxygen2::roxygenize()
-
-      - name: Install package 🔧
-        run: R CMD INSTALL .
-
-      - name: Check spelling 📖
-        shell: Rscript {0}
-        run: |
-          if (!require("spelling")) install.packages("spelling", repos = "http://cran.rstudio.com")
-          out <- capture.output(spelling::spell_check_package())
-          if (!identical(out, "No spelling errors found.")) stop(paste(out, collapse = "\n"))
-
-      - name: Test coverage
-        shell: Rscript {0}
-        run: |
-          if (!require("covr")) install.packages("covr", repos = "http://cran.rstudio.com")
-          covr::codecov()
-
-      - name: Build docs 🖨️
-        shell: Rscript {0}
-        run: |
-          if (!require("pkgdown")) install.packages("pkgdown", repos = "http://cran.rstudio.com")
-          pkgdown::build_site()
-
   r-hub-checks:
     needs: [check-r-verse-latest, check-r-verse-devel, check-r-verse-3-6]
     runs-on: ubuntu-18.04
@@ -142,3 +103,52 @@ jobs:
           devtools::check_win_devel()
           devtools::check_win_oldrelease()
           devtools::check_win_release()
+
+  pkgdown:
+    runs-on: ubuntu-latest
+    # Only restrict concurrency for non-PR jobs
+    concurrency:
+      group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
+    env:
+      GITHUB_PAT: ${{ secrets.GH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::pkgdown, local::.
+          needs: website
+
+      - name: Build site
+        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
+        shell: Rscript {0} 
+
+      - name: Deploy Docs 🚀
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          publish_dir: docs
+
+      - name: Prepare release vars
+        run: |
+          echo "PKGNAME=$(sed -n 's/Package: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
+          echo "PKGVERS=$(sed -n 's/Version: *\([^ ]*\)/\1/p' DESCRIPTION)" >> $GITHUB_ENV
+          echo "$(sed -n '2,/^$/p' NEWS.md)" > news.txt
+
+      - name: GH Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: "v${{ env.PKGVERS }}"
+          release_name: "${{ env.PKGNAME }} ${{ env.PKGVERS }}"
+          body_path: news.txt
+          draft: false
+          prerelease: false

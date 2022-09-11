@@ -38,11 +38,11 @@ runner(
 \method{runner}{data.frame}(
   x,
   f = function(x) x,
-  k = integer(0),
-  lag = integer(1),
-  idx = integer(0),
-  at = integer(0),
-  na_pad = FALSE,
+  k = attr(x, "k"),
+  lag = if (!is.null(attr(x, "lag"))) attr(x, "lag") else integer(1),
+  idx = attr(x, "idx"),
+  at = attr(x, "at"),
+  na_pad = if (!is.null(attr(x, "na_pad"))) attr(x, "na_pad") else FALSE,
   simplify = TRUE,
   cl = NULL,
   ...
@@ -51,11 +51,11 @@ runner(
 \method{runner}{grouped_df}(
   x,
   f = function(x) x,
-  k = integer(0),
-  lag = integer(1),
-  idx = integer(0),
-  at = integer(0),
-  na_pad = FALSE,
+  k = attr(x, "k"),
+  lag = if (!is.null(attr(x, "lag"))) attr(x, "lag") else integer(1),
+  idx = attr(x, "idx"),
+  at = attr(x, "at"),
+  na_pad = if (!is.null(attr(x, "na_pad"))) attr(x, "na_pad") else FALSE,
   simplify = TRUE,
   cl = NULL,
   ...

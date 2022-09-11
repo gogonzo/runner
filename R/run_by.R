@@ -36,75 +36,26 @@
 #' @export
 run_by <- function(x, idx, k, lag, na_pad, at) {
   if (!is.data.frame(x)) {
-    stop("`run_by` should be used only for `data.frame`. \n
-         Use `runner` on x directly.")
+    stop("`run_by` should be used only with `data.frame`. \n Please use `runner` on `x` directly.")
   }
 
-  if (!missing(k)) x <- set_run_by_difftime(x, k)
-  if (!missing(lag)) x <- set_run_by_difftime(x, lag)
-  if (!missing(idx)) x <- set_run_by_index(x, idx)
-  if (!missing(at)) x <- set_run_by_index(x, at)
+  if (!missing(k)) {
+    .check_unresolved_difftime(x, k)
+    attr(x, "k") <- k
+  }
+  if (!missing(lag)) {
+    .check_unresolved_difftime(x, lag)
+    attr(x, "lag") <- lag
+  }
+  if (!missing(idx)) {
+    .check_unresolved_index(x, idx)
+    attr(x, "idx") <- idx
+  }
+  if (!missing(at)) {
+    .check_unresolved_at(x, at)
+    attr(x, "at") <- at
+  }
   if (!missing(na_pad)) attr(x, "na_pad") <- na_pad
 
-  return(x)
-}
-
-set_run_by_index <- function(x, arg) {
-  arg_name <- deparse(substitute(arg))
-  attr(x, arg_name) <- if (is.character(arg) &&
-                           length(arg) == 1 &&
-                           arg %in% names(x)) {
-    arg
-  } else if (is.numeric(arg) ||
-             inherits(arg, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
-    arg
-  } else {
-    stop(
-      sprintf(
-        "`%s` should be either:
-         - column name of `x`
-         - vector of type `numeric`, `Date`, `POSIXct` or `POSIXlt`",
-        arg_name
-      ),
-      call. = FALSE
-    )
-  }
-  return(x)
-}
-
-set_run_by_difftime <- function(x, arg) {
-  arg_name <- deparse(substitute(arg))
-
-  attr(x, arg_name) <- if (is.character(arg)) {
-    if (length(arg) == 1 && arg %in% names(x)) {
-      arg
-    } else if (all(is_datetime_valid(arg))) {
-      arg
-    } else {
-      stop(
-        sprintf(
-          "`%s` is invalid, should be either:
-           - column name of `x`
-           - `difftime` class or character describing diffitme (see at argument in `seq.POSIXt`) #nolint
-           - `numeric` or `integer` vector",
-          arg_name
-        ),
-        call. = FALSE
-      )
-    }
-  } else if (is.numeric(arg) || is(arg, "difftime")) {
-    arg
-  } else {
-    stop(
-      sprintf(
-        "`%s` is invalid, should be either:
-           - column name of `x`
-           - `difftime` class or character describing diffitme (see at argument in `seq.POSIXt`) #nolint
-           - `numeric` or `integer` `vector`",
-        arg_name
-      ),
-      call. = FALSE
-    )
-  }
   return(x)
 }
