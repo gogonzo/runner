@@ -86,37 +86,30 @@ jobs:
       - name: Check r-hub/fedora-clang-devel
         run: Rscript --vanilla inst/automation-checks/check-rhub.R "fedora-clang-devel"
 
-  build-and-deploy:
-    needs: r-hub-checks
+  pkgdown:
     runs-on: ubuntu-latest
-    container: rocker/verse:latest
+    # Only restrict concurrency for non-PR jobs
+    concurrency:
+      group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
+    env:
+      GITHUB_PAT: ${{ secrets.GH_TOKEN }}
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v2.3.1
+      - uses: actions/checkout@v2
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
         with:
-          persist-credentials: false
+          use-public-rspm: true
 
-      - name: Install package 🔧
-        run: R CMD INSTALL .
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::pkgdown, local::.
+          needs: website
 
-      - name: Check spelling 📖
-        shell: Rscript {0}
-        run: |
-          if (!require("spelling")) install.packages("spelling", repos = "http://cran.rstudio.com")
-          out <- capture.output(spelling::spell_check_package())
-          if (!identical(out, "No spelling errors found.")) stop(paste(out, collapse = "\n"))
-
-      - name: Test coverage
-        shell: Rscript {0}
-        run: |
-          if (!require("covr")) install.packages("covr", repos = "http://cran.rstudio.com")
-          covr::codecov()
-
-      - name: Build docs 🖨
-        shell: Rscript {0}
-        run: |
-          if (!require("pkgdown")) install.packages("pkgdown", repos = "http://cran.rstudio.com")
-          pkgdown::build_site()
+      - name: Build site
+        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
+        shell: Rscript {0} 
 
       - name: Deploy Docs 🚀
         uses: peaceiris/actions-gh-pages@v3
