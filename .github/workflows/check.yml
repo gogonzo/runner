@@ -55,7 +55,7 @@ jobs:
   r-hub-checks:
     needs: [check-r-verse-latest, check-r-verse-devel, check-r-verse-3-6]
     runs-on: ubuntu-18.04
-    if: "contains(github.event.head_commit.message, 'release')"
+    if: "contains(github.event.head_commit.message, 'deploy')"
     container: rocker/tidyverse:latest
     steps:
       - name: Checkout repository 🛎
