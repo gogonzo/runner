@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.2</span>
       </span>
     </div>
 
@@ -70,24 +70,25 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.4.2" id="runner-042">runner 0.4.2<a class="anchor" aria-label="anchor" href="#runner-042"></a></h2>
+<ul><li>fix <code>runner(..., na_pad)</code> for vectors to return <code>NA</code> when windows is incomplete. Other methods already consistent.</li>
+<li>fix the problems when calling <code><a href="../reference/runner.html">runner::runner</a></code> using <code>do.call</code>. (<a href="https://github.com/gogonzo/runner/issues/83" class="external-link">#83</a> and <a href="https://github.com/gogonzo/runner/issues/84" class="external-link">#84</a>)</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.4.1" id="runner-041">runner 0.4.1<small>2021-10-03</small><a class="anchor" aria-label="anchor" href="#runner-041"></a></h2>
-<ul><li>Fix <code>runner.grouped_df</code> (<code>dplyr</code> class) to not
-ignore <code>k</code> argument.</li>
+<ul><li>Fix <code>runner.grouped_df</code> (<code>dplyr</code> class) to not ignore <code>k</code> argument.</li>
 <li>removed defunct argument <code>type</code>.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.4.0" id="runner-040">runner 0.4.0<small>2021-04-22</small><a class="anchor" aria-label="anchor" href="#runner-040"></a></h2>
-<ul><li>defunct <code>type</code> argument in favor of
-<code>simplify</code>.</li>
+<ul><li>defunct <code>type</code> argument in favor of <code>simplify</code>.</li>
 <li>fixed error when using <code><a href="../reference/runner.html">runner::runner</a></code>.</li>
-<li>fixed <code>max_run</code> to return <code>NA</code> instead of
-<code>NaN</code> in incomplete or <code>NA</code> windows.</li>
+<li>fixed <code>max_run</code> to return <code>NA</code> instead of <code>NaN</code> in incomplete or <code>NA</code> windows.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.8" id="runner-038">runner 0.3.8<small>2021-02-22</small><a class="anchor" aria-label="anchor" href="#runner-038"></a></h2>
 <ul><li>implement parallel windows computation.</li>
-<li>added <code>simplify</code> identical to argument used in
-<code>sapply</code>.</li>
+<li>added <code>simplify</code> identical to argument used in <code>sapply</code>.</li>
 <li>add runner for <code>xts</code> objects.</li>
 <li>fix runner for matrix.</li>
 <li>
@@ -96,8 +97,7 @@ ignore <code>k</code> argument.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.7" id="runner-037">runner 0.3.7<small>2020-05-17</small><a class="anchor" aria-label="anchor" href="#runner-037"></a></h2>
-<ul><li>add <code>run_by</code> function to prespecify arguments for
-multiple runner calls</li>
+<ul><li>add <code>run_by</code> function to prespecify arguments for multiple runner calls</li>
 <li>
 <code>runner</code> supports <code>grouped_df</code>
 </li>
@@ -105,34 +105,26 @@ multiple runner calls</li>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.5" id="runner-035">runner 0.3.5<small>2020-04-11</small><a class="anchor" aria-label="anchor" href="#runner-035"></a></h2>
 <ul><li>
-<code>runner</code> function to be applied on
-<code>data.frame</code> or <code>matrix</code> - running windows
-constructed by subsetting rows.</li>
+<code>runner</code> function to be applied on <code>data.frame</code> or <code>matrix</code> - running windows constructed by subsetting rows.</li>
 <li>
 <code>runner</code> output can be a list.</li>
 <li>
-<code>at</code> <code>lag</code> and <code>k</code> allows to
-specify values as <code>POSIXt</code> sequence increment - same as
-<code>by</code> in <code>seq.POSIXt</code>.</li>
+<code>at</code> <code>lag</code> and <code>k</code> allows to specify values as <code>POSIXt</code> sequence increment - same as <code>by</code> in <code>seq.POSIXt</code>.</li>
 <li>enhanced function documentation by images.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.2" id="runner-032">runner 0.3.2<small>2020-03-13</small><a class="anchor" aria-label="anchor" href="#runner-032"></a></h2>
 <ul><li>
-<code>runner</code> function with default <code>type = "auto"</code>
-which automatically guess the type of returned object.</li>
+<code>runner</code> function with default <code>type = "auto"</code> which automatically guess the type of returned object.</li>
 <li>speed up <code>runner</code> function.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.1" id="runner-031">runner 0.3.1<small>2020-01-14</small><a class="anchor" aria-label="anchor" href="#runner-031"></a></h2>
-<ul><li>added <code>at</code> argument to all functions to return output
-with specific indexes.</li>
-</ul></div>
+<ul><li>added <code>at</code> argument to all functions to return output with specific indexes.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.0" id="runner-030">runner 0.3.0<small>2019-12-09</small><a class="anchor" aria-label="anchor" href="#runner-030"></a></h2>
 <ul><li>switch to c++11 compiler</li>
-<li>fix lag to get latest value within window instead of outside of the
-window</li>
+<li>fix lag to get latest value within window instead of outside of the window</li>
 <li>change argument in lag from k to lag</li>
 <li>runner able to return output specified by user in type argument</li>
 </ul></div>
@@ -144,27 +136,19 @@ window</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.2" id="runner-022">runner 0.2.2<a class="anchor" aria-label="anchor" href="#runner-022"></a></h2>
-<ul><li>modified <code>runner</code> to accept any types of input
-vectors</li>
+<ul><li>modified <code>runner</code> to accept any types of input vectors</li>
 <li>added <code>lag</code> to all runner functions</li>
-<li>added <code>minmax_run</code> which calculates running minimum and
-maximum to denote current highs and lows</li>
+<li>added <code>minmax_run</code> which calculates running minimum and maximum to denote current highs and lows</li>
 <li>improved vignettes</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.1" id="runner-021">runner 0.2.1<small>2019-10-01</small><a class="anchor" aria-label="anchor" href="#runner-021"></a></h2>
-<ul><li>added <code>runner</code> function which allows to apply custom
-function on running windows - so far returning only numeric</li>
-</ul></div>
+<ul><li>added <code>runner</code> function which allows to apply custom function on running windows - so far returning only numeric</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.0" id="runner-020">runner 0.2.0<small>2019-03-08</small><a class="anchor" aria-label="anchor" href="#runner-020"></a></h2>
-<ul><li>all functions have additional <code>idx</code> argument which allows
-to compute running windows within specified date/time/indexes
-range.</li>
-<li>added <code>lag_run</code> function - lagged value able to be
-computed on date/time lag.</li>
-<li>added <code>length_run</code> function to compute number of elements
-within specified date/time/indexes range.</li>
+<ul><li>all functions have additional <code>idx</code> argument which allows to compute running windows within specified date/time/indexes range.</li>
+<li>added <code>lag_run</code> function - lagged value able to be computed on date/time lag.</li>
+<li>added <code>length_run</code> function to compute number of elements within specified date/time/indexes range.</li>
 </ul></div>
   </div>
 
@@ -180,8 +164,7 @@ within specified date/time/indexes range.</li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

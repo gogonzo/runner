@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.2</span>
       </span>
     </div>
 
@@ -75,7 +75,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">lag_run</span><span class="op">(</span><span class="va">x</span>, lag <span class="op">=</span> <span class="fl">1L</span>, idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>, nearest <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lag_run</span><span class="op">(</span><span class="va">x</span>, lag <span class="op">=</span> <span class="fl">1L</span>, idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>, nearest <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -83,6 +83,8 @@
     <dl><dt>x</dt>
 <dd><p>(<code>vector</code>, <code>data.frame</code>, <code>matrix</code>, <code>xts</code>, <code>grouped_df</code>)<br>
 Input in runner custom function <code>f</code>.</p></dd>
+
+
 <dt>lag</dt>
 <dd><p>(<code>integer</code> vector or single value)<br>
 Denoting window lag. If <code>lag</code> is a single value then window lag is constant
@@ -91,6 +93,8 @@ size for each element. Negative value shifts window forward. One can also
 specify <code>lag</code> in the same way as <code>by</code> argument in
 <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">seq.POSIXt</a></code>. See 'Specifying time-intervals' in details
 section.</p></dd>
+
+
 <dt>idx</dt>
 <dd><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>)<br>
 Optional integer vector containing sorted (ascending) index of observation.
@@ -98,20 +102,23 @@ By default <code>idx</code> is index incremented by one. User can provide index 
 varying increment and with duplicated values. If specified then <code>k</code> and
 <code>lag</code> are depending on <code>idx</code>. Length of <code>idx</code> have to be equal of length
 <code>x</code>.</p></dd>
+
+
 <dt>nearest</dt>
 <dd><p><code>logical</code> single value. Applied when <code>idx</code> is used,
 then <code>nearest = FALSE</code> returns observation lagged exactly by the
 specified number of "periods". When <code>nearest = TRUE</code>
 function returns latest observation within lag window.</p></dd>
+
 </dl></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">lag_run</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, lag <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">lag_run</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, lag <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] NA NA NA  1  2  3  4  5  6  7</span>
-<span class="r-in"><span class="fu">lag_run</span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, lag <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>, idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">8</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">lag_run</span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, lag <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>, idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">8</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "e" "e" "e" "f" NA  "g" "i" NA  "j" NA </span>
-<span class="r-in"><span class="fu">lag_run</span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, lag <span class="op">=</span> <span class="fl">2</span>, idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">8</span>, <span class="fl">10</span><span class="op">)</span>, nearest <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">lag_run</span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, lag <span class="op">=</span> <span class="fl">2</span>, idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">8</span>, <span class="fl">10</span><span class="op">)</span>, nearest <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] NA  "a" "a" "a" "a" "d" "f" "g" "g" "i"</span>
 </code></pre></div>
     </div>
@@ -127,8 +134,7 @@ function returns latest observation within lag window.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

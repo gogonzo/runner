@@ -24,7 +24,7 @@ specified k window size."><!-- mathjax --><script src="https://cdnjs.cloudflare.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.2</span>
       </span>
     </div>
 
@@ -77,15 +77,15 @@ specified <code>k</code> window size.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">max_run</span><span class="op">(</span>
-  <span class="va">x</span>,
-  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,
-  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,
-  na_pad <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">max_run</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  na_pad <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -93,6 +93,8 @@ specified <code>k</code> window size.</p>
     <dl><dt>x</dt>
 <dd><p>(<code>vector</code>, <code>data.frame</code>, <code>matrix</code>, <code>xts</code>, <code>grouped_df</code>)<br>
 Input in runner custom function <code>f</code>.</p></dd>
+
+
 <dt>k</dt>
 <dd><p>(<code>integer</code> vector or single value)<br>
 Denoting size of the running window. If <code>k</code> is a single value then window
@@ -100,6 +102,8 @@ size is constant for all elements, otherwise if <code>length(k) == length(x)</co
 different window size for each element. One can also specify <code>k</code> in the same
 way as <code>by</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">seq.POSIXt</a></code>.
 See 'Specifying time-intervals' in details section.</p></dd>
+
+
 <dt>lag</dt>
 <dd><p>(<code>integer</code> vector or single value)<br>
 Denoting window lag. If <code>lag</code> is a single value then window lag is constant
@@ -108,6 +112,8 @@ size for each element. Negative value shifts window forward. One can also
 specify <code>lag</code> in the same way as <code>by</code> argument in
 <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">seq.POSIXt</a></code>. See 'Specifying time-intervals' in details
 section.</p></dd>
+
+
 <dt>idx</dt>
 <dd><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>)<br>
 Optional integer vector containing sorted (ascending) index of observation.
@@ -115,38 +121,47 @@ By default <code>idx</code> is index incremented by one. User can provide index 
 varying increment and with duplicated values. If specified then <code>k</code> and
 <code>lag</code> are depending on <code>idx</code>. Length of <code>idx</code> have to be equal of length
 <code>x</code>.</p></dd>
+
+
 <dt>at</dt>
 <dd><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>, <code>character</code> vector)<br>
 Vector of any size and any value defining output data points. Values of the
 vector defines the indexes which data is computed at. Can be also <code>POSIXt</code>
 sequence increment used in <code>at</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">seq.POSIXt</a></code>.
 See 'Specifying time-intervals' in details section.</p></dd>
+
+
 <dt>na_rm</dt>
 <dd><p><code>logical</code> single value (default <code>na_rm = TRUE</code>) -
 if <code>TRUE</code> sum is calculating excluding <code>NA</code>.</p></dd>
+
+
 <dt>na_pad</dt>
 <dd><p>(<code>logical</code> single value)<br>
 Whether incomplete window should return <code>NA</code> (if <code>na_pad = TRUE</code>)
 Incomplete window is when some parts of the window are out of range.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>max numeric vector of length equals length of <code>x</code>.</p>
+    
+
+<p>max numeric vector of length equals length of <code>x</code>.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fl">15</span>, replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fl">15</span>, replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">k</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">15</span>, replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">max_run</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span> <span class="co"># simple cumulative maximum</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fl">15</span>, replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fl">15</span>, replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">k</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">15</span>, replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">max_run</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span> <span class="co"># simple cumulative maximum</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3</span>
-<span class="r-in"><span class="fu">max_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># cumulative maximum with removing NA.</span></span>
+<span class="r-in"><span><span class="fu">max_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># cumulative maximum with removing NA.</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3</span>
-<span class="r-in"><span class="fu">max_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, k<span class="op">=</span><span class="fl">4</span><span class="op">)</span> <span class="co"># maximum in 4-element window</span></span>
+<span class="r-in"><span><span class="fu">max_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, k<span class="op">=</span><span class="fl">4</span><span class="op">)</span> <span class="co"># maximum in 4-element window</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 2 2 2 2 2 2 3 3 3 3 2 2 2 2 2</span>
-<span class="r-in"><span class="fu">max_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">FALSE</span>, k<span class="op">=</span><span class="va">k</span><span class="op">)</span> <span class="co"># maximum in varying k window size</span></span>
+<span class="r-in"><span><span class="fu">max_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">FALSE</span>, k<span class="op">=</span><span class="va">k</span><span class="op">)</span> <span class="co"># maximum in varying k window size</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  2  2 NA NA NA NA  3  3  2  1  2  2  2  2  2</span>
 </code></pre></div>
     </div>
@@ -162,8 +177,7 @@ Incomplete window is when some parts of the window are out of range.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

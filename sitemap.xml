@@ -25,13 +25,37 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
+    <loc>/reference/dot-check_unresolved_at.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dot-check_unresolved_difftime.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dot-check_unresolved_index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dot-is_datetime_valid.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dot-k_by.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dot-reformat_k.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dot-resolve_arg.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dot-seq_at.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dot-this_group.html</loc>
+  </url>
+  <url>
     <loc>/reference/fill_run.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/k_by.html</loc>
   </url>
   <url>
     <loc>/reference/lag_run.html</loc>
@@ -52,25 +76,16 @@
     <loc>/reference/minmax_run.html</loc>
   </url>
   <url>
-    <loc>/reference/reformat_k.html</loc>
-  </url>
-  <url>
     <loc>/reference/run_by.html</loc>
   </url>
   <url>
     <loc>/reference/runner.html</loc>
   </url>
   <url>
-    <loc>/reference/seq_at.html</loc>
-  </url>
-  <url>
     <loc>/reference/streak_run.html</loc>
   </url>
   <url>
     <loc>/reference/sum_run.html</loc>
-  </url>
-  <url>
-    <loc>/reference/this_group.html</loc>
   </url>
   <url>
     <loc>/reference/which_run.html</loc>

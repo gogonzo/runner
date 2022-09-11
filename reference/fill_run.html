@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.2</span>
       </span>
     </div>
 
@@ -75,7 +75,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">fill_run</span><span class="op">(</span><span class="va">x</span>, run_for_first <span class="op">=</span> <span class="cn">FALSE</span>, only_within <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fill_run</span><span class="op">(</span><span class="va">x</span>, run_for_first <span class="op">=</span> <span class="cn">FALSE</span>, only_within <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -83,28 +83,38 @@
     <dl><dt>x</dt>
 <dd><p>(<code>vector</code>, <code>data.frame</code>, <code>matrix</code>, <code>xts</code>, <code>grouped_df</code>)<br>
 Input in runner custom function <code>f</code>.</p></dd>
+
+
 <dt>run_for_first</dt>
 <dd><p>If first elements are filled with <code>NA</code>, <code>run_for_first = TRUE</code>
 allows to fill all initial <code>NA</code> with nearest non-NA value. By default
 <code>run_for_first = TRUE</code></p></dd>
+
+
 <dt>only_within</dt>
 <dd><p><code>NA</code> are replaced only if previous and next non-NA
 values are the same. By default <code>only_within = TRUE</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>vector - <code>x</code> containing all <code>x</code> elements with <code>NA</code>replaced with previous non-NA element.</p>
+    
+
+<p>vector - <code>x</code> containing all <code>x</code> elements with <code>NA</code></p>
+
+
+<p>replaced with previous non-NA element.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">fill_run</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, run_for_first <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">fill_run</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, run_for_first <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1  1  1  2  3  4  5  6  7  8  9 10 10 10</span>
-<span class="r-in"><span class="fu">fill_run</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, run_for_first <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">fill_run</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, run_for_first <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1  1  1  2  3  4  5  6  7  8  9 10 10 10</span>
-<span class="r-in"><span class="fu">fill_run</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, run_for_first <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">fill_run</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, run_for_first <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] NA NA  1  2  3  4  5  6  7  8  9 10 10 10</span>
-<span class="r-in"><span class="fu">fill_run</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">1</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, run_for_first <span class="op">=</span> <span class="cn">TRUE</span>, only_within <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">fill_run</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">1</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, run_for_first <span class="op">=</span> <span class="cn">TRUE</span>, only_within <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1  1  1  2  2  2  2  2 NA NA  1 NA NA</span>
 </code></pre></div>
     </div>
@@ -120,8 +130,7 @@ values are the same. By default <code>only_within = TRUE</code></p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

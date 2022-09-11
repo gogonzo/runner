@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.2</span>
       </span>
     </div>
 
@@ -75,73 +75,88 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">sum_run</span><span class="op">(</span>
-  <span class="va">x</span>,
-  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,
-  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,
-  na_pad <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sum_run</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  na_pad <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p><code>numeric</code> vector which running function is calculated on</p></dd>
+
+
 <dt>k</dt>
 <dd><p>(<code>integer</code>` vector or single value)<br>
 Denoting size of the running window. If <code>k</code> is a single value then window
 size is constant for all elements, otherwise if <code>length(k) == length(x)</code>
 different window size for each element.</p></dd>
+
+
 <dt>lag</dt>
 <dd><p>(<code>integer</code> vector or single value)<br>
 Denoting window lag. If <code>lag</code> is a single value then window lag is constant
 for all elements, otherwise if <code>length(lag) == length(x)</code> different window
 size for each element. Negative value shifts window forward.</p></dd>
+
+
 <dt>idx</dt>
 <dd><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>)<br>
 Optional integer vector containing sorted (ascending) index of observation.
 By default <code>idx</code> is index incremented by one. User can provide index with
 varying increment and with duplicated values. If specified then <code>k</code> and <code>lag</code>
 are depending on <code>idx</code>. Length of <code>idx</code> have to be equal of length <code>x</code>.</p></dd>
+
+
 <dt>at</dt>
 <dd><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>, <code>character</code> vector)<br>
 Vector of any size and any value defining output data points. Values of the
 vector defines the indexes which data is computed at.</p></dd>
+
+
 <dt>na_rm</dt>
 <dd><p><code>logical</code> single value (default <code>na_rm = TRUE</code>) -
 if <code>TRUE</code> sum is calculating excluding <code>NA</code>.</p></dd>
+
+
 <dt>na_pad</dt>
 <dd><p>(<code>logical</code> single value)<br>
 Whether incomplete window should return <code>NA</code> (if <code>na_pad = TRUE</code>)
 Incomplete window is when some parts of the window are out of range.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>sum <code>code</code> vector of length equals length of <code>x</code>.</p>
+    
+
+<p>sum <code>code</code> vector of length equals length of <code>x</code>.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">15</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">5</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">15</span><span class="op">)</span><span class="op">)</span>, <span class="fl">15</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, <span class="fl">15</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">sum_run</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">15</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">5</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">15</span><span class="op">)</span><span class="op">)</span>, <span class="fl">15</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, <span class="fl">15</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">sum_run</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.5910311 -0.5644367 -2.0809898 -3.4436432 -2.2651540 -3.1993053</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -1.8756997 -1.2507819 -1.2965049 -2.3006254 -3.1290587 -3.4774104</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [13] -5.0157038 -5.2712690 -6.4212141</span>
-<span class="r-in"><span class="fu">sum_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">sum_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.1876001 -0.1804413 -0.1962995  0.1562580 -0.6094426 -0.8324122</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -0.8324122 -1.0200123 -1.0076853 -1.0005265 -0.9881996 -0.9758726</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [13] -0.6233151 -0.6109881 -0.7985882</span>
-<span class="r-in"><span class="fu">sum_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">sum_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.1876001 -0.1804413 -0.1962995  0.1562580 -0.6094426 -0.8324122</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [7]         NA         NA         NA         NA         NA         NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [13]         NA         NA         NA</span>
-<span class="r-in"><span class="fu">sum_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, k <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">sum_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, k <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.1876001 -0.1804413 -0.1962995  0.1562580 -0.4218425 -0.6519709</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -0.6361127 -1.1762703 -0.3982427 -0.1681143 -0.1557874  0.0441397</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [13]  0.3843702  0.3895384  0.1896113</span>
@@ -159,8 +174,7 @@ Incomplete window is when some parts of the window are out of range.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

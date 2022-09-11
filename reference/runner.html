@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.2</span>
       </span>
     </div>
 
@@ -75,88 +75,88 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">runner</span><span class="op">(</span>
-  <span class="va">x</span>,
-  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span>,
-  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,
-  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  na_pad <span class="op">=</span> <span class="cn">FALSE</span>,
-  simplify <span class="op">=</span> <span class="cn">TRUE</span>,
-  cl <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for default</span>
-<span class="fu">runner</span><span class="op">(</span>
-  <span class="va">x</span>,
-  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span>,
-  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,
-  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  na_pad <span class="op">=</span> <span class="cn">FALSE</span>,
-  simplify <span class="op">=</span> <span class="cn">TRUE</span>,
-  cl <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for data.frame</span>
-<span class="fu">runner</span><span class="op">(</span>
-  <span class="va">x</span>,
-  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span>,
-  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,
-  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  na_pad <span class="op">=</span> <span class="cn">FALSE</span>,
-  simplify <span class="op">=</span> <span class="cn">TRUE</span>,
-  cl <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for grouped_df</span>
-<span class="fu">runner</span><span class="op">(</span>
-  <span class="va">x</span>,
-  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span>,
-  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,
-  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  na_pad <span class="op">=</span> <span class="cn">FALSE</span>,
-  simplify <span class="op">=</span> <span class="cn">TRUE</span>,
-  cl <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for matrix</span>
-<span class="fu">runner</span><span class="op">(</span>
-  <span class="va">x</span>,
-  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span>,
-  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,
-  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  na_pad <span class="op">=</span> <span class="cn">FALSE</span>,
-  simplify <span class="op">=</span> <span class="cn">TRUE</span>,
-  cl <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for xts</span>
-<span class="fu">runner</span><span class="op">(</span>
-  <span class="va">x</span>,
-  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span>,
-  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,
-  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  na_pad <span class="op">=</span> <span class="cn">FALSE</span>,
-  simplify <span class="op">=</span> <span class="cn">TRUE</span>,
-  cl <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">runner</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span>,</span>
+<span>  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  na_pad <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  simplify <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cl <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for default</span></span>
+<span><span class="fu">runner</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span>,</span>
+<span>  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  na_pad <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  simplify <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cl <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for data.frame</span></span>
+<span><span class="fu">runner</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span>,</span>
+<span>  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"k"</span><span class="op">)</span>,</span>
+<span>  lag <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"lag"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"lag"</span><span class="op">)</span> <span class="kw">else</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"idx"</span><span class="op">)</span>,</span>
+<span>  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"at"</span><span class="op">)</span>,</span>
+<span>  na_pad <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"na_pad"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"na_pad"</span><span class="op">)</span> <span class="kw">else</span> <span class="cn">FALSE</span>,</span>
+<span>  simplify <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cl <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for grouped_df</span></span>
+<span><span class="fu">runner</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span>,</span>
+<span>  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"k"</span><span class="op">)</span>,</span>
+<span>  lag <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"lag"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"lag"</span><span class="op">)</span> <span class="kw">else</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"idx"</span><span class="op">)</span>,</span>
+<span>  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"at"</span><span class="op">)</span>,</span>
+<span>  na_pad <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"na_pad"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"na_pad"</span><span class="op">)</span> <span class="kw">else</span> <span class="cn">FALSE</span>,</span>
+<span>  simplify <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cl <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for matrix</span></span>
+<span><span class="fu">runner</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span>,</span>
+<span>  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  na_pad <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  simplify <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cl <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for xts</span></span>
+<span><span class="fu">runner</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span>,</span>
+<span>  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  na_pad <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  simplify <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cl <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -164,12 +164,16 @@
     <dl><dt>x</dt>
 <dd><p>(<code>vector</code>, <code>data.frame</code>, <code>matrix</code>, <code>xts</code>, <code>grouped_df</code>)<br>
 Input in runner custom function <code>f</code>.</p></dd>
+
+
 <dt>f</dt>
 <dd><p>(<code>function</code>)<br>
 Applied on windows created from <code>x</code>. This function is meant to summarize
 windows and create single element for each window, but one can also specify
 function which return multiple elements (runner output will be a list).
 By default runner returns windows as is (<code>f = function(x)</code>).</p></dd>
+
+
 <dt>k</dt>
 <dd><p>(<code>integer</code> vector or single value)<br>
 Denoting size of the running window. If <code>k</code> is a single value then window
@@ -177,6 +181,8 @@ size is constant for all elements, otherwise if <code>length(k) == length(x)</co
 different window size for each element. One can also specify <code>k</code> in the same
 way as <code>by</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">seq.POSIXt</a></code>.
 See 'Specifying time-intervals' in details section.</p></dd>
+
+
 <dt>lag</dt>
 <dd><p>(<code>integer</code> vector or single value)<br>
 Denoting window lag. If <code>lag</code> is a single value then window lag is constant
@@ -185,6 +191,8 @@ size for each element. Negative value shifts window forward. One can also
 specify <code>lag</code> in the same way as <code>by</code> argument in
 <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">seq.POSIXt</a></code>. See 'Specifying time-intervals' in details
 section.</p></dd>
+
+
 <dt>idx</dt>
 <dd><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>)<br>
 Optional integer vector containing sorted (ascending) index of observation.
@@ -192,16 +200,22 @@ By default <code>idx</code> is index incremented by one. User can provide index 
 varying increment and with duplicated values. If specified then <code>k</code> and
 <code>lag</code> are depending on <code>idx</code>. Length of <code>idx</code> have to be equal of length
 <code>x</code>.</p></dd>
+
+
 <dt>at</dt>
 <dd><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>, <code>character</code> vector)<br>
 Vector of any size and any value defining output data points. Values of the
 vector defines the indexes which data is computed at. Can be also <code>POSIXt</code>
 sequence increment used in <code>at</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">seq.POSIXt</a></code>.
 See 'Specifying time-intervals' in details section.</p></dd>
+
+
 <dt>na_pad</dt>
 <dd><p>(<code>logical</code> single value)<br>
 Whether incomplete window should return <code>NA</code> (if <code>na_pad = TRUE</code>)
 Incomplete window is when some parts of the window are out of range.</p></dd>
+
+
 <dt>simplify</dt>
 <dd><p>(<code>logical</code> or <code>character</code> value)<br>
 should the result be simplified to a vector, matrix or higher dimensional
@@ -210,17 +224,24 @@ matrix if appropriate, whereas if <code>simplify = "array"</code> the result may
 array of "rank" <code>(=length(dim(.)))</code> one higher than the result of output
 from the function <code>f</code> for each window. Consequences of <code>simplify</code> in <code>runner</code>
 are identical to <code>sapply</code>.</p></dd>
+
+
 <dt>cl</dt>
 <dd><p>(<code>cluster</code>) <em>experimental</em><br>
 Create and pass the cluster to the <code>runner</code> function to run each window
 calculation in parallel. See <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></code> in details.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>(optional)<br>
 other arguments passed to the function <code>f</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>vector with aggregated values for each window. Length of output is
+    
+
+<p>vector with aggregated values for each window. Length of output is
 the same as <code>length(x)</code> or <code>length(at)</code> if specified. Type of the output
 depends on the output from a function <code>f</code>.</p>
     </div>
@@ -290,9 +311,9 @@ parallel environment using <code><a href="https://rdrr.io/r/parallel/clusterAppl
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># runner returns windows as is by default</span></span>
-<span class="r-in"><span class="fu">runner</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># runner returns windows as is by default</span></span></span>
+<span class="r-in"><span><span class="fu">runner</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -323,122 +344,151 @@ parallel environment using <code><a href="https://rdrr.io/r/parallel/clusterAppl
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1  2  3  4  5  6  7  8  9 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># mean on k = 3 elements windows</span></span>
-<span class="r-in"><span class="fu">runner</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, f <span class="op">=</span> <span class="va">mean</span>, k <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># mean on k = 3 elements windows</span></span></span>
+<span class="r-in"><span><span class="fu">runner</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, f <span class="op">=</span> <span class="va">mean</span>, k <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.0 1.5 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># mean on k = 3 elements windows with different specification</span></span>
-<span class="r-in"><span class="fu">runner</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, k <span class="op">=</span> <span class="fl">3</span>, f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># mean on k = 3 elements windows with different specification</span></span></span>
+<span class="r-in"><span><span class="fu">runner</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, k <span class="op">=</span> <span class="fl">3</span>, f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.0 1.5 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># concatenate two columns</span></span>
-<span class="r-in"><span class="fu">runner</span><span class="op">(</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">    a <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span>
-<span class="r-in">    b <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">a</span>, <span class="va">x</span><span class="op">$</span><span class="va">b</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">"+"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in x[[1]] == as.name("runner"):</span> comparison (1) is possible only for atomic and list types</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># concatenate two columns with additional argument</span></span>
-<span class="r-in"><span class="fu">runner</span><span class="op">(</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">    a <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span>
-<span class="r-in">    b <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">xxx</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">a</span>, <span class="va">xxx</span>, <span class="va">x</span><span class="op">$</span><span class="va">b</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">" + "</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">}</span>,</span>
-<span class="r-in">  xxx <span class="op">=</span> <span class="st">"..."</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in x[[1]] == as.name("runner"):</span> comparison (1) is possible only for atomic and list types</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># number of unique values in each window (varying window size)</span></span>
-<span class="r-in"><span class="fu">runner</span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span>
-<span class="r-in">       k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>,</span>
-<span class="r-in">       f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># concatenate two columns</span></span></span>
+<span class="r-in"><span><span class="fu">runner</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    a <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>    b <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">a</span>, <span class="va">x</span><span class="op">$</span><span class="va">b</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">"+"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "a1"                             "a1+b2"                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "a1+b2+c3"                       "a1+b2+c3+d4"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "a1+b2+c3+d4+e5"                 "a1+b2+c3+d4+e5+f6"             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "a1+b2+c3+d4+e5+f6+g7"           "a1+b2+c3+d4+e5+f6+g7+h8"       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "a1+b2+c3+d4+e5+f6+g7+h8+i9"     "a1+b2+c3+d4+e5+f6+g7+h8+i9+j10"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># concatenate two columns with additional argument</span></span></span>
+<span class="r-in"><span><span class="fu">runner</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    a <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>    b <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">xxx</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">a</span>, <span class="va">xxx</span>, <span class="va">x</span><span class="op">$</span><span class="va">b</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">" + "</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span>,</span></span>
+<span class="r-in"><span>  xxx <span class="op">=</span> <span class="st">"..."</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "a...1"                                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2] "a...1 + b...2"                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "a...1 + b...2 + c...3"                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4] "a...1 + b...2 + c...3 + d...4"                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "a...1 + b...2 + c...3 + d...4 + e...5"                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] "a...1 + b...2 + c...3 + d...4 + e...5 + f...6"                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "a...1 + b...2 + c...3 + d...4 + e...5 + f...6 + g...7"                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] "a...1 + b...2 + c...3 + d...4 + e...5 + f...6 + g...7 + h...8"                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "a...1 + b...2 + c...3 + d...4 + e...5 + f...6 + g...7 + h...8 + i...9"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10] "a...1 + b...2 + c...3 + d...4 + e...5 + f...6 + g...7 + h...8 + i...9 + j...10"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># number of unique values in each window (varying window size)</span></span></span>
+<span class="r-in"><span><span class="fu">runner</span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>       k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>       f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1 2 2 4 5 5 5 5 5 5</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># concatenate only on selected windows index</span></span>
-<span class="r-in"><span class="fu">runner</span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span>
-<span class="r-in">       f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span>, collapse <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span>,</span>
-<span class="r-in">       at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># concatenate only on selected windows index</span></span></span>
+<span class="r-in"><span><span class="fu">runner</span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>       f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span>, collapse <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>       at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a"               "a-b-c-d-e"       "a-b-c-d-e-f-g-h"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># 5 days mean</span></span>
-<span class="r-in"><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">13</span>, <span class="fl">17</span>, <span class="fl">18</span>, <span class="fl">18</span>, <span class="fl">21</span>, <span class="fl">27</span>, <span class="fl">31</span>, <span class="fl">37</span>, <span class="fl">42</span>, <span class="fl">44</span>, <span class="fl">47</span>, <span class="fl">48</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">runner</span><span class="fu">::</span><span class="fu">runner</span><span class="op">(</span></span>
-<span class="r-in">  x <span class="op">=</span> <span class="va">idx</span>,</span>
-<span class="r-in">  k <span class="op">=</span> <span class="st">"5 days"</span>,</span>
-<span class="r-in">  lag <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="va">idx</span>,</span>
-<span class="r-in">  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]      NaN  4.00000  5.00000      NaN 13.00000 15.00000 15.00000 17.66667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9]      NaN 27.00000      NaN 37.00000 42.00000 43.00000 45.50000</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># 5 days mean at 4-indices</span></span>
-<span class="r-in"><span class="fu">runner</span><span class="fu">::</span><span class="fu">runner</span><span class="op">(</span></span>
-<span class="r-in">  x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">15</span>,</span>
-<span class="r-in">  k <span class="op">=</span> <span class="fl">5</span>,</span>
-<span class="r-in">  lag <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">  idx <span class="op">=</span> <span class="va">idx</span>,</span>
-<span class="r-in">  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">27</span>, <span class="fl">48</span>, <span class="fl">31</span><span class="op">)</span>,</span>
-<span class="r-in">  f <span class="op">=</span> <span class="va">mean</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  4.5  NaN 13.5  9.0</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># runner with data.frame</span></span>
-<span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">  a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">13</span>,</span>
-<span class="r-in">  b <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">13</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">13</span>, sd <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span>
-<span class="r-in">  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fl">365</span>, by <span class="op">=</span> <span class="st">"1 month"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="fu">runner</span><span class="op">(</span></span>
-<span class="r-in">  x <span class="op">=</span> <span class="va">df</span>,</span>
-<span class="r-in">  idx <span class="op">=</span> <span class="st">"idx"</span>,</span>
-<span class="r-in">  at <span class="op">=</span> <span class="st">"6 months"</span>,</span>
-<span class="r-in">  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">a</span>, <span class="va">x</span><span class="op">$</span><span class="va">b</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">}</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in x[[1]] == as.name("runner"):</span> comparison (1) is possible only for atomic and list types</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># parallel computing</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">  a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
-<span class="r-in">  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
-<span class="r-in">  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">const</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
-<span class="r-in"><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/parallel/clusterApply.html" class="external-link">clusterExport</a></span><span class="op">(</span><span class="va">cl</span>, <span class="st">"const"</span>, envir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">runner</span><span class="op">(</span></span>
-<span class="r-in">  x <span class="op">=</span> <span class="va">data</span>,</span>
-<span class="r-in">  k <span class="op">=</span> <span class="fl">10</span>,</span>
-<span class="r-in">  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">a</span>, <span class="va">x</span><span class="op">$</span><span class="va">b</span><span class="op">)</span> <span class="op">+</span> <span class="va">const</span></span>
-<span class="r-in">  <span class="op">}</span>,</span>
-<span class="r-in">  idx <span class="op">=</span> <span class="st">"idx"</span>,</span>
-<span class="r-in">  cl <span class="op">=</span> <span class="va">cl</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in x[[1]] == as.name("runner"):</span> comparison (1) is possible only for atomic and list types</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># runner with matrix</span></span>
-<span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">20</span>, ncol <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">runner</span><span class="op">(</span></span>
-<span class="r-in">  x <span class="op">=</span> <span class="va">data</span>,</span>
-<span class="r-in">  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
-<span class="r-in">      error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="cn">NA</span></span>
-<span class="r-in">    <span class="op">)</span></span>
-<span class="r-in"> <span class="op">}</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># 5 days mean</span></span></span>
+<span class="r-in"><span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">13</span>, <span class="fl">17</span>, <span class="fl">18</span>, <span class="fl">18</span>, <span class="fl">21</span>, <span class="fl">27</span>, <span class="fl">31</span>, <span class="fl">37</span>, <span class="fl">42</span>, <span class="fl">44</span>, <span class="fl">47</span>, <span class="fl">48</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">runner</span><span class="fu">::</span><span class="fu">runner</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="va">idx</span>,</span></span>
+<span class="r-in"><span>  k <span class="op">=</span> <span class="st">"5 days"</span>,</span></span>
+<span class="r-in"><span>  lag <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="va">idx</span>,</span></span>
+<span class="r-in"><span>  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]       NA  4.00000  5.00000       NA 13.00000 15.00000 15.00000 17.66667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9]       NA 27.00000       NA 37.00000 42.00000 43.00000 45.50000</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># 5 days mean at 4-indices</span></span></span>
+<span class="r-in"><span><span class="fu">runner</span><span class="fu">::</span><span class="fu">runner</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">15</span>,</span></span>
+<span class="r-in"><span>  k <span class="op">=</span> <span class="fl">5</span>,</span></span>
+<span class="r-in"><span>  lag <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  idx <span class="op">=</span> <span class="va">idx</span>,</span></span>
+<span class="r-in"><span>  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">27</span>, <span class="fl">48</span>, <span class="fl">31</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  f <span class="op">=</span> <span class="va">mean</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  4.5   NA 13.5  9.0</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># runner with data.frame</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">13</span>,</span></span>
+<span class="r-in"><span>  b <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">13</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">13</span>, sd <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fl">365</span>, by <span class="op">=</span> <span class="st">"1 month"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">runner</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="va">df</span>,</span></span>
+<span class="r-in"><span>  idx <span class="op">=</span> <span class="st">"idx"</span>,</span></span>
+<span class="r-in"><span>  at <span class="op">=</span> <span class="st">"6 months"</span>,</span></span>
+<span class="r-in"><span>  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">a</span>, <span class="va">x</span><span class="op">$</span><span class="va">b</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]        NA 0.6571997 0.6924993</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># parallel computing</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">const</span> <span class="op">&lt;-</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/parallel/clusterApply.html" class="external-link">clusterExport</a></span><span class="op">(</span><span class="va">cl</span>, <span class="st">"const"</span>, envir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">runner</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="va">data</span>,</span></span>
+<span class="r-in"><span>  k <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">a</span>, <span class="va">x</span><span class="op">$</span><span class="va">b</span><span class="op">)</span> <span class="op">+</span> <span class="va">const</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span>,</span></span>
+<span class="r-in"><span>  idx <span class="op">=</span> <span class="st">"idx"</span>,</span></span>
+<span class="r-in"><span>  cl <span class="op">=</span> <span class="va">cl</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1]          NA  1.00000000  1.00000000  0.01724492 -0.09315799 -0.99327925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [7] -0.94382033 -0.99710574 -0.98260307  0.65135545  0.87152732 -1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [13] -1.00000000  1.00000000 -0.52128291 -0.05780382 -0.84347254 -1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [19]  1.00000000 -0.76077380 -0.74453011  1.00000000          NA -1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [25] -0.89962234 -0.89611962 -0.97093250 -1.00000000  1.00000000 -1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [31]  1.00000000 -0.86400080          NA  1.00000000 -0.86775397  1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [37] -1.00000000 -1.00000000 -1.00000000 -0.28843542 -0.67221825 -0.19909563</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [43]  0.11264234  1.00000000 -0.19349216  1.00000000  0.98477621  0.72549665</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [49]  1.00000000 -1.00000000 -1.00000000  0.48611613  0.13342545  0.16255224</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [55]  1.00000000  1.00000000  1.00000000 -0.37969457 -0.22479115 -1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [61] -1.00000000 -0.29664241  1.00000000  0.52830307 -0.98104983 -0.97031468</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [67] -0.66148555  1.00000000  0.99504392  0.11134679  0.07975996 -0.74401064</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [73] -0.62841711 -1.00000000  1.00000000  0.34947453 -1.00000000 -0.77948953</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [79] -0.99239039 -0.80128888  1.00000000 -1.00000000          NA  1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [85] -1.00000000  1.00000000 -1.00000000 -1.00000000  1.00000000 -0.42008586</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [91] -1.00000000 -1.00000000 -1.00000000  1.00000000  1.00000000 -0.35597197</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [97]  0.64812183  1.00000000  1.00000000  1.00000000</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># runner with matrix</span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">20</span>, ncol <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">runner</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="va">data</span>,</span></span>
+<span class="r-in"><span>  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="cn">NA</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       [,1] [,2]        [,3]        [,4]         [,5]        [,6]        [,7]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]   NA    1  1.00000000  1.00000000  1.000000000  1.00000000  1.00000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]   NA    1  0.56501046  0.48501747  0.352903529  0.26309989  0.35214652</span>
@@ -557,8 +607,7 @@ parallel environment using <code><a href="https://rdrr.io/r/parallel/clusterAppl
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

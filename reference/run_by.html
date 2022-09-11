@@ -25,7 +25,7 @@ to specify window parameters in further multiple runner calls."><!-- mathjax -->
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.2</span>
       </span>
     </div>
 
@@ -79,7 +79,7 @@ to specify window parameters in further multiple <a href="runner.html">runner</a
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">run_by</span><span class="op">(</span><span class="va">x</span>, <span class="va">idx</span>, <span class="va">k</span>, <span class="va">lag</span>, <span class="va">na_pad</span>, <span class="va">at</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">run_by</span><span class="op">(</span><span class="va">x</span>, <span class="va">idx</span>, <span class="va">k</span>, <span class="va">lag</span>, <span class="va">na_pad</span>, <span class="va">at</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -87,6 +87,8 @@ to specify window parameters in further multiple <a href="runner.html">runner</a
     <dl><dt>x</dt>
 <dd><p>(<code>vector</code>, <code>data.frame</code>, <code>matrix</code>, <code>xts</code>, <code>grouped_df</code>)<br>
 Input in runner custom function <code>f</code>.</p></dd>
+
+
 <dt>idx</dt>
 <dd><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>)<br>
 Optional integer vector containing sorted (ascending) index of observation.
@@ -94,6 +96,8 @@ By default <code>idx</code> is index incremented by one. User can provide index 
 varying increment and with duplicated values. If specified then <code>k</code> and
 <code>lag</code> are depending on <code>idx</code>. Length of <code>idx</code> have to be equal of length
 <code>x</code>.</p></dd>
+
+
 <dt>k</dt>
 <dd><p>(<code>integer</code> vector or single value)<br>
 Denoting size of the running window. If <code>k</code> is a single value then window
@@ -101,6 +105,8 @@ size is constant for all elements, otherwise if <code>length(k) == length(x)</co
 different window size for each element. One can also specify <code>k</code> in the same
 way as <code>by</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">seq.POSIXt</a></code>.
 See 'Specifying time-intervals' in details section.</p></dd>
+
+
 <dt>lag</dt>
 <dd><p>(<code>integer</code> vector or single value)<br>
 Denoting window lag. If <code>lag</code> is a single value then window lag is constant
@@ -109,51 +115,58 @@ size for each element. Negative value shifts window forward. One can also
 specify <code>lag</code> in the same way as <code>by</code> argument in
 <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">seq.POSIXt</a></code>. See 'Specifying time-intervals' in details
 section.</p></dd>
+
+
 <dt>na_pad</dt>
 <dd><p>(<code>logical</code> single value)<br>
 Whether incomplete window should return <code>NA</code> (if <code>na_pad = TRUE</code>)
 Incomplete window is when some parts of the window are out of range.</p></dd>
+
+
 <dt>at</dt>
 <dd><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>, <code>character</code> vector)<br>
 Vector of any size and any value defining output data points. Values of the
 vector defines the indexes which data is computed at. Can be also <code>POSIXt</code>
 sequence increment used in <code>at</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">seq.POSIXt</a></code>.
 See 'Specifying time-intervals' in details section.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>x object which <a href="runner.html">runner</a> can be executed on.</p>
+    
+
+<p>x object which <a href="runner.html">runner</a> can be executed on.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in"> index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">10</span>, <span class="fl">13</span>, <span class="fl">15</span><span class="op">)</span>,</span>
-<span class="r-in"> a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span>
-<span class="r-in"> b <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in"> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in"> <span class="fu">run_by</span><span class="op">(</span>idx <span class="op">=</span> <span class="st">"index"</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in"> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span class="r-in">   c <span class="op">=</span> <span class="fu"><a href="runner.html">runner</a></span><span class="op">(</span></span>
-<span class="r-in">     x <span class="op">=</span> <span class="va">.</span>,</span>
-<span class="r-in">     f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">       <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">b</span>, collapse <span class="op">=</span> <span class="st">"&gt;"</span><span class="op">)</span></span>
-<span class="r-in">     <span class="op">}</span></span>
-<span class="r-in">   <span class="op">)</span>,</span>
-<span class="r-in">   d <span class="op">=</span> <span class="fu"><a href="runner.html">runner</a></span><span class="op">(</span></span>
-<span class="r-in">     x <span class="op">=</span> <span class="va">.</span>,</span>
-<span class="r-in">     f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">       <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">b</span><span class="op">)</span></span>
-<span class="r-in">     <span class="op">}</span></span>
-<span class="r-in">   <span class="op">)</span></span>
-<span class="r-in"> <span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span> index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">10</span>, <span class="fl">13</span>, <span class="fl">15</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span> a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span> b <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">%&gt;%</span></span></span>
+<span class="r-in"><span> <span class="fu">group_by</span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="op">%&gt;%</span></span></span>
+<span class="r-in"><span> <span class="fu">run_by</span><span class="op">(</span>idx <span class="op">=</span> <span class="st">"index"</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">%&gt;%</span></span></span>
+<span class="r-in"><span> <span class="fu">mutate</span><span class="op">(</span></span></span>
+<span class="r-in"><span>   c <span class="op">=</span> <span class="fu"><a href="runner.html">runner</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>     x <span class="op">=</span> <span class="va">.</span>,</span></span>
+<span class="r-in"><span>     f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>       <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">b</span>, collapse <span class="op">=</span> <span class="st">"&gt;"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>     <span class="op">}</span></span></span>
+<span class="r-in"><span>   <span class="op">)</span>,</span></span>
+<span class="r-in"><span>   d <span class="op">=</span> <span class="fu"><a href="runner.html">runner</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>     x <span class="op">=</span> <span class="va">.</span>,</span></span>
+<span class="r-in"><span>     f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>       <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">b</span><span class="op">)</span></span></span>
+<span class="r-in"><span>     <span class="op">}</span></span></span>
+<span class="r-in"><span>   <span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -168,8 +181,7 @@ See 'Specifying time-intervals' in details section.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
