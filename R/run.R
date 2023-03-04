@@ -273,7 +273,7 @@ runner.default <- function(  #nolint
 #' df <- data.frame(
 #'   a = 1:13,
 #'   b = 1:13 + rnorm(13, sd = 5),
-#'   idx = seq(Sys.Date(), Sys.Date() + 365, by = "1 month")
+#'   idx = seq(as.Date("2022-02-22"), as.Date("2023-02-22"), by = "1 month")
 #' )
 #' runner(
 #'   x = df,
