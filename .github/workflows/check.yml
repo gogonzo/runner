@@ -7,7 +7,7 @@ jobs:
     container: rocker/verse:latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@master
+        uses: actions/checkout@main
 
       - name: Install dependencies
         shell: Rscript {0}
@@ -24,7 +24,7 @@ jobs:
     container: rocker/verse:devel
     steps:
       - name: Checkout repository
-        uses: actions/checkout@master
+        uses: actions/checkout@main
 
       - name: Install dependencies
         shell: Rscript {0}
