@@ -1,3 +1,7 @@
+# runner 0.4.3
+
+* fix an example after dependency change.
+
 # runner 0.4.2
 
 * fix `runner(..., na_pad)` for vectors to return `NA` when windows is incomplete.

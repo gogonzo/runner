@@ -112,8 +112,8 @@
     }
   ],
   "codeRepository": "https://github.com/gogonzo/runner",
-  "releaseNotes": "https://github.com/gogonzo/runner/blob/master/NEWS.md",
+  "releaseNotes": "https://github.com/gogonzo/runner/blob/main/NEWS.md",
   "readme": "https://github.com/gogonzo/runner/blob/main/README.md",
   "fileSize": "0KB",
-  "contIntegration": ["https://ci.appveyor.com/project/gogonzo/runner", "https://codecov.io/gh/gogonzo/runner/branch/master"]
+  "contIntegration": ["https://ci.appveyor.com/project/gogonzo/runner", "https://codecov.io/gh/gogonzo/runner/branch/main"]
 }
