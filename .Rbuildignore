@@ -30,3 +30,4 @@
 inst/automation-checks
 inst/tinytest/test_external*
 inst/WORDLIST
+^\.github$
