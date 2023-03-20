@@ -36,6 +36,40 @@ jobs:
         run: |
           devtools::check(cran = TRUE, vignettes = TRUE)
 
+  check-r-devel-san:
+    runs-on: ubuntu-18.04
+    container: rocker/r-devel-san
+    steps:
+      - name: Checkout repository 🛎
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        shell: Rscript {0}
+        run: |
+          remotes::install_deps(dependencies = TRUE)
+
+      - name: Check 🔍
+        shell: Rscript {0}
+        run: |
+          devtools::check(cran = TRUE, vignettes = TRUE)
+
+  check-r-devel-ubsan-clang:
+    runs-on: ubuntu-18.04
+    container: rocker/r-devel-ubsan-clang
+    steps:
+      - name: Checkout repository 🛎
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        shell: Rscript {0}
+        run: |
+          remotes::install_deps(dependencies = TRUE)
+
+      - name: Check 🔍
+        shell: Rscript {0}
+        run: |
+          devtools::check(cran = TRUE, vignettes = TRUE)
+
   check-r-verse-3-6:
     runs-on: ubuntu-18.04
     container: rocker/verse:3.6.3
@@ -52,3 +86,4 @@ jobs:
         shell: Rscript {0}
         run: |
           devtools::check(cran = TRUE, vignettes = TRUE)
+
