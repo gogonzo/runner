@@ -46,7 +46,7 @@ jobs:
       - name: Install dependencies
         shell: Rscript {0}
         run: |
-          install.packages(c("devtools", "rmarkdown"))
+          install.packages(c("Rcpp", "knitr", "rmarkdown", "tinytest"))
           remotes::install_deps(dependencies = TRUE)
 
       - name: Check 🔍
@@ -64,7 +64,7 @@ jobs:
       - name: Install dependencies
         shell: Rscript {0}
         run: |
-          install.packages(c("devtools", "rmarkdown"))
+          install.packages(c("Rcpp", "knitr", "rmarkdown", "tinytest"))
           remotes::install_deps(dependencies = TRUE)
 
       - name: Check 🔍
