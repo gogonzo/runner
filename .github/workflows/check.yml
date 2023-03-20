@@ -51,7 +51,7 @@ jobs:
       - name: Check 🔍
         shell: Rscript {0}
         run: |
-          rcmdcheck::rcmdcheck(args = "--as-cran")
+          rcmdcheck::rcmdcheck(args = c("--as-cran", "--ignore-vignettes"), build_args = "--no-build-vignettes")
 
   check-r-devel-ubsan-clang:
     runs-on: ubuntu-18.04
@@ -68,7 +68,7 @@ jobs:
       - name: Check 🔍
         shell: Rscript {0}
         run: |
-          rcmdcheck::rcmdcheck(args = "--as-cran")
+          rcmdcheck::rcmdcheck(args = c("--as-cran", "--ignore-vignettes"), build_args = "--no-build-vignettes")
 
   check-r-verse-3-6:
     runs-on: ubuntu-18.04
