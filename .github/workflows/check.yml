@@ -46,6 +46,7 @@ jobs:
       - name: Install dependencies
         shell: Rscript {0}
         run: |
+          install.packages(c("remotes", "devtools"))
           remotes::install_deps(dependencies = TRUE)
 
       - name: Check 🔍
@@ -59,6 +60,11 @@ jobs:
     steps:
       - name: Checkout repository 🛎
         uses: actions/checkout@v2
+
+      - name: Install remotes
+        shell: Rscript {0}
+        run: |
+          install.packages(c("remotes", "devtools"))
 
       - name: Install dependencies
         shell: Rscript {0}
