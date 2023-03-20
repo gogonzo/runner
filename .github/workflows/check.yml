@@ -54,7 +54,7 @@ jobs:
           rcmdcheck::rcmdcheck(
             args = c("--as-cran", "--ignore-vignettes"), 
             build_args = "--no-build-vignettes",
-            error_on = c("error", "warning")
+            error_on = "warning"
           )
 
   check-r-devel-ubsan-clang:
@@ -75,7 +75,7 @@ jobs:
           rcmdcheck::rcmdcheck(
             args = c("--as-cran", "--ignore-vignettes"), 
             build_args = "--no-build-vignettes",
-            error_on = c("error", "warning")
+            error_on = "warning"
           )
 
   check-r-verse-3-6:
