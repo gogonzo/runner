@@ -46,13 +46,12 @@ jobs:
       - name: Install dependencies
         shell: Rscript {0}
         run: |
-          install.packages(c("Rcpp", "knitr", "rmarkdown", "tinytest"))
-          remotes::install_deps(dependencies = TRUE)
+          install.packages(c("Rcpp", "knitr", "rmarkdown", "tinytest", "rcmdcheck"))
 
       - name: Check 🔍
         shell: Rscript {0}
         run: |
-          devtools::check(cran = TRUE, vignettes = TRUE)
+          rcmdcheck::rcmdcheck(args = "--as-cran")
 
   check-r-devel-ubsan-clang:
     runs-on: ubuntu-18.04
@@ -64,13 +63,12 @@ jobs:
       - name: Install dependencies
         shell: Rscript {0}
         run: |
-          install.packages(c("Rcpp", "knitr", "rmarkdown", "tinytest"))
-          remotes::install_deps(dependencies = TRUE)
+          install.packages(c("Rcpp", "knitr", "rmarkdown", "tinytest", "rcmdcheck"))
 
       - name: Check 🔍
         shell: Rscript {0}
         run: |
-          devtools::check(cran = TRUE, vignettes = TRUE)
+          rcmdcheck::rcmdcheck(args = "--as-cran")
 
   check-r-verse-3-6:
     runs-on: ubuntu-18.04
