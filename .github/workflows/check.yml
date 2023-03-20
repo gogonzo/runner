@@ -68,7 +68,11 @@ jobs:
       - name: Check 🔍
         shell: Rscript {0}
         run: |
-          rcmdcheck::rcmdcheck(args = c("--as-cran", "--ignore-vignettes"), build_args = "--no-build-vignettes")
+          rcmdcheck::rcmdcheck(
+            args = c("--as-cran", "--ignore-vignettes"), 
+            build_args = "--no-build-vignettes",
+            error_on = c("error", "warning")
+          )
 
   check-r-verse-3-6:
     runs-on: ubuntu-18.04
@@ -85,4 +89,8 @@ jobs:
       - name: Check 🔍
         shell: Rscript {0}
         run: |
-          devtools::check(cran = TRUE, vignettes = TRUE)
+          rcmdcheck::rcmdcheck(
+            args = c("--as-cran", "--ignore-vignettes"), 
+            build_args = "--no-build-vignettes",
+            error_on = c("error", "warning")
+          )
