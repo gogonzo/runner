@@ -36,6 +36,48 @@ jobs:
         run: |
           devtools::check(cran = TRUE, vignettes = TRUE)
 
+  check-r-devel-san:
+    runs-on: ubuntu-18.04
+    container: rocker/r-devel-san
+    steps:
+      - name: Checkout repository 🛎
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        shell: Rscript {0}
+        run: |
+          install.packages(c("Rcpp", "knitr", "rmarkdown", "tinytest", "rcmdcheck"))
+
+      - name: Check 🔍
+        shell: Rscript {0}
+        run: |
+          rcmdcheck::rcmdcheck(
+            args = c("--as-cran", "--ignore-vignettes"), 
+            build_args = "--no-build-vignettes",
+            error_on = "warning"
+          )
+
+  check-r-devel-ubsan-clang:
+    runs-on: ubuntu-18.04
+    container: rocker/r-devel-ubsan-clang
+    steps:
+      - name: Checkout repository 🛎
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        shell: Rscript {0}
+        run: |
+          install.packages(c("Rcpp", "knitr", "rmarkdown", "tinytest", "rcmdcheck"))
+
+      - name: Check 🔍
+        shell: Rscript {0}
+        run: |
+          rcmdcheck::rcmdcheck(
+            args = c("--as-cran", "--ignore-vignettes"), 
+            build_args = "--no-build-vignettes",
+            error_on = "warning"
+          )
+
   check-r-verse-3-6:
     runs-on: ubuntu-18.04
     container: rocker/verse:3.6.3
