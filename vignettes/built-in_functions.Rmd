@@ -37,9 +37,10 @@ x <- c(1, -5, 1, -3, NA, NA, NA, 1, -1, NA, -2, 3)
 
 data.frame(
   x,
-  default = min_run(x, na_rm = TRUE), 
+  default = min_run(x, na_rm = TRUE),
   k_5     = min_run(x, k = 5, na_rm = TRUE),
-  narm_f  = min_run(x, na_rm = FALSE))
+  narm_f  = min_run(x, na_rm = FALSE)
+)
 ```
 
 In above example constant `k = 5` has been used which means that for each element, 
@@ -54,8 +55,10 @@ Illustration below shows two sums calculated in 5-days window span. In both case
 
 ```{r idx_run_example, echo=TRUE}
 x <- c(-0.5910, 0.0266, -1.5166, -1.3627, 1.1785, -0.9342, 1.3236, 0.6249)
-idx <- as.Date(c("1970-01-03", "1970-01-06", "1970-01-09", "1970-01-12", 
-                 "1970-01-13", "1970-01-16", "1970-01-17", "1970-01-19"))
+idx <- as.Date(c(
+  "1970-01-03", "1970-01-06", "1970-01-09", "1970-01-12",
+  "1970-01-13", "1970-01-16", "1970-01-17", "1970-01-19"
+))
 
 sum_run(x, k = 5, idx = idx)
 ```
@@ -65,8 +68,10 @@ Specifying `lag` argument shift of the window by number of elements or time peri
 
 ```{r lag_run_example, echo=TRUE}
 x <- c(-0.5910, 0.0266, -1.5166, -1.3627, 1.1785, -0.9342, 1.3236, 0.6249)
-idx <- as.Date(c("1970-01-03", "1970-01-06", "1970-01-09", "1970-01-12", 
-                 "1970-01-13", "1970-01-16", "1970-01-17", "1970-01-19"))
+idx <- as.Date(c(
+  "1970-01-03", "1970-01-06", "1970-01-09", "1970-01-12",
+  "1970-01-13", "1970-01-16", "1970-01-17", "1970-01-19"
+))
 
 sum_run(x, k = 5, lag = 2, idx = idx)
 ```
@@ -86,10 +91,11 @@ Visualization also supported with corresponding R code.
 ```{r}
 x <- c("A", "B", "A", "A", "B", "B", "B", NA, "B", "B", "A", "B")
 data.frame(
-  x, 
+  x,
   s0 = streak_run(x),
   s1 = streak_run(x, k = 4, na_rm = FALSE),
-  s2 = streak_run(x, k = 4))
+  s2 = streak_run(x, k = 4)
+)
 ```
 
 Streak is often used in sports to count number of wins or loses of the team/player.
@@ -99,14 +105,17 @@ number of elements or time periods (if `idx` is specified).
 
 ```{r}
 x <- c("W", "W", "L", "L", "L", "W", "L", "L")
-idx <- as.Date(c("2019-01-03", "2019-01-06", "2019-01-09", "2019-01-12", 
-                 "2019-01-13", "2019-01-16", "2019-01-17", "2019-01-19"))
+idx <- as.Date(c(
+  "2019-01-03", "2019-01-06", "2019-01-09", "2019-01-12",
+  "2019-01-13", "2019-01-16", "2019-01-17", "2019-01-19"
+))
 
 data.frame(
   idx,
   x,
   streak_5d     = streak_run(x, k = 5, idx = idx),
-  streak_5d_lag = streak_run(x, k = 5, lag = 1, idx = idx))
+  streak_5d_lag = streak_run(x, k = 5, lag = 1, idx = idx)
+)
 ```
 
 ## Utility functions
@@ -120,8 +129,10 @@ time periods (if `idx` is specified).
 
 ```{r}
 x <- c(-0.5910, 0.0266, -1.5166, -1.3627, 1.1785, -0.9342, 1.3236, 0.6249)
-idx <- as.Date(c("1970-01-03", "1970-01-06", "1970-01-09", "1970-01-12", 
-                 "1970-01-13", "1970-01-16", "1970-01-17", "1970-01-19"))
+idx <- as.Date(c(
+  "1970-01-03", "1970-01-06", "1970-01-09", "1970-01-12",
+  "1970-01-13", "1970-01-16", "1970-01-17", "1970-01-19"
+))
 
 lag_run(x, lag = 3, idx = idx)
 ```
@@ -143,10 +154,11 @@ windows provided in this functionality.
 
 ```{r}
 x <- c(NA, NA, "b", "b", "a", NA, NA, "a", "b", NA, "a", "b")
-data.frame(x, 
-           f1 = fill_run(x), 
-           f2 = fill_run(x,run_for_first = TRUE), 
-           f3 = fill_run(x, only_within = TRUE))
+data.frame(x,
+  f1 = fill_run(x),
+  f2 = fill_run(x, run_for_first = TRUE),
+  f3 = fill_run(x, only_within = TRUE)
+)
 ```
 
 ### Running which  
@@ -165,11 +177,11 @@ element of unknown value - could be `TRUE` or `FALSE`).
 ```{r}
 x <- c(T, T, T, F, NA, T, F, NA, T, F, T, F)
 data.frame(
-  x, 
+  x,
   s0 = which_run(x, which = "first"),
   s1 = which_run(x, na_rm = FALSE, k = 5, which = "first"),
-  s2 = which_run(x, k = 5, which = "last"))
-
+  s2 = which_run(x, k = 5, which = "last")
+)
 ```
 
 
