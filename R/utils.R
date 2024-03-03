@@ -1,7 +1,7 @@
 #' Validate date time character
 #'
 #' Checks if the character is a valid date time string
-#' @param (`character`) can be anything but suppose to be a character.
+#' @param x (`character`) can be anything but suppose to be a character.
 #' @return `logical(1)` denoting if all elements of the character vectors are valid
 #' @keywords internal
 .is_datetime_valid <- function(x) {
@@ -19,7 +19,7 @@
 #' @inheritParams runner
 #' @param param name of the parameter to be printed in error message
 #' @examples
-#' k <-  "1 month"
+#' k <- "1 month"
 #' idx <- seq(
 #'   as.POSIXct("2019-01-01 03:02:01"),
 #'   as.POSIXct("2020-01-01 03:02:01"),
@@ -71,7 +71,6 @@
     }
 
     return(as.integer(idx) - from)
-
   } else if (is(k, "difftime")) {
     k <- if (param == "k") {
       if (any(k < 0)) {
@@ -136,12 +135,11 @@
 #' @keywords internal
 .seq_at <- function(at, idx) { # nolint
   if (length(at) == 1 &&
-      (
-        (is.character(at) && .is_datetime_valid(at)) ||
+    (
+      (is.character(at) && .is_datetime_valid(at)) ||
         is(at, "difftime")
-      )
-    ) {
-
+    )
+  ) {
     if (length(idx) == 0) {
       stop(
         sprintf("`idx` can't be empty while specifying `at` as time interval")
@@ -151,7 +149,7 @@
 
     if (inherits(idx, c("Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
       at <- if ((is.character(at) && grepl("^-", at)) ||
-                (is(at, "difftime") && at < 0)) {
+        (is(at, "difftime") && at < 0)) {
         seq(max(idx), min(idx), by = at)
       } else {
         seq(min(idx), max(idx), by = at)
@@ -191,7 +189,7 @@
 #' @inheritParams runner
 #' @return resolved `at`
 #' @keywords internal
-.check_unresolved_at <- function(x, at) { #nolint
+.check_unresolved_at <- function(x, at) { # nolint
   arg_name <- deparse(substitute(at))
 
   if (length(at) > 0) {
@@ -203,7 +201,7 @@
     } else if (inherits(at, c("numeric", "integer", "Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
       NULL
     } else {
-     stop(
+      stop(
         sprintf(
           "`%s` is invalid, should be either:
           - `numeric`, `Date`, `POSIXct` or `POSIXlt` vector of any length.
@@ -226,7 +224,7 @@
 #' @inheritParams runner
 #' @return resolved `idx`
 #' @keywords internal
-.check_unresolved_difftime <- function(x, k) { #nolint
+.check_unresolved_difftime <- function(x, k) { # nolint
   arg_name <- deparse(substitute(k))
   if (length(k) > 0) {
     if (length(k) == 1 && is.character(k) && k %in% names(x)) {
@@ -259,7 +257,7 @@
 #' @inheritParams runner
 #' @return resolved `idx`
 #' @keywords internal
-.check_unresolved_index <- function(x, idx) { #nolint
+.check_unresolved_index <- function(x, idx) { # nolint
   arg_name <- deparse(substitute(idx))
 
   if (length(idx) > 0) {
@@ -267,7 +265,7 @@
       idx <- x[[idx]]
     }
     if (length(idx) == nrow(x) &&
-        inherits(idx, c("numeric", "integer", "Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
+      inherits(idx, c("numeric", "integer", "Date", "POSIXct", "POSIXxt", "POSIXlt"))) {
       NULL
     } else {
       stop(
