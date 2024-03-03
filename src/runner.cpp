@@ -776,34 +776,34 @@ runner_vec(Rcpp::Vector<ITYPE> const &x,
 //' Running sum in specified window of numeric vector.
 //' @inheritParams runner
 //'
-//' @param x \code{numeric} vector which running function is calculated on
+//' @param x `numeric` vector which running function is calculated on
 //'
-//' @param k (\code{integer}` vector or single value)\cr
-//'  Denoting size of the running window. If \code{k} is a single value then window
-//'  size is constant for all elements, otherwise if \code{length(k) == length(x)}
+//' @param k (`integer`` vector or single value)\cr
+//'  Denoting size of the running window. If `k` is a single value then window
+//'  size is constant for all elements, otherwise if `length(k) == length(x)`
 //'  different window size for each element.
 //'
-//' @param lag (\code{integer} vector or single value)\cr
-//'  Denoting window lag. If \code{lag} is a single value then window lag is constant
-//'  for all elements, otherwise if \code{length(lag) == length(x)} different window
+//' @param lag (`integer` vector or single value)\cr
+//'  Denoting window lag. If `lag` is a single value then window lag is constant
+//'  for all elements, otherwise if `length(lag) == length(x)` different window
 //'  size for each element. Negative value shifts window forward.
 //'
-//' @param idx (\code{integer}, \code{Date}, \code{POSIXt})\cr
+//' @param idx (`integer`, `Date`, `POSIXt`)\cr
 //'  Optional integer vector containing sorted (ascending) index of observation.
-//'  By default \code{idx} is index incremented by one. User can provide index with
-//'  varying increment and with duplicated values. If specified then \code{k} and \code{lag}
-//'  are depending on \code{idx}. Length of \code{idx} have to be equal of length \code{x}.
+//'  By default `idx` is index incremented by one. User can provide index with
+//'  varying increment and with duplicated values. If specified then `k` and `lag`
+//'  are depending on `idx`. Length of `idx` have to be equal of length `x`.
 //'
-//' @param at (\code{integer}, \code{Date}, \code{POSIXt}, \code{character} vector)\cr
+//' @param at (`integer`, `Date`, `POSIXt`, `character` vector)\cr
 //'  Vector of any size and any value defining output data points. Values of the
 //'  vector defines the indexes which data is computed at.
 //'
-//' @param na_rm \code{logical} single value (default \code{na_rm = TRUE}) -
-//' if \code{TRUE} sum is calculating excluding \code{NA}.
+//' @param na_rm `logical` single value (default `na_rm = TRUE`) -
+//' if `TRUE` sum is calculating excluding `NA`.
 //'
 //' @inheritParams runner
 //'
-//' @return sum \code{code} vector of length equals length of \code{x}.
+//' @return sum `code` vector of length equals length of `x`.
 //' @examples
 //' set.seed(11)
 //' x1 <- rnorm(15)
@@ -844,7 +844,7 @@ Rcpp::NumericVector sum_run(
 //' Running mean in specified window of numeric vector.
 //' @inheritParams sum_run
 //' @inheritParams runner
-//' @return mean (`numeric`) vector of length equals length of \code{x}.
+//' @return mean (`numeric`) vector of length equals length of `x`.
 //' @examples
 //' set.seed(11)
 //' x1 <- rnorm(15)
@@ -883,11 +883,11 @@ NumericVector mean_run(
 //' Running maximum
 //'
 //'
-//' \code{min_run} calculates running max on given \code{x} numeric vector,
-//' specified \code{k} window size.
+//' `min_run` calculates running max on given `x` numeric vector,
+//' specified `k` window size.
 //' @inheritParams runner
 //' @inheritParams sum_run
-//' @return max (`numeric`) vector of length equals length of \code{x}.
+//' @return max (`numeric`) vector of length equals length of `x`.
 //' @examples
 //' set.seed(11)
 //' x1 <- sample( c(1,2,3), 15, replace=TRUE)
@@ -926,10 +926,10 @@ NumericVector max_run(
 //' Running minimum
 //'
 //'
-//' \code{min_run} calculates running min on given \code{x} numeric vector, specified \code{k} window size.
+//' `min_run` calculates running min on given `x` numeric vector, specified `k` window size.
 //' @inheritParams runner
 //' @inheritParams sum_run
-//' @return min (`numeric`) vector of length equals length of \code{x}.
+//' @return min (`numeric`) vector of length equals length of `x`.
 //' @examples
 //' set.seed(11)
 //' x1 <- sample(c(1, 2, 3), 15, replace = TRUE)
@@ -971,7 +971,7 @@ NumericVector min_run(
 //' @param x {any type} vector which running function is calculated on
 //' @inheritParams runner
 //' @inheritParams sum_run
-//' @return streak [numeric] vector of length equals length of \code{x} containing
+//' @return streak [numeric] vector of length equals length of `x` containing
 //' number of consecutive occurrences.
 //' @examples
 //' set.seed(11)
@@ -1049,12 +1049,12 @@ IntegerVector streak_run(
 //' Running which
 //'
 //'
-//' \code{min_run} calculates running which - returns index of element where \code{x == TRUE}.
+//' `min_run` calculates running which - returns index of element where `x == TRUE`.
 //' @inheritParams runner
 //' @inheritParams sum_run
-//' @param which \code{character} value "first" or "last" denoting if the first or last \code{TRUE}
+//' @param which `character` value "first" or "last" denoting if the first or last `TRUE`
 //' index is returned from the window.
-//' @return integer vector of indexes of the same length as \code{x}.
+//' @return integer vector of indexes of the same length as `x`.
 //' @examples
 //' set.seed(11)
 //' x1 <- sample(c(1, 2, 3), 15, replace = TRUE)
@@ -1587,12 +1587,12 @@ window_create(
 
 //' List of running windows
 //'
-//' Creates \code{list} of windows with given arguments settings.
-//' Length of output \code{list} is equal
+//' Creates `list` of windows with given arguments settings.
+//' Length of output `list` is equal
 //' @inheritParams runner
 //' @return list of vectors (windows). Length of list is the same as
-//' \code{length(x)} or \code{length(at)} if specified, and length of each
-//'  window is defined by \code{k} (unless window is out of range).
+//' `length(x)` or `length(at)` if specified, and length of each
+//'  window is defined by `k` (unless window is out of range).
 //' @examples
 //' window_run(1:10, k = 3, lag = -1)
 //' window_run(letters[1:10], k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))

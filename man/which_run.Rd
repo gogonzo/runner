@@ -23,7 +23,7 @@ Input in runner custom function \code{f}.}
 Denoting size of the running window. If \code{k} is a single value then window
 size is constant for all elements, otherwise if \code{length(k) == length(x)}
 different window size for each element. One can also specify \code{k} in the same
-way as \code{by} argument in \code{\link[base]{seq.POSIXt}}.
+way as \code{by} argument in \code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}.
 See 'Specifying time-intervals' in details section.}
 
 \item{lag}{(\code{integer} vector or single value)\cr
@@ -31,7 +31,7 @@ Denoting window lag. If \code{lag} is a single value then window lag is constant
 for all elements, otherwise if \code{length(lag) == length(x)} different window
 size for each element. Negative value shifts window forward. One can also
 specify \code{lag} in the same way as \code{by} argument in
-\code{\link[base]{seq.POSIXt}}. See 'Specifying time-intervals' in details
+\code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}. See 'Specifying time-intervals' in details
 section.}
 
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr
@@ -44,7 +44,7 @@ varying increment and with duplicated values. If specified then \code{k} and
 \item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character} vector)\cr
 Vector of any size and any value defining output data points. Values of the
 vector defines the indexes which data is computed at. Can be also \code{POSIXt}
-sequence increment used in \code{at} argument in \code{\link[base]{seq.POSIXt}}.
+sequence increment used in \code{at} argument in \code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}.
 See 'Specifying time-intervals' in details section.}
 
 \item{which}{\code{character} value "first" or "last" denoting if the first or last \code{TRUE}

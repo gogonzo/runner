@@ -97,13 +97,13 @@
 
 #' Formats time-unit-interval to valid for runner
 #'
-#' Formats time-unit-interval to valid for runner. User specifies \code{k} as
+#' Formats time-unit-interval to valid for runner. User specifies `k` as
 #' positive number but this means that this interval needs to be substracted
-#' from \code{idx} - because windows length extends window backwards in time.
+#' from `idx` - because windows length extends window backwards in time.
 #' The same situation for lag.
 #' @param k (k or lag) object from runner to be formatted
-#' @param only_positive for \code{k} is \code{TRUE},
-#'   for \code{lag} is \code{FALSE}
+#' @param only_positive for `k` is `TRUE`,
+#'   for `lag` is `FALSE`
 #' @examples
 #' runner:::.reformat_k("1 days")
 #' runner:::.reformat_k("day")

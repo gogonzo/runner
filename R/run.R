@@ -8,7 +8,7 @@
 #'  Denoting size of the running window. If `k` is a single value then window
 #'  size is constant for all elements, otherwise if `length(k) == length(x)`
 #'  different window size for each element. One can also specify `k` in the same
-#'  way as `by` argument in \code{\link[base]{seq.POSIXt}}.
+#'  way as `by` argument in [base::seq.POSIXt()].
 #'  See 'Specifying time-intervals' in details section.
 #'
 #' @param lag (`integer` vector or single value)\cr
@@ -16,7 +16,7 @@
 #'  for all elements, otherwise if `length(lag) == length(x)` different window
 #'  size for each element. Negative value shifts window forward. One can also
 #'  specify `lag` in the same way as `by` argument in
-#'  \code{\link[base]{seq.POSIXt}}. See 'Specifying time-intervals' in details
+#'  [base::seq.POSIXt()]. See 'Specifying time-intervals' in details
 #'  section.
 #'
 #' @param idx (`integer`, `Date`, `POSIXt`)\cr
@@ -35,7 +35,7 @@
 #' @param at (`integer`, `Date`, `POSIXt`, `character` vector)\cr
 #'  Vector of any size and any value defining output data points. Values of the
 #'  vector defines the indexes which data is computed at. Can be also `POSIXt`
-#'  sequence increment used in `at` argument in \code{\link[base]{seq.POSIXt}}.
+#'  sequence increment used in `at` argument in [base::seq.POSIXt()].
 #'  See 'Specifying time-intervals' in details section.
 #'
 #' @param na_pad (`logical` single value)\cr
@@ -102,7 +102,7 @@
 #'  `at` can also be specified as interval of the output defined by
 #'  `at = "<increment>"` which results in indices sequence defined by
 #'  `seq.POSIXt(min(idx), max(idx), by = "<increment>")`. Increment of sequence
-#'  is the same as in \code{\link[base]{seq.POSIXt}} function.
+#'  is the same as in [base::seq.POSIXt()] function.
 #'  It's worth noting that increment interval can't be more frequent than
 #'  interval of `idx` - for `Date` the most frequent time-unit is a `"day"`,
 #'  for `POSIXt` a `sec`.

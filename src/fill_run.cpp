@@ -4,14 +4,14 @@ using namespace Rcpp;
 
 //' Fill NA with previous non-NA element
 //'
-//' Fill \code{NA} with last non-NA element.
+//' Fill `NA` with last non-NA element.
 //' @inheritParams runner
-//' @param run_for_first If first elements are filled with \code{NA}, \code{run_for_first = TRUE}
-//' allows to fill all initial \code{NA} with nearest non-NA value. By default
-//' \code{run_for_first = TRUE}
-//' @param only_within \code{NA} are replaced only if previous and next non-NA
-//' values are the same. By default \code{only_within = TRUE}
-//' @return vector - \code{x} containing all \code{x} elements with \code{NA}
+//' @param run_for_first If first elements are filled with `NA`, `run_for_first = TRUE`
+//' allows to fill all initial `NA` with nearest non-NA value. By default
+//' `run_for_first = TRUE`
+//' @param only_within `NA` are replaced only if previous and next non-NA
+//' values are the same. By default `only_within = TRUE`
+//' @return vector - `x` containing all `x` elements with `NA`
 //' replaced with previous non-NA element.
 //' @examples
 //' fill_run(c(NA, NA,1:10, NA, NA), run_for_first = TRUE)
@@ -20,15 +20,23 @@ using namespace Rcpp;
 //' fill_run(c(NA, NA, 1, 2, NA, NA, 2, 2, NA, NA, 1, NA, NA), run_for_first = TRUE, only_within = TRUE)
 //' @export
 // [[Rcpp::export]]
-SEXP fill_run(SEXP x, bool run_for_first = false, bool only_within = false) {
+SEXP fill_run(SEXP x, bool run_for_first = false, bool only_within = false)
+{
 
-  switch (TYPEOF(x)) {
-  case INTSXP: return fill::fill_run(  as<IntegerVector>(x), run_for_first, only_within);
-  case REALSXP: return fill::fill_run( as<NumericVector>(x), run_for_first, only_within);
-  case STRSXP: return fill::fill_run(  as<CharacterVector>(x), run_for_first, only_within);
-  case LGLSXP: return fill::fill_run(  as<LogicalVector>(x), run_for_first, only_within);
-  case CPLXSXP: return fill::fill_run( as<ComplexVector>(x), run_for_first, only_within);
-  default: {
+  switch (TYPEOF(x))
+  {
+  case INTSXP:
+    return fill::fill_run(as<IntegerVector>(x), run_for_first, only_within);
+  case REALSXP:
+    return fill::fill_run(as<NumericVector>(x), run_for_first, only_within);
+  case STRSXP:
+    return fill::fill_run(as<CharacterVector>(x), run_for_first, only_within);
+  case LGLSXP:
+    return fill::fill_run(as<LogicalVector>(x), run_for_first, only_within);
+  case CPLXSXP:
+    return fill::fill_run(as<ComplexVector>(x), run_for_first, only_within);
+  default:
+  {
     stop("Invalid data type - only integer, numeric, character, factor, date vectors are possible.");
   }
   }

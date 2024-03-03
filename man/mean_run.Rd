@@ -17,9 +17,7 @@ mean_run(
 \arguments{
 \item{x}{\code{numeric} vector which running function is calculated on}
 
-\item{k}{(\code{integer}` vector or single value)\cr
-Denoting size of the running window. If \code{k} is a single value then window
-size is constant for all elements, otherwise if \code{length(k) == length(x)}
+\item{k}{(\verb{integer`` vector or single value)\\cr Denoting size of the running window. If }k\verb{is a single value then window size is constant for all elements, otherwise if}length(k) == length(x)`
 different window size for each element.}
 
 \item{lag}{(\code{integer} vector or single value)\cr
