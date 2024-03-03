@@ -139,7 +139,7 @@ are identical to \code{sapply}.}
 
 \item{cl}{(\code{cluster}) \emph{experimental}\cr
 Create and pass the cluster to the \code{runner} function to run each window
-calculation in parallel. See \code{\link[parallel]{makeCluster}} in details.}
+calculation in parallel. See \code{\link[parallel:makeCluster]{parallel::makeCluster()}} in details.}
 
 \item{...}{(optional)\cr
 other arguments passed to the function \code{f}.}
@@ -157,20 +157,18 @@ Function can apply any R function on running windows defined by \code{x},
 \code{k}, \code{lag}, \code{idx} and \code{at}. Running window can be calculated
 on several ways:
 \itemize{
-\item{\strong{Cumulative windows}}{\cr
+\item \strong{Cumulative windows}\cr
 applied when user doesn't specify \code{k} argument or specify \code{k = length(x)},
 this would mean that \code{k} is equal to number of available elements \cr
 \if{html}{\figure{cumulativewindows.png}{options: width="75\%" alt="Figure: cumulativewindows.png"}}
 \if{latex}{\figure{cumulativewindows.pdf}{options: width=7cm}}
-}
-\item{\strong{Constant sliding windows}}{\cr
+\item \strong{Constant sliding windows}
 applied when user specify \code{k} as constant value keeping \code{idx} and
 \code{at} unspecified. \code{lag} argument shifts windows left (\code{lag > 0})
 or right (\code{lag < 0}). \cr
 \if{html}{\figure{incrementalindex.png}{options: width="75\%" alt="Figure: incrementalindex.png"}}
 \if{latex}{\figure{incrementalindex.pdf}{options: width=7cm}}
-}
-\item{\strong{Windows depending on date}}{\cr
+\item \strong{Windows depending on date}\cr
 If one specifies \code{idx} this would mean that output windows size might
 change in size because of unequally spaced indexes. Fox example 5-period
 window is different than 5-element window, because 5-period window might
@@ -179,8 +177,7 @@ mean)
 \cr
 \if{html}{\figure{runningdatewindows.png}{options: width="75\%" alt="Figure: runningdatewindows.png"}}
 \if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
-}
-\item{\strong{Window at specific indices}}{\cr
+\item \strong{Window at specific indices}\cr
 \code{runner} by default returns vector of the same size as \code{x} unless one
 specifies \code{at} argument. Each element of \code{at} is an index on which runner
 calculates function - which means that output of the runner is now of
@@ -191,7 +188,6 @@ brackets. Range for \code{at = 27} is \verb{[22, 26]} which is not available in
 current indices. \cr
 \if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}}
 \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
-}
 }
 \subsection{Specifying time-intervals}{
 
@@ -223,7 +219,8 @@ have the edge over single-thread even if the
 \cr
 Parallel windows are executed in the independent environment, which means
 that objects other than function arguments needs to be copied to the
-parallel environment using \code{\link[parallel]{clusterExport}}\verb{. For example using }f = function(x) x + y + z` will result in error as
+parallel environment using \code{\link[parallel:clusterApply]{parallel::clusterExport()}}. For
+example using \code{f = function(x) x + y + z} will result in error as
 \code{clusterExport(cl, varlist = c("y", "z"))} needs to be called before.
 }
 }
@@ -261,13 +258,15 @@ runner(
 
 # number of unique values in each window (varying window size)
 runner(letters[1:10],
-       k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5),
-       f = function(x) length(unique(x)))
+  k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5),
+  f = function(x) length(unique(x))
+)
 
 # concatenate only on selected windows index
 runner(letters[1:10],
-       f = function(x) paste(x, collapse = "-"),
-       at = c(1, 5, 8))
+  f = function(x) paste(x, collapse = "-"),
+  at = c(1, 5, 8)
+)
 
 # 5 days mean
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
@@ -335,5 +334,6 @@ runner(
       cor(x),
       error = function(e) NA
     )
- })
+  }
+)
 }

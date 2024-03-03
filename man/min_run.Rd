@@ -54,7 +54,7 @@ Whether incomplete window should return \code{NA} (if \code{na_pad = TRUE})
 Incomplete window is when some parts of the window are out of range.}
 }
 \value{
-min (`numeric`) vector of length equals length of \code{x}.
+min (\code{numeric}) vector of length equals length of \code{x}.
 }
 \description{
 \code{min_run} calculates running min on given \code{x} numeric vector, specified \code{k} window size.

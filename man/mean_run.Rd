@@ -45,7 +45,7 @@ Whether incomplete window should return \code{NA} (if \code{na_pad = TRUE})
 Incomplete window is when some parts of the window are out of range.}
 }
 \value{
-mean (`numeric`) vector of length equals length of \code{x}.
+mean (\code{numeric}) vector of length equals length of \code{x}.
 }
 \description{
 Running mean in specified window of numeric vector.

@@ -27,7 +27,7 @@ varying increment and with duplicated values. If specified then \code{k} and
 Converts k and lag from time-unit-interval to int
 }
 \examples{
-k <-  "1 month"
+k <- "1 month"
 idx <- seq(
   as.POSIXct("2019-01-01 03:02:01"),
   as.POSIXct("2020-01-01 03:02:01"),
