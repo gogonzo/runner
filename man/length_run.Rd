@@ -11,7 +11,7 @@ length_run(k = integer(1), lag = integer(1), idx = integer(0))
 Denoting size of the running window. If \code{k} is a single value then window
 size is constant for all elements, otherwise if \code{length(k) == length(x)}
 different window size for each element. One can also specify \code{k} in the same
-way as \code{by} argument in \code{\link[base]{seq.POSIXt}}.
+way as \code{by} argument in \code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}.
 See 'Specifying time-intervals' in details section.}
 
 \item{lag}{(\code{integer} vector or single value)\cr
@@ -19,7 +19,7 @@ Denoting window lag. If \code{lag} is a single value then window lag is constant
 for all elements, otherwise if \code{length(lag) == length(x)} different window
 size for each element. Negative value shifts window forward. One can also
 specify \code{lag} in the same way as \code{by} argument in
-\code{\link[base]{seq.POSIXt}}. See 'Specifying time-intervals' in details
+\code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}. See 'Specifying time-intervals' in details
 section.}
 
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr

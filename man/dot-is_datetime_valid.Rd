@@ -7,7 +7,7 @@
 .is_datetime_valid(x)
 }
 \arguments{
-\item{(`character`)}{can be anything but suppose to be a character.}
+\item{x}{(\code{character}) can be anything but suppose to be a character.}
 }
 \value{
 \code{logical(1)} denoting if all elements of the character vectors are valid

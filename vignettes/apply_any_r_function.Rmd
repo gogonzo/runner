@@ -102,7 +102,7 @@ idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
 
 # summarize - mean
 runner::runner(
-  x = idx, 
+  x = idx,
   k = 5, # 5-days window
   lag = 1,
   idx = idx,
@@ -112,7 +112,7 @@ runner::runner(
 
 # use Date or datetime sequences
 runner::runner(
-  x = idx, 
+  x = idx,
   k = "5 days", # 5-days window
   lag = 1,
   idx = Sys.Date() + idx,
@@ -121,7 +121,7 @@ runner::runner(
 
 # obtain window from above illustration
 runner::runner(
-  x = idx, 
+  x = idx,
   k = "5 days",
   lag = 1,
   idx = Sys.Date() + idx
@@ -142,7 +142,7 @@ idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
 
 # summary
 runner::runner(
-  x = 1:15, 
+  x = 1:15,
   k = 5,
   lag = 1,
   idx = idx,
@@ -152,7 +152,7 @@ runner::runner(
 
 # full window
 runner::runner(
-  x = idx, 
+  x = idx,
   k = 5,
   lag = 1,
   idx = idx,
@@ -206,16 +206,16 @@ Both `k` and `lag` can be of `length(.) == 1`, `length(.) == length(x)` or
 ```{r eval=FALSE}
 # summarizing - concatenating
 runner::runner(
-  x = 1:10, 
-  lag = c(-1, 2, -1, -2, 0, 0, 5, -5, -2, -3), 
-  k = c(0, 1, 1, 1, 1, 5, 5, 5, 5, 5), 
+  x = 1:10,
+  lag = c(-1, 2, -1, -2, 0, 0, 5, -5, -2, -3),
+  k = c(0, 1, 1, 1, 1, 5, 5, 5, 5, 5),
   f = paste,
   collapse = ","
 )
 
 # full window
 runner::runner(
-  x = 1:10, 
+  x = 1:10,
   lag = 1,
   k = c(1, 1, 1, 1, 1, 5, 5, 5, 5, 5)
 )
@@ -224,13 +224,15 @@ runner::runner(
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
 
 runner::runner(
-  x = 1:15, 
-  lag = sample(c("-2 days", "-1 days", "1 days", "2 days"), 
-               size = 15, 
-               replace = TRUE),
-  k = sample(c("5 days", "10 days", "15 days"), 
-             size = 15, 
-             replace = TRUE),
+  x = 1:15,
+  lag = sample(c("-2 days", "-1 days", "1 days", "2 days"),
+    size = 15,
+    replace = TRUE
+  ),
+  k = sample(c("5 days", "10 days", "15 days"),
+    size = 15,
+    replace = TRUE
+  ),
   idx = Sys.Date() + idx,
   f = function(x) mean(x)
 )
@@ -253,10 +255,10 @@ matching `idx`.
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
 
 runner::runner(
-  x = 1:15, 
-  k = 5, 
-  lag = 1, 
-  idx = idx, 
+  x = 1:15,
+  k = 5,
+  lag = 1,
+  idx = idx,
   at = c(4, 18, 48, 51),
   na_pad = TRUE,
   f = function(x) mean(x)
@@ -274,7 +276,7 @@ parameter adapt with increasing number of observation.
 x <- cumsum(rnorm(40))
 y <- 3 * x + rnorm(40)
 date <- Sys.Date() + cumsum(sample(1:3, 40, replace = TRUE)) # unequaly spaced time series
-group <-  rep(c("a", "b"), 20)
+group <- rep(c("a", "b"), 20)
 
 df <- data.frame(date, group, y, x)
 
@@ -313,7 +315,6 @@ library(ggplot2)
 summ %>%
   ggplot(aes(x = date, y = cumulative_mse, group = group, color = group)) +
   geom_line()
-
 ```
 
 When user executes multiple `runner` calls in `dplyr` mutate, one can also use 
@@ -329,26 +330,22 @@ df %>%
     cumulative_mse = runner(
       x = .,
       f = function(x) {
-        mean((residuals(lm(y ~ x, data = x))) ^ 2)
+        mean((residuals(lm(y ~ x, data = x)))^2)
       }
     ),
-    
     intercept = runner(
       x = .,
       f = function(x) {
         coefficients(lm(y ~ x, data = x))[1]
       }
     ),
-    
     slope = runner(
       x = .,
       f = function(x) {
         coefficients(lm(y ~ x, data = x))[2]
       }
-    ) 
+    )
   )
-
-
 ```
 
 ### Parallel mode

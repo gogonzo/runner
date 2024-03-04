@@ -12,7 +12,7 @@
 \item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character} vector)\cr
 Vector of any size and any value defining output data points. Values of the
 vector defines the indexes which data is computed at. Can be also \code{POSIXt}
-sequence increment used in \code{at} argument in \code{\link[base]{seq.POSIXt}}.
+sequence increment used in \code{at} argument in \code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}.
 See 'Specifying time-intervals' in details section.}
 }
 \value{

@@ -22,7 +22,7 @@ Input in runner custom function \code{f}.}
 Denoting size of the running window. If \code{k} is a single value then window
 size is constant for all elements, otherwise if \code{length(k) == length(x)}
 different window size for each element. One can also specify \code{k} in the same
-way as \code{by} argument in \code{\link[base]{seq.POSIXt}}.
+way as \code{by} argument in \code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}.
 See 'Specifying time-intervals' in details section.}
 
 \item{lag}{(\code{integer} vector or single value)\cr
@@ -30,7 +30,7 @@ Denoting window lag. If \code{lag} is a single value then window lag is constant
 for all elements, otherwise if \code{length(lag) == length(x)} different window
 size for each element. Negative value shifts window forward. One can also
 specify \code{lag} in the same way as \code{by} argument in
-\code{\link[base]{seq.POSIXt}}. See 'Specifying time-intervals' in details
+\code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}. See 'Specifying time-intervals' in details
 section.}
 
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr
@@ -43,7 +43,7 @@ varying increment and with duplicated values. If specified then \code{k} and
 \item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character} vector)\cr
 Vector of any size and any value defining output data points. Values of the
 vector defines the indexes which data is computed at. Can be also \code{POSIXt}
-sequence increment used in \code{at} argument in \code{\link[base]{seq.POSIXt}}.
+sequence increment used in \code{at} argument in \code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}.
 See 'Specifying time-intervals' in details section.}
 
 \item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) -
@@ -54,7 +54,7 @@ Whether incomplete window should return \code{NA} (if \code{na_pad = TRUE})
 Incomplete window is when some parts of the window are out of range.}
 }
 \value{
-max {numeric} vector of length equals length of \code{x}.
+max (\code{numeric}) vector of length equals length of \code{x}.
 }
 \description{
 \code{min_run} calculates running max on given \code{x} numeric vector,
@@ -62,11 +62,11 @@ specified \code{k} window size.
 }
 \examples{
 set.seed(11)
-x1 <- sample( c(1,2,3), 15, replace=TRUE)
-x2 <- sample( c(NA,1,2,3), 15, replace=TRUE)
-k  <- sample( 1:4, 15, replace=TRUE)
+x1 <- sample(c(1, 2, 3), 15, replace = TRUE)
+x2 <- sample(c(NA, 1, 2, 3), 15, replace = TRUE)
+k <- sample(1:4, 15, replace = TRUE)
 max_run(x1) # simple cumulative maximum
 max_run(x2, na_rm = TRUE) # cumulative maximum with removing NA.
-max_run(x2, na_rm = TRUE, k=4) # maximum in 4-element window
-max_run(x2, na_rm = FALSE, k=k) # maximum in varying k window size
+max_run(x2, na_rm = TRUE, k = 4) # maximum in 4-element window
+max_run(x2, na_rm = FALSE, k = k) # maximum in varying k window size
 }

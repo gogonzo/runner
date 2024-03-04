@@ -8,7 +8,7 @@
 #'  Denoting size of the running window. If `k` is a single value then window
 #'  size is constant for all elements, otherwise if `length(k) == length(x)`
 #'  different window size for each element. One can also specify `k` in the same
-#'  way as `by` argument in \code{\link[base]{seq.POSIXt}}.
+#'  way as `by` argument in [base::seq.POSIXt()].
 #'  See 'Specifying time-intervals' in details section.
 #'
 #' @param lag (`integer` vector or single value)\cr
@@ -16,7 +16,7 @@
 #'  for all elements, otherwise if `length(lag) == length(x)` different window
 #'  size for each element. Negative value shifts window forward. One can also
 #'  specify `lag` in the same way as `by` argument in
-#'  \code{\link[base]{seq.POSIXt}}. See 'Specifying time-intervals' in details
+#'  [base::seq.POSIXt()]. See 'Specifying time-intervals' in details
 #'  section.
 #'
 #' @param idx (`integer`, `Date`, `POSIXt`)\cr
@@ -35,7 +35,7 @@
 #' @param at (`integer`, `Date`, `POSIXt`, `character` vector)\cr
 #'  Vector of any size and any value defining output data points. Values of the
 #'  vector defines the indexes which data is computed at. Can be also `POSIXt`
-#'  sequence increment used in `at` argument in \code{\link[base]{seq.POSIXt}}.
+#'  sequence increment used in `at` argument in [base::seq.POSIXt()].
 #'  See 'Specifying time-intervals' in details section.
 #'
 #' @param na_pad (`logical` single value)\cr
@@ -52,7 +52,7 @@
 #'
 #' @param cl (`cluster`) *experimental*\cr
 #'  Create and pass the cluster to the `runner` function to run each window
-#'  calculation in parallel. See \code{\link[parallel]{makeCluster}} in details.
+#'  calculation in parallel. See [parallel::makeCluster()] in details.
 #'
 #' @param ... (optional)\cr
 #'   other arguments passed to the function `f`.
@@ -61,21 +61,21 @@
 #' Function can apply any R function on running windows defined by `x`,
 #' `k`, `lag`, `idx` and `at`. Running window can be calculated
 #' on several ways:
-#' \itemize{
-#'  \item{**Cumulative windows**}{\cr
+#'
+#' - **Cumulative windows**\cr
 #'    applied when user doesn't specify `k` argument or specify `k = length(x)`,
 #'    this would mean that `k` is equal to number of available elements \cr
 #'    \if{html}{\figure{cumulativewindows.png}{options: width="75\%" alt="Figure: cumulativewindows.png"}}
 #'    \if{latex}{\figure{cumulativewindows.pdf}{options: width=7cm}}
-#'  }
-#'  \item{**Constant sliding windows**}{\cr
+#'
+#'  - **Constant sliding windows**
 #'    applied when user specify `k` as constant value keeping `idx` and
 #'    `at` unspecified. `lag` argument shifts windows left (`lag > 0`)
 #'    or right (`lag < 0`). \cr
 #'    \if{html}{\figure{incrementalindex.png}{options: width="75\%" alt="Figure: incrementalindex.png"}}
 #'    \if{latex}{\figure{incrementalindex.pdf}{options: width=7cm}}
-#'  }
-#'  \item{**Windows depending on date**}{\cr
+#'
+#'  - **Windows depending on date**\cr
 #'    If one specifies `idx` this would mean that output windows size might
 #'    change in size because of unequally spaced indexes. Fox example 5-period
 #'    window is different than 5-element window, because 5-period window might
@@ -84,8 +84,8 @@
 #'     \cr
 #'    \if{html}{\figure{runningdatewindows.png}{options: width="75\%" alt="Figure: runningdatewindows.png"}}
 #'    \if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
-#'  }
-#'  \item{**Window at specific indices**}{\cr
+#'
+#'  - **Window at specific indices**\cr
 #'    `runner` by default returns vector of the same size as `x` unless one
 #'    specifies `at` argument. Each element of `at` is an index on which runner
 #'    calculates function - which means that output of the runner is now of
@@ -96,20 +96,20 @@
 #'    current indices. \cr
 #'    \if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}}
 #'    \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
-#'  }
-#' }
+#'
+#'
 #' ## Specifying time-intervals
 #'  `at` can also be specified as interval of the output defined by
 #'  `at = "<increment>"` which results in indices sequence defined by
 #'  `seq.POSIXt(min(idx), max(idx), by = "<increment>")`. Increment of sequence
-#'  is the same as in \code{\link[base]{seq.POSIXt}} function.
+#'  is the same as in [base::seq.POSIXt()] function.
 #'  It's worth noting that increment interval can't be more frequent than
 #'  interval of `idx` - for `Date` the most frequent time-unit is a `"day"`,
 #'  for `POSIXt` a `sec`.
 #'
 #'  `k` and `lag` can also be specified as using time sequence increment.
 #'  Available time units are
-#'`"sec", "min", "hour", "day", "DSTday", "week", "month", "quarter" or "year"`.
+#' `"sec", "min", "hour", "day", "DSTday", "week", "month", "quarter" or "year"`.
 #'  To increment by number of units one can also specify `<number> <unit>s`
 #'  for example `lag = "-2 days"`, `k = "5 weeks"`.
 #'
@@ -124,9 +124,9 @@
 #'  \cr
 #'  Parallel windows are executed in the independent environment, which means
 #'  that objects other than function arguments needs to be copied to the
-#'  parallel environment using \code{\link[parallel]{clusterExport}}`. For
+#'  parallel environment using [parallel::clusterExport()]. For
 #'  example using `f = function(x) x + y + z` will result in error as
-#'  \code{clusterExport(cl, varlist = c("y", "z"))} needs to be called before.
+#'  `clusterExport(cl, varlist = c("y", "z"))` needs to be called before.
 #'
 #' @return vector with aggregated values for each window. Length of output is
 #'  the same as `length(x)` or `length(at)` if specified. Type of the output
@@ -138,17 +138,16 @@
 #' @importFrom parallel clusterExport parLapply
 #' @export
 runner <- function(
-  x,
-  f = function(x) x,
-  k = integer(0),
-  lag = integer(1),
-  idx = integer(0),
-  at = integer(0),
-  na_pad = FALSE,
-  simplify = TRUE,
-  cl = NULL,
-  ...
-  ) {
+    x,
+    f = function(x) x,
+    k = integer(0),
+    lag = integer(1),
+    idx = integer(0),
+    at = integer(0),
+    na_pad = FALSE,
+    simplify = TRUE,
+    cl = NULL,
+    ...) {
   UseMethod("runner", x)
 }
 
@@ -187,13 +186,15 @@ runner <- function(
 #'
 #' # number of unique values in each window (varying window size)
 #' runner(letters[1:10],
-#'        k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5),
-#'        f = function(x) length(unique(x)))
+#'   k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5),
+#'   f = function(x) length(unique(x))
+#' )
 #'
 #' # concatenate only on selected windows index
 #' runner(letters[1:10],
-#'        f = function(x) paste(x, collapse = "-"),
-#'        at = c(1, 5, 8))
+#'   f = function(x) paste(x, collapse = "-"),
+#'   at = c(1, 5, 8)
+#' )
 #'
 #' # 5 days mean
 #' idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
@@ -205,7 +206,7 @@ runner <- function(
 #'   f = function(x) mean(x)
 #' )
 #'
-#'# 5 days mean at 4-indices
+#' # 5 days mean at 4-indices
 #' runner::runner(
 #'   x = 1:15,
 #'   k = 5,
@@ -215,34 +216,34 @@ runner <- function(
 #'   f = mean
 #' )
 #' @export
-runner.default <- function(  #nolint
-  x,
-  f = function(x) x,
-  k = integer(0),
-  lag = integer(1),
-  idx = integer(0),
-  at = integer(0),
-  na_pad = FALSE,
-  simplify = TRUE,
-  cl = NULL,
-  ...
-) {
+runner.default <- function(
+    # nolint
+    x,
+    f = function(x) x,
+    k = integer(0),
+    lag = integer(1),
+    idx = integer(0),
+    at = integer(0),
+    na_pad = FALSE,
+    simplify = TRUE,
+    cl = NULL,
+    ...) {
   if (any(is.na(k))) {
-    stop("Function doesn't accept NA values in k vector");
+    stop("Function doesn't accept NA values in k vector")
   }
   if (any(is.na(lag))) {
-    stop("Function doesn't accept NA values in lag vector");
+    stop("Function doesn't accept NA values in lag vector")
   }
   if (any(is.na(idx))) {
-    stop("Function doesn't accept NA values in idx vector");
+    stop("Function doesn't accept NA values in idx vector")
   }
   if (!is(f, "function")) {
     stop("f should be a function")
   }
 
   # use POSIXt.seq
-  at  <- .seq_at(at, idx)
-  k   <- .k_by(k, if (length(at > 0)) at else idx, "k")
+  at <- .seq_at(at, idx)
+  k <- .k_by(k, if (length(at > 0)) at else idx, "k")
   lag <- .k_by(lag, if (length(at > 0)) at else idx, "lag")
 
   w <- window_run(x = x, k = k, lag = lag, idx = idx, at = at, na_pad = na_pad)
@@ -250,13 +251,13 @@ runner.default <- function(  #nolint
   answer <- if (!is.null(cl) && is(cl, "cluster")) {
     parLapply(cl = cl, X = w, fun = f, ...)
   } else {
-    lapply(w, function(.this_window)
+    lapply(w, function(.this_window) {
       if (length(.this_window) == 0) {
         NA
       } else {
         f(.this_window, ...)
       }
-    )
+    })
   }
 
   if (!isFALSE(simplify) && length(answer)) {
@@ -306,18 +307,18 @@ runner.default <- function(  #nolint
 #' )
 #' stopCluster(cl)
 #' @export
-runner.data.frame <- function( #nolint
-  x,
-  f = function(x) x,
-  k = attr(x, "k"),
-  lag = if (!is.null(attr(x, "lag"))) attr(x, "lag") else integer(1),
-  idx = attr(x, "idx"),
-  at = attr(x, "at"),
-  na_pad = if (!is.null(attr(x, "na_pad"))) attr(x, "na_pad") else FALSE,
-  simplify = TRUE,
-  cl = NULL,
-  ...
-) {
+runner.data.frame <- function(
+    # nolint
+    x,
+    f = function(x) x,
+    k = attr(x, "k"),
+    lag = if (!is.null(attr(x, "lag"))) attr(x, "lag") else integer(1),
+    idx = attr(x, "idx"),
+    at = attr(x, "at"),
+    na_pad = if (!is.null(attr(x, "na_pad"))) attr(x, "na_pad") else FALSE,
+    simplify = TRUE,
+    cl = NULL,
+    ...) {
   # Check if argument is either a colname of x or valid vector of values
   .check_unresolved_difftime(x, k)
   .check_unresolved_difftime(x, lag)
@@ -325,27 +326,27 @@ runner.data.frame <- function( #nolint
   .check_unresolved_at(x, at)
 
   # if argument is a name of the column in x then column of x is taken
-  k   <- .resolve_arg(x, k)
+  k <- .resolve_arg(x, k)
   lag <- .resolve_arg(x, lag)
   idx <- .resolve_arg(x, idx)
-  at  <- .resolve_arg(x, at)
+  at <- .resolve_arg(x, at)
 
   if (any(is.na(k))) {
-    stop("Function doesn't accept NA values in k vector");
+    stop("Function doesn't accept NA values in k vector")
   }
   if (any(is.na(lag))) {
-    stop("Function doesn't accept NA values in lag vector");
+    stop("Function doesn't accept NA values in lag vector")
   }
   if (any(is.na(idx))) {
-    stop("Function doesn't accept NA values in idx vector");
+    stop("Function doesn't accept NA values in idx vector")
   }
   if (!is(f, "function")) {
     stop("f should be a function")
   }
 
   # use POSIXt.seq
-  at  <- .seq_at(at, idx)
-  k   <- .k_by(k, if (length(at) > 0) at else idx, "k")
+  at <- .seq_at(at, idx)
+  k <- .k_by(k, if (length(at) > 0) at else idx, "k")
   lag <- .k_by(lag, if (length(at) > 0) at else idx, "lag")
 
   w <- window_run(
@@ -370,7 +371,6 @@ runner.data.frame <- function( #nolint
         }
       }
     )
-
   } else {
     lapply(w, function(.this_window_idx) {
       if (length(.this_window_idx) == 0) {
@@ -391,17 +391,16 @@ runner.data.frame <- function( #nolint
 #' @rdname runner
 #' @export
 runner.grouped_df <- function(
-  x,
-  f = function(x) x,
-  k = attr(x, "k"),
-  lag = if (!is.null(attr(x, "lag"))) attr(x, "lag") else integer(1),
-  idx = attr(x, "idx"),
-  at = attr(x, "at"),
-  na_pad = if (!is.null(attr(x, "na_pad"))) attr(x, "na_pad") else FALSE,
-  simplify = TRUE,
-  cl = NULL,
-  ...
-) {
+    x,
+    f = function(x) x,
+    k = attr(x, "k"),
+    lag = if (!is.null(attr(x, "lag"))) attr(x, "lag") else integer(1),
+    idx = attr(x, "idx"),
+    at = attr(x, "at"),
+    na_pad = if (!is.null(attr(x, "na_pad"))) attr(x, "na_pad") else FALSE,
+    simplify = TRUE,
+    cl = NULL,
+    ...) {
   runner.data.frame(
     x = .this_group(x),
     f = f,
@@ -428,36 +427,36 @@ runner.grouped_df <- function(
 #'       cor(x),
 #'       error = function(e) NA
 #'     )
-#'  })
+#'   }
+#' )
 #' @export
 runner.matrix <- function(
-  x,
-  f = function(x) x,
-  k = integer(0),
-  lag = integer(1),
-  idx = integer(0),
-  at = integer(0),
-  na_pad = FALSE,
-  simplify = TRUE,
-  cl = NULL,
-  ...
-) {
+    x,
+    f = function(x) x,
+    k = integer(0),
+    lag = integer(1),
+    idx = integer(0),
+    at = integer(0),
+    na_pad = FALSE,
+    simplify = TRUE,
+    cl = NULL,
+    ...) {
   if (any(is.na(k))) {
-    stop("Function doesn't accept NA values in k vector");
+    stop("Function doesn't accept NA values in k vector")
   }
   if (any(is.na(lag))) {
-    stop("Function doesn't accept NA values in lag vector");
+    stop("Function doesn't accept NA values in lag vector")
   }
   if (any(is.na(idx))) {
-    stop("Function doesn't accept NA values in idx vector");
+    stop("Function doesn't accept NA values in idx vector")
   }
   if (!is(f, "function")) {
     stop("f should be a function")
   }
 
   # use POSIXt.seq
-  at  <- .seq_at(at, idx)
-  k   <- .k_by(k,   if (length(at) > 0) at else idx, "k")
+  at <- .seq_at(at, idx)
+  k <- .k_by(k, if (length(at) > 0) at else idx, "k")
   lag <- .k_by(lag, if (length(at) > 0) at else idx, "lag")
 
   w <- window_run(
@@ -469,7 +468,7 @@ runner.matrix <- function(
     na_pad = na_pad
   )
 
-  answer <- if (!is.null(cl) && is(cl, "cluster"))  {
+  answer <- if (!is.null(cl) && is(cl, "cluster")) {
     clusterExport(cl, varlist = c("x", "f"), envir = environment())
     parLapply(
       cl = cl,
@@ -487,12 +486,13 @@ runner.matrix <- function(
     lapply(
       X = w,
       FUN = function(.this_window_idx) {
-      if (length(.this_window_idx) == 0) {
-        NA
-      } else {
-        f(x[.this_window_idx, , drop = FALSE], ...)
+        if (length(.this_window_idx) == 0) {
+          NA
+        } else {
+          f(x[.this_window_idx, , drop = FALSE], ...)
+        }
       }
-    })
+    )
   }
   if (!isFALSE(simplify) && length(answer)) {
     simplify2array(answer, higher = (simplify == "array"))
@@ -504,17 +504,16 @@ runner.matrix <- function(
 #' @rdname runner
 #' @export
 runner.xts <- function(
-  x,
-  f = function(x) x,
-  k = integer(0),
-  lag = integer(1),
-  idx = integer(0),
-  at = integer(0),
-  na_pad = FALSE,
-  simplify = TRUE,
-  cl = NULL,
-  ...
-) {
+    x,
+    f = function(x) x,
+    k = integer(0),
+    lag = integer(1),
+    idx = integer(0),
+    at = integer(0),
+    na_pad = FALSE,
+    simplify = TRUE,
+    cl = NULL,
+    ...) {
   if (!identical(idx, integer(0))) {
     warning(
       "'idx' argument has been specified and will mask index

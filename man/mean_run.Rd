@@ -17,9 +17,7 @@ mean_run(
 \arguments{
 \item{x}{\code{numeric} vector which running function is calculated on}
 
-\item{k}{(\code{integer}` vector or single value)\cr
-Denoting size of the running window. If \code{k} is a single value then window
-size is constant for all elements, otherwise if \code{length(k) == length(x)}
+\item{k}{(\verb{integer`` vector or single value)\\cr Denoting size of the running window. If }k\verb{is a single value then window size is constant for all elements, otherwise if}length(k) == length(x)`
 different window size for each element.}
 
 \item{lag}{(\code{integer} vector or single value)\cr
@@ -45,7 +43,7 @@ Whether incomplete window should return \code{NA} (if \code{na_pad = TRUE})
 Incomplete window is when some parts of the window are out of range.}
 }
 \value{
-mean {numeric} vector of length equals length of \code{x}.
+mean (\code{numeric}) vector of length equals length of \code{x}.
 }
 \description{
 Running mean in specified window of numeric vector.
@@ -53,10 +51,10 @@ Running mean in specified window of numeric vector.
 \examples{
 set.seed(11)
 x1 <- rnorm(15)
-x2 <- sample(c(rep(NA,5), rnorm(15)), 15, replace = TRUE)
+x2 <- sample(c(rep(NA, 5), rnorm(15)), 15, replace = TRUE)
 k <- sample(1:15, 15, replace = TRUE)
 mean_run(x1)
 mean_run(x2, na_rm = TRUE)
-mean_run(x2, na_rm = FALSE )
-mean_run(x2, na_rm = TRUE, k=4)
+mean_run(x2, na_rm = FALSE)
+mean_run(x2, na_rm = TRUE, k = 4)
 }

@@ -15,7 +15,7 @@ Denoting window lag. If \code{lag} is a single value then window lag is constant
 for all elements, otherwise if \code{length(lag) == length(x)} different window
 size for each element. Negative value shifts window forward. One can also
 specify \code{lag} in the same way as \code{by} argument in
-\code{\link[base]{seq.POSIXt}}. See 'Specifying time-intervals' in details
+\code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}. See 'Specifying time-intervals' in details
 section.}
 
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr

@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![Check](https://github.com/gogonzo/runner/workflows/Check/badge.svg)](https://github.com/gogonzo/runner/actions)
+[![Check](https://github.com/gogonzo/runner/workflows/R-CMD-check/badge.svg)](https://github.com/gogonzo/runner/actions)
 [![](https://cranlogs.r-pkg.org/badges/runner)](https://CRAN.R-project.org/package=runner)
 [![Dependencies](https://tinyverse.netlify.com/badge/runner)](https://cran.r-project.org/package=runner)
 <!-- badges: end -->
@@ -45,10 +45,10 @@ x <- data.frame(
 )
 
 runner(
-  x, 
+  x,
   lag = "1 months",
-  k = "4 months", 
-  idx = x$date, 
+  k = "4 months",
+  idx = x$date,
   f = function(x) {
     cor(x$a, x$b)
   }
@@ -95,8 +95,8 @@ also be negative value, which shifts window forward instead of backward.
 
 ``` r
 runner(
-  1:15, 
-  k = 4, 
+  1:15,
+  k = 4,
   lag = 2
 )
 ```
@@ -118,9 +118,9 @@ each window.
 ``` r
 idx <- Sys.Date() + c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
 runner(
-  x = 1:15, 
-  k = "5 days", 
-  lag = "1 days", 
+  x = 1:15,
+  k = "5 days",
+  lag = "1 days",
   idx = idx
 )
 ```
@@ -139,10 +139,10 @@ available in current indices.
 ``` r
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
 runner(
-  x = idx, 
-  k = 5, 
-  lag = 1, 
-  idx = idx, 
+  x = idx,
+  k = 5,
+  lag = 1,
+  idx = idx,
   at = c(18, 27, 48, 31)
 )
 ```
@@ -164,10 +164,10 @@ depending on date. In example below two windows exceed range given by
 ``` r
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
 runner(
-  x = idx, 
-  k = 5, 
-  lag = 1, 
-  idx = idx, 
+  x = idx,
+  k = 5,
+  lag = 1,
+  idx = idx,
   at = c(4, 18, 48, 51),
   na_pad = TRUE
 )
@@ -211,7 +211,7 @@ argument.
 ``` r
 library(parallel)
 
-# 
+#
 numCores <- detectCores()
 cl <- makeForkCluster(numCores)
 

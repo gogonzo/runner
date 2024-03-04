@@ -1,37 +1,37 @@
 #' Set window parameters
 #'
-#' Set window parameters for \link{runner}. This function sets the
-#' attributes to \code{x} (only \code{data.frame}) object and saves user effort
-#' to specify window parameters in further multiple \link{runner} calls.
+#' Set window parameters for [runner()]. This function sets the
+#' attributes to `x` (only `data.frame`) object and saves user effort
+#' to specify window parameters in further multiple [runner()] calls.
 #' @inheritParams runner
-#' @return x object which \link{runner} can be executed on.
+#' @return x object which [runner()] can be executed on.
 #' @examples
 #' \dontrun{
 #' library(dplyr)
 #'
 #' data <- data.frame(
-#'  index = c(2, 3, 3, 4, 5, 8, 10, 10, 13, 15),
-#'  a = rep(c("a", "b"), each = 5),
-#'  b = 1:10
+#'   index = c(2, 3, 3, 4, 5, 8, 10, 10, 13, 15),
+#'   a = rep(c("a", "b"), each = 5),
+#'   b = 1:10
 #' )
 #'
 #' data %>%
-#'  group_by(a) %>%
-#'  run_by(idx = "index", k = 5) %>%
-#'  mutate(
-#'    c = runner(
-#'      x = .,
-#'      f = function(x) {
-#'        paste(x$b, collapse = ">")
-#'      }
-#'    ),
-#'    d = runner(
-#'      x = .,
-#'      f = function(x) {
-#'        sum(x$b)
-#'      }
-#'    )
-#'  )
+#'   group_by(a) %>%
+#'   run_by(idx = "index", k = 5) %>%
+#'   mutate(
+#'     c = runner(
+#'       x = .,
+#'       f = function(x) {
+#'         paste(x$b, collapse = ">")
+#'       }
+#'     ),
+#'     d = runner(
+#'       x = .,
+#'       f = function(x) {
+#'         sum(x$b)
+#'       }
+#'     )
+#'   )
 #' }
 #' @export
 run_by <- function(x, idx, k, lag, na_pad, at) {
