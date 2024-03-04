@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4</span>
       </span>
     </div>
 
@@ -93,9 +93,7 @@
 
 
 <dt>k</dt>
-<dd><p>(<code>integer</code>` vector or single value)<br>
-Denoting size of the running window. If <code>k</code> is a single value then window
-size is constant for all elements, otherwise if <code>length(k) == length(x)</code>
+<dd><p>(<code>integer`` vector or single value)\cr Denoting size of the running window. If </code>k<code>is a single value then window size is constant for all elements, otherwise if</code>length(k) == length(x)`
 different window size for each element.</p></dd>
 
 
@@ -135,14 +133,14 @@ Incomplete window is when some parts of the window are out of range.</p></dd>
     <h2>Value</h2>
     
 
-<p>mean numeric vector of length equals length of <code>x</code>.</p>
+<p>mean (<code>numeric</code>) vector of length equals length of <code>x</code>.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">15</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>,<span class="fl">5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">15</span><span class="op">)</span><span class="op">)</span>, <span class="fl">15</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">15</span><span class="op">)</span><span class="op">)</span>, <span class="fl">15</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, <span class="fl">15</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">mean_run</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.5910311 -0.2822184 -0.6936633 -0.8609108 -0.4530308 -0.5332176</span>
@@ -152,11 +150,11 @@ Incomplete window is when some parts of the window are out of range.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.18760011 -0.09022066 -0.06543317  0.03906450 -0.12188853 -0.13873536</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -0.13873536 -0.14571604 -0.12596067 -0.11116961 -0.09881996 -0.08871569</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [13] -0.05194292 -0.04699909 -0.05704202</span>
-<span class="r-in"><span><span class="fu">mean_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">FALSE</span> <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">mean_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.18760011 -0.09022066 -0.06543317  0.03906450 -0.12188853 -0.13873536</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [7]          NA          NA          NA          NA          NA          NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [13]          NA          NA          NA</span>
-<span class="r-in"><span><span class="fu">mean_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, k<span class="op">=</span><span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">mean_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, k <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.18760011 -0.09022066 -0.06543317  0.03906450 -0.10546063 -0.16299272</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -0.21203756 -0.39209010 -0.13274756 -0.05603811 -0.03894684  0.01103493</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [13]  0.09609256  0.09738460  0.04740283</span>
@@ -174,7 +172,7 @@ Incomplete window is when some parts of the window are out of range.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

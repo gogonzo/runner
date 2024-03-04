@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4</span>
       </span>
     </div>
 
@@ -179,7 +179,7 @@ By default runner returns windows as is (<code>f = function(x)</code>).</p></dd>
 Denoting size of the running window. If <code>k</code> is a single value then window
 size is constant for all elements, otherwise if <code>length(k) == length(x)</code>
 different window size for each element. One can also specify <code>k</code> in the same
-way as <code>by</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">seq.POSIXt</a></code>.
+way as <code>by</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">base::seq.POSIXt()</a></code>.
 See 'Specifying time-intervals' in details section.</p></dd>
 
 
@@ -189,7 +189,7 @@ Denoting window lag. If <code>lag</code> is a single value then window lag is co
 for all elements, otherwise if <code>length(lag) == length(x)</code> different window
 size for each element. Negative value shifts window forward. One can also
 specify <code>lag</code> in the same way as <code>by</code> argument in
-<code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">seq.POSIXt</a></code>. See 'Specifying time-intervals' in details
+<code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">base::seq.POSIXt()</a></code>. See 'Specifying time-intervals' in details
 section.</p></dd>
 
 
@@ -206,7 +206,7 @@ varying increment and with duplicated values. If specified then <code>k</code> a
 <dd><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>, <code>character</code> vector)<br>
 Vector of any size and any value defining output data points. Values of the
 vector defines the indexes which data is computed at. Can be also <code>POSIXt</code>
-sequence increment used in <code>at</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">seq.POSIXt</a></code>.
+sequence increment used in <code>at</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">base::seq.POSIXt()</a></code>.
 See 'Specifying time-intervals' in details section.</p></dd>
 
 
@@ -229,7 +229,7 @@ are identical to <code>sapply</code>.</p></dd>
 <dt>cl</dt>
 <dd><p>(<code>cluster</code>) <em>experimental</em><br>
 Create and pass the cluster to the <code>runner</code> function to run each window
-calculation in parallel. See <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></code> in details.</p></dd>
+calculation in parallel. See <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::makeCluster()</a></code> in details.</p></dd>
 
 
 <dt>...</dt>
@@ -252,7 +252,7 @@ depends on the output from a function <code>f</code>.</p>
 on several ways:</p><ul><li><p><strong>Cumulative windows</strong><br>
 applied when user doesn't specify <code>k</code> argument or specify <code>k = length(x)</code>,
 this would mean that <code>k</code> is equal to number of available elements <br><img src="figures/cumulativewindows.png" width="75%" alt="Figure: cumulativewindows.png"></p></li>
-<li><p><strong>Constant sliding windows</strong><br>
+<li><p><strong>Constant sliding windows</strong>
 applied when user specify <code>k</code> as constant value keeping <code>idx</code> and
 <code>at</code> unspecified. <code>lag</code> argument shifts windows left (<code>lag &gt; 0</code>)
 or right (<code>lag &lt; 0</code>). <br><img src="figures/incrementalindex.png" width="75%" alt="Figure: incrementalindex.png"></p></li>
@@ -278,7 +278,7 @@ current indices. <br><img src="figures/runnerat.png" width="75%" alt="Figure: ru
 <p><code>at</code> can also be specified as interval of the output defined by
 <code>at = "&lt;increment&gt;"</code> which results in indices sequence defined by
 <code>seq.POSIXt(min(idx), max(idx), by = "&lt;increment&gt;")</code>. Increment of sequence
-is the same as in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">seq.POSIXt</a></code> function.
+is the same as in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">base::seq.POSIXt()</a></code> function.
 It's worth noting that increment interval can't be more frequent than
 interval of <code>idx</code> - for <code>Date</code> the most frequent time-unit is a <code>"day"</code>,
 for <code>POSIXt</code> a <code>sec</code>.</p>
@@ -303,7 +303,8 @@ have the edge over single-thread even if the
 <br>
 Parallel windows are executed in the independent environment, which means
 that objects other than function arguments needs to be copied to the
-parallel environment using <code><a href="https://rdrr.io/r/parallel/clusterApply.html" class="external-link">clusterExport</a></code><code>. For example using </code>f = function(x) x + y + z` will result in error as
+parallel environment using <code><a href="https://rdrr.io/r/parallel/clusterApply.html" class="external-link">parallel::clusterExport()</a></code>. For
+example using <code>f = function(x) x + y + z</code> will result in error as
 <code>clusterExport(cl, varlist = c("y", "z"))</code> needs to be called before.</p>
 </div>
 
@@ -391,14 +392,16 @@ parallel environment using <code><a href="https://rdrr.io/r/parallel/clusterAppl
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># number of unique values in each window (varying window size)</span></span></span>
 <span class="r-in"><span><span class="fu">runner</span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>       k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>       f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1 2 2 4 5 5 5 5 5 5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># concatenate only on selected windows index</span></span></span>
 <span class="r-in"><span><span class="fu">runner</span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>       f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span>, collapse <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>       at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span>, collapse <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">8</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a"               "a-b-c-d-e"       "a-b-c-d-e-f-g-h"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># 5 days mean</span></span></span>
@@ -428,7 +431,7 @@ parallel environment using <code><a href="https://rdrr.io/r/parallel/clusterAppl
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">13</span>,</span></span>
 <span class="r-in"><span>  b <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">13</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">13</span>, sd <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fl">365</span>, by <span class="op">=</span> <span class="st">"1 month"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-02-22"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2023-02-22"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"1 month"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">runner</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="va">df</span>,</span></span>
@@ -488,7 +491,8 @@ parallel environment using <code><a href="https://rdrr.io/r/parallel/clusterAppl
 <span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>      error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="cn">NA</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
-<span class="r-in"><span> <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       [,1] [,2]        [,3]        [,4]         [,5]        [,6]        [,7]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]   NA    1  1.00000000  1.00000000  1.000000000  1.00000000  1.00000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]   NA    1  0.56501046  0.48501747  0.352903529  0.26309989  0.35214652</span>
@@ -607,7 +611,7 @@ parallel environment using <code><a href="https://rdrr.io/r/parallel/clusterAppl
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

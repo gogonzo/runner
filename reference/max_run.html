@@ -24,7 +24,7 @@ specified k window size."><!-- mathjax --><script src="https://cdnjs.cloudflare.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4</span>
       </span>
     </div>
 
@@ -100,7 +100,7 @@ Input in runner custom function <code>f</code>.</p></dd>
 Denoting size of the running window. If <code>k</code> is a single value then window
 size is constant for all elements, otherwise if <code>length(k) == length(x)</code>
 different window size for each element. One can also specify <code>k</code> in the same
-way as <code>by</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">seq.POSIXt</a></code>.
+way as <code>by</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">base::seq.POSIXt()</a></code>.
 See 'Specifying time-intervals' in details section.</p></dd>
 
 
@@ -110,7 +110,7 @@ Denoting window lag. If <code>lag</code> is a single value then window lag is co
 for all elements, otherwise if <code>length(lag) == length(x)</code> different window
 size for each element. Negative value shifts window forward. One can also
 specify <code>lag</code> in the same way as <code>by</code> argument in
-<code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">seq.POSIXt</a></code>. See 'Specifying time-intervals' in details
+<code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">base::seq.POSIXt()</a></code>. See 'Specifying time-intervals' in details
 section.</p></dd>
 
 
@@ -127,7 +127,7 @@ varying increment and with duplicated values. If specified then <code>k</code> a
 <dd><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>, <code>character</code> vector)<br>
 Vector of any size and any value defining output data points. Values of the
 vector defines the indexes which data is computed at. Can be also <code>POSIXt</code>
-sequence increment used in <code>at</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">seq.POSIXt</a></code>.
+sequence increment used in <code>at</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">base::seq.POSIXt()</a></code>.
 See 'Specifying time-intervals' in details section.</p></dd>
 
 
@@ -146,22 +146,22 @@ Incomplete window is when some parts of the window are out of range.</p></dd>
     <h2>Value</h2>
     
 
-<p>max numeric vector of length equals length of <code>x</code>.</p>
+<p>max (<code>numeric</code>) vector of length equals length of <code>x</code>.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fl">15</span>, replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fl">15</span>, replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">k</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">15</span>, replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fl">15</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fl">15</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">15</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">max_run</span><span class="op">(</span><span class="va">x1</span><span class="op">)</span> <span class="co"># simple cumulative maximum</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3</span>
 <span class="r-in"><span><span class="fu">max_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># cumulative maximum with removing NA.</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3</span>
-<span class="r-in"><span><span class="fu">max_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, k<span class="op">=</span><span class="fl">4</span><span class="op">)</span> <span class="co"># maximum in 4-element window</span></span></span>
+<span class="r-in"><span><span class="fu">max_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span>, k <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="co"># maximum in 4-element window</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 2 2 2 2 2 2 3 3 3 3 2 2 2 2 2</span>
-<span class="r-in"><span><span class="fu">max_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">FALSE</span>, k<span class="op">=</span><span class="va">k</span><span class="op">)</span> <span class="co"># maximum in varying k window size</span></span></span>
+<span class="r-in"><span><span class="fu">max_run</span><span class="op">(</span><span class="va">x2</span>, na_rm <span class="op">=</span> <span class="cn">FALSE</span>, k <span class="op">=</span> <span class="va">k</span><span class="op">)</span> <span class="co"># maximum in varying k window size</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  2  2 NA NA NA NA  3  3  2  1  2  2  2  2  2</span>
 </code></pre></div>
     </div>
@@ -177,7 +177,7 @@ Incomplete window is when some parts of the window are out of range.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

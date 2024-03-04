@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4</span>
       </span>
     </div>
 
@@ -93,14 +93,17 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div class="section level1"><div class="page-header"><h1 id="runner-an-r-package-for-running-operations">
+<div class="section level1">
+<div class="page-header"><h1 id="runner-an-r-package-for-running-operations">
 <code>runner</code> an R package for running operations.<a class="anchor" aria-label="anchor" href="#runner-an-r-package-for-running-operations"></a>
-</h1></div></div>
+</h1></div>
+</div>
 <div class="section level1">
 <h1 id="section">
 <img src="reference/figures/hexlogo.png" align="right"><a class="anchor" aria-label="anchor" href="#section"></a>
 </h1>
 <!-- badges: start -->
+
 <div class="section level2">
 <h2 id="about">About<a class="anchor" aria-label="anchor" href="#about"></a>
 </h2>
@@ -128,10 +131,10 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/runner.html">runner</a></span><span class="op">(</span></span>
-<span>  <span class="va">x</span>, </span>
+<span>  <span class="va">x</span>,</span>
 <span>  lag <span class="op">=</span> <span class="st">"1 months"</span>,</span>
-<span>  k <span class="op">=</span> <span class="st">"4 months"</span>, </span>
-<span>  idx <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">date</span>, </span>
+<span>  k <span class="op">=</span> <span class="st">"4 months"</span>,</span>
+<span>  idx <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">date</span>,</span>
 <span>  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">a</span>, <span class="va">x</span><span class="op">$</span><span class="va">b</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
@@ -158,8 +161,8 @@
 <p><img src="reference/figures/laggedwindowklag.png"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/runner.html">runner</a></span><span class="op">(</span></span>
-<span>  <span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, </span>
-<span>  k <span class="op">=</span> <span class="fl">4</span>, </span>
+<span>  <span class="fl">1</span><span class="op">:</span><span class="fl">15</span>,</span>
+<span>  k <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  lag <span class="op">=</span> <span class="fl">2</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -171,9 +174,9 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">13</span>, <span class="fl">17</span>, <span class="fl">18</span>, <span class="fl">18</span>, <span class="fl">21</span>, <span class="fl">27</span>, <span class="fl">31</span>, <span class="fl">37</span>, <span class="fl">42</span>, <span class="fl">44</span>, <span class="fl">47</span>, <span class="fl">48</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/runner.html">runner</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, </span>
-<span>  k <span class="op">=</span> <span class="st">"5 days"</span>, </span>
-<span>  lag <span class="op">=</span> <span class="st">"1 days"</span>, </span>
+<span>  x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">15</span>,</span>
+<span>  k <span class="op">=</span> <span class="st">"5 days"</span>,</span>
+<span>  lag <span class="op">=</span> <span class="st">"1 days"</span>,</span>
 <span>  idx <span class="op">=</span> <span class="va">idx</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -185,10 +188,10 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">13</span>, <span class="fl">17</span>, <span class="fl">18</span>, <span class="fl">18</span>, <span class="fl">21</span>, <span class="fl">27</span>, <span class="fl">31</span>, <span class="fl">37</span>, <span class="fl">42</span>, <span class="fl">44</span>, <span class="fl">47</span>, <span class="fl">48</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/runner.html">runner</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="va">idx</span>, </span>
-<span>  k <span class="op">=</span> <span class="fl">5</span>, </span>
-<span>  lag <span class="op">=</span> <span class="fl">1</span>, </span>
-<span>  idx <span class="op">=</span> <span class="va">idx</span>, </span>
+<span>  x <span class="op">=</span> <span class="va">idx</span>,</span>
+<span>  k <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  lag <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  idx <span class="op">=</span> <span class="va">idx</span>,</span>
 <span>  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">27</span>, <span class="fl">48</span>, <span class="fl">31</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -201,10 +204,10 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">13</span>, <span class="fl">17</span>, <span class="fl">18</span>, <span class="fl">18</span>, <span class="fl">21</span>, <span class="fl">27</span>, <span class="fl">31</span>, <span class="fl">37</span>, <span class="fl">42</span>, <span class="fl">44</span>, <span class="fl">47</span>, <span class="fl">48</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/runner.html">runner</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="va">idx</span>, </span>
-<span>  k <span class="op">=</span> <span class="fl">5</span>, </span>
-<span>  lag <span class="op">=</span> <span class="fl">1</span>, </span>
-<span>  idx <span class="op">=</span> <span class="va">idx</span>, </span>
+<span>  x <span class="op">=</span> <span class="va">idx</span>,</span>
+<span>  k <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  lag <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  idx <span class="op">=</span> <span class="va">idx</span>,</span>
 <span>  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">18</span>, <span class="fl">48</span>, <span class="fl">51</span><span class="op">)</span>,</span>
 <span>  na_pad <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -240,7 +243,7 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># </span></span>
+<span><span class="co">#</span></span>
 <span><span class="va">numCores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeForkCluster</a></span><span class="op">(</span><span class="va">numCores</span><span class="op">)</span></span>
 <span></span>
@@ -301,10 +304,8 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/gogonzo/runner/actions" class="external-link"><img src="https://github.com/gogonzo/runner/workflows/Check/badge.svg" alt="Check"></a></li>
+<li><a href="https://github.com/gogonzo/runner/actions" class="external-link"><img src="https://github.com/gogonzo/runner/workflows/R-CMD-check/badge.svg" alt="Check"></a></li>
 <li><a href="https://CRAN.R-project.org/package=runner" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/runner"></a></li>
-<li><a href="https://ci.appveyor.com/project/gogonzo/runner" class="external-link"><img src="https://ci.appveyor.com/api/projects/status/github/gogonzo/runner?branch=master&amp;svg=true"></a></li>
-<li><a href="https://codecov.io/gh/gogonzo/runner/branch/master" class="external-link"><img src="https://codecov.io/gh/gogonzo/runner/branch/master/graph/badge.svg"></a></li>
 <li><a href="https://cran.r-project.org/package=runner" class="external-link"><img src="https://tinyverse.netlify.com/badge/runner" alt="Dependencies"></a></li>
 </ul>
 </div>
@@ -320,7 +321,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
