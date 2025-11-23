@@ -65,14 +65,14 @@
 #' - **Cumulative windows**\cr
 #'    applied when user doesn't specify `k` argument or specify `k = length(x)`,
 #'    this would mean that `k` is equal to number of available elements \cr
-#'    \if{html}{\figure{cumulativewindows.png}{options: style="width: 75\%;" alt="Figure: cumulativewindows.png"}}
+#'    \if{html}{\figure{cumulativewindows.png}{options: alt="Figure: cumulativewindows.png"}}
 #'    \if{latex}{\figure{cumulativewindows.pdf}{options: width=7cm}}
 #'
 #'  - **Constant sliding windows**
 #'    applied when user specify `k` as constant value keeping `idx` and
 #'    `at` unspecified. `lag` argument shifts windows left (`lag > 0`)
 #'    or right (`lag < 0`). \cr
-#'    \if{html}{\figure{incrementalindex.png}{options: style="width: 75\%;" alt="Figure: incrementalindex.png"}}
+#'    \if{html}{\figure{incrementalindex.png}{options: alt="Figure: incrementalindex.png"}}
 #'    \if{latex}{\figure{incrementalindex.pdf}{options: width=7cm}}
 #'
 #'  - **Windows depending on date**\cr
@@ -82,7 +82,7 @@
 #'    contain any number of observation (7-day mean is not the same as 7-element
 #'    mean)
 #'     \cr
-#'    \if{html}{\figure{runningdatewindows.png}{options: style="width: 75\%;" alt="Figure: runningdatewindows.png"}}
+#'    \if{html}{\figure{runningdatewindows.png}{options: alt="Figure: runningdatewindows.png"}}
 #'    \if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
 #'
 #'  - **Window at specific indices**\cr
@@ -94,7 +94,7 @@
 #'    `at = c(18, 27, 45, 31)` which gives windows in ranges enclosed in square
 #'    brackets. Range for `at = 27` is `[22, 26]` which is not available in
 #'    current indices. \cr
-#'    \if{html}{\figure{runnerat.png}{options: style="width: 75\%;" alt="Figure: runnerat.png"}}
+#'    \if{html}{\figure{runnerat.png}{options: alt="Figure: runnerat.png"}}
 #'    \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
 #'
 #'
