@@ -13,13 +13,13 @@
 #' @return vector - `x` containing all `x` elements with `NA`
 #' replaced with previous non-NA element.
 #' @examples
-#' fill_run(c(NA, NA, 1:10, NA, NA), run_for_first = TRUE)
-#' fill_run(c(NA, NA, 1:10, NA, NA), run_for_first = TRUE)
-#' fill_run(c(NA, NA, 1:10, NA, NA), run_for_first = FALSE)
+#' fill_run(c(NA, NA,1:10, NA, NA), run_for_first = TRUE)
+#' fill_run(c(NA, NA,1:10, NA, NA), run_for_first = TRUE)
+#' fill_run(c(NA, NA,1:10, NA, NA), run_for_first = FALSE)
 #' fill_run(c(NA, NA, 1, 2, NA, NA, 2, 2, NA, NA, 1, NA, NA), run_for_first = TRUE, only_within = TRUE)
 #' @export
 fill_run <- function(x, run_for_first = FALSE, only_within = FALSE) {
-    .Call("_runner_fill_run", PACKAGE = "runner", x, run_for_first, only_within)
+    .Call('_runner_fill_run', PACKAGE = 'runner', x, run_for_first, only_within)
 }
 
 #' Lag dependent on variable
@@ -37,7 +37,7 @@ fill_run <- function(x, run_for_first = FALSE, only_within = FALSE) {
 #' lag_run(letters[1:10], lag = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10), nearest = TRUE)
 #' @export
 lag_run <- function(x, lag = 1L, idx = integer(0), nearest = FALSE) {
-    .Call("_runner_lag_run", PACKAGE = "runner", x, lag, idx, nearest)
+    .Call('_runner_lag_run', PACKAGE = 'runner', x, lag, idx, nearest)
 }
 
 #' Length of running windows
@@ -51,7 +51,7 @@ lag_run <- function(x, lag = 1L, idx = integer(0), nearest = FALSE) {
 #' length_run(k = 3, idx = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
 #' @export
 length_run <- function(k = integer(1), lag = integer(1), idx = integer(0)) {
-    .Call("_runner_length_run", PACKAGE = "runner", k, lag, idx)
+    .Call('_runner_length_run', PACKAGE = 'runner', k, lag, idx)
 }
 
 #' Running min/max
@@ -65,7 +65,7 @@ length_run <- function(k = integer(1), lag = integer(1), idx = integer(0)) {
 #' @return list.
 #' @export
 minmax_run <- function(x, metric = "min", na_rm = TRUE) {
-    .Call("_runner_minmax_run", PACKAGE = "runner", x, metric, na_rm)
+    .Call('_runner_minmax_run', PACKAGE = 'runner', x, metric, na_rm)
 }
 
 #' Running sum
@@ -100,11 +100,11 @@ minmax_run <- function(x, metric = "min", na_rm = TRUE) {
 #'
 #' @inheritParams runner
 #'
-#' @return sum `numeric` vector of length equals length of `x`.
+#' @return sum `code` vector of length equals length of `x`.
 #' @examples
 #' set.seed(11)
 #' x1 <- rnorm(15)
-#' x2 <- sample(c(rep(NA, 5), rnorm(15)), 15, replace = TRUE)
+#' x2 <- sample(c(rep(NA, 5),rnorm(15)), 15, replace = TRUE)
 #' k <- sample(1:15, 15, replace = TRUE)
 #' sum_run(x1)
 #' sum_run(x2, na_rm = TRUE)
@@ -112,7 +112,7 @@ minmax_run <- function(x, metric = "min", na_rm = TRUE) {
 #' sum_run(x2, na_rm = TRUE, k = 4)
 #' @export
 sum_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_rm = TRUE, na_pad = FALSE) {
-    .Call("_runner_sum_run", PACKAGE = "runner", x, k, lag, idx, at, na_rm, na_pad)
+    .Call('_runner_sum_run', PACKAGE = 'runner', x, k, lag, idx, at, na_rm, na_pad)
 }
 
 #' Running mean
@@ -124,15 +124,15 @@ sum_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = 
 #' @examples
 #' set.seed(11)
 #' x1 <- rnorm(15)
-#' x2 <- sample(c(rep(NA, 5), rnorm(15)), 15, replace = TRUE)
+#' x2 <- sample(c(rep(NA,5), rnorm(15)), 15, replace = TRUE)
 #' k <- sample(1:15, 15, replace = TRUE)
 #' mean_run(x1)
 #' mean_run(x2, na_rm = TRUE)
-#' mean_run(x2, na_rm = FALSE)
-#' mean_run(x2, na_rm = TRUE, k = 4)
+#' mean_run(x2, na_rm = FALSE )
+#' mean_run(x2, na_rm = TRUE, k=4)
 #' @export
 mean_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_rm = TRUE, na_pad = FALSE) {
-    .Call("_runner_mean_run", PACKAGE = "runner", x, k, lag, idx, at, na_rm, na_pad)
+    .Call('_runner_mean_run', PACKAGE = 'runner', x, k, lag, idx, at, na_rm, na_pad)
 }
 
 #' Running maximum
@@ -145,16 +145,16 @@ mean_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at =
 #' @return max (`numeric`) vector of length equals length of `x`.
 #' @examples
 #' set.seed(11)
-#' x1 <- sample(c(1, 2, 3), 15, replace = TRUE)
-#' x2 <- sample(c(NA, 1, 2, 3), 15, replace = TRUE)
-#' k <- sample(1:4, 15, replace = TRUE)
+#' x1 <- sample( c(1,2,3), 15, replace=TRUE)
+#' x2 <- sample( c(NA,1,2,3), 15, replace=TRUE)
+#' k  <- sample( 1:4, 15, replace=TRUE)
 #' max_run(x1) # simple cumulative maximum
 #' max_run(x2, na_rm = TRUE) # cumulative maximum with removing NA.
-#' max_run(x2, na_rm = TRUE, k = 4) # maximum in 4-element window
-#' max_run(x2, na_rm = FALSE, k = k) # maximum in varying k window size
+#' max_run(x2, na_rm = TRUE, k=4) # maximum in 4-element window
+#' max_run(x2, na_rm = FALSE, k=k) # maximum in varying k window size
 #' @export
 max_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_rm = TRUE, na_pad = FALSE) {
-    .Call("_runner_max_run", PACKAGE = "runner", x, k, lag, idx, at, na_rm, na_pad)
+    .Call('_runner_max_run', PACKAGE = 'runner', x, k, lag, idx, at, na_rm, na_pad)
 }
 
 #' Running minimum
@@ -168,14 +168,14 @@ max_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = 
 #' set.seed(11)
 #' x1 <- sample(c(1, 2, 3), 15, replace = TRUE)
 #' x2 <- sample(c(NA, 1, 2, 3), 15, replace = TRUE)
-#' k <- sample(1:4, 15, replace = TRUE)
+#' k  <- sample(1:4, 15, replace = TRUE)
 #' min_run(x1)
 #' min_run(x2, na_rm = TRUE)
 #' min_run(x2, na_rm = TRUE, k = 4)
 #' min_run(x2, na_rm = FALSE, k = k)
 #' @export
 min_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_rm = TRUE, na_pad = FALSE) {
-    .Call("_runner_min_run", PACKAGE = "runner", x, k, lag, idx, at, na_rm, na_pad)
+    .Call('_runner_min_run', PACKAGE = 'runner', x, k, lag, idx, at, na_rm, na_pad)
 }
 
 #' Running streak length
@@ -188,7 +188,7 @@ min_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = 
 #' number of consecutive occurrences.
 #' @examples
 #' set.seed(11)
-#' x1 <- sample(c("a", "b"), 15, replace = TRUE)
+#' x1 <- sample(c("a","b"), 15, replace = TRUE)
 #' x2 <- sample(c(NA_character_, "a", "b"), 15, replace = TRUE)
 #' k <- sample(1:4, 15, replace = TRUE)
 #' streak_run(x1) # simple streak run
@@ -197,7 +197,7 @@ min_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = 
 #' streak_run(x1, k = k) # streak run within varying window size specified by vector k
 #' @export
 streak_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_rm = TRUE, na_pad = FALSE) {
-    .Call("_runner_streak_run", PACKAGE = "runner", x, k, lag, idx, at, na_rm, na_pad)
+    .Call('_runner_streak_run', PACKAGE = 'runner', x, k, lag, idx, at, na_rm, na_pad)
 }
 
 #' Running which
@@ -213,14 +213,14 @@ streak_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at
 #' set.seed(11)
 #' x1 <- sample(c(1, 2, 3), 15, replace = TRUE)
 #' x2 <- sample(c(NA, 1, 2, 3), 15, replace = TRUE)
-#' k <- sample(1:4, 15, replace = TRUE)
+#' k  <- sample(1:4, 15, replace = TRUE)
 #' which_run(x1)
 #' which_run(x2, na_rm = TRUE)
 #' which_run(x2, na_rm = TRUE, k = 4)
 #' which_run(x2, na_rm = FALSE, k = k)
 #' @export
 which_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), which = "last", na_rm = TRUE, na_pad = FALSE) {
-    .Call("_runner_which_run", PACKAGE = "runner", x, k, lag, idx, at, which, na_rm, na_pad)
+    .Call('_runner_which_run', PACKAGE = 'runner', x, k, lag, idx, at, which, na_rm, na_pad)
 }
 
 #' List of running windows
@@ -236,5 +236,6 @@ which_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at 
 #' window_run(letters[1:10], k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
 #' @export
 window_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_pad = FALSE) {
-    .Call("_runner_window_run", PACKAGE = "runner", x, k, lag, idx, at, na_pad)
+    .Call('_runner_window_run', PACKAGE = 'runner', x, k, lag, idx, at, na_pad)
 }
+

@@ -1,3 +1,11 @@
+# runner 0.4.5
+
+* fix CRAN issues
+
+# runner 0.4.4
+
+* fix CRAN issues
+
 # runner 0.4.3
 
 * fix an example after dependency change.
