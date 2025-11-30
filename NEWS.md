@@ -1,10 +1,10 @@
 # runner 0.4.5
 
-* fix CRAN issues
+* fix CRAN issues with documentation
 
 # runner 0.4.4
 
-* fix CRAN issues
+* remove redundant Makevars
 
 # runner 0.4.3
 
