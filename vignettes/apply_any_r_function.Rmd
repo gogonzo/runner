@@ -85,6 +85,7 @@ runner(
 ```
 
 ### Windows depending on date
+
 By default `runner` calculates on assumption that index increments by one, but sometimes 
 data points in dataset are not equally spaced (missing weekends, holidays, other missings) 
 and thus window size should vary to keep expected time frame. If one specifies 
