@@ -1,3 +1,11 @@
+# runner 0.4.5
+
+* fix CRAN issues with documentation
+
+# runner 0.4.4
+
+* remove redundant Makevars
+
 # runner 0.4.3
 
 * fix an example after dependency change.

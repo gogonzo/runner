@@ -67,7 +67,7 @@ integer vector of indexes of the same length as \code{x}.
 set.seed(11)
 x1 <- sample(c(1, 2, 3), 15, replace = TRUE)
 x2 <- sample(c(NA, 1, 2, 3), 15, replace = TRUE)
-k <- sample(1:4, 15, replace = TRUE)
+k  <- sample(1:4, 15, replace = TRUE)
 which_run(x1)
 which_run(x2, na_rm = TRUE)
 which_run(x2, na_rm = TRUE, k = 4)

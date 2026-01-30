@@ -43,7 +43,7 @@ Whether incomplete window should return \code{NA} (if \code{na_pad = TRUE})
 Incomplete window is when some parts of the window are out of range.}
 }
 \value{
-sum \code{numeric} vector of length equals length of \code{x}.
+sum \code{code} vector of length equals length of \code{x}.
 }
 \description{
 Running sum in specified window of numeric vector.
@@ -51,7 +51,7 @@ Running sum in specified window of numeric vector.
 \examples{
 set.seed(11)
 x1 <- rnorm(15)
-x2 <- sample(c(rep(NA, 5), rnorm(15)), 15, replace = TRUE)
+x2 <- sample(c(rep(NA, 5),rnorm(15)), 15, replace = TRUE)
 k <- sample(1:15, 15, replace = TRUE)
 sum_run(x1)
 sum_run(x2, na_rm = TRUE)

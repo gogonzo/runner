@@ -62,11 +62,11 @@ specified \code{k} window size.
 }
 \examples{
 set.seed(11)
-x1 <- sample(c(1, 2, 3), 15, replace = TRUE)
-x2 <- sample(c(NA, 1, 2, 3), 15, replace = TRUE)
-k <- sample(1:4, 15, replace = TRUE)
+x1 <- sample( c(1,2,3), 15, replace=TRUE)
+x2 <- sample( c(NA,1,2,3), 15, replace=TRUE)
+k  <- sample( 1:4, 15, replace=TRUE)
 max_run(x1) # simple cumulative maximum
 max_run(x2, na_rm = TRUE) # cumulative maximum with removing NA.
-max_run(x2, na_rm = TRUE, k = 4) # maximum in 4-element window
-max_run(x2, na_rm = FALSE, k = k) # maximum in varying k window size
+max_run(x2, na_rm = TRUE, k=4) # maximum in 4-element window
+max_run(x2, na_rm = FALSE, k=k) # maximum in varying k window size
 }

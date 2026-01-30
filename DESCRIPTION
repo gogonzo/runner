@@ -1,11 +1,11 @@
 Package: runner
 Title: Running Operations for Vectors
 Type: Package
-Version: 0.4.4
+Version: 0.4.5
 Depends: R (>= 3.0)
 Language: en-US
 Encoding: UTF-8
-Authors@R: person("Dawid", "Kałędkowski", 
+Authors@R: person("Dawid", "Kałędkowski", ,
                   email = "dawid.kaledkowski@gmail.com",
                   comment = c(ORCID = "0000-0001-9533-457X"),
                   role = c("aut", "cre"))
@@ -25,6 +25,6 @@ Suggests:
   knitr,
   rmarkdown,
   tinytest
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr

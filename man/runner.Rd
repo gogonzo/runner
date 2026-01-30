@@ -160,13 +160,13 @@ on several ways:
 \item \strong{Cumulative windows}\cr
 applied when user doesn't specify \code{k} argument or specify \code{k = length(x)},
 this would mean that \code{k} is equal to number of available elements \cr
-\if{html}{\figure{cumulativewindows.png}{options: width="75\%" alt="Figure: cumulativewindows.png"}}
+\if{html}{\figure{cumulativewindows.png}{options: alt="Figure: cumulativewindows.png"}}
 \if{latex}{\figure{cumulativewindows.pdf}{options: width=7cm}}
 \item \strong{Constant sliding windows}
 applied when user specify \code{k} as constant value keeping \code{idx} and
 \code{at} unspecified. \code{lag} argument shifts windows left (\code{lag > 0})
 or right (\code{lag < 0}). \cr
-\if{html}{\figure{incrementalindex.png}{options: width="75\%" alt="Figure: incrementalindex.png"}}
+\if{html}{\figure{incrementalindex.png}{options: alt="Figure: incrementalindex.png"}}
 \if{latex}{\figure{incrementalindex.pdf}{options: width=7cm}}
 \item \strong{Windows depending on date}\cr
 If one specifies \code{idx} this would mean that output windows size might
@@ -175,7 +175,7 @@ window is different than 5-element window, because 5-period window might
 contain any number of observation (7-day mean is not the same as 7-element
 mean)
 \cr
-\if{html}{\figure{runningdatewindows.png}{options: width="75\%" alt="Figure: runningdatewindows.png"}}
+\if{html}{\figure{runningdatewindows.png}{options: alt="Figure: runningdatewindows.png"}}
 \if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
 \item \strong{Window at specific indices}\cr
 \code{runner} by default returns vector of the same size as \code{x} unless one
@@ -186,7 +186,7 @@ length equal to \code{at}. Note that one can change index of \code{x} by specify
 \code{at = c(18, 27, 45, 31)} which gives windows in ranges enclosed in square
 brackets. Range for \code{at = 27} is \verb{[22, 26]} which is not available in
 current indices. \cr
-\if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}}
+\if{html}{\figure{runnerat.png}{options: alt="Figure: runnerat.png"}}
 \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
 }
 \subsection{Specifying time-intervals}{

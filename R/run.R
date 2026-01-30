@@ -65,14 +65,14 @@
 #' - **Cumulative windows**\cr
 #'    applied when user doesn't specify `k` argument or specify `k = length(x)`,
 #'    this would mean that `k` is equal to number of available elements \cr
-#'    \if{html}{\figure{cumulativewindows.png}{options: width="75\%" alt="Figure: cumulativewindows.png"}}
+#'    \if{html}{\figure{cumulativewindows.png}{options: alt="Figure: cumulativewindows.png"}}
 #'    \if{latex}{\figure{cumulativewindows.pdf}{options: width=7cm}}
 #'
 #'  - **Constant sliding windows**
 #'    applied when user specify `k` as constant value keeping `idx` and
 #'    `at` unspecified. `lag` argument shifts windows left (`lag > 0`)
 #'    or right (`lag < 0`). \cr
-#'    \if{html}{\figure{incrementalindex.png}{options: width="75\%" alt="Figure: incrementalindex.png"}}
+#'    \if{html}{\figure{incrementalindex.png}{options: alt="Figure: incrementalindex.png"}}
 #'    \if{latex}{\figure{incrementalindex.pdf}{options: width=7cm}}
 #'
 #'  - **Windows depending on date**\cr
@@ -82,7 +82,7 @@
 #'    contain any number of observation (7-day mean is not the same as 7-element
 #'    mean)
 #'     \cr
-#'    \if{html}{\figure{runningdatewindows.png}{options: width="75\%" alt="Figure: runningdatewindows.png"}}
+#'    \if{html}{\figure{runningdatewindows.png}{options: alt="Figure: runningdatewindows.png"}}
 #'    \if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
 #'
 #'  - **Window at specific indices**\cr
@@ -94,7 +94,7 @@
 #'    `at = c(18, 27, 45, 31)` which gives windows in ranges enclosed in square
 #'    brackets. Range for `at = 27` is `[22, 26]` which is not available in
 #'    current indices. \cr
-#'    \if{html}{\figure{runnerat.png}{options: width="75\%" alt="Figure: runnerat.png"}}
+#'    \if{html}{\figure{runnerat.png}{options: alt="Figure: runnerat.png"}}
 #'    \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
 #'
 #'
@@ -138,16 +138,17 @@
 #' @importFrom parallel clusterExport parLapply
 #' @export
 runner <- function(
-    x,
-    f = function(x) x,
-    k = integer(0),
-    lag = integer(1),
-    idx = integer(0),
-    at = integer(0),
-    na_pad = FALSE,
-    simplify = TRUE,
-    cl = NULL,
-    ...) {
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  simplify = TRUE,
+  cl = NULL,
+  ...
+) {
   UseMethod("runner", x)
 }
 
@@ -217,17 +218,18 @@ runner <- function(
 #' )
 #' @export
 runner.default <- function(
-    # nolint
-    x,
-    f = function(x) x,
-    k = integer(0),
-    lag = integer(1),
-    idx = integer(0),
-    at = integer(0),
-    na_pad = FALSE,
-    simplify = TRUE,
-    cl = NULL,
-    ...) {
+  # nolint
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  simplify = TRUE,
+  cl = NULL,
+  ...
+) {
   if (any(is.na(k))) {
     stop("Function doesn't accept NA values in k vector")
   }
@@ -308,17 +310,18 @@ runner.default <- function(
 #' stopCluster(cl)
 #' @export
 runner.data.frame <- function(
-    # nolint
-    x,
-    f = function(x) x,
-    k = attr(x, "k"),
-    lag = if (!is.null(attr(x, "lag"))) attr(x, "lag") else integer(1),
-    idx = attr(x, "idx"),
-    at = attr(x, "at"),
-    na_pad = if (!is.null(attr(x, "na_pad"))) attr(x, "na_pad") else FALSE,
-    simplify = TRUE,
-    cl = NULL,
-    ...) {
+  # nolint
+  x,
+  f = function(x) x,
+  k = attr(x, "k"),
+  lag = if (!is.null(attr(x, "lag"))) attr(x, "lag") else integer(1),
+  idx = attr(x, "idx"),
+  at = attr(x, "at"),
+  na_pad = if (!is.null(attr(x, "na_pad"))) attr(x, "na_pad") else FALSE,
+  simplify = TRUE,
+  cl = NULL,
+  ...
+) {
   # Check if argument is either a colname of x or valid vector of values
   .check_unresolved_difftime(x, k)
   .check_unresolved_difftime(x, lag)
@@ -391,16 +394,17 @@ runner.data.frame <- function(
 #' @rdname runner
 #' @export
 runner.grouped_df <- function(
-    x,
-    f = function(x) x,
-    k = attr(x, "k"),
-    lag = if (!is.null(attr(x, "lag"))) attr(x, "lag") else integer(1),
-    idx = attr(x, "idx"),
-    at = attr(x, "at"),
-    na_pad = if (!is.null(attr(x, "na_pad"))) attr(x, "na_pad") else FALSE,
-    simplify = TRUE,
-    cl = NULL,
-    ...) {
+  x,
+  f = function(x) x,
+  k = attr(x, "k"),
+  lag = if (!is.null(attr(x, "lag"))) attr(x, "lag") else integer(1),
+  idx = attr(x, "idx"),
+  at = attr(x, "at"),
+  na_pad = if (!is.null(attr(x, "na_pad"))) attr(x, "na_pad") else FALSE,
+  simplify = TRUE,
+  cl = NULL,
+  ...
+) {
   runner.data.frame(
     x = .this_group(x),
     f = f,
@@ -431,16 +435,17 @@ runner.grouped_df <- function(
 #' )
 #' @export
 runner.matrix <- function(
-    x,
-    f = function(x) x,
-    k = integer(0),
-    lag = integer(1),
-    idx = integer(0),
-    at = integer(0),
-    na_pad = FALSE,
-    simplify = TRUE,
-    cl = NULL,
-    ...) {
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  simplify = TRUE,
+  cl = NULL,
+  ...
+) {
   if (any(is.na(k))) {
     stop("Function doesn't accept NA values in k vector")
   }
@@ -504,16 +509,17 @@ runner.matrix <- function(
 #' @rdname runner
 #' @export
 runner.xts <- function(
-    x,
-    f = function(x) x,
-    k = integer(0),
-    lag = integer(1),
-    idx = integer(0),
-    at = integer(0),
-    na_pad = FALSE,
-    simplify = TRUE,
-    cl = NULL,
-    ...) {
+  x,
+  f = function(x) x,
+  k = integer(0),
+  lag = integer(1),
+  idx = integer(0),
+  at = integer(0),
+  na_pad = FALSE,
+  simplify = TRUE,
+  cl = NULL,
+  ...
+) {
   if (!identical(idx, integer(0))) {
     warning(
       "'idx' argument has been specified and will mask index
