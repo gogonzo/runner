@@ -31,3 +31,12 @@ reference:
      - lag_run
      - which_run
 
+articles:
+  - title: "Vignettes"
+    navbar: ~
+    contents:
+      - getting_started_with_runner
+      - apply_any_r_function
+      - built-in_functions
+      - runner_examples
+
