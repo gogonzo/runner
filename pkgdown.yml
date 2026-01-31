@@ -4,5 +4,6 @@ pkgdown_sha: ~
 articles:
   apply_any_r_function: apply_any_r_function.html
   built-in_functions: built-in_functions.html
+  getting_started_with_runner: getting_started_with_runner.html
   runner_examples: runner_examples.html
-last_built: 2026-01-30T20:25Z
+last_built: 2026-01-31T10:36Z
