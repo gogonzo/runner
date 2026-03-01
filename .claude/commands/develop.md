@@ -25,3 +25,8 @@ Act as a developer working on the runner R package. Follow these guidelines:
 ## Commits
 - Keep commits focused and atomic
 - Do not commit compiled files (.so, .dll, .o)
+
+## Escalation
+If you are blocked, unsure about the approach, or cannot resolve failing checks:
+- Tag the maintainer @gogonzo in a comment explaining what you're stuck on
+- Do NOT keep retrying the same failing approach

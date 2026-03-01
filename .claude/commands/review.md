@@ -40,3 +40,8 @@ Act as a code reviewer for the runner R package. Review the recent changes with 
 - If the implementation deviates from or only partially addresses the issue, flag it as a **blocker**
 
 Summarize findings with severity: **blocker**, **should fix**, or **nit**.
+
+## Escalation
+If you are blocked or unable to complete the review (e.g. cannot determine backward compatibility, unclear CRAN policy implications):
+- Tag the maintainer @gogonzo in your review comment asking for guidance
+- Clearly explain what you're unsure about and what decision is needed
