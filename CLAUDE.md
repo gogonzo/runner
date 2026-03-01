@@ -25,6 +25,9 @@
 - `R/run_by.R` handles grouped operations
 - Package supports data.frame, matrix, xts, and grouped_df inputs
 
+## Protected Files
+- NEVER modify `CLAUDE.md`, `.claude/`, or `.github/CODEOWNERS` — these are maintained by the project owner only
+
 ## Important
 - This is a CRAN package — follow CRAN policies
 - Do not break backward compatibility without discussion
