@@ -1,4 +1,6 @@
 #include <Rcpp.h>
+#include <vector>
+#include <algorithm>
 using namespace Rcpp;
 #include "vector_funs.h"
 #include "window_funs.h"
@@ -833,6 +835,58 @@ Rcpp::NumericVector sum_run(
   {
     return aggr::cumsum(x, na_rm);
   }
+  else if (k.size() == 1 &&
+           lag.size() == 1 &&
+           idx.size() == 0 &&
+           at.size() == 0)
+  {
+    // Prefix-sum fast path: O(n) instead of O(n*k)
+    int n = x.size();
+    int kk = k(0);
+    int ll = lag(0);
+
+    checks::check_k(k, n, "x");
+    checks::check_lag(lag, n, "x");
+
+    Rcpp::NumericVector res(n);
+    std::vector<double> psum(n + 1, 0.0);
+    std::vector<int> pna(n + 1, 0);
+
+    for (int i = 0; i < n; i++)
+    {
+      bool is_na = Rcpp::NumericVector::is_na(x(i));
+      psum[i + 1] = psum[i] + (is_na ? 0.0 : x(i));
+      pna[i + 1] = pna[i] + (is_na ? 1 : 0);
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+      Rcpp::IntegerVector b = utils::window_ul(i, kk, ll, n, na_pad);
+      if (b.size() == 0)
+      {
+        res(i) = NA_REAL;
+      }
+      else
+      {
+        int lo = b(0), hi = b(1);
+        int na_count = pna[hi + 1] - pna[lo];
+        int total = hi - lo + 1;
+        if (!na_rm && na_count > 0)
+        {
+          res(i) = NA_REAL;
+        }
+        else if (na_count == total)
+        {
+          res(i) = NA_REAL;
+        }
+        else
+        {
+          res(i) = psum[hi + 1] - psum[lo];
+        }
+      }
+    }
+    return res;
+  }
   else
   {
     return runner_vec<14>(x, aggr::calc_sum, k, lag, idx, at, na_rm, na_pad);
@@ -873,6 +927,59 @@ NumericVector mean_run(
       at.size() == 0)
   {
     return aggr::cummean(x, na_rm);
+  }
+  else if (k.size() == 1 &&
+           lag.size() == 1 &&
+           idx.size() == 0 &&
+           at.size() == 0)
+  {
+    // Prefix-sum fast path: O(n) instead of O(n*k)
+    int n = x.size();
+    int kk = k(0);
+    int ll = lag(0);
+
+    checks::check_k(k, n, "x");
+    checks::check_lag(lag, n, "x");
+
+    Rcpp::NumericVector res(n);
+    std::vector<double> psum(n + 1, 0.0);
+    std::vector<int> pna(n + 1, 0);
+
+    for (int i = 0; i < n; i++)
+    {
+      bool is_na = Rcpp::NumericVector::is_na(x(i));
+      psum[i + 1] = psum[i] + (is_na ? 0.0 : x(i));
+      pna[i + 1] = pna[i] + (is_na ? 1 : 0);
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+      Rcpp::IntegerVector b = utils::window_ul(i, kk, ll, n, na_pad);
+      if (b.size() == 0)
+      {
+        res(i) = NA_REAL;
+      }
+      else
+      {
+        int lo = b(0), hi = b(1);
+        int na_count = pna[hi + 1] - pna[lo];
+        int total = hi - lo + 1;
+        if (!na_rm && na_count > 0)
+        {
+          res(i) = NA_REAL;
+        }
+        else if (na_count == total)
+        {
+          res(i) = NA_REAL;
+        }
+        else
+        {
+          int nonna = total - na_count;
+          res(i) = (psum[hi + 1] - psum[lo]) / nonna;
+        }
+      }
+    }
+    return res;
   }
   else
   {
@@ -1616,6 +1723,159 @@ SEXP window_run(SEXP x,
     return window_create(as<CharacterVector>(x), k, lag, idx, at, na_pad);
   case LGLSXP:
     return window_create(as<LogicalVector>(x), k, lag, idx, at, na_pad);
+  default:
+  {
+    stop("Invalid 'x' type - only integer, numeric, character, factor, date and logical vectors are possible.");
+  }
+  }
+
+  return R_NilValue;
+}
+
+// Single-pass runner: compute window bounds and apply R function in one loop.
+// Returns a List (one element per window), avoiding the intermediate
+// allocation that window_run + lapply requires.
+template <int ITYPE>
+Rcpp::List run_list(Rcpp::Vector<ITYPE> const &x,
+                    Rcpp::Function const &f,
+                    Rcpp::IntegerVector const &k,
+                    Rcpp::IntegerVector const &lag,
+                    Rcpp::IntegerVector const &idx,
+                    Rcpp::IntegerVector const &at,
+                    bool na_pad)
+{
+  int n = x.size();
+  int nn = at.size();
+  int out_len = (nn == 0) ? n : nn;
+  Rcpp::List res(out_len);
+  IntegerVector b(2);
+
+  SEXP na_val = PROTECT(Rf_ScalarLogical(NA_LOGICAL));
+
+  if (at.size() == 0)
+  {
+    if (idx.size() == 0)
+    {
+      for (int i = 0; i < n; i++)
+      {
+        int ki  = (k.size() > 1)   ? k(i)   : (k.size() == 1 ? k(0) : n);
+        int li  = (lag.size() > 1)  ? lag(i)  : lag(0);
+        bool cum = (k.size() == 0);
+        b = utils::window_ul(i, ki, li, n, na_pad, cum);
+        if (b.size() == 0)
+        {
+          res[i] = na_val;
+        }
+        else
+        {
+          res[i] = f(listfuns::get_window(x, b(1), b(0)));
+        }
+      }
+    }
+    else
+    {
+      for (int i = 0; i < n; i++)
+      {
+        int ki  = (k.size() > 1)   ? k(i)   : (k.size() == 1 ? k(0) : n);
+        int li  = (lag.size() > 1)  ? lag(i)  : lag(0);
+        bool cum = (k.size() == 0);
+        b = utils::window_ul_dl(idx, i, ki, li, n, na_pad, cum);
+        if (b.size() == 0)
+        {
+          res[i] = na_val;
+        }
+        else
+        {
+          res[i] = f(listfuns::get_window(x, b(1), b(0)));
+        }
+      }
+    }
+  }
+  else
+  {
+    if (idx.size() == 0)
+    {
+      for (int i = 0; i < nn; i++)
+      {
+        int ki  = (k.size() > 1)   ? k(i)   : (k.size() == 1 ? k(0) : n);
+        int li  = (lag.size() > 1)  ? lag(i)  : lag(0);
+        bool cum = (k.size() == 0);
+        b = utils::window_ul(at(i) - 1, ki, li, n, na_pad, cum);
+        if (b.size() == 0)
+        {
+          res[i] = na_val;
+        }
+        else
+        {
+          res[i] = f(listfuns::get_window(x, b(1), b(0)));
+        }
+      }
+    }
+    else
+    {
+      for (int i = 0; i < nn; i++)
+      {
+        int ki  = (k.size() > 1)   ? k(i)   : (k.size() == 1 ? k(0) : n);
+        int li  = (lag.size() > 1)  ? lag(i)  : lag(0);
+        bool cum = (k.size() == 0);
+        b = utils::window_ul_at(idx, at(i), ki, li, n, na_pad, cum);
+        if (b.size() == 0)
+        {
+          res[i] = na_val;
+        }
+        else
+        {
+          res[i] = f(listfuns::get_window(x, b(1), b(0)));
+        }
+      }
+    }
+  }
+
+  UNPROTECT(1);
+  return res;
+}
+
+//' Apply function on running windows (single-pass)
+//'
+//' Computes window bounds and applies function in a single C++ loop,
+//' avoiding intermediate list allocation.
+//' @param x vector input
+//' @param f function to apply on each window
+//' @param k window size
+//' @param lag window lag
+//' @param idx optional index vector
+//' @param at optional output index vector
+//' @param na_pad whether to pad with NA for incomplete windows
+//' @return list of results from applying f on each window
+//' @keywords internal
+// [[Rcpp::export]]
+SEXP runner_run(SEXP x,
+                Rcpp::Function f,
+                Rcpp::IntegerVector k = IntegerVector(0),
+                Rcpp::IntegerVector lag = IntegerVector(1),
+                Rcpp::IntegerVector idx = IntegerVector(0),
+                Rcpp::IntegerVector at = IntegerVector(0),
+                bool na_pad = false)
+{
+  int n = Rf_length(x);
+  int nn = at.size() == 0 ? n : at.size();
+  std::string var = at.size() == 0 ? "x" : "at";
+
+  checks::check_k(k, nn, var);
+  checks::check_lag(lag, nn, var);
+  checks::check_idx(idx, n, var);
+  checks::check_at(at);
+
+  switch (TYPEOF(x))
+  {
+  case INTSXP:
+    return run_list(as<IntegerVector>(x), f, k, lag, idx, at, na_pad);
+  case REALSXP:
+    return run_list(as<NumericVector>(x), f, k, lag, idx, at, na_pad);
+  case STRSXP:
+    return run_list(as<CharacterVector>(x), f, k, lag, idx, at, na_pad);
+  case LGLSXP:
+    return run_list(as<LogicalVector>(x), f, k, lag, idx, at, na_pad);
   default:
   {
     stop("Invalid 'x' type - only integer, numeric, character, factor, date and logical vectors are possible.");

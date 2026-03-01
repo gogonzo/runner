@@ -239,3 +239,20 @@ window_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at
     .Call('_runner_window_run', PACKAGE = 'runner', x, k, lag, idx, at, na_pad)
 }
 
+#' Apply function on running windows (single-pass)
+#'
+#' Computes window bounds and applies function in a single C++ loop,
+#' avoiding intermediate list allocation.
+#' @param x vector input
+#' @param f function to apply on each window
+#' @param k window size
+#' @param lag window lag
+#' @param idx optional index vector
+#' @param at optional output index vector
+#' @param na_pad whether to pad with NA for incomplete windows
+#' @return list of results from applying f on each window
+#' @keywords internal
+runner_run <- function(x, f, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_pad = FALSE) {
+    .Call('_runner_runner_run', PACKAGE = 'runner', x, f, k, lag, idx, at, na_pad)
+}
+

@@ -9,22 +9,14 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-## About
+## Overview
 
-Package contains standard running functions (aka. rolling) with additional 
-options like varying window size, lagging, handling missings and windows 
-depending on date. `runner` brings also rolling streak and rolling which, what 
-extends beyond range of functions already implemented in R packages. This 
-package can be successfully used to manipulate and aggregate time series or 
-longitudinal data.
+`runner` applies any R function on running (rolling/sliding) windows. It gives
+full control over window size (`k`), lag, and time-based indexing (`idx`), and
+supports vectors, data frames, and matrices as input. It also integrates with
+`dplyr::group_by`.
 
-## Using runner
-
-`runner` package provides functions applied on running windows. The most 
-universal function is `runner::runner` which gives user possibility to apply 
-any R function `f` in running window. In example below 4-months correlation 
-is calculated lagged by 
-1 month.
+Below, a 4-month rolling correlation is computed with a 1-month lag:
 
 ```{r eval=FALSE}
 library(runner)
@@ -35,57 +27,79 @@ x <- data.frame(
   b = rnorm(20)
 )
 
-runner(
-  x,
-  lag = "1 months",
-  k = "4 months",
-  idx = x$date,
-  f = function(x) {
-    cor(x$a, x$b)
-  }
-)
+runner(x, lag = "1 months", k = "4 months", idx = x$date,
+       f = function(x) cor(x$a, x$b))
 ```
 
-There are different kinds of running windows and all of them are implemented in
-`runner`.
+## Window types
 
-## Running windows
+### Sliding window (`k`)
 
-Following diagram illustrates what running windows are - in this case running 
-windows of length `k = 4`. For each of 15 elements of a vector each window 
-contains current 4 elements.
-
-![](images/incrementalindex.png)
-
-
-### Window size
-`k` denotes number of elements in window. If `k` is a single value then window 
-size is constant for all elements of x. For varying window size one should specify 
-`k` as integer vector of `length(k) == length(x)` where each element of `k` 
-defines window length. If `k` is empty it means that window will be cumulative 
-(like `base::cumsum`). Example below illustrates window of `k = 4` for 10th 
-element of vector `x`.  
+`k` sets the number of elements in each window. When `k` is a single constant,
+the window slides along the data with a fixed size. If `k` is omitted, windows
+are cumulative — each window grows from the first element to the current one.
 
 ![](images/constantwindow.png)
 
 ```{r eval=FALSE}
-runner(1:15, k = 4)
+# 4-element sliding sum
+runner(1:15, k = 4, f = sum)
+
+# cumulative sum (k omitted)
+runner(1:15, f = sum)
 ```
 
-### Window lag
-`lag` denotes how many observations windows will be lagged by. If `lag` is a 
-single value than it is constant for all elements of x. For varying lag size one 
-should specify `lag` as integer vector of `length(lag) == length(x)` where each 
-element of `lag` defines lag of window. Default value of `lag = 0`. Example 
-below illustrates window of `k = 4` lagged by `lag = 2` for 10-th element of 
-vector `x`. Lag can also be negative value, which shifts window forward instead 
-of backward.
+`k` can also be a vector of `length(x)` to use a different window size at each
+position.
+
+### Lag (`lag`)
+
+`lag` shifts the window backward (positive values) or forward (negative values)
+relative to the current element. Default is `lag = 0`. Like `k`, `lag` can be
+a single value or a vector of `length(x)`.
 
 ![](images/laggedwindowklag.png)
+
 ```{r eval=FALSE}
-runner(
-  1:15,
-  k = 4,
-  lag = 2
-)
+runner(1:15, k = 4, lag = 2, f = sum)
 ```
+
+### Index-based windows (`idx`)
+
+By default, `runner` treats elements as equally spaced (index increments by 1).
+Real data often has gaps — missing weekends, holidays, irregular timestamps.
+Setting `idx` makes `k` and `lag` refer to index distance instead of element
+count, so the number of elements per window varies with the spacing.
+
+For example, a 5-day window (`k = 5`) on unevenly-spaced dates will contain
+different numbers of observations at each step:
+
+![](images/running_date_windows.png)
+
+`k` and `lag` also accept time-interval strings using the same syntax as
+`seq.POSIXt(by = ...)`, e.g. `"5 days"`, `"2 weeks"`, `"month"`.
+
+```{r eval=FALSE}
+idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
+runner(idx, k = 5, lag = 1, idx = idx, f = mean)
+
+# equivalent with Date index
+runner(idx, k = "5 days", lag = "day", idx = Sys.Date() + idx, f = mean)
+```
+
+### Evaluation at specific points (`at`)
+
+By default, `runner` returns one result per element of `x`. Setting `at`
+restricts evaluation to specific index positions — the output length equals
+`length(at)`. This is useful when you only need results at certain dates or
+milestones, not at every observation.
+
+![](images/runner_at_date.png)
+
+```{r eval=FALSE}
+runner(1:15, k = 5, lag = 1, idx = idx, at = c(18, 27, 48, 31), f = mean)
+```
+
+`at` can also be a single time-interval string, which generates a regular
+sequence over the `idx` range. For example, `at = "4 months"` evaluates at
+every 4-month interval from `min(idx)` to `max(idx)`.

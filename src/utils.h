@@ -1,9 +1,11 @@
 #ifndef utils_h
 #define utils_h
 
+#include <algorithm>
+
 namespace utils
 {
-  // Boundaries of the lagged running window
+  // Boundaries of the lagged running window (positional, no idx) — O(1)
   Rcpp::IntegerVector window_ul(int i, int k, int lag, int n, bool na_pad, bool cum = false)
   {
     Rcpp::IntegerVector res(2);
@@ -60,7 +62,8 @@ namespace utils
     return res;
   }
 
-  // Boundaries of the lagged running window based on indexes
+  // Boundaries of the lagged running window based on indexes — O(log n) via binary search
+  // indexes must be sorted ascending (enforced by checks::check_idx)
   Rcpp::IntegerVector window_ul_dl(Rcpp::IntegerVector const &indexes, int i, int k, int lag, int n, bool na_pad, bool cum = false)
   {
     if (na_pad)
@@ -75,7 +78,6 @@ namespace utils
         if (((indexes(i) - lag - k + 1) < indexes(0)) or ((indexes(i) - lag) > indexes(n - 1)))
           return Rcpp::IntegerVector(0);
       }
-      // |---------- [ ]    [ ] |----------
     }
     else
     {
@@ -92,140 +94,106 @@ namespace utils
     }
 
     Rcpp::IntegerVector idx_out(2);
+
     // cumulative ========================================================================
     if (cum)
     {
-      // [-------]-+-->
+      int val_hi = indexes(i) - lag;
+
       if (lag >= 0)
       {
-        for (int u = i; u >= 0; u--)
-        {
-          if ((indexes(i) - indexes(u)) >= lag)
-          {
-            idx_out(0) = 0;
-            idx_out(1) = u;
-            return idx_out;
-          }
-          else if (u == 0)
-          {
-            return Rcpp::IntegerVector(0);
-          }
-        }
-        // [-------+-]-->
+        // u = last position <= i where indexes(u) <= val_hi
+        auto it = std::upper_bound(indexes.begin(), indexes.begin() + i + 1, val_hi);
+        if (it == indexes.begin())
+          return Rcpp::IntegerVector(0);
+        idx_out(0) = 0;
+        idx_out(1) = (int)(it - indexes.begin()) - 1;
+        return idx_out;
       }
       else
       {
-        for (int u = i; u < n; u++)
-        {
-          if ((indexes(i) - indexes(u)) < lag)
-          {
-            idx_out(0) = 0;
-            idx_out(1) = u - 1;
-            return idx_out;
-          }
-          else if (u == (n - 1))
-          {
-            idx_out(0) = 0;
-            idx_out(1) = u;
-            return idx_out;
-          }
-        }
+        // u = last position where indexes(u) <= val_hi (search from i forward)
+        auto it = std::upper_bound(indexes.begin() + i, indexes.begin() + n, val_hi);
+        int u = (int)(it - indexes.begin()) - 1;
+        if (u < 0)
+          return Rcpp::IntegerVector(0);
+        idx_out(0) = 0;
+        idx_out(1) = u;
+        return idx_out;
       }
     }
 
+    // non-cumulative ====================================================================
+    int val_hi = indexes(i) - lag;
+    int val_lo = indexes(i) - lag - k + 1;
+
     if (lag >= 0)
     {
-      for (int u = i; u >= 0; u--)
-      {
-        if ((indexes(i) - indexes(u)) < (k + lag))
-        {
-          if ((indexes(i) - indexes(u)) >= lag)
-          {
-            for (int l = u; l >= 0; l--)
-            {
-              if ((indexes(i) - indexes(l) > (k + lag - 1)))
-              {
-                idx_out(0) = l + 1;
-                idx_out(1) = u;
-                return idx_out;
-              }
-              else if (l == 0)
-              {
-                idx_out(1) = u;
-                return idx_out;
-              }
-            }
-          }
-        }
-        else
-        {
-          return Rcpp::IntegerVector(0);
-        }
-      }
+      // u = last position <= i where indexes(u) <= val_hi
+      auto it_u = std::upper_bound(indexes.begin(), indexes.begin() + i + 1, val_hi);
+      if (it_u == indexes.begin())
+        return Rcpp::IntegerVector(0);
+      int u = (int)(it_u - indexes.begin()) - 1;
+
+      // Check that u is within window width: indexes(u) >= val_lo
+      if (indexes(u) < val_lo)
+        return Rcpp::IntegerVector(0);
+
+      // l = first position where indexes(l) >= val_lo
+      auto it_l = std::lower_bound(indexes.begin(), indexes.begin() + u + 1, val_lo);
+      int l = (int)(it_l - indexes.begin());
+
+      idx_out(0) = l;
+      idx_out(1) = u;
+      return idx_out;
     }
     else
     {
-      // l <- i -> u
+      // lag < 0: window may span both sides of i or be entirely ahead
       if (-lag < k)
       {
-        for (int l = i; l >= -1; l--)
-        {
-          if (l == -1 or indexes(l) < (indexes(i) - lag - k + 1))
-          {
-            for (int u = i; u < n; u++)
-            {
-              if (indexes(u) > (indexes(i) - lag))
-              {
-                idx_out(0) = l + 1;
-                idx_out(1) = u - 1;
-                return idx_out;
-              }
-              else if (u == (n - 1))
-              {
-                idx_out(0) = l + 1;
-                idx_out(1) = u;
-                return idx_out;
-              }
-            }
-          }
-        }
-        // i -> l -> u
+        // Window spans both sides of i
+        // l = first position in [0, i] where indexes(l) >= val_lo
+        auto it_l = std::lower_bound(indexes.begin(), indexes.begin() + i + 1, val_lo);
+        int l = (int)(it_l - indexes.begin());
+
+        // u = last position in [i, n-1] where indexes(u) <= val_hi
+        auto it_u = std::upper_bound(indexes.begin() + i, indexes.begin() + n, val_hi);
+        int u = (int)(it_u - indexes.begin()) - 1;
+
+        if (l > u)
+          return Rcpp::IntegerVector(0);
+
+        idx_out(0) = l;
+        idx_out(1) = u;
+        return idx_out;
       }
       else
       {
-        for (int l = i; l < n; l++)
-        {
-          if (indexes(l) <= (indexes(i) - lag))
-          {
-            if (indexes(l) >= (indexes(i) - lag - k + 1))
-            {
-              for (int u = l; u < n; u++)
-              {
-                if (indexes(u) > (indexes(i) - lag))
-                {
-                  idx_out(0) = l;
-                  idx_out(1) = u - 1;
-                  return idx_out;
-                }
-                else if (u == (n - 1))
-                {
-                  idx_out(0) = l;
-                  idx_out(1) = u;
-                  return idx_out;
-                }
-              }
-            }
-          }
-          else
-          {
-            return Rcpp::IntegerVector(0);
-          }
-        }
+        // -lag >= k: window entirely ahead of i
+        // l = first position in [i, n-1] where indexes(l) >= val_lo
+        auto it_l = std::lower_bound(indexes.begin() + i, indexes.begin() + n, val_lo);
+        int l = (int)(it_l - indexes.begin());
+
+        if (l >= n || indexes(l) > val_hi)
+          return Rcpp::IntegerVector(0);
+
+        // u = last position where indexes(u) <= val_hi
+        auto it_u = std::upper_bound(indexes.begin() + l, indexes.begin() + n, val_hi);
+        int u = (int)(it_u - indexes.begin()) - 1;
+
+        if (u < l)
+          return Rcpp::IntegerVector(0);
+
+        idx_out(0) = l;
+        idx_out(1) = u;
+        return idx_out;
       }
     }
     return Rcpp::IntegerVector(0);
   }
 
+  // Boundaries of the lagged running window at arbitrary points — O(log n) via binary search
   Rcpp::IntegerVector window_ul_at(Rcpp::IntegerVector const &indexes, int at, int k, int lag, int n, bool na_pad, bool cum = false)
   {
     int li, ui;
@@ -251,7 +219,6 @@ namespace utils
         if ((li < indexes(0)) or (ui > indexes(n - 1)))
           return Rcpp::IntegerVector(0);
       }
-      // |---------- [ ]    [ ] |----------
     }
     else
     {
@@ -268,107 +235,60 @@ namespace utils
     }
 
     Rcpp::IntegerVector idx_out(2);
+
     // cumulative ========================================================================
     if (cum)
     {
-      // [-------]-+-->
-      if (lag >= 0)
-      {
-        for (int u = 0; u < n; u++)
-        {
-          if (indexes(u) > ui)
-          {
-            idx_out(0) = 0;
-            idx_out(1) = u - 1;
-            return idx_out;
-          }
-          else if (u == (n - 1))
-          {
-            idx_out(0) = 0;
-            idx_out(1) = u;
-            return idx_out;
-          }
-        }
-        // [-------+-]-->
-      }
-      else if (lag < 0)
-      {
-        for (int u = n - 1; u >= 0; u--)
-        {
-          if (indexes(u) <= ui)
-          {
-            idx_out(0) = 0;
-            idx_out(1) = u;
-            return idx_out;
-          }
-          else if (u == 0)
-          {
-            return Rcpp::IntegerVector(0);
-          }
-        }
-      }
+      // u = last position where indexes(u) <= ui
+      auto it = std::upper_bound(indexes.begin(), indexes.begin() + n, ui);
+      if (it == indexes.begin())
+        return Rcpp::IntegerVector(0);
+      idx_out(0) = 0;
+      idx_out(1) = (int)(it - indexes.begin()) - 1;
+      return idx_out;
     }
 
+    // non-cumulative ====================================================================
     if (lag >= 0)
     {
-      for (int u = n - 1; u >= 0; u--)
-      {
-        if ((at - indexes(u)) < (k + lag))
-        {
-          if ((at - indexes(u)) >= lag)
-          {
-            for (int l = u; l >= 0; l--)
-            {
-              if ((at - indexes(l) > (k + lag - 1)))
-              {
-                idx_out(0) = l + 1;
-                idx_out(1) = u;
-                return idx_out;
-              }
-              else if (l == 0)
-              {
-                idx_out(1) = u;
-                return idx_out;
-              }
-            }
-          }
-        }
-        else
-        {
-          return Rcpp::IntegerVector(0);
-        }
-      }
+      // u = last position where indexes(u) <= ui
+      auto it_u = std::upper_bound(indexes.begin(), indexes.begin() + n, ui);
+      if (it_u == indexes.begin())
+        return Rcpp::IntegerVector(0);
+      int u = (int)(it_u - indexes.begin()) - 1;
+
+      // Check that indexes(u) >= li
+      if (indexes(u) < li)
+        return Rcpp::IntegerVector(0);
+
+      // l = first position where indexes(l) >= li
+      auto it_l = std::lower_bound(indexes.begin(), indexes.begin() + u + 1, li);
+      int l = (int)(it_l - indexes.begin());
+
+      idx_out(0) = l;
+      idx_out(1) = u;
+      return idx_out;
     }
     else
     {
-      for (int l = 0; l < n; l++)
-      {
-        if (indexes(l) <= ui)
-        {
-          if (indexes(l) >= li)
-          {
-            for (int u = l; u < n; u++)
-            {
-              if (indexes(u) > ui)
-              {
-                idx_out(0) = l;
-                idx_out(1) = u - 1;
-                return idx_out;
-              }
-              else if (u == (n - 1))
-              {
-                idx_out(0) = l;
-                idx_out(1) = u;
-                return idx_out;
-              }
-            }
-          }
-        }
-        else
-        {
-          return Rcpp::IntegerVector(0);
-        }
-      }
+      // lag < 0
+      // l = first position where indexes(l) >= li
+      auto it_l = std::lower_bound(indexes.begin(), indexes.begin() + n, li);
+      int l = (int)(it_l - indexes.begin());
+
+      if (l >= n || indexes(l) > ui)
+        return Rcpp::IntegerVector(0);
+
+      // u = last position where indexes(u) <= ui
+      auto it_u = std::upper_bound(indexes.begin() + l, indexes.begin() + n, ui);
+      int u = (int)(it_u - indexes.begin()) - 1;
+
+      if (u < l)
+        return Rcpp::IntegerVector(0);
+
+      idx_out(0) = l;
+      idx_out(1) = u;
+      return idx_out;
     }
     return Rcpp::IntegerVector(0);
   }

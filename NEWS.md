@@ -1,3 +1,9 @@
+# runner 0.5.0
+
+* `runner()` is up to 5-19x faster for vector inputs.
+* `sum_run()` and `mean_run()` are significantly faster for fixed-width windows.
+* Faster window computation when using `idx`.
+
 # runner 0.4.5
 
 * fix CRAN issues with documentation

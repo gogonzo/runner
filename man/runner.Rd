@@ -7,7 +7,7 @@
 \alias{runner.grouped_df}
 \alias{runner.matrix}
 \alias{runner.xts}
-\title{Apply running function}
+\title{Apply function on running windows}
 \usage{
 runner(
   x,
@@ -89,139 +89,95 @@ runner(
 }
 \arguments{
 \item{x}{(\code{vector}, \code{data.frame}, \code{matrix}, \code{xts}, \code{grouped_df})\cr
-Input in runner custom function \code{f}.}
+input data.}
 
 \item{f}{(\code{function})\cr
-Applied on windows created from \code{x}. This function is meant to summarize
-windows and create single element for each window, but one can also specify
-function which return multiple elements (runner output will be a list).
-By default runner returns windows as is (\verb{f = function(x)}).}
+Function applied to each window. Defaults to identity (\code{function(x) x}).}
 
-\item{k}{(\code{integer} vector or single value)\cr
-Denoting size of the running window. If \code{k} is a single value then window
-size is constant for all elements, otherwise if \code{length(k) == length(x)}
-different window size for each element. One can also specify \code{k} in the same
-way as \code{by} argument in \code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}.
-See 'Specifying time-intervals' in details section.}
+\item{k}{(\code{integer} or \code{character})\cr
+Window size. Single value or vector of \code{length(x)}. Omit for cumulative
+windows. Accepts time-interval strings (e.g. \code{"5 days"}) when \code{idx} is set.}
 
-\item{lag}{(\code{integer} vector or single value)\cr
-Denoting window lag. If \code{lag} is a single value then window lag is constant
-for all elements, otherwise if \code{length(lag) == length(x)} different window
-size for each element. Negative value shifts window forward. One can also
-specify \code{lag} in the same way as \code{by} argument in
-\code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}. See 'Specifying time-intervals' in details
-section.}
+\item{lag}{(\code{integer} or \code{character})\cr
+Window shift. Positive shifts back, negative shifts forward. Single value
+or vector of \code{length(x)}. Accepts time-interval strings when \code{idx} is set.}
 
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr
-Optional integer vector containing sorted (ascending) index of observation.
-By default \code{idx} is index incremented by one. User can provide index with
-varying increment and with duplicated values. If specified then \code{k} and
-\code{lag} are depending on \code{idx}. Length of \code{idx} have to be equal of length
-\code{x}.}
+Sorted index of observations. When set, \code{k} and \code{lag} refer to index
+distance rather than element count. Must be same length as \code{x}.}
 
-\item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character} vector)\cr
-Vector of any size and any value defining output data points. Values of the
-vector defines the indexes which data is computed at. Can be also \code{POSIXt}
-sequence increment used in \code{at} argument in \code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}.
-See 'Specifying time-intervals' in details section.}
+\item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character})\cr
+Indices at which to evaluate windows. Output length equals \code{length(at)}
+instead of \code{length(x)}. A single time-interval string (e.g. \code{"month"})
+generates a regular sequence over the range of \code{idx}.}
 
-\item{na_pad}{(\code{logical} single value)\cr
-Whether incomplete window should return \code{NA} (if \code{na_pad = TRUE})
-Incomplete window is when some parts of the window are out of range.}
+\item{na_pad}{(\code{logical})\cr
+If \code{TRUE}, return \code{NA} for windows that extend beyond the data range.}
 
-\item{simplify}{(\code{logical} or \code{character} value)\cr
-should the result be simplified to a vector, matrix or higher dimensional
-array if possible. The default value, \code{simplify = TRUE}, returns a vector or
-matrix if appropriate, whereas if \code{simplify = "array"} the result may be an
-array of "rank" \verb{(=length(dim(.)))} one higher than the result of output
-from the function \code{f} for each window. Consequences of \code{simplify} in \code{runner}
-are identical to \code{sapply}.}
+\item{simplify}{(\code{logical} or \code{character})\cr
+Simplify result like \code{\link[base:lapply]{base::sapply()}}. \code{TRUE} returns vector/matrix,
+\code{"array"} may return a higher-dimensional array.}
 
 \item{cl}{(\code{cluster}) \emph{experimental}\cr
-Create and pass the cluster to the \code{runner} function to run each window
-calculation in parallel. See \code{\link[parallel:makeCluster]{parallel::makeCluster()}} in details.}
+Parallel cluster from \code{\link[parallel:makeCluster]{parallel::makeCluster()}}.}
 
-\item{...}{(optional)\cr
-other arguments passed to the function \code{f}.}
+\item{...}{additional arguments passed to \code{f}.}
 }
 \value{
-vector with aggregated values for each window. Length of output is
-the same as \code{length(x)} or \code{length(at)} if specified. Type of the output
-depends on the output from a function \code{f}.
+vector with aggregated values for each window. Length equals
+\code{length(x)} or \code{length(at)} if specified. Type depends on \code{f}.
 }
 \description{
-Applies custom function on running windows.
+Applies any R function \code{f} on running (Column/sliding) windows defined by
+\code{k}, \code{lag}, \code{idx} and \code{at}.
 }
 \details{
-Function can apply any R function on running windows defined by \code{x},
-\code{k}, \code{lag}, \code{idx} and \code{at}. Running window can be calculated
-on several ways:
+\subsection{Window types}{
 \itemize{
-\item \strong{Cumulative windows}\cr
-applied when user doesn't specify \code{k} argument or specify \code{k = length(x)},
-this would mean that \code{k} is equal to number of available elements \cr
+\item \strong{Cumulative} (\code{k} omitted): window grows from the first element to the
+current one, similar to \code{cumsum}. Each step includes all preceding data.
+\cr
 \if{html}{\figure{cumulativewindows.png}{options: alt="Figure: cumulativewindows.png"}}
 \if{latex}{\figure{cumulativewindows.pdf}{options: width=7cm}}
-\item \strong{Constant sliding windows}
-applied when user specify \code{k} as constant value keeping \code{idx} and
-\code{at} unspecified. \code{lag} argument shifts windows left (\code{lag > 0})
-or right (\code{lag < 0}). \cr
+\item \strong{Sliding} (constant \code{k}): fixed-size window slides along the data. The
+first \code{k-1} windows are shorter since there aren't enough preceding
+elements. \code{lag} shifts the window backward (positive) or forward
+(negative).
+\cr
 \if{html}{\figure{incrementalindex.png}{options: alt="Figure: incrementalindex.png"}}
 \if{latex}{\figure{incrementalindex.pdf}{options: width=7cm}}
-\item \strong{Windows depending on date}\cr
-If one specifies \code{idx} this would mean that output windows size might
-change in size because of unequally spaced indexes. Fox example 5-period
-window is different than 5-element window, because 5-period window might
-contain any number of observation (7-day mean is not the same as 7-element
-mean)
+\item \strong{Index-based} (\code{idx} set): window covers a range of index values rather
+than a fixed number of elements. This is important for unevenly-spaced
+data where a 5-day window may contain different numbers of observations
+at each step.
 \cr
 \if{html}{\figure{runningdatewindows.png}{options: alt="Figure: runningdatewindows.png"}}
 \if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
-\item \strong{Window at specific indices}\cr
-\code{runner} by default returns vector of the same size as \code{x} unless one
-specifies \code{at} argument. Each element of \code{at} is an index on which runner
-calculates function - which means that output of the runner is now of
-length equal to \code{at}. Note that one can change index of \code{x} by specifying
-\code{idx}. Illustration below shows output of \code{runner} for
-\code{at = c(18, 27, 45, 31)} which gives windows in ranges enclosed in square
-brackets. Range for \code{at = 27} is \verb{[22, 26]} which is not available in
-current indices. \cr
+\item \strong{Evaluation at specific points} (\code{at} set): by default, \code{runner} returns
+one result per element of \code{x}. Setting \code{at} restricts output to specific
+index positions, so output length equals \code{length(at)}.
+\cr
 \if{html}{\figure{runnerat.png}{options: alt="Figure: runnerat.png"}}
 \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
 }
-\subsection{Specifying time-intervals}{
+}
 
-\code{at} can also be specified as interval of the output defined by
-\code{at = "<increment>"} which results in indices sequence defined by
-\code{seq.POSIXt(min(idx), max(idx), by = "<increment>")}. Increment of sequence
-is the same as in \code{\link[base:seq.POSIXt]{base::seq.POSIXt()}} function.
-It's worth noting that increment interval can't be more frequent than
-interval of \code{idx} - for \code{Date} the most frequent time-unit is a \code{"day"},
-for \code{POSIXt} a \code{sec}.
+\subsection{Time-interval syntax}{
 
-\code{k} and \code{lag} can also be specified as using time sequence increment.
-Available time units are
-\verb{"sec", "min", "hour", "day", "DSTday", "week", "month", "quarter" or "year"}.
-To increment by number of units one can also specify \verb{<number> <unit>s}
-for example \code{lag = "-2 days"}, \code{k = "5 weeks"}.
-
-Setting \code{k} and \code{lag} as a sequence increment can be also a vector can be a
-vector which allows to stretch and lag/lead each window freely on in time
-(on indices).
-\cr
+\code{k}, \code{lag} and \code{at} accept time-interval strings (requires \code{idx} to be set)
+using the same syntax as the \code{by} argument in \code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}:
+\code{"sec"}, \code{"min"}, \code{"hour"}, \code{"day"}, \code{"week"}, \code{"month"}, \code{"quarter"},
+\code{"year"}, or \code{"<n> <unit>s"} (e.g. \code{"5 days"}, \code{"-2 weeks"}).
+Both \code{k} and \code{lag} can also be vectors, allowing different window sizes
+and shifts at each position.
 }
 
 \subsection{Parallel computing}{
 
-Beware that executing R call in parallel not always
-have the edge over single-thread even if the
-\code{cl <- registerCluster(detectCores())} was specified before.
-\cr
-Parallel windows are executed in the independent environment, which means
-that objects other than function arguments needs to be copied to the
-parallel environment using \code{\link[parallel:clusterApply]{parallel::clusterExport()}}. For
-example using \code{f = function(x) x + y + z} will result in error as
-\code{clusterExport(cl, varlist = c("y", "z"))} needs to be called before.
+Pass a \code{\link[parallel:makeCluster]{parallel::makeCluster()}} object via \code{cl} to run windows in
+parallel. Objects referenced inside \code{f} (other than its arguments) must
+be exported with \code{\link[parallel:clusterApply]{parallel::clusterExport()}} beforehand. Parallel
+execution adds overhead and is only beneficial for expensive computations.
 }
 }
 \examples{

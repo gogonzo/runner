@@ -1,4 +1,5 @@
 #include <Rcpp.h>
+#include <algorithm>
 #include "checks.h"
 using namespace Rcpp;
 
@@ -30,39 +31,42 @@ IntegerVector length_run(IntegerVector k = IntegerVector(1),
   IntegerVector res(n);
   if ((k.size() == 1))
   {
+    int kk = k(0);
     for (int i = 0; i < n; i++)
     {
-      for (int j = i; j >= 0; j--)
+      // Find last position j where idx(i) - idx(j) > kk - 1, i.e., idx(j) < idx(i) - kk + 1
+      int target = idx(i) - kk + 1;
+      // lower_bound finds first position with idx >= target
+      auto it = std::lower_bound(idx.begin(), idx.begin() + i + 1, target);
+      int p = (int)(it - idx.begin());
+
+      if (p == 0)
       {
-        if ((idx(i) - idx(j)) > (k(0) - 1))
-        {
-          res(i) = i - j;
-          break;
-        }
-        else if (j == 0)
-        {
-          res(i) = NA_INTEGER;
-        }
+        // All positions 0..i have idx >= target, no j with idx(j) < target
+        res(i) = NA_INTEGER;
+      }
+      else
+      {
+        // j = p - 1 is the last position with idx(j) < target
+        res(i) = i - (p - 1);
       }
     }
-
-    // IDX VARYING WINDOW -----------
   }
   else if ((k.size() > 1))
   {
     for (int i = 0; i < n; i++)
     {
-      for (int j = i; j >= 0; j--)
+      int target = idx(i) - k(i) + 1;
+      auto it = std::lower_bound(idx.begin(), idx.begin() + i + 1, target);
+      int p = (int)(it - idx.begin());
+
+      if (p == 0)
       {
-        if ((idx(i) - idx(j)) > (k(i) - 1))
-        {
-          res(i) = i - j;
-          break;
-        }
-        else if (j == 0)
-        {
-          res(i) = NA_INTEGER;
-        }
+        res(i) = NA_INTEGER;
+      }
+      else
+      {
+        res(i) = i - (p - 1);
       }
     }
   }

@@ -7,27 +7,17 @@
 length_run(k = integer(1), lag = integer(1), idx = integer(0))
 }
 \arguments{
-\item{k}{(\code{integer} vector or single value)\cr
-Denoting size of the running window. If \code{k} is a single value then window
-size is constant for all elements, otherwise if \code{length(k) == length(x)}
-different window size for each element. One can also specify \code{k} in the same
-way as \code{by} argument in \code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}.
-See 'Specifying time-intervals' in details section.}
+\item{k}{(\code{integer} or \code{character})\cr
+Window size. Single value or vector of \code{length(x)}. Omit for cumulative
+windows. Accepts time-interval strings (e.g. \code{"5 days"}) when \code{idx} is set.}
 
-\item{lag}{(\code{integer} vector or single value)\cr
-Denoting window lag. If \code{lag} is a single value then window lag is constant
-for all elements, otherwise if \code{length(lag) == length(x)} different window
-size for each element. Negative value shifts window forward. One can also
-specify \code{lag} in the same way as \code{by} argument in
-\code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}. See 'Specifying time-intervals' in details
-section.}
+\item{lag}{(\code{integer} or \code{character})\cr
+Window shift. Positive shifts back, negative shifts forward. Single value
+or vector of \code{length(x)}. Accepts time-interval strings when \code{idx} is set.}
 
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr
-Optional integer vector containing sorted (ascending) index of observation.
-By default \code{idx} is index incremented by one. User can provide index with
-varying increment and with duplicated values. If specified then \code{k} and
-\code{lag} are depending on \code{idx}. Length of \code{idx} have to be equal of length
-\code{x}.}
+Sorted index of observations. When set, \code{k} and \code{lag} refer to index
+distance rather than element count. Must be same length as \code{x}.}
 }
 \description{
 Number of elements in k-long window calculated on \code{idx} vector.

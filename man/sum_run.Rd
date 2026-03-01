@@ -38,9 +38,8 @@ vector defines the indexes which data is computed at.}
 \item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) -
 if \code{TRUE} sum is calculating excluding \code{NA}.}
 
-\item{na_pad}{(\code{logical} single value)\cr
-Whether incomplete window should return \code{NA} (if \code{na_pad = TRUE})
-Incomplete window is when some parts of the window are out of range.}
+\item{na_pad}{(\code{logical})\cr
+If \code{TRUE}, return \code{NA} for windows that extend beyond the data range.}
 }
 \value{
 sum \code{code} vector of length equals length of \code{x}.

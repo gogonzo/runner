@@ -10,11 +10,8 @@
 \item{x}{(\code{data.frame})}
 
 \item{idx}{(\code{integer}, \code{Date}, \code{POSIXt})\cr
-Optional integer vector containing sorted (ascending) index of observation.
-By default \code{idx} is index incremented by one. User can provide index with
-varying increment and with duplicated values. If specified then \code{k} and
-\code{lag} are depending on \code{idx}. Length of \code{idx} have to be equal of length
-\code{x}.}
+Sorted index of observations. When set, \code{k} and \code{lag} refer to index
+distance rather than element count. Must be same length as \code{x}.}
 }
 \value{
 resolved \code{idx}
