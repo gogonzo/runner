@@ -17,4 +17,9 @@ jobs:
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          prompt: "/review"
+          allowed_tools: "Bash(gh pr comment *),Bash(gh pr review *),Read,Glob,Grep"
+          max_turns: 20
+          prompt: |
+            /review
+
+            Post your review on PR #${{ github.event.pull_request.number }} using `gh pr review` or `gh pr comment`.

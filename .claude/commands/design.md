@@ -28,3 +28,8 @@ If the issue is ambiguous, underspecified, or can be addressed in multiple ways:
 - Post a comment on the issue asking the creator for clarification
 - List the specific options or open questions clearly
 - Do NOT give a final recommendation until questions are resolved
+
+## Escalation
+If you are blocked, unsure, or the issue is outside your scope (e.g. infrastructure, release decisions, licensing):
+- Tag the maintainer @gogonzo in your comment asking for guidance
+- Clearly explain what you're blocked on and what decision is needed
