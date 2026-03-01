@@ -18,6 +18,7 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           allowed_tools: "Bash(gh issue comment *),Bash(gh issue edit *),Read,Glob,Grep"
+          max_turns: 20
           prompt: |
             /design
 
