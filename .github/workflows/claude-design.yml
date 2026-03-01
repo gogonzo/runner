@@ -1,10 +1,11 @@
 name: Claude Design Review
 on:
   issues:
-    types: [opened]
+    types: [opened, labeled]
 
 jobs:
   design:
+    if: contains(github.event.issue.labels.*.name, 'claude-design')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
