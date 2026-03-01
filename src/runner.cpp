@@ -1,4 +1,6 @@
 #include <Rcpp.h>
+#include <vector>
+#include <algorithm>
 using namespace Rcpp;
 #include "vector_funs.h"
 #include "window_funs.h"
@@ -833,6 +835,58 @@ Rcpp::NumericVector sum_run(
   {
     return aggr::cumsum(x, na_rm);
   }
+  else if (k.size() == 1 &&
+           lag.size() == 1 &&
+           idx.size() == 0 &&
+           at.size() == 0)
+  {
+    // Prefix-sum fast path: O(n) instead of O(n*k)
+    int n = x.size();
+    int kk = k(0);
+    int ll = lag(0);
+
+    checks::check_k(k, n, "x");
+    checks::check_lag(lag, n, "x");
+
+    Rcpp::NumericVector res(n);
+    std::vector<double> psum(n + 1, 0.0);
+    std::vector<int> pna(n + 1, 0);
+
+    for (int i = 0; i < n; i++)
+    {
+      bool is_na = Rcpp::NumericVector::is_na(x(i));
+      psum[i + 1] = psum[i] + (is_na ? 0.0 : x(i));
+      pna[i + 1] = pna[i] + (is_na ? 1 : 0);
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+      Rcpp::IntegerVector b = utils::window_ul(i, kk, ll, n, na_pad);
+      if (b.size() == 0)
+      {
+        res(i) = NA_REAL;
+      }
+      else
+      {
+        int lo = b(0), hi = b(1);
+        int na_count = pna[hi + 1] - pna[lo];
+        int total = hi - lo + 1;
+        if (!na_rm && na_count > 0)
+        {
+          res(i) = NA_REAL;
+        }
+        else if (na_count == total)
+        {
+          res(i) = NA_REAL;
+        }
+        else
+        {
+          res(i) = psum[hi + 1] - psum[lo];
+        }
+      }
+    }
+    return res;
+  }
   else
   {
     return runner_vec<14>(x, aggr::calc_sum, k, lag, idx, at, na_rm, na_pad);
@@ -873,6 +927,59 @@ NumericVector mean_run(
       at.size() == 0)
   {
     return aggr::cummean(x, na_rm);
+  }
+  else if (k.size() == 1 &&
+           lag.size() == 1 &&
+           idx.size() == 0 &&
+           at.size() == 0)
+  {
+    // Prefix-sum fast path: O(n) instead of O(n*k)
+    int n = x.size();
+    int kk = k(0);
+    int ll = lag(0);
+
+    checks::check_k(k, n, "x");
+    checks::check_lag(lag, n, "x");
+
+    Rcpp::NumericVector res(n);
+    std::vector<double> psum(n + 1, 0.0);
+    std::vector<int> pna(n + 1, 0);
+
+    for (int i = 0; i < n; i++)
+    {
+      bool is_na = Rcpp::NumericVector::is_na(x(i));
+      psum[i + 1] = psum[i] + (is_na ? 0.0 : x(i));
+      pna[i + 1] = pna[i] + (is_na ? 1 : 0);
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+      Rcpp::IntegerVector b = utils::window_ul(i, kk, ll, n, na_pad);
+      if (b.size() == 0)
+      {
+        res(i) = NA_REAL;
+      }
+      else
+      {
+        int lo = b(0), hi = b(1);
+        int na_count = pna[hi + 1] - pna[lo];
+        int total = hi - lo + 1;
+        if (!na_rm && na_count > 0)
+        {
+          res(i) = NA_REAL;
+        }
+        else if (na_count == total)
+        {
+          res(i) = NA_REAL;
+        }
+        else
+        {
+          int nonna = total - na_count;
+          res(i) = (psum[hi + 1] - psum[lo]) / nonna;
+        }
+      }
+    }
+    return res;
   }
   else
   {

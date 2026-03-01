@@ -1,3 +1,5 @@
+#include <algorithm>
+
 namespace listfuns
 {
   template <int RTYPE>
@@ -5,12 +7,7 @@ namespace listfuns
   {
     int n = u - l + 1;
     Rcpp::Vector<RTYPE> res(n);
-
-    for (int i = 0; i < n; i++)
-    {
-      res(i) = x(l + i);
-    }
-
+    std::copy(x.begin() + l, x.begin() + u + 1, res.begin());
     return res;
   }
 }
