@@ -15,6 +15,7 @@ Act as a developer working on the runner R package. Follow these guidelines:
 - Add tinytest tests in `inst/tinytest/` for any new or changed behavior
 - Cover: typical usage, edge cases (NA, empty, single element), error conditions
 - Use `tinytest::expect_equal()`, `expect_true()`, `expect_error()` etc.
+- Never test private functions directly but cover them via public ones
 
 ## Documentation
 - Add roxygen2 docs for new exported functions with `@param`, `@return`, `@export`, `@examples`

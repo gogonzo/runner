@@ -34,4 +34,9 @@ Act as a code reviewer for the runner R package. Review the recent changes with 
 - Bounds checking on vector access
 - No unnecessary copies of large objects
 
+## Issue Alignment
+- Read the linked issue carefully and verify the implementation actually addresses what was requested
+- Check that the scope of changes matches the issue — no unrelated changes bundled in
+- If the implementation deviates from or only partially addresses the issue, flag it as a **blocker**
+
 Summarize findings with severity: **blocker**, **should fix**, or **nit**.

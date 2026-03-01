@@ -4,9 +4,8 @@ on:
     types: [opened, labeled]
 
 permissions:
-  contents: write
+  contents: read
   issues: write
-  pull-requests: write
   id-token: write
 
 jobs:
