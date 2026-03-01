@@ -182,6 +182,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// runner_run
+SEXP runner_run(SEXP x, Rcpp::Function f, Rcpp::IntegerVector k, Rcpp::IntegerVector lag, Rcpp::IntegerVector idx, Rcpp::IntegerVector at, bool na_pad);
+RcppExport SEXP _runner_runner_run(SEXP xSEXP, SEXP fSEXP, SEXP kSEXP, SEXP lagSEXP, SEXP idxSEXP, SEXP atSEXP, SEXP na_padSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Function >::type f(fSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type k(kSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type lag(lagSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type idx(idxSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type at(atSEXP);
+    Rcpp::traits::input_parameter< bool >::type na_pad(na_padSEXP);
+    rcpp_result_gen = Rcpp::wrap(runner_run(x, f, k, lag, idx, at, na_pad));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_runner_fill_run", (DL_FUNC) &_runner_fill_run, 3},
@@ -195,6 +212,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_runner_streak_run", (DL_FUNC) &_runner_streak_run, 7},
     {"_runner_which_run", (DL_FUNC) &_runner_which_run, 8},
     {"_runner_window_run", (DL_FUNC) &_runner_window_run, 6},
+    {"_runner_runner_run", (DL_FUNC) &_runner_runner_run, 7},
     {NULL, NULL, 0}
 };
 

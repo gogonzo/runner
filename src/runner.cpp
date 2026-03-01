@@ -1731,3 +1731,156 @@ SEXP window_run(SEXP x,
 
   return R_NilValue;
 }
+
+// Single-pass runner: compute window bounds and apply R function in one loop.
+// Returns a List (one element per window), avoiding the intermediate
+// allocation that window_run + lapply requires.
+template <int ITYPE>
+Rcpp::List run_list(Rcpp::Vector<ITYPE> const &x,
+                    Rcpp::Function const &f,
+                    Rcpp::IntegerVector const &k,
+                    Rcpp::IntegerVector const &lag,
+                    Rcpp::IntegerVector const &idx,
+                    Rcpp::IntegerVector const &at,
+                    bool na_pad)
+{
+  int n = x.size();
+  int nn = at.size();
+  int out_len = (nn == 0) ? n : nn;
+  Rcpp::List res(out_len);
+  IntegerVector b(2);
+
+  SEXP na_val = PROTECT(Rf_ScalarLogical(NA_LOGICAL));
+
+  if (at.size() == 0)
+  {
+    if (idx.size() == 0)
+    {
+      for (int i = 0; i < n; i++)
+      {
+        int ki  = (k.size() > 1)   ? k(i)   : (k.size() == 1 ? k(0) : n);
+        int li  = (lag.size() > 1)  ? lag(i)  : lag(0);
+        bool cum = (k.size() == 0);
+        b = utils::window_ul(i, ki, li, n, na_pad, cum);
+        if (b.size() == 0)
+        {
+          res[i] = na_val;
+        }
+        else
+        {
+          res[i] = f(listfuns::get_window(x, b(1), b(0)));
+        }
+      }
+    }
+    else
+    {
+      for (int i = 0; i < n; i++)
+      {
+        int ki  = (k.size() > 1)   ? k(i)   : (k.size() == 1 ? k(0) : n);
+        int li  = (lag.size() > 1)  ? lag(i)  : lag(0);
+        bool cum = (k.size() == 0);
+        b = utils::window_ul_dl(idx, i, ki, li, n, na_pad, cum);
+        if (b.size() == 0)
+        {
+          res[i] = na_val;
+        }
+        else
+        {
+          res[i] = f(listfuns::get_window(x, b(1), b(0)));
+        }
+      }
+    }
+  }
+  else
+  {
+    if (idx.size() == 0)
+    {
+      for (int i = 0; i < nn; i++)
+      {
+        int ki  = (k.size() > 1)   ? k(i)   : (k.size() == 1 ? k(0) : n);
+        int li  = (lag.size() > 1)  ? lag(i)  : lag(0);
+        bool cum = (k.size() == 0);
+        b = utils::window_ul(at(i) - 1, ki, li, n, na_pad, cum);
+        if (b.size() == 0)
+        {
+          res[i] = na_val;
+        }
+        else
+        {
+          res[i] = f(listfuns::get_window(x, b(1), b(0)));
+        }
+      }
+    }
+    else
+    {
+      for (int i = 0; i < nn; i++)
+      {
+        int ki  = (k.size() > 1)   ? k(i)   : (k.size() == 1 ? k(0) : n);
+        int li  = (lag.size() > 1)  ? lag(i)  : lag(0);
+        bool cum = (k.size() == 0);
+        b = utils::window_ul_at(idx, at(i), ki, li, n, na_pad, cum);
+        if (b.size() == 0)
+        {
+          res[i] = na_val;
+        }
+        else
+        {
+          res[i] = f(listfuns::get_window(x, b(1), b(0)));
+        }
+      }
+    }
+  }
+
+  UNPROTECT(1);
+  return res;
+}
+
+//' Apply function on running windows (single-pass)
+//'
+//' Computes window bounds and applies function in a single C++ loop,
+//' avoiding intermediate list allocation.
+//' @param x vector input
+//' @param f function to apply on each window
+//' @param k window size
+//' @param lag window lag
+//' @param idx optional index vector
+//' @param at optional output index vector
+//' @param na_pad whether to pad with NA for incomplete windows
+//' @return list of results from applying f on each window
+//' @keywords internal
+// [[Rcpp::export]]
+SEXP runner_run(SEXP x,
+                Rcpp::Function f,
+                Rcpp::IntegerVector k = IntegerVector(0),
+                Rcpp::IntegerVector lag = IntegerVector(1),
+                Rcpp::IntegerVector idx = IntegerVector(0),
+                Rcpp::IntegerVector at = IntegerVector(0),
+                bool na_pad = false)
+{
+  int n = Rf_length(x);
+  int nn = at.size() == 0 ? n : at.size();
+  std::string var = at.size() == 0 ? "x" : "at";
+
+  checks::check_k(k, nn, var);
+  checks::check_lag(lag, nn, var);
+  checks::check_idx(idx, n, var);
+  checks::check_at(at);
+
+  switch (TYPEOF(x))
+  {
+  case INTSXP:
+    return run_list(as<IntegerVector>(x), f, k, lag, idx, at, na_pad);
+  case REALSXP:
+    return run_list(as<NumericVector>(x), f, k, lag, idx, at, na_pad);
+  case STRSXP:
+    return run_list(as<CharacterVector>(x), f, k, lag, idx, at, na_pad);
+  case LGLSXP:
+    return run_list(as<LogicalVector>(x), f, k, lag, idx, at, na_pad);
+  default:
+  {
+    stop("Invalid 'x' type - only integer, numeric, character, factor, date and logical vectors are possible.");
+  }
+  }
+
+  return R_NilValue;
+}

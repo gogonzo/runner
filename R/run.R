@@ -248,18 +248,17 @@ runner.default <- function(
   k <- .k_by(k, if (length(at > 0)) at else idx, "k")
   lag <- .k_by(lag, if (length(at > 0)) at else idx, "lag")
 
-  w <- window_run(x = x, k = k, lag = lag, idx = idx, at = at, na_pad = na_pad)
-
-  answer <- if (!is.null(cl) && is(cl, "cluster")) {
-    parLapply(cl = cl, X = w, fun = f, ...)
+  if (!is.null(cl) && is(cl, "cluster")) {
+    w <- window_run(x = x, k = k, lag = lag, idx = idx, at = at, na_pad = na_pad)
+    answer <- parLapply(cl = cl, X = w, fun = f, ...)
   } else {
-    lapply(w, function(.this_window) {
-      if (length(.this_window) == 0) {
-        NA
-      } else {
-        f(.this_window, ...)
-      }
-    })
+    f_wrapped <- if (length(list(...)) > 0) {
+      dots <- list(...)
+      function(x) do.call(f, c(list(x), dots))
+    } else {
+      f
+    }
+    answer <- runner_run(x = x, f = f_wrapped, k = k, lag = lag, idx = idx, at = at, na_pad = na_pad)
   }
 
   if (!isFALSE(simplify) && length(answer)) {
@@ -352,18 +351,17 @@ runner.data.frame <- function(
   k <- .k_by(k, if (length(at) > 0) at else idx, "k")
   lag <- .k_by(lag, if (length(at) > 0) at else idx, "lag")
 
-  w <- window_run(
-    x = seq_len(nrow(x)),
-    k = k,
-    lag = lag,
-    idx = idx,
-    at = at,
-    na_pad = na_pad
-  )
-
-  answer <- if (!is.null(cl) && is(cl, "cluster")) {
+  if (!is.null(cl) && is(cl, "cluster")) {
+    w <- window_run(
+      x = seq_len(nrow(x)),
+      k = k,
+      lag = lag,
+      idx = idx,
+      at = at,
+      na_pad = na_pad
+    )
     clusterExport(cl, varlist = c("x", "f"), envir = environment())
-    parLapply(
+    answer <- parLapply(
       cl = cl,
       X = w,
       fun = function(.this_window_idx) {
@@ -375,13 +373,22 @@ runner.data.frame <- function(
       }
     )
   } else {
-    lapply(w, function(.this_window_idx) {
+    f_wrapped <- function(.this_window_idx) {
       if (length(.this_window_idx) == 0) {
         NA
       } else {
         f(x[.this_window_idx, ], ...)
       }
-    })
+    }
+    answer <- runner_run(
+      x = seq_len(nrow(x)),
+      f = f_wrapped,
+      k = k,
+      lag = lag,
+      idx = idx,
+      at = at,
+      na_pad = na_pad
+    )
   }
 
   if (!isFALSE(simplify) && length(answer)) {
@@ -464,18 +471,17 @@ runner.matrix <- function(
   k <- .k_by(k, if (length(at) > 0) at else idx, "k")
   lag <- .k_by(lag, if (length(at) > 0) at else idx, "lag")
 
-  w <- window_run(
-    x = seq_len(nrow(x)),
-    k = k,
-    lag = lag,
-    idx = idx,
-    at = at,
-    na_pad = na_pad
-  )
-
-  answer <- if (!is.null(cl) && is(cl, "cluster")) {
+  if (!is.null(cl) && is(cl, "cluster")) {
+    w <- window_run(
+      x = seq_len(nrow(x)),
+      k = k,
+      lag = lag,
+      idx = idx,
+      at = at,
+      na_pad = na_pad
+    )
     clusterExport(cl, varlist = c("x", "f"), envir = environment())
-    parLapply(
+    answer <- parLapply(
       cl = cl,
       X = w,
       fun = function(.this_window_idx) {
@@ -488,15 +494,21 @@ runner.matrix <- function(
       ...
     )
   } else {
-    lapply(
-      X = w,
-      FUN = function(.this_window_idx) {
-        if (length(.this_window_idx) == 0) {
-          NA
-        } else {
-          f(x[.this_window_idx, , drop = FALSE], ...)
-        }
+    f_wrapped <- function(.this_window_idx) {
+      if (length(.this_window_idx) == 0) {
+        NA
+      } else {
+        f(x[.this_window_idx, , drop = FALSE], ...)
       }
+    }
+    answer <- runner_run(
+      x = seq_len(nrow(x)),
+      f = f_wrapped,
+      k = k,
+      lag = lag,
+      idx = idx,
+      at = at,
+      na_pad = na_pad
     )
   }
   if (!isFALSE(simplify) && length(answer)) {
