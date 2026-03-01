@@ -25,7 +25,7 @@ matching column name in the x then is replaced with the value x[[idx]]"><!-- mat
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.0</span>
       </span>
     </div>
 
@@ -94,12 +94,9 @@ matching column name in the <code>x</code> then is replaced with the value <code
 
 
 <dt id="arg-k">k<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>(<code>integer</code> vector or single value)<br>
-Denoting size of the running window. If <code>k</code> is a single value then window
-size is constant for all elements, otherwise if <code>length(k) == length(x)</code>
-different window size for each element. One can also specify <code>k</code> in the same
-way as <code>by</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">base::seq.POSIXt()</a></code>.
-See 'Specifying time-intervals' in details section.</p></dd>
+<dd><p>(<code>integer</code> or <code>character</code>)<br>
+Window size. Single value or vector of <code>length(x)</code>. Omit for cumulative
+windows. Accepts time-interval strings (e.g. <code>"5 days"</code>) when <code>idx</code> is set.</p></dd>
 
 </dl></div>
     <div id="value">

@@ -1,5 +1,6 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>/404.html</loc></url>
+<url><loc>/CLAUDE.html</loc></url>
 <url><loc>/articles/apply_any_r_function.html</loc></url>
 <url><loc>/articles/built-in_functions.html</loc></url>
 <url><loc>/articles/getting_started_with_runner.html</loc></url>
@@ -27,6 +28,7 @@
 <url><loc>/reference/minmax_run.html</loc></url>
 <url><loc>/reference/run_by.html</loc></url>
 <url><loc>/reference/runner.html</loc></url>
+<url><loc>/reference/runner_run.html</loc></url>
 <url><loc>/reference/streak_run.html</loc></url>
 <url><loc>/reference/sum_run.html</loc></url>
 <url><loc>/reference/which_run.html</loc></url>

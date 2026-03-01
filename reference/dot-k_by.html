@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.0</span>
       </span>
     </div>
 
@@ -86,21 +86,15 @@
 
 
 <dl><dt id="arg-k">k<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>(<code>integer</code> vector or single value)<br>
-Denoting size of the running window. If <code>k</code> is a single value then window
-size is constant for all elements, otherwise if <code>length(k) == length(x)</code>
-different window size for each element. One can also specify <code>k</code> in the same
-way as <code>by</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">base::seq.POSIXt()</a></code>.
-See 'Specifying time-intervals' in details section.</p></dd>
+<dd><p>(<code>integer</code> or <code>character</code>)<br>
+Window size. Single value or vector of <code>length(x)</code>. Omit for cumulative
+windows. Accepts time-interval strings (e.g. <code>"5 days"</code>) when <code>idx</code> is set.</p></dd>
 
 
 <dt id="arg-idx">idx<a class="anchor" aria-label="anchor" href="#arg-idx"></a></dt>
 <dd><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>)<br>
-Optional integer vector containing sorted (ascending) index of observation.
-By default <code>idx</code> is index incremented by one. User can provide index with
-varying increment and with duplicated values. If specified then <code>k</code> and
-<code>lag</code> are depending on <code>idx</code>. Length of <code>idx</code> have to be equal of length
-<code>x</code>.</p></dd>
+Sorted index of observations. When set, <code>k</code> and <code>lag</code> refer to index
+distance rather than element count. Must be same length as <code>x</code>.</p></dd>
 
 
 <dt id="arg-param">param<a class="anchor" aria-label="anchor" href="#arg-param"></a></dt>

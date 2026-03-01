@@ -25,7 +25,7 @@ matching column name in the x then is replaced with the value x[[at]]"><!-- math
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.0</span>
       </span>
     </div>
 
@@ -94,11 +94,10 @@ matching column name in the <code>x</code> then is replaced with the value <code
 
 
 <dt id="arg-at">at<a class="anchor" aria-label="anchor" href="#arg-at"></a></dt>
-<dd><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>, <code>character</code> vector)<br>
-Vector of any size and any value defining output data points. Values of the
-vector defines the indexes which data is computed at. Can be also <code>POSIXt</code>
-sequence increment used in <code>at</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">base::seq.POSIXt()</a></code>.
-See 'Specifying time-intervals' in details section.</p></dd>
+<dd><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>, <code>character</code>)<br>
+Indices at which to evaluate windows. Output length equals <code>length(at)</code>
+instead of <code>length(x)</code>. A single time-interval string (e.g. <code>"month"</code>)
+generates a regular sequence over the range of <code>idx</code>.</p></dd>
 
 </dl></div>
     <div id="value">

@@ -24,7 +24,7 @@ specified k window size."><!-- mathjax --><script src="https://cdnjs.cloudflare.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.0</span>
       </span>
     </div>
 
@@ -97,43 +97,32 @@ specified <code>k</code> window size.</p>
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>(<code>vector</code>, <code>data.frame</code>, <code>matrix</code>, <code>xts</code>, <code>grouped_df</code>)<br>
-Input in runner custom function <code>f</code>.</p></dd>
+input data.</p></dd>
 
 
 <dt id="arg-k">k<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>(<code>integer</code> vector or single value)<br>
-Denoting size of the running window. If <code>k</code> is a single value then window
-size is constant for all elements, otherwise if <code>length(k) == length(x)</code>
-different window size for each element. One can also specify <code>k</code> in the same
-way as <code>by</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">base::seq.POSIXt()</a></code>.
-See 'Specifying time-intervals' in details section.</p></dd>
+<dd><p>(<code>integer</code> or <code>character</code>)<br>
+Window size. Single value or vector of <code>length(x)</code>. Omit for cumulative
+windows. Accepts time-interval strings (e.g. <code>"5 days"</code>) when <code>idx</code> is set.</p></dd>
 
 
 <dt id="arg-lag">lag<a class="anchor" aria-label="anchor" href="#arg-lag"></a></dt>
-<dd><p>(<code>integer</code> vector or single value)<br>
-Denoting window lag. If <code>lag</code> is a single value then window lag is constant
-for all elements, otherwise if <code>length(lag) == length(x)</code> different window
-size for each element. Negative value shifts window forward. One can also
-specify <code>lag</code> in the same way as <code>by</code> argument in
-<code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">base::seq.POSIXt()</a></code>. See 'Specifying time-intervals' in details
-section.</p></dd>
+<dd><p>(<code>integer</code> or <code>character</code>)<br>
+Window shift. Positive shifts back, negative shifts forward. Single value
+or vector of <code>length(x)</code>. Accepts time-interval strings when <code>idx</code> is set.</p></dd>
 
 
 <dt id="arg-idx">idx<a class="anchor" aria-label="anchor" href="#arg-idx"></a></dt>
 <dd><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>)<br>
-Optional integer vector containing sorted (ascending) index of observation.
-By default <code>idx</code> is index incremented by one. User can provide index with
-varying increment and with duplicated values. If specified then <code>k</code> and
-<code>lag</code> are depending on <code>idx</code>. Length of <code>idx</code> have to be equal of length
-<code>x</code>.</p></dd>
+Sorted index of observations. When set, <code>k</code> and <code>lag</code> refer to index
+distance rather than element count. Must be same length as <code>x</code>.</p></dd>
 
 
 <dt id="arg-at">at<a class="anchor" aria-label="anchor" href="#arg-at"></a></dt>
-<dd><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>, <code>character</code> vector)<br>
-Vector of any size and any value defining output data points. Values of the
-vector defines the indexes which data is computed at. Can be also <code>POSIXt</code>
-sequence increment used in <code>at</code> argument in <code><a href="https://rdrr.io/r/base/seq.POSIXt.html" class="external-link">base::seq.POSIXt()</a></code>.
-See 'Specifying time-intervals' in details section.</p></dd>
+<dd><p>(<code>integer</code>, <code>Date</code>, <code>POSIXt</code>, <code>character</code>)<br>
+Indices at which to evaluate windows. Output length equals <code>length(at)</code>
+instead of <code>length(x)</code>. A single time-interval string (e.g. <code>"month"</code>)
+generates a regular sequence over the range of <code>idx</code>.</p></dd>
 
 
 <dt id="arg-na-rm">na_rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
@@ -142,9 +131,8 @@ if <code>TRUE</code> sum is calculating excluding <code>NA</code>.</p></dd>
 
 
 <dt id="arg-na-pad">na_pad<a class="anchor" aria-label="anchor" href="#arg-na-pad"></a></dt>
-<dd><p>(<code>logical</code> single value)<br>
-Whether incomplete window should return <code>NA</code> (if <code>na_pad = TRUE</code>)
-Incomplete window is when some parts of the window are out of range.</p></dd>
+<dd><p>(<code>logical</code>)<br>
+If <code>TRUE</code>, return <code>NA</code> for windows that extend beyond the data range.</p></dd>
 
 </dl></div>
     <div id="value">

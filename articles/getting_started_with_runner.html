@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">runner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.0</span>
       </span>
     </div>
 
@@ -96,7 +96,7 @@
                         <h4 data-toc-skip class="author">Dawid
 Kałędkowski</h4>
             
-            <h4 data-toc-skip class="date">2026-01-31</h4>
+            <h4 data-toc-skip class="date">2026-03-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/gogonzo/runner/blob/main/vignettes/getting_started_with_runner.Rmd" class="external-link"><code>vignettes/getting_started_with_runner.Rmd</code></a></small>
       <div class="hidden name"><code>getting_started_with_runner.Rmd</code></div>
@@ -106,23 +106,15 @@ Kałędkowski</h4>
     
     
 <div class="section level2">
-<h2 id="about">About<a class="anchor" aria-label="anchor" href="#about"></a>
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>Package contains standard running functions (aka. rolling) with
-additional options like varying window size, lagging, handling missings
-and windows depending on date. <code>runner</code> brings also rolling
-streak and rolling which, what extends beyond range of functions already
-implemented in R packages. This package can be successfully used to
-manipulate and aggregate time series or longitudinal data.</p>
-</div>
-<div class="section level2">
-<h2 id="using-runner">Using runner<a class="anchor" aria-label="anchor" href="#using-runner"></a>
-</h2>
-<p><code>runner</code> package provides functions applied on running
-windows. The most universal function is <code><a href="../reference/runner.html">runner::runner</a></code>
-which gives user possibility to apply any R function <code>f</code> in
-running window. In example below 4-months correlation is calculated
-lagged by 1 month.</p>
+<p><code>runner</code> applies any R function on running
+(rolling/sliding) windows. It gives full control over window size
+(<code>k</code>), lag, and time-based indexing (<code>idx</code>), and
+supports vectors, data frames, and matrices as input. It also integrates
+with <code>dplyr::group_by</code>.</p>
+<p>Below, a 4-month rolling correlation is computed with a 1-month
+lag:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">runner</span><span class="op">)</span></span>
 <span></span>
@@ -132,59 +124,78 @@ lagged by 1 month.</p>
 <span>  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/runner.html">runner</a></span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  lag <span class="op">=</span> <span class="st">"1 months"</span>,</span>
-<span>  k <span class="op">=</span> <span class="st">"4 months"</span>,</span>
-<span>  idx <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">date</span>,</span>
-<span>  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">a</span>, <span class="va">x</span><span class="op">$</span><span class="va">b</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p>There are different kinds of running windows and all of them are
-implemented in <code>runner</code>.</p>
+<span><span class="fu"><a href="../reference/runner.html">runner</a></span><span class="op">(</span><span class="va">x</span>, lag <span class="op">=</span> <span class="st">"1 months"</span>, k <span class="op">=</span> <span class="st">"4 months"</span>, idx <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">date</span>,</span>
+<span>       f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">a</span>, <span class="va">x</span><span class="op">$</span><span class="va">b</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="running-windows">Running windows<a class="anchor" aria-label="anchor" href="#running-windows"></a>
+<h2 id="window-types">Window types<a class="anchor" aria-label="anchor" href="#window-types"></a>
 </h2>
-<p>Following diagram illustrates what running windows are - in this case
-running windows of length <code>k = 4</code>. For each of 15 elements of
-a vector each window contains current 4 elements.</p>
-<p><img src="images/incrementalindex.png"></p>
 <div class="section level3">
-<h3 id="window-size">Window size<a class="anchor" aria-label="anchor" href="#window-size"></a>
+<h3 id="sliding-window-k">Sliding window (<code>k</code>)<a class="anchor" aria-label="anchor" href="#sliding-window-k"></a>
 </h3>
-<p><code>k</code> denotes number of elements in window. If
-<code>k</code> is a single value then window size is constant for all
-elements of x. For varying window size one should specify <code>k</code>
-as integer vector of <code>length(k) == length(x)</code> where each
-element of <code>k</code> defines window length. If <code>k</code> is
-empty it means that window will be cumulative (like
-<code><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">base::cumsum</a></code>). Example below illustrates window of
-<code>k = 4</code> for 10th element of vector <code>x</code>.</p>
+<p><code>k</code> sets the number of elements in each window. When
+<code>k</code> is a single constant, the window slides along the data
+with a fixed size. If <code>k</code> is omitted, windows are cumulative
+— each window grows from the first element to the current one.</p>
 <p><img src="images/constantwindow.png"></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/runner.html">runner</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, k <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># 4-element sliding sum</span></span>
+<span><span class="fu"><a href="../reference/runner.html">runner</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, k <span class="op">=</span> <span class="fl">4</span>, f <span class="op">=</span> <span class="va">sum</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># cumulative sum (k omitted)</span></span>
+<span><span class="fu"><a href="../reference/runner.html">runner</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, f <span class="op">=</span> <span class="va">sum</span><span class="op">)</span></span></code></pre></div>
+<p><code>k</code> can also be a vector of <code>length(x)</code> to use
+a different window size at each position.</p>
 </div>
 <div class="section level3">
-<h3 id="window-lag">Window lag<a class="anchor" aria-label="anchor" href="#window-lag"></a>
+<h3 id="lag-lag">Lag (<code>lag</code>)<a class="anchor" aria-label="anchor" href="#lag-lag"></a>
 </h3>
-<p><code>lag</code> denotes how many observations windows will be lagged
-by. If <code>lag</code> is a single value than it is constant for all
-elements of x. For varying lag size one should specify <code>lag</code>
-as integer vector of <code>length(lag) == length(x)</code> where each
-element of <code>lag</code> defines lag of window. Default value of
-<code>lag = 0</code>. Example below illustrates window of
-<code>k = 4</code> lagged by <code>lag = 2</code> for 10-th element of
-vector <code>x</code>. Lag can also be negative value, which shifts
-window forward instead of backward.</p>
+<p><code>lag</code> shifts the window backward (positive values) or
+forward (negative values) relative to the current element. Default is
+<code>lag = 0</code>. Like <code>k</code>, <code>lag</code> can be a
+single value or a vector of <code>length(x)</code>.</p>
 <p><img src="images/laggedwindowklag.png"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/runner.html">runner</a></span><span class="op">(</span></span>
-<span>  <span class="fl">1</span><span class="op">:</span><span class="fl">15</span>,</span>
-<span>  k <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  lag <span class="op">=</span> <span class="fl">2</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/runner.html">runner</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, k <span class="op">=</span> <span class="fl">4</span>, lag <span class="op">=</span> <span class="fl">2</span>, f <span class="op">=</span> <span class="va">sum</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="index-based-windows-idx">Index-based windows (<code>idx</code>)<a class="anchor" aria-label="anchor" href="#index-based-windows-idx"></a>
+</h3>
+<p>By default, <code>runner</code> treats elements as equally spaced
+(index increments by 1). Real data often has gaps — missing weekends,
+holidays, irregular timestamps. Setting <code>idx</code> makes
+<code>k</code> and <code>lag</code> refer to index distance instead of
+element count, so the number of elements per window varies with the
+spacing.</p>
+<p>For example, a 5-day window (<code>k = 5</code>) on unevenly-spaced
+dates will contain different numbers of observations at each step:</p>
+<p><img src="images/running_date_windows.png"></p>
+<p><code>k</code> and <code>lag</code> also accept time-interval strings
+using the same syntax as <code>seq.POSIXt(by = ...)</code>,
+e.g. <code>"5 days"</code>, <code>"2 weeks"</code>,
+<code>"month"</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">13</span>, <span class="fl">17</span>, <span class="fl">18</span>, <span class="fl">18</span>, <span class="fl">21</span>, <span class="fl">27</span>, <span class="fl">31</span>, <span class="fl">37</span>, <span class="fl">42</span>, <span class="fl">44</span>, <span class="fl">47</span>, <span class="fl">48</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/runner.html">runner</a></span><span class="op">(</span><span class="va">idx</span>, k <span class="op">=</span> <span class="fl">5</span>, lag <span class="op">=</span> <span class="fl">1</span>, idx <span class="op">=</span> <span class="va">idx</span>, f <span class="op">=</span> <span class="va">mean</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># equivalent with Date index</span></span>
+<span><span class="fu"><a href="../reference/runner.html">runner</a></span><span class="op">(</span><span class="va">idx</span>, k <span class="op">=</span> <span class="st">"5 days"</span>, lag <span class="op">=</span> <span class="st">"day"</span>, idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="va">idx</span>, f <span class="op">=</span> <span class="va">mean</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="evaluation-at-specific-points-at">Evaluation at specific points (<code>at</code>)<a class="anchor" aria-label="anchor" href="#evaluation-at-specific-points-at"></a>
+</h3>
+<p>By default, <code>runner</code> returns one result per element of
+<code>x</code>. Setting <code>at</code> restricts evaluation to specific
+index positions — the output length equals <code>length(at)</code>. This
+is useful when you only need results at certain dates or milestones, not
+at every observation.</p>
+<p><img src="images/runner_at_date.png"></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/runner.html">runner</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, k <span class="op">=</span> <span class="fl">5</span>, lag <span class="op">=</span> <span class="fl">1</span>, idx <span class="op">=</span> <span class="va">idx</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">27</span>, <span class="fl">48</span>, <span class="fl">31</span><span class="op">)</span>, f <span class="op">=</span> <span class="va">mean</span><span class="op">)</span></span></code></pre></div>
+<p><code>at</code> can also be a single time-interval string, which
+generates a regular sequence over the <code>idx</code> range. For
+example, <code>at = "4 months"</code> evaluates at every 4-month
+interval from <code>min(idx)</code> to <code>max(idx)</code>.</p>
 </div>
 </div>
   </div>
