@@ -9,11 +9,10 @@
 \arguments{
 \item{x}{(\code{data.frame})}
 
-\item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character} vector)\cr
-Vector of any size and any value defining output data points. Values of the
-vector defines the indexes which data is computed at. Can be also \code{POSIXt}
-sequence increment used in \code{at} argument in \code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}.
-See 'Specifying time-intervals' in details section.}
+\item{at}{(\code{integer}, \code{Date}, \code{POSIXt}, \code{character})\cr
+Indices at which to evaluate windows. Output length equals \code{length(at)}
+instead of \code{length(x)}. A single time-interval string (e.g. \code{"month"})
+generates a regular sequence over the range of \code{idx}.}
 }
 \value{
 resolved \code{at}

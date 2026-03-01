@@ -1,136 +1,93 @@
-#' Apply running function
+#' Apply function on running windows
 #'
-#' Applies custom function on running windows.
+#' Applies any R function `f` on running (Column/sliding) windows defined by
+#' `k`, `lag`, `idx` and `at`.
+#'
 #' @param x (`vector`, `data.frame`, `matrix`, `xts`, `grouped_df`)\cr
-#'  Input in runner custom function `f`.
+#'  input data.
 #'
-#' @param k (`integer` vector or single value)\cr
-#'  Denoting size of the running window. If `k` is a single value then window
-#'  size is constant for all elements, otherwise if `length(k) == length(x)`
-#'  different window size for each element. One can also specify `k` in the same
-#'  way as `by` argument in [base::seq.POSIXt()].
-#'  See 'Specifying time-intervals' in details section.
+#' @param k (`integer` or `character`)\cr
+#'  Window size. Single value or vector of `length(x)`. Omit for cumulative
+#'  windows. Accepts time-interval strings (e.g. `"5 days"`) when `idx` is set.
 #'
-#' @param lag (`integer` vector or single value)\cr
-#'  Denoting window lag. If `lag` is a single value then window lag is constant
-#'  for all elements, otherwise if `length(lag) == length(x)` different window
-#'  size for each element. Negative value shifts window forward. One can also
-#'  specify `lag` in the same way as `by` argument in
-#'  [base::seq.POSIXt()]. See 'Specifying time-intervals' in details
-#'  section.
+#' @param lag (`integer` or `character`)\cr
+#'  Window shift. Positive shifts back, negative shifts forward. Single value
+#'  or vector of `length(x)`. Accepts time-interval strings when `idx` is set.
 #'
 #' @param idx (`integer`, `Date`, `POSIXt`)\cr
-#'  Optional integer vector containing sorted (ascending) index of observation.
-#'  By default `idx` is index incremented by one. User can provide index with
-#'  varying increment and with duplicated values. If specified then `k` and
-#'  `lag` are depending on `idx`. Length of `idx` have to be equal of length
-#'  `x`.
+#'  Sorted index of observations. When set, `k` and `lag` refer to index
+#'  distance rather than element count. Must be same length as `x`.
 #'
 #' @param f (`function`)\cr
-#'  Applied on windows created from `x`. This function is meant to summarize
-#'  windows and create single element for each window, but one can also specify
-#'  function which return multiple elements (runner output will be a list).
-#'  By default runner returns windows as is (`f = function(x)`).
+#'  Function applied to each window. Defaults to identity (`function(x) x`).
 #'
-#' @param at (`integer`, `Date`, `POSIXt`, `character` vector)\cr
-#'  Vector of any size and any value defining output data points. Values of the
-#'  vector defines the indexes which data is computed at. Can be also `POSIXt`
-#'  sequence increment used in `at` argument in [base::seq.POSIXt()].
-#'  See 'Specifying time-intervals' in details section.
+#' @param at (`integer`, `Date`, `POSIXt`, `character`)\cr
+#'  Indices at which to evaluate windows. Output length equals `length(at)`
+#'  instead of `length(x)`. A single time-interval string (e.g. `"month"`)
+#'  generates a regular sequence over the range of `idx`.
 #'
-#' @param na_pad (`logical` single value)\cr
-#'  Whether incomplete window should return `NA` (if `na_pad = TRUE`)
-#'  Incomplete window is when some parts of the window are out of range.
+#' @param na_pad (`logical`)\cr
+#'  If `TRUE`, return `NA` for windows that extend beyond the data range.
 #'
-#' @param simplify (`logical` or `character` value)\cr
-#'  should the result be simplified to a vector, matrix or higher dimensional
-#'  array if possible. The default value, `simplify = TRUE`, returns a vector or
-#'  matrix if appropriate, whereas if `simplify = "array"` the result may be an
-#'  array of "rank" `(=length(dim(.)))` one higher than the result of output
-#'  from the function `f` for each window. Consequences of `simplify` in `runner`
-#'  are identical to `sapply`.
+#' @param simplify (`logical` or `character`)\cr
+#'  Simplify result like [base::sapply()]. `TRUE` returns vector/matrix,
+#'  `"array"` may return a higher-dimensional array.
 #'
 #' @param cl (`cluster`) *experimental*\cr
-#'  Create and pass the cluster to the `runner` function to run each window
-#'  calculation in parallel. See [parallel::makeCluster()] in details.
+#'  Parallel cluster from [parallel::makeCluster()].
 #'
-#' @param ... (optional)\cr
-#'   other arguments passed to the function `f`.
+#' @param ... additional arguments passed to `f`.
 #'
 #' @details
-#' Function can apply any R function on running windows defined by `x`,
-#' `k`, `lag`, `idx` and `at`. Running window can be calculated
-#' on several ways:
+#' ## Window types
 #'
-#' - **Cumulative windows**\cr
-#'    applied when user doesn't specify `k` argument or specify `k = length(x)`,
-#'    this would mean that `k` is equal to number of available elements \cr
+#' - **Cumulative** (`k` omitted): window grows from the first element to the
+#'   current one, similar to `cumsum`. Each step includes all preceding data.
+#'   \cr
 #'    \if{html}{\figure{cumulativewindows.png}{options: alt="Figure: cumulativewindows.png"}}
 #'    \if{latex}{\figure{cumulativewindows.pdf}{options: width=7cm}}
 #'
-#'  - **Constant sliding windows**
-#'    applied when user specify `k` as constant value keeping `idx` and
-#'    `at` unspecified. `lag` argument shifts windows left (`lag > 0`)
-#'    or right (`lag < 0`). \cr
+#' - **Sliding** (constant `k`): fixed-size window slides along the data. The
+#'   first `k-1` windows are shorter since there aren't enough preceding
+#'   elements. `lag` shifts the window backward (positive) or forward
+#'   (negative).
+#'   \cr
 #'    \if{html}{\figure{incrementalindex.png}{options: alt="Figure: incrementalindex.png"}}
 #'    \if{latex}{\figure{incrementalindex.pdf}{options: width=7cm}}
 #'
-#'  - **Windows depending on date**\cr
-#'    If one specifies `idx` this would mean that output windows size might
-#'    change in size because of unequally spaced indexes. Fox example 5-period
-#'    window is different than 5-element window, because 5-period window might
-#'    contain any number of observation (7-day mean is not the same as 7-element
-#'    mean)
-#'     \cr
+#' - **Index-based** (`idx` set): window covers a range of index values rather
+#'   than a fixed number of elements. This is important for unevenly-spaced
+#'   data where a 5-day window may contain different numbers of observations
+#'   at each step.
+#'   \cr
 #'    \if{html}{\figure{runningdatewindows.png}{options: alt="Figure: runningdatewindows.png"}}
 #'    \if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
 #'
-#'  - **Window at specific indices**\cr
-#'    `runner` by default returns vector of the same size as `x` unless one
-#'    specifies `at` argument. Each element of `at` is an index on which runner
-#'    calculates function - which means that output of the runner is now of
-#'    length equal to `at`. Note that one can change index of `x` by specifying
-#'    `idx`. Illustration below shows output of `runner` for
-#'    `at = c(18, 27, 45, 31)` which gives windows in ranges enclosed in square
-#'    brackets. Range for `at = 27` is `[22, 26]` which is not available in
-#'    current indices. \cr
+#' - **Evaluation at specific points** (`at` set): by default, `runner` returns
+#'   one result per element of `x`. Setting `at` restricts output to specific
+#'   index positions, so output length equals `length(at)`.
+#'   \cr
 #'    \if{html}{\figure{runnerat.png}{options: alt="Figure: runnerat.png"}}
 #'    \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
 #'
+#' ## Time-interval syntax
 #'
-#' ## Specifying time-intervals
-#'  `at` can also be specified as interval of the output defined by
-#'  `at = "<increment>"` which results in indices sequence defined by
-#'  `seq.POSIXt(min(idx), max(idx), by = "<increment>")`. Increment of sequence
-#'  is the same as in [base::seq.POSIXt()] function.
-#'  It's worth noting that increment interval can't be more frequent than
-#'  interval of `idx` - for `Date` the most frequent time-unit is a `"day"`,
-#'  for `POSIXt` a `sec`.
+#' `k`, `lag` and `at` accept time-interval strings (requires `idx` to be set)
+#' using the same syntax as the `by` argument in [base::seq.POSIXt()]:
+#' `"sec"`, `"min"`, `"hour"`, `"day"`, `"week"`, `"month"`, `"quarter"`,
+#' `"year"`, or `"<n> <unit>s"` (e.g. `"5 days"`, `"-2 weeks"`).
+#' Both `k` and `lag` can also be vectors, allowing different window sizes
+#' and shifts at each position.
 #'
-#'  `k` and `lag` can also be specified as using time sequence increment.
-#'  Available time units are
-#' `"sec", "min", "hour", "day", "DSTday", "week", "month", "quarter" or "year"`.
-#'  To increment by number of units one can also specify `<number> <unit>s`
-#'  for example `lag = "-2 days"`, `k = "5 weeks"`.
-#'
-#'  Setting `k` and `lag` as a sequence increment can be also a vector can be a
-#'  vector which allows to stretch and lag/lead each window freely on in time
-#'  (on indices).
-#' \cr
 #' ## Parallel computing
-#'  Beware that executing R call in parallel not always
-#'  have the edge over single-thread even if the
-#'  `cl <- registerCluster(detectCores())` was specified before.
-#'  \cr
-#'  Parallel windows are executed in the independent environment, which means
-#'  that objects other than function arguments needs to be copied to the
-#'  parallel environment using [parallel::clusterExport()]. For
-#'  example using `f = function(x) x + y + z` will result in error as
-#'  `clusterExport(cl, varlist = c("y", "z"))` needs to be called before.
 #'
-#' @return vector with aggregated values for each window. Length of output is
-#'  the same as `length(x)` or `length(at)` if specified. Type of the output
-#'  depends on the output from a function `f`.
+#' Pass a [parallel::makeCluster()] object via `cl` to run windows in
+#' parallel. Objects referenced inside `f` (other than its arguments) must
+#' be exported with [parallel::clusterExport()] beforehand. Parallel
+#' execution adds overhead and is only beneficial for expensive computations.
+#'
+#' @return vector with aggregated values for each window. Length equals
+#'  `length(x)` or `length(at)` if specified. Type depends on `f`.
 #'
 #' @md
 #' @rdname runner

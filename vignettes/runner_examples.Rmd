@@ -6,83 +6,54 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-  
-The most fundamental function in `runner` package is `runner`. With `runner::runner`
-one can apply any R function on running windows. This tutorial presents set of 
-examples explaining how to tackle some tasks. Some of the examples are referenced 
-to original topic on [stack-overflow](https://stackoverflow.com).
 
+Practical examples using `runner::runner`. Some are adapted from
+[Stack Overflow](https://stackoverflow.com) discussions.
 
-### Number of unique elements in 7 days window
+### Unique elements in a 7-day window
 
 ```{r eval=FALSE}
 library(runner)
 
 x <- sample(letters, 20, replace = TRUE)
-date <- Sys.Date() + cumsum(sample(1:5, 20, replace = TRUE)) # unequally spaced time series
+date <- Sys.Date() + cumsum(sample(1:5, 20, replace = TRUE))
 
-runner(
-  x,
-  k = "7 days",
-  idx = date,
-  f = function(x) length(unique(x))
-)
+runner(x, k = "7 days", idx = date, f = function(x) length(unique(x)))
 ```
 
-### weekly trimmed mean
+### Weekly trimmed mean
 
 ```{r eval=FALSE}
-library(runner)
-
 x <- cumsum(rnorm(20))
-date <- Sys.Date() + cumsum(sample(1:5, 20, replace = TRUE)) # unequaly spaced time series
+date <- Sys.Date() + cumsum(sample(1:5, 20, replace = TRUE))
 
-runner(
-  x,
-  k = "week",
-  idx = date,
-  f = function(x) mean(x, trim = 0.05)
-)
+runner(x, k = "week", idx = date, f = function(x) mean(x, trim = 0.05))
 ```
 
-### Prediction on current day based on preceding 2-weeks regression
+### Prediction from rolling 2-week regression
 
 ```{r eval=FALSE}
-library(runner)
-
-# sample data
 x <- cumsum(rnorm(20))
 data <- data.frame(
-  date = Sys.Date() + cumsum(sample(1:3, 20, replace = TRUE)), # unequally spaced time series,
+  date = Sys.Date() + cumsum(sample(1:3, 20, replace = TRUE)),
   y = 3 * x + rnorm(20),
   x = cumsum(rnorm(20))
 )
 
-# solution
 data$pred <- runner(
-  data,
-  lag = "1 days",
-  k = "2 weeks",
-  idx = data$date,
-  f = function(data) {
-    predict(
-      lm(y ~ x, data = data)
-    )[nrow(data)]
-  }
+  data, lag = "1 days", k = "2 weeks", idx = data$date,
+  f = function(data) predict(lm(y ~ x, data = data))[nrow(data)]
 )
-
 
 plot(data$date, data$y, type = "l", col = "red")
 lines(data$date, data$pred, col = "blue")
 ```
 
-
-### Rolling sums for groups with uneven time gaps
+### Grouped rolling sums with uneven time gaps
 
 [SO discussion](https://stackoverflow.com/a/58167952/3495076)
 
 ```{r eval=FALSE}
-library(runner)
 library(dplyr)
 
 set.seed(3737)
@@ -103,14 +74,11 @@ df %>%
   )
 ```
 
-# runner with `dplyr`
-
-### Unique for specified time frame
+### Rolling distinct count by group
 
 [SO discussion](https://stackoverflow.com/questions/41693081/)
 
 ```{r eval=FALSE}
-library(runner)
 library(dplyr)
 
 df <- read.table(text = "  user_id       date category
@@ -132,116 +100,64 @@ df <- read.table(text = "  user_id       date category
 df %>%
   group_by(user_id) %>%
   mutate(
-    distinct_7 = runner(category,
-      k = "7 days",
-      idx = as.Date(date),
-      f = function(x) length(unique(x))
-    ),
-    distinct_14 = runner(category,
-      k = "14 days",
-      idx = as.Date(date),
-      f = function(x) length(unique(x))
-    )
+    distinct_7  = runner(category, k = "7 days", idx = as.Date(date),
+                         f = function(x) length(unique(x))),
+    distinct_14 = runner(category, k = "14 days", idx = as.Date(date),
+                         f = function(x) length(unique(x)))
   )
 ```
 
-### runner with group_by mutate
+### Grouped rolling regression with `run_by`
 
 ```{r eval=FALSE}
 library(dplyr)
 
 x <- cumsum(rnorm(20))
 y <- 3 * x + rnorm(20)
-date <- Sys.Date() + cumsum(sample(1:3, 20, replace = TRUE)) # unequaly spaced time series
+date <- Sys.Date() + cumsum(sample(1:3, 20, replace = TRUE))
 group <- rep(c("a", "b"), each = 10)
-
 
 data.frame(date, group, y, x) %>%
   group_by(group) %>%
   run_by(idx = "date", k = "5 days") %>%
   mutate(
-    alpha_5 = runner(
-      x = .,
-      f = function(x) {
-        coefficients(lm(x ~ y, x))[1]
-      }
-    ),
-    beta_5 = runner(
-      x = .,
-      f = function(x) {
-        coefficients(lm(x ~ y, x))[1]
-      }
-    )
+    alpha = runner(x = ., f = function(x) coefficients(lm(x ~ y, x))[1]),
+    beta  = runner(x = ., f = function(x) coefficients(lm(x ~ y, x))[2])
   )
 ```
 
-### Aggregating values from another data.frame in `grouped_df`
-[SO Discussion](https://stackoverflow.com/questions/61024712/do-a-rolling-regression-only-on-specific-dates/61045233#61045233)
+### Cross-referencing another data.frame in grouped context
+
+[SO Discussion](https://stackoverflow.com/questions/61024712/)
+
 ```{r eval=FALSE}
-library(runner)
 library(dplyr)
 
-Date <- seq(
-  from = as.Date("2014-01-01"),
-  to = as.Date("2019-12-31"),
-  by = "day"
-)
-market_return <- c(rnorm(2191))
+Date <- seq(as.Date("2014-01-01"), as.Date("2019-12-31"), by = "day")
+market_return <- rnorm(length(Date))
 
-AAPL <- data.frame(
-  Company.name = "AAPL",
-  Date = Date,
-  market_return = market_return
+df <- rbind(
+  data.frame(Company.name = "AAPL", Date = Date, market_return = market_return),
+  data.frame(Company.name = "MSFT", Date = Date, market_return = market_return)
 )
-
-MSFT <- data.frame(
-  Company.name = "MSFT",
-  Date = Date,
-  market_return = market_return
-)
-
-df <- rbind(AAPL, MSFT)
-df$stock_return <- c(rnorm(4382))
+df$stock_return <- rnorm(nrow(df))
 df <- df[order(df$Date), ]
 
 df2 <- data.frame(
-  Company.name2 = c(replicate(450, "AAPL"), replicate(450, "MSFT")),
-  Event_date = sample(
-    seq(as.Date("2015/01/01"),
-      as.Date("2019/12/31"),
-      by = "day"
-    ),
-    size = 900
-  )
+  Company.name2 = c(rep("AAPL", 450), rep("MSFT", 450)),
+  Event_date = sample(seq(as.Date("2015/01/01"), as.Date("2019/12/31"), by = "day"),
+                      size = 900)
 )
-
 
 df2 %>%
   group_by(Company.name2) %>%
   mutate(
-    intercept = runner(
-      x = df[df$Company.name == Company.name2[1], ],
-      k = "180 days",
-      lag = "5 days",
-      idx = df$Date[df$Company.name == Company.name2[1]],
-      at = Event_date,
-      f = function(x) {
-        coef(
-          lm(stock_return ~ market_return, data = x)
-        )[1]
-      }
-    ),
     slope = runner(
       x = df[df$Company.name == Company.name2[1], ],
-      k = "180 days",
-      lag = "5 days",
+      k = "180 days", lag = "5 days",
       idx = df$Date[df$Company.name == Company.name2[1]],
       at = Event_date,
-      f = function(x) {
-        coef(
-          lm(stock_return ~ market_return, data = x)
-        )[2]
-      }
+      f = function(x) coef(lm(stock_return ~ market_return, data = x))[2]
     )
   )
 ```

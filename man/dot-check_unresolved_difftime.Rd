@@ -9,12 +9,9 @@
 \arguments{
 \item{x}{(\code{data.frame})}
 
-\item{k}{(\code{integer} vector or single value)\cr
-Denoting size of the running window. If \code{k} is a single value then window
-size is constant for all elements, otherwise if \code{length(k) == length(x)}
-different window size for each element. One can also specify \code{k} in the same
-way as \code{by} argument in \code{\link[base:seq.POSIXt]{base::seq.POSIXt()}}.
-See 'Specifying time-intervals' in details section.}
+\item{k}{(\code{integer} or \code{character})\cr
+Window size. Single value or vector of \code{length(x)}. Omit for cumulative
+windows. Accepts time-interval strings (e.g. \code{"5 days"}) when \code{idx} is set.}
 }
 \value{
 resolved \code{idx}
