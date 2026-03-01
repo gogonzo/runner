@@ -12,7 +12,7 @@ vignette: >
 ## Using runner
 
 `runner` package provides functions applied on running windows. The most 
-universal function is `runner::runner` which gives user possibility to apply 
+universal function is `runner2::runner` which gives user possibility to apply 
 any R function `f` on running windows. Running windows are defined for each data
 window size `k`, `lag` with respect to their indexes. Unlike other available R 
 packages, `runner` supports any input and output type and also gives full control
@@ -102,7 +102,7 @@ In the example below in square brackets ranges for each window.
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
 
 # summarize - mean
-runner::runner(
+runner2::runner(
   x = idx,
   k = 5, # 5-days window
   lag = 1,
@@ -112,7 +112,7 @@ runner::runner(
 
 
 # use Date or datetime sequences
-runner::runner(
+runner2::runner(
   x = idx,
   k = "5 days", # 5-days window
   lag = 1,
@@ -121,7 +121,7 @@ runner::runner(
 )
 
 # obtain window from above illustration
-runner::runner(
+runner2::runner(
   x = idx,
   k = "5 days",
   lag = 1,
@@ -142,7 +142,7 @@ which gives windows in ranges enclosed in square brackets. Range for `at = 27` i
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
 
 # summary
-runner::runner(
+runner2::runner(
   x = 1:15,
   k = 5,
   lag = 1,
@@ -152,7 +152,7 @@ runner::runner(
 )
 
 # full window
-runner::runner(
+runner2::runner(
   x = idx,
   k = 5,
   lag = 1,
@@ -206,7 +206,7 @@ Both `k` and `lag` can be of `length(.) == 1`, `length(.) == length(x)` or
 
 ```{r eval=FALSE}
 # summarizing - concatenating
-runner::runner(
+runner2::runner(
   x = 1:10,
   lag = c(-1, 2, -1, -2, 0, 0, 5, -5, -2, -3),
   k = c(0, 1, 1, 1, 1, 5, 5, 5, 5, 5),
@@ -215,7 +215,7 @@ runner::runner(
 )
 
 # full window
-runner::runner(
+runner2::runner(
   x = 1:10,
   lag = 1,
   k = c(1, 1, 1, 1, 1, 5, 5, 5, 5, 5)
@@ -224,7 +224,7 @@ runner::runner(
 # on dates
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
 
-runner::runner(
+runner2::runner(
   x = 1:15,
   lag = sample(c("-2 days", "-1 days", "1 days", "2 days"),
     size = 15,
@@ -255,7 +255,7 @@ matching `idx`.
 ```{r eval=FALSE}
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
 
-runner::runner(
+runner2::runner(
   x = 1:15,
   k = 5,
   lag = 1,

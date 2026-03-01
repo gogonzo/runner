@@ -8,7 +8,7 @@ data <- data.frame(
 )
 
 f1 <- function(x, k) {
-  runner:::.check_unresolved_difftime(x, k)
+  runner2:::.check_unresolved_difftime(x, k)
 }
 
 expect_identical(f1(data, NULL), NULL, info = "k can be empty")
@@ -21,7 +21,7 @@ expect_error(f1(data, NA), "`k` is invalid", info = "k cant be NA")
 expect_error(f1(data, "group1"), "`k` is invalid", info = "k cant be a name of the column which isn't valid")
 
 f2 <- function(x, idx) {
-  runner:::.check_unresolved_index(x, idx)
+  runner2:::.check_unresolved_index(x, idx)
 }
 
 expect_identical(f2(data, NULL), NULL, info = "idx can be empty")
@@ -34,7 +34,7 @@ expect_error(f2(data, NA), "`idx` is invalid", info = "idx cant be NA")
 expect_error(f2(data, "group1"), "`idx` is invalid", info = "idx cant be a name of the column which isn't valid")
 
 f3 <- function(x, at) {
-  runner:::.check_unresolved_at(x, at)
+  runner2:::.check_unresolved_at(x, at)
 }
 
 expect_identical(f3(data, NULL), NULL, info = "at can be empty")

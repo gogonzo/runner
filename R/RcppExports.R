@@ -19,7 +19,7 @@
 #' fill_run(c(NA, NA, 1, 2, NA, NA, 2, 2, NA, NA, 1, NA, NA), run_for_first = TRUE, only_within = TRUE)
 #' @export
 fill_run <- function(x, run_for_first = FALSE, only_within = FALSE) {
-    .Call('_runner_fill_run', PACKAGE = 'runner', x, run_for_first, only_within)
+    .Call('_runner2_fill_run', PACKAGE = 'runner2', x, run_for_first, only_within)
 }
 
 #' Lag dependent on variable
@@ -37,7 +37,7 @@ fill_run <- function(x, run_for_first = FALSE, only_within = FALSE) {
 #' lag_run(letters[1:10], lag = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10), nearest = TRUE)
 #' @export
 lag_run <- function(x, lag = 1L, idx = integer(0), nearest = FALSE) {
-    .Call('_runner_lag_run', PACKAGE = 'runner', x, lag, idx, nearest)
+    .Call('_runner2_lag_run', PACKAGE = 'runner2', x, lag, idx, nearest)
 }
 
 #' Length of running windows
@@ -51,7 +51,7 @@ lag_run <- function(x, lag = 1L, idx = integer(0), nearest = FALSE) {
 #' length_run(k = 3, idx = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
 #' @export
 length_run <- function(k = integer(1), lag = integer(1), idx = integer(0)) {
-    .Call('_runner_length_run', PACKAGE = 'runner', k, lag, idx)
+    .Call('_runner2_length_run', PACKAGE = 'runner2', k, lag, idx)
 }
 
 #' Running min/max
@@ -65,7 +65,7 @@ length_run <- function(k = integer(1), lag = integer(1), idx = integer(0)) {
 #' @return list.
 #' @export
 minmax_run <- function(x, metric = "min", na_rm = TRUE) {
-    .Call('_runner_minmax_run', PACKAGE = 'runner', x, metric, na_rm)
+    .Call('_runner2_minmax_run', PACKAGE = 'runner2', x, metric, na_rm)
 }
 
 #' Running sum
@@ -112,7 +112,7 @@ minmax_run <- function(x, metric = "min", na_rm = TRUE) {
 #' sum_run(x2, na_rm = TRUE, k = 4)
 #' @export
 sum_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_rm = TRUE, na_pad = FALSE) {
-    .Call('_runner_sum_run', PACKAGE = 'runner', x, k, lag, idx, at, na_rm, na_pad)
+    .Call('_runner2_sum_run', PACKAGE = 'runner2', x, k, lag, idx, at, na_rm, na_pad)
 }
 
 #' Running mean
@@ -132,7 +132,7 @@ sum_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = 
 #' mean_run(x2, na_rm = TRUE, k=4)
 #' @export
 mean_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_rm = TRUE, na_pad = FALSE) {
-    .Call('_runner_mean_run', PACKAGE = 'runner', x, k, lag, idx, at, na_rm, na_pad)
+    .Call('_runner2_mean_run', PACKAGE = 'runner2', x, k, lag, idx, at, na_rm, na_pad)
 }
 
 #' Running maximum
@@ -154,7 +154,7 @@ mean_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at =
 #' max_run(x2, na_rm = FALSE, k=k) # maximum in varying k window size
 #' @export
 max_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_rm = TRUE, na_pad = FALSE) {
-    .Call('_runner_max_run', PACKAGE = 'runner', x, k, lag, idx, at, na_rm, na_pad)
+    .Call('_runner2_max_run', PACKAGE = 'runner2', x, k, lag, idx, at, na_rm, na_pad)
 }
 
 #' Running minimum
@@ -175,7 +175,7 @@ max_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = 
 #' min_run(x2, na_rm = FALSE, k = k)
 #' @export
 min_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_rm = TRUE, na_pad = FALSE) {
-    .Call('_runner_min_run', PACKAGE = 'runner', x, k, lag, idx, at, na_rm, na_pad)
+    .Call('_runner2_min_run', PACKAGE = 'runner2', x, k, lag, idx, at, na_rm, na_pad)
 }
 
 #' Running streak length
@@ -197,7 +197,7 @@ min_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = 
 #' streak_run(x1, k = k) # streak run within varying window size specified by vector k
 #' @export
 streak_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_rm = TRUE, na_pad = FALSE) {
-    .Call('_runner_streak_run', PACKAGE = 'runner', x, k, lag, idx, at, na_rm, na_pad)
+    .Call('_runner2_streak_run', PACKAGE = 'runner2', x, k, lag, idx, at, na_rm, na_pad)
 }
 
 #' Running which
@@ -220,7 +220,7 @@ streak_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at
 #' which_run(x2, na_rm = FALSE, k = k)
 #' @export
 which_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), which = "last", na_rm = TRUE, na_pad = FALSE) {
-    .Call('_runner_which_run', PACKAGE = 'runner', x, k, lag, idx, at, which, na_rm, na_pad)
+    .Call('_runner2_which_run', PACKAGE = 'runner2', x, k, lag, idx, at, which, na_rm, na_pad)
 }
 
 #' List of running windows
@@ -236,6 +236,6 @@ which_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at 
 #' window_run(letters[1:10], k = c(1, 2, 2, 4, 5, 5, 5, 5, 5, 5))
 #' @export
 window_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at = integer(0), na_pad = FALSE) {
-    .Call('_runner_window_run', PACKAGE = 'runner', x, k, lag, idx, at, na_pad)
+    .Call('_runner2_window_run', PACKAGE = 'runner2', x, k, lag, idx, at, na_pad)
 }
 

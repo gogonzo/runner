@@ -7,14 +7,14 @@ data <- data.frame(
 # vector
 cl <- parallel::makeCluster(1)
 expect_identical(
-  res <- runner::runner(
+  res <- runner2::runner(
     x = data$a,
     k = 10,
     f = sum,
     idx = data$idx,
     simplify = TRUE
   ),
-  runner::runner(
+  runner2::runner(
     x = data$a,
     k = 10,
     f = sum,
@@ -28,14 +28,14 @@ expect_true(is(res, "numeric"))
 
 cl <- parallel::makeCluster(1)
 expect_identical(
-  res <- runner::runner(
+  res <- runner2::runner(
     x = data$a,
     k = 10,
     f = sum,
     idx = data$idx,
     simplify = FALSE
   ),
-  runner::runner(
+  runner2::runner(
     x = data$a,
     k = 10,
     f = sum,

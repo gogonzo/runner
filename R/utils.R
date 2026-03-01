@@ -25,7 +25,7 @@
 #'   as.POSIXct("2020-01-01 03:02:01"),
 #'   by = "month"
 #' )
-#' k_difftime <- runner:::.k_by(k, idx, param = "k")
+#' k_difftime <- runner2:::.k_by(k, idx, param = "k")
 #' idx - k_difftime
 #' @keywords internal
 .k_by <- function(k, idx, param) {
@@ -94,7 +94,6 @@
 }
 
 
-
 #' Formats time-unit-interval to valid for runner
 #'
 #' Formats time-unit-interval to valid for runner. User specifies `k` as
@@ -105,11 +104,11 @@
 #' @param only_positive for `k` is `TRUE`,
 #'   for `lag` is `FALSE`
 #' @examples
-#' runner:::.reformat_k("1 days")
-#' runner:::.reformat_k("day")
-#' runner:::.reformat_k("10 days")
-#' runner:::.reformat_k("-10 days", only_positive = FALSE)
-#' runner:::.reformat_k(c("-10 days", "2 months"), only_positive = FALSE)
+#' runner2:::.reformat_k("1 days")
+#' runner2:::.reformat_k("day")
+#' runner2:::.reformat_k("10 days")
+#' runner2:::.reformat_k("-10 days", only_positive = FALSE)
+#' runner2:::.reformat_k(c("-10 days", "2 months"), only_positive = FALSE)
 #' @keywords internal
 .reformat_k <- function(k, only_positive = TRUE) {
   if (only_positive && any(grepl("^-", k))) {

@@ -14,7 +14,7 @@
 
 * fix `runner(..., na_pad)` for vectors to return `NA` when windows is incomplete.
 Other methods already consistent.
-* fix the problems when calling `runner::runner` using `do.call`. (#83 and #84)
+* fix the problems when calling `runner2::runner` using `do.call`. (#83 and #84)
 
 # runner 0.4.1
 
@@ -24,7 +24,7 @@ Other methods already consistent.
 # runner 0.4.0
 
 * defunct `type` argument in favor of `simplify`.
-* fixed error when using `runner::runner`.
+* fixed error when using `runner2::runner`.
 * fixed `max_run` to return `NA` instead of `NaN` in incomplete or `NA` windows.
 
 # runner 0.3.8

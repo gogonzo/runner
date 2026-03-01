@@ -270,7 +270,7 @@ runner(letters[1:10],
 
 # 5 days mean
 idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
-runner::runner(
+runner2::runner(
   x = idx,
   k = "5 days",
   lag = 1,
@@ -279,7 +279,7 @@ runner::runner(
 )
 
 # 5 days mean at 4-indices
-runner::runner(
+runner2::runner(
   x = 1:15,
   k = 5,
   lag = 1,

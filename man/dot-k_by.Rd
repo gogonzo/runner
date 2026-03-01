@@ -33,7 +33,7 @@ idx <- seq(
   as.POSIXct("2020-01-01 03:02:01"),
   by = "month"
 )
-k_difftime <- runner:::.k_by(k, idx, param = "k")
+k_difftime <- runner2:::.k_by(k, idx, param = "k")
 idx - k_difftime
 }
 \keyword{internal}

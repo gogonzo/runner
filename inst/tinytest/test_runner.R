@@ -10,10 +10,14 @@ at_date <- sample(idx, 10)
 find_idx <- function(x, i, k, lag = 0, na_pad = FALSE) {
   n <- length(x)
   if (missing(k)) {
-    if ((i - lag) > n) if (na_pad) return(integer(0))
+    if ((i - lag) > n) if (na_pad) {
+      return(integer(0))
+    }
     seq_along(x) %in% seq(0, i - lag)
   } else {
-    if ((i - k - lag + 1) < 1 || (i - lag) > n) if (na_pad) return(integer(0))
+    if ((i - k - lag + 1) < 1 || (i - lag) > n) if (na_pad) {
+      return(integer(0))
+    }
     seq_along(x) %in% seq(i - lag - k + 1, i - lag)
   }
 }
@@ -30,7 +34,8 @@ apply_fun <- function(x, i, k, lag = 0, na_pad = FALSE, fun, ...) {
 #       |--------]-------> ------
 expect_identical(
   runner(x1, f = mean),
-  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, fun = mean)))
+  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, fun = mean))
+)
 
 expect_identical(
   runner(x2, f = mean, na.rm = TRUE),
@@ -42,38 +47,46 @@ expect_identical(
 
 expect_identical(
   runner(x1, f = mean, idx = idx),
-  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, fun = mean)))
+  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, fun = mean))
+)
 
 
 expect_identical(
   runner(x1, f = mean)[at],
-  runner(x1, f = mean, at = at))
+  runner(x1, f = mean, at = at)
+)
 
 expect_identical(
   runner(x1, f = mean, idx = idx)[at],
-  runner(x1, f = mean, at = at))
+  runner(x1, f = mean, at = at)
+)
 
 #   [...|----]---+-------> -------
 expect_equal(
   runner(x1, lag = 3, f = mean),
-  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, lag = 3, fun = mean)))
+  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, lag = 3, fun = mean))
+)
 
 expect_equal(
   runner(x1, lag = 3, f = mean, na_pad = TRUE),
-  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, lag = 3, fun = mean)))
+  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, lag = 3, fun = mean))
+)
 
 expect_equal(
   runner(x1, lag = 3, f = mean)[at],
-  runner(x1, lag = 3, f = mean, at = at))
+  runner(x1, lag = 3, f = mean, at = at)
+)
 
 expect_equal(
   runner(x1, lag = 3, f = mean, na_pad = TRUE)[at],
-  runner(x1, lag = 3, f = mean, na_pad = TRUE, at = at))
+  runner(x1, lag = 3, f = mean, na_pad = TRUE, at = at)
+)
 
 #       |--------+---]---> -------
 expect_equal(
   runner(x1, lag = -3, f = mean),
-  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, lag = -3, fun = mean)))
+  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, lag = -3, fun = mean))
+)
 
 expect_equal(
   runner(x1, lag = -3, f = mean, na_pad = TRUE),
@@ -101,19 +114,23 @@ expect_equal(
 
 expect_equal(
   runner(x1, lag = -3, f = mean)[at],
-  runner(x1, lag = -3, f = mean, at = at))
+  runner(x1, lag = -3, f = mean, at = at)
+)
 
 expect_equal(
   runner(x1, lag = -3, f = mean, na_pad = TRUE)[at],
-  runner(x1, lag = -3, f = mean, na_pad = TRUE, at = at))
+  runner(x1, lag = -3, f = mean, na_pad = TRUE, at = at)
+)
 
 expect_equal(
   runner(x1, lag = lag, f = mean)[at],
-  runner(x1, lag = lag[at], f = mean, at = at))
+  runner(x1, lag = lag[at], f = mean, at = at)
+)
 
 expect_equal(
   runner(x1, lag = lag, f = mean, na_pad = TRUE)[at],
-  runner(x1, lag = lag[at], f = mean, na_pad = TRUE, at = at))
+  runner(x1, lag = lag[at], f = mean, na_pad = TRUE, at = at)
+)
 
 #  [...]|--------+-------> -------
 expect_equal(
@@ -123,7 +140,8 @@ expect_equal(
 
 expect_equal(
   runner(x1, lag = -100, f = mean),
-  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, lag = -100, fun = mean)))
+  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, lag = -100, fun = mean))
+)
 
 expect_equal(
   runner(x1, lag = 100, f = mean, na_pad = TRUE),
@@ -143,24 +161,29 @@ expect_equal(
 
 expect_equal(
   runner(x1, lag = 100, f = mean)[at],
-  runner(x1, lag = 100, f = mean, at = at))
+  runner(x1, lag = 100, f = mean, at = at)
+)
 
 expect_equal(
   runner(x1, lag = -100, f = mean)[at],
-  runner(x1, lag = -100, f = mean, at = at))
+  runner(x1, lag = -100, f = mean, at = at)
+)
 
 expect_equal(
   runner(x1, lag = 100, f = mean, na_pad = TRUE)[at],
-  runner(x1, lag = 100, f = mean, na_pad = TRUE, at = at))
+  runner(x1, lag = 100, f = mean, na_pad = TRUE, at = at)
+)
 
 expect_equal(
   runner(x1, lag = -100, f = mean, na_pad = TRUE)[at],
-  runner(x1, lag = -100, f = mean, na_pad = TRUE, at = at))
+  runner(x1, lag = -100, f = mean, na_pad = TRUE, at = at)
+)
 
 #       |----[...]-------> -------
 expect_equal(
   runner(x1, k = 3, f = mean),
-  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, k = 3, fun = mean)))
+  sapply(seq_along(x1), function(i) apply_fun(x1, i = i, k = 3, fun = mean))
+)
 
 expect_equal(
   runner(x1, k = 3, f = mean, na_pad = TRUE),
@@ -175,25 +198,29 @@ expect_equal(
   sapply(
     seq_along(x1),
     function(i) apply_fun(x1, i = i, k = k[i], lag = 0, fun = mean)
-    )
   )
+)
 
 expect_equal(
   runner(x1, k = 3, f = mean)[at],
-  runner(x1, k = 3, f = mean, at = at))
+  runner(x1, k = 3, f = mean, at = at)
+)
 
 expect_equal(
   runner(x1, k = 3, f = mean, na_pad = TRUE)[at],
-  runner(x1, k = 3, f = mean, na_pad = TRUE, at = at))
+  runner(x1, k = 3, f = mean, na_pad = TRUE, at = at)
+)
 
 expect_equal(
   runner(x1, k = k, f = mean)[at],
-  runner(x1, k = k[at], f = mean, at = at))
+  runner(x1, k = k[at], f = mean, at = at)
+)
 
 #       [...|--------+-------[...] -------
 expect_equal(
   runner(x1, k = 100, f = mean),
-  sapply(seq_along(x1), function(i) apply_fun(fun = mean, x1, i = i, k = 100)))
+  sapply(seq_along(x1), function(i) apply_fun(fun = mean, x1, i = i, k = 100))
+)
 
 expect_equal(
   runner(x1, k = 100, f = mean, na_pad = TRUE),
@@ -205,7 +232,8 @@ expect_equal(
 
 expect_equal(
   runner(x1, k = 101, f = mean),
-  sapply(seq_along(x1), function(i) apply_fun(fun = mean, x1, i = i, k = 101)))
+  sapply(seq_along(x1), function(i) apply_fun(fun = mean, x1, i = i, k = 101))
+)
 
 expect_equal(
   runner(x1, k = 101, f = mean, na_pad = TRUE),
@@ -217,19 +245,23 @@ expect_equal(
 
 expect_equal(
   runner(x1, k = 100, f = mean)[at],
-  runner(x1, k = 100, f = mean, at = at))
+  runner(x1, k = 100, f = mean, at = at)
+)
 
 expect_equal(
   as.numeric(runner(x1, k = 100, f = mean, na_pad = TRUE)[at]),
-  as.numeric(runner(x1, k = 100, f = mean, na_pad = TRUE, at = at)))
+  as.numeric(runner(x1, k = 100, f = mean, na_pad = TRUE, at = at))
+)
 
 expect_equal(
   runner(x1, k = 101, f = mean)[at],
-  runner(x1, k = 101, f = mean, at = at))
+  runner(x1, k = 101, f = mean, at = at)
+)
 
 expect_equal(
   runner(x1, k = 101, f = mean, na_pad = TRUE)[at],
-  runner(x1, k = 101, f = mean, na_pad = TRUE, at = at))
+  runner(x1, k = 101, f = mean, na_pad = TRUE, at = at)
+)
 
 #       [...|----]---+-------> -------
 expect_equal(
@@ -237,8 +269,8 @@ expect_equal(
   sapply(
     seq_along(x1),
     function(i) apply_fun(fun = mean, x1, i = i, k = 5, lag = 3)
-    )
   )
+)
 
 expect_equal(
   runner(x1, k = 5, lag = 3, f = mean, na_pad = TRUE),
@@ -250,11 +282,13 @@ expect_equal(
 
 expect_equal(
   runner(x1, k = 5, lag = 3, f = mean)[at],
-  runner(x1, k = 5, lag = 3, f = mean, at = at))
+  runner(x1, k = 5, lag = 3, f = mean, at = at)
+)
 
 expect_equal(
   runner(x1, k = 5, lag = 3, f = mean, na_pad = TRUE)[at],
-  runner(x1, k = 5, lag = 3, f = mean, na_pad = TRUE, at = at))
+  runner(x1, k = 5, lag = 3, f = mean, na_pad = TRUE, at = at)
+)
 
 #       |-----[--+---]---> -------
 expect_equal(
@@ -262,26 +296,27 @@ expect_equal(
   sapply(
     seq_along(x1),
     function(i) apply_fun(fun = mean, x1, i = i, k = 5, lag = -3)
-    )
   )
+)
 
 expect_equal(
   runner(x1, k = 5, lag = -3, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
     function(i) apply_fun(fun = mean, x1, i = i, k = 5, lag = -3, na_pad = TRUE)
-    )
   )
-
+)
 
 
 expect_equal(
   runner(x1, k = 5, lag = -3, f = mean)[at],
-  runner(x1, k = 5, lag = -3, f = mean, at = at))
+  runner(x1, k = 5, lag = -3, f = mean, at = at)
+)
 
 expect_equal(
   runner(x1, k = 5, lag = -3, f = mean, na_pad = TRUE)[at],
-  runner(x1, k = 5, lag = -3, f = mean, na_pad = TRUE, at = at))
+  runner(x1, k = 5, lag = -3, f = mean, na_pad = TRUE, at = at)
+)
 
 #       |--------+-[---]-> -------
 expect_equal(
@@ -289,7 +324,7 @@ expect_equal(
   sapply(
     seq_along(x1),
     function(i) apply_fun(fun = mean, x1, i = i, k = 5, lag = -7)
-    )
+  )
 )
 
 expect_equal(
@@ -297,17 +332,19 @@ expect_equal(
   sapply(
     seq_along(x1),
     function(i) apply_fun(fun = mean, x1, i = i, k = 5, lag = -7, na_pad = TRUE)
-    )
   )
+)
 
 
 expect_equal(
   runner(x1, k = 5, lag = -7, f = mean)[at],
-  runner(x1, k = 5, lag = -7, f = mean, at = at))
+  runner(x1, k = 5, lag = -7, f = mean, at = at)
+)
 
 expect_equal(
   runner(x1, k = 5, lag = -7, f = mean, na_pad = TRUE)[at],
-  runner(x1, k = 5, lag = -7, f = mean, na_pad = TRUE, at = at))
+  runner(x1, k = 5, lag = -7, f = mean, na_pad = TRUE, at = at)
+)
 
 #       |--------+[]-----> -------
 expect_equal(
@@ -315,26 +352,27 @@ expect_equal(
   sapply(
     seq_along(x1),
     function(i) apply_fun(fun = mean, x1, i = i, k = 1, lag = -1)
-    )
   )
+)
 
 expect_equal(
   runner(x1, k = 1, lag = -1, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
     function(i) apply_fun(fun = mean, x1, i = i, k = 1, lag = -1, na_pad = TRUE)
-    )
   )
-
+)
 
 
 expect_equal(
   runner(x1, k = 1, lag = -1, f = mean)[at],
-  runner(x1, k = 1, lag = -1, f = mean, at = at))
+  runner(x1, k = 1, lag = -1, f = mean, at = at)
+)
 
 expect_equal(
   runner(x1, k = 1, lag = -1, f = mean, na_pad = TRUE)[at],
-  runner(x1, k = 1, lag = -1, f = mean, na_pad = TRUE, at = at))
+  runner(x1, k = 1, lag = -1, f = mean, na_pad = TRUE, at = at)
+)
 
 #       |------[]+-------> -------
 expect_equal(
@@ -342,74 +380,80 @@ expect_equal(
   sapply(
     seq_along(x1),
     function(i) apply_fun(fun = mean, x1, i = i, k = 1, lag = 1)
-    )
   )
+)
 
 expect_equal(
   runner(x1, k = 1, lag = 1, f = mean, na_pad = TRUE),
   sapply(
     seq_along(x1),
     function(i) apply_fun(fun = mean, x1, i = i, k = 1, lag = 1, na_pad = TRUE)
-    )
   )
+)
 
 
 expect_equal(
   runner(x1, k = 1, lag = 1, f = mean)[at],
-  runner(x1, k = 1, lag = 1, f = mean, at = at))
+  runner(x1, k = 1, lag = 1, f = mean, at = at)
+)
 
 expect_equal(
   runner(x1, k = 1, lag = 1, f = mean, na_pad = TRUE)[at],
-  runner(x1, k = 1, lag = 1, f = mean, na_pad = TRUE, at = at))
+  runner(x1, k = 1, lag = 1, f = mean, na_pad = TRUE, at = at)
+)
 
-#various -------
+# various -------
 expect_equal(
   runner(x1, k = k, lag = 1, f = mean),
   sapply(
     seq_along(x1),
     function(i) apply_fun(fun = mean, x1, i = i, k = k[i], lag = 1)
-    )
   )
+)
 
 expect_equal(
   runner(x1, k = 3, lag = lag, f = mean),
   sapply(
     seq_along(x1),
     function(i) apply_fun(fun = mean, x1, i = i, k = 3, lag = lag[i])
-    )
   )
+)
 
 expect_equal(
   runner(x1, k = length(x1), lag = lag, f = mean),
   sapply(
     seq_along(x1),
     function(i) apply_fun(fun = mean, x1, i = i, k = length(x1), lag = lag[i])
-    )
   )
+)
 
 expect_equal(
   runner(x1, k = k, lag = lag, f = mean),
-  sapply(window_run(x1, k = k, lag = lag), mean))
-
+  sapply(window_run(x1, k = k, lag = lag), mean)
+)
 
 
 expect_equal(
   runner(x1, k = k, lag = 1, f = mean)[at],
-  runner(x1, k = k[at], lag = 1, f = mean, at = at))
+  runner(x1, k = k[at], lag = 1, f = mean, at = at)
+)
 
 expect_equal(
   runner(x1, k = 3, lag = lag, f = mean)[at],
-  runner(x1, k = 3, lag = lag[at], f = mean, at = at))
+  runner(x1, k = 3, lag = lag[at], f = mean, at = at)
+)
 
 expect_equal(
   runner(x1, k = length(x1), lag = lag, f = mean)[at],
-  runner(x1, k = length(x1), lag = lag[at], f = mean, at = at))
+  runner(x1, k = length(x1), lag = lag[at], f = mean, at = at)
+)
 
 expect_equal(
   runner(x1, k = k, lag = lag, f = mean)[at],
-  runner(x1, k = k[at], lag = lag[at], f = mean, at = at))
+  runner(x1, k = k[at], lag = lag[at], f = mean, at = at)
+)
 
-#date window -------
+# date window -------
 expect_equal(
   runner(x1, idx = idx, f = mean),
   sapply(window_run(x1, idx = idx), mean)
@@ -531,7 +575,7 @@ expect_equal(
   sapply(window_run(x2, k = k, lag = 3, idx = idx, na_pad = TRUE), mean)
 )
 
-#Function applied on other types -------
+# Function applied on other types -------
 expect_silent(runner(as.integer(1:100), k = 5, f = length))
 expect_silent(runner(as.integer(1:100), k = k, f = length))
 expect_silent(runner(as.integer(1:100), k = k, idx, f = length))
@@ -542,7 +586,7 @@ expect_silent(
 expect_silent(runner(sample(letters, 100, replace = TRUE), k = k, f = length))
 expect_silent(
   runner(sample(letters, 100, replace = TRUE), k = k, idx, f = length)
-  )
+)
 
 expect_silent(
   runner(as.factor(sample(letters, 100, replace = TRUE)), k = 5, f = length)
@@ -552,7 +596,8 @@ expect_silent(
 )
 expect_silent(
   runner(
-    as.factor(sample(letters, 100, replace = TRUE)), k = k, idx, f = length
+    as.factor(sample(letters, 100, replace = TRUE)),
+    k = k, idx, f = length
   )
 )
 
@@ -561,20 +606,20 @@ expect_silent(
 )
 expect_silent(
   runner(as.Date(1:100, origin = "1970-01-01"), k = k, f = length)
-  )
+)
 expect_silent(
   runner(as.Date(1:100, origin = "1970-01-01"), k = k, idx, f = length)
-  )
+)
 
-#i/o type -------
+# i/o type -------
 log_input <- c(T, T, F, F)
 int_input <- as.integer(1:4)
 num_input <- as.numeric(1:4) + 0.5
 cha_input <- letters[1:4]
 
 log_function <- function(x) any(duplicated(x))
-int_function  <- function(x) as.integer(length(x))
-num_function  <- function(x) as.double(sum(x))
+int_function <- function(x) as.integer(length(x))
+num_function <- function(x) as.double(sum(x))
 char_function <- function(x) paste(x, collapse = "-")
 
 # <logical>
@@ -633,7 +678,8 @@ expect_identical(
 
 expect_identical(
   as.numeric(c(1.5, 4, 7.5, 12)),
-  runner(num_input, f = num_function))
+  runner(num_input, f = num_function)
+)
 
 expect_error(runner(cha_input, f = num_function))
 
@@ -658,15 +704,15 @@ expect_identical(
   runner(cha_input, f = char_function)
 )
 
-#i/o type at -------
+# i/o type at -------
 log_input <- c(T, T, F, F)
 int_input <- as.integer(1:4)
 num_input <- as.numeric(1:4) + 0.5
 cha_input <- letters[1:4]
 
 log_function <- function(x) any(duplicated(x))
-int_function  <- function(x) as.integer(length(x))
-num_function  <- function(x) as.double(sum(x))
+int_function <- function(x) as.integer(length(x))
+num_function <- function(x) as.double(sum(x))
 char_function <- function(x) paste(x, collapse = "-")
 
 at <- c(2, 3)
@@ -741,7 +787,7 @@ expect_identical(
   runner(cha_input, f = char_function, at = at)
 )
 
-#at date window -------
+# at date window -------
 ids <- match(at_date, idx)
 expect_equal(
   runner(x1, idx = idx, f = mean)[ids],
@@ -836,8 +882,10 @@ expect_equal(
 
 expect_equal(
   runner(x2, k = 3, lag = lag, idx = idx, f = mean, na_pad = TRUE)[ids],
-  runner(x2, k = 3, lag = lag[ids], idx = idx,
-         at = at_date, f = mean, na_pad = TRUE)
+  runner(x2,
+    k = 3, lag = lag[ids], idx = idx,
+    at = at_date, f = mean, na_pad = TRUE
+  )
 )
 
 expect_equal(
@@ -847,8 +895,10 @@ expect_equal(
 
 expect_equal(
   runner(x2, k = k, lag = lag, idx = idx, f = mean, na_pad = TRUE)[ids],
-  runner(x2, k = k[ids], lag = lag[ids], idx = idx,
-         at = at_date, f = mean, na_pad = TRUE)
+  runner(x2,
+    k = k[ids], lag = lag[ids], idx = idx,
+    at = at_date, f = mean, na_pad = TRUE
+  )
 )
 
 expect_equal(
@@ -858,8 +908,10 @@ expect_equal(
 
 expect_equal(
   runner(x2, k = k, lag = 3, idx = idx, f = mean, na_pad = TRUE)[ids],
-  runner(x2, k = k[ids], lag = 3, idx = idx,
-         at = at_date, f = mean, na_pad = TRUE)
+  runner(x2,
+    k = k[ids], lag = 3, idx = idx,
+    at = at_date, f = mean, na_pad = TRUE
+  )
 )
 
 expect_equal(
@@ -869,12 +921,14 @@ expect_equal(
 
 expect_equal(
   runner(x2, k = k, lag = lag, idx = idx, f = mean, na_pad = TRUE)[ids],
-  runner(x2, k = k[ids], lag = lag[ids], idx = idx,
-         at = at_date, f = mean, na_pad = TRUE)
+  runner(x2,
+    k = k[ids], lag = lag[ids], idx = idx,
+    at = at_date, f = mean, na_pad = TRUE
+  )
 )
 
-#at with difftime -------
-at_date <- runner:::.seq_at(at = "1 months", idx = idx_date)
+# at with difftime -------
+at_date <- runner2:::.seq_at(at = "1 months", idx = idx_date)
 expect_identical(
   at_date,
   seq(min(idx_date), max(idx_date), by = "1 months")
@@ -885,7 +939,7 @@ expect_equal(
   runner(1:100, at = at_date, idx = idx_date, f = function(x) max(x))
 )
 
-at_date <- runner:::.seq_at(at = "-1 months", idx = idx_date)
+at_date <- runner2:::.seq_at(at = "-1 months", idx = idx_date)
 expect_identical(
   at_date,
   seq(max(idx_date), min(idx_date), by = "-1 months")
@@ -895,7 +949,7 @@ expect_equal(
   runner(1:100, at = at_date, idx = idx_date, f = function(x) max(x))
 )
 
-#k with difftime -------
+# k with difftime -------
 expect_equal(
   runner(1:100, k = "2 weeks", idx = idx_date, f = function(x) x),
   runner(1:100, k = 14, idx = idx_date, f = function(x) x)
@@ -903,8 +957,10 @@ expect_equal(
 
 expect_equal(
   runner(1:100, k = "2 weeks", idx = idx_date, f = function(x) x),
-  runner(1:100, k = as.difftime(2, units = "weeks"),
-         idx = idx_date, f = function(x) x)
+  runner(1:100,
+    k = as.difftime(2, units = "weeks"),
+    idx = idx_date, f = function(x) x
+  )
 )
 
 k_date <- sample(c("week", "day"), 100, replace = TRUE)
@@ -922,13 +978,14 @@ expect_error(
 
 expect_error(
   runner(1:100,
-         k = as.difftime(-1, units = "weeks"),
-         idx = idx_date,
-         f = function(x) x),
+    k = as.difftime(-1, units = "weeks"),
+    idx = idx_date,
+    f = function(x) x
+  ),
   "negative"
 )
 
-#lag with difftime -------
+# lag with difftime -------
 expect_equal(
   runner(1:100, lag = "week", idx = idx_date, f = function(x) x),
   runner(1:100, lag = 7, idx = idx_date, f = function(x) x)
@@ -943,25 +1000,33 @@ expect_equal(
 expect_equal(
   runner(1:100, lag = "2 weeks", idx = idx_date, f = function(x) x),
   runner(1:100,
-         lag = as.difftime(2, units = "weeks"),
-         idx = idx_date,
-         f = function(x) x)
+    lag = as.difftime(2, units = "weeks"),
+    idx = idx_date,
+    f = function(x) x
+  )
 )
 
 expect_equal(
   runner(1:100, lag = "-2 weeks", idx = idx_date, f = function(x) x),
   runner(1:100,
-         lag = as.difftime(-2, units = "weeks"),
-         idx = idx_date,
-         f = function(x) x)
+    lag = as.difftime(-2, units = "weeks"),
+    idx = idx_date,
+    f = function(x) x
+  )
 )
 
 
 lag_date <- sample(c("week", "day", "-2 weeks", "-2 days"), 100, replace = TRUE)
 lag_int <- vapply(
   lag_date,
-  function(x)
-    switch(x, "week" = 7L, "day" = 1L, "-2 weeks" = -14L, "-2 days" = -2L),
+  function(x) {
+    switch(x,
+      "week" = 7L,
+      "day" = 1L,
+      "-2 weeks" = -14L,
+      "-2 days" = -2L
+    )
+  },
   integer(1),
   USE.NAMES = FALSE
 )
@@ -972,9 +1037,9 @@ expect_equal(
   runner(1:100, k = 5, lag = lag_int, idx = idx_date, f = function(x) x)
 )
 
-#runner with df -------
+# runner with df -------
 
-#runner with matrix -------
+# runner with matrix -------
 data <- matrix(data = runif(100, 0, 1), nrow = 20, ncol = 5)
 res <- runner(
   x = data,
@@ -983,7 +1048,8 @@ res <- runner(
       cor(x),
       error = function(e) NA
     )
-  })
+  }
+)
 
 expected <- sapply(
   X = 1:20,
@@ -992,11 +1058,12 @@ expected <- sapply(
       cor(data[1:i, , drop = FALSE]),
       error = function(e) NA
     )
-  }, simplify = TRUE)
+  }, simplify = TRUE
+)
 
 expect_identical(res, expected)
 
-#runner with xts -------
+# runner with xts -------
 xts_object <- structure(
   .Data = matrix(
     data = runif(100, 0, 1),
@@ -1019,7 +1086,8 @@ res <- runner(
       x,
       error = function(e) NA
     )
-  })
+  }
+)
 
 expected <- sapply(
   X = 1:20,
@@ -1034,34 +1102,52 @@ expected <- sapply(
 
 expect_identical(res, expected)
 
-#Parallel -------
+# Parallel -------
 
-#Errors -------
+# Errors -------
 expect_error(runner(x = letters[1:5], f = ""))
 
 expect_error(runner(list(1:10), k = 5, f = mean), "Invalid \\'x\\' type")
 
-expect_error(runner(1:10, k = -5, f = mean),
-             "k can't be negative")
+expect_error(
+  runner(1:10, k = -5, f = mean),
+  "k can't be negative"
+)
 
-expect_error(runner(1:10, k = (1:9), f = mean),
-             "length of k and length of x differs")
-expect_error(runner(1:10, k = c(NA, 1:9), f = mean),
-             "Function doesn't accept NA values in k vector")
+expect_error(
+  runner(1:10, k = (1:9), f = mean),
+  "length of k and length of x differs"
+)
+expect_error(
+  runner(1:10, k = c(NA, 1:9), f = mean),
+  "Function doesn't accept NA values in k vector"
+)
 
-expect_error(runner(1:10, lag = (1:9), f = mean),
-             "length of lag and length of x differs")
-expect_error(runner(x1, k = k, lag = integer(0), idx = idx, f = mean),
-             "length of lag should not be zero")
-expect_error(runner(1:10, lag = c(NA, 1:9), f = mean),
-             "Function doesn't accept NA values in lag vector")
+expect_error(
+  runner(1:10, lag = (1:9), f = mean),
+  "length of lag and length of x differs"
+)
+expect_error(
+  runner(x1, k = k, lag = integer(0), idx = idx, f = mean),
+  "length of lag should not be zero"
+)
+expect_error(
+  runner(1:10, lag = c(NA, 1:9), f = mean),
+  "Function doesn't accept NA values in lag vector"
+)
 
-expect_error(runner(1:10, idx = (1:9), f = mean),
-             "length of idx and length of x differs")
-expect_error(runner(1:10, idx = c(NA, 1:9), f = mean),
-             "Function doesn't accept NA values in idx vector")
-expect_error(runner(1:10, idx = sample(1:10), f = mean),
-             "idx have to be in ascending order")
+expect_error(
+  runner(1:10, idx = (1:9), f = mean),
+  "length of idx and length of x differs"
+)
+expect_error(
+  runner(1:10, idx = c(NA, 1:9), f = mean),
+  "Function doesn't accept NA values in idx vector"
+)
+expect_error(
+  runner(1:10, idx = sample(1:10), f = mean),
+  "idx have to be in ascending order"
+)
 
 
 expect_error(
@@ -1073,4 +1159,3 @@ expect_error(
   runner(1:10, lag = rep(5, 10), idx = 1:10, at = c(4, 5), f = mean),
   "length\\(lag\\) should be 1 or equal to"
 )
-

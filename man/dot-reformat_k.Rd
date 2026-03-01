@@ -19,10 +19,10 @@ from \code{idx} - because windows length extends window backwards in time.
 The same situation for lag.
 }
 \examples{
-runner:::.reformat_k("1 days")
-runner:::.reformat_k("day")
-runner:::.reformat_k("10 days")
-runner:::.reformat_k("-10 days", only_positive = FALSE)
-runner:::.reformat_k(c("-10 days", "2 months"), only_positive = FALSE)
+runner2:::.reformat_k("1 days")
+runner2:::.reformat_k("day")
+runner2:::.reformat_k("10 days")
+runner2:::.reformat_k("-10 days", only_positive = FALSE)
+runner2:::.reformat_k(c("-10 days", "2 months"), only_positive = FALSE)
 }
 \keyword{internal}
