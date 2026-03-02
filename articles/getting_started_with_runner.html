@@ -137,8 +137,15 @@ lag:</p>
 <code>k</code> is a single constant, the window slides along the data
 with a fixed size. If <code>k</code> is omitted, windows are cumulative
 — each window grows from the first element to the current one.</p>
-<p><img src="images/constantwindow.png"></p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<pre><code>k = 4
+
+ +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ |  |  |  |  |  |  |##|##|##|##|  |  |  |  |  |
+ +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
+                     &lt;--------&gt;
+                     window at i=10</code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 4-element sliding sum</span></span>
 <span><span class="fu"><a href="../reference/runner.html">runner</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, k <span class="op">=</span> <span class="fl">4</span>, f <span class="op">=</span> <span class="va">sum</span><span class="op">)</span></span>
 <span></span>
@@ -154,8 +161,15 @@ a different window size at each position.</p>
 forward (negative values) relative to the current element. Default is
 <code>lag = 0</code>. Like <code>k</code>, <code>lag</code> can be a
 single value or a vector of <code>length(x)</code>.</p>
-<p><img src="images/laggedwindowklag.png"></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<pre><code>k = 4, lag = 2
+
+ +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ |  |  |  |  |##|##|##|##|  |  |  |  |  |  |  |
+ +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
+               &lt;--------&gt;    ^
+               window     i=10 (shifted by lag=2)</code></pre>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/runner.html">runner</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, k <span class="op">=</span> <span class="fl">4</span>, lag <span class="op">=</span> <span class="fl">2</span>, f <span class="op">=</span> <span class="va">sum</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -169,12 +183,29 @@ element count, so the number of elements per window varies with the
 spacing.</p>
 <p>For example, a 5-day window (<code>k = 5</code>) on unevenly-spaced
 dates will contain different numbers of observations at each step:</p>
-<p><img src="images/running_date_windows.png"></p>
+<pre><code>k = 5, lag = 1
+idx:  4   6   7  13  17  18  18  21  27  31  37  42  44  47  48
+
+ 4:  [-2,  3]  NA            (no data in range)
+ 6:  [ 1,  5]  =             {4}
+ 7:  [ 2,  6]  ==            {4, 6}
+13:  [ 8, 12]  NA            (no data in range)
+17:  [12, 16]  =             {13}
+18:  [13, 17]  ==            {13, 17}
+18:  [13, 17]  ==            {13, 17, 18}
+21:  [16, 20]  ===           {17, 18, 18}
+27:  [22, 26]  NA            (no data in range)
+31:  [26, 30]  =             {27}
+37:  [32, 36]  NA            (no data in range)
+42:  [37, 41]  =             {37}
+44:  [39, 43]  ==            {42, 44}
+47:  [42, 46]  ==            {42, 44}
+48:  [43, 47]  ===           {44, 47}</code></pre>
 <p><code>k</code> and <code>lag</code> also accept time-interval strings
 using the same syntax as <code>seq.POSIXt(by = ...)</code>,
 e.g. <code>"5 days"</code>, <code>"2 weeks"</code>,
 <code>"month"</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">13</span>, <span class="fl">17</span>, <span class="fl">18</span>, <span class="fl">18</span>, <span class="fl">21</span>, <span class="fl">27</span>, <span class="fl">31</span>, <span class="fl">37</span>, <span class="fl">42</span>, <span class="fl">44</span>, <span class="fl">47</span>, <span class="fl">48</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/runner.html">runner</a></span><span class="op">(</span><span class="va">idx</span>, k <span class="op">=</span> <span class="fl">5</span>, lag <span class="op">=</span> <span class="fl">1</span>, idx <span class="op">=</span> <span class="va">idx</span>, f <span class="op">=</span> <span class="va">mean</span><span class="op">)</span></span>
 <span></span>
@@ -189,8 +220,14 @@ e.g. <code>"5 days"</code>, <code>"2 weeks"</code>,
 index positions — the output length equals <code>length(at)</code>. This
 is useful when you only need results at certain dates or milestones, not
 at every observation.</p>
-<p><img src="images/runner_at_date.png"></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<pre><code>k = 5, lag = 1, at = c(18, 27, 48, 31)
+idx:  4   6   7  13  17  18  18  21  27  31  37  42  44  47  48
+
+at=18:  [13, 17]  ==          {13, 17}
+at=27:  [22, 26]  NA          (no data in range)
+at=48:  [43, 47]  ===         {44, 47}
+at=31:  [26, 30]  =           {27}</code></pre>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/runner.html">runner</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, k <span class="op">=</span> <span class="fl">5</span>, lag <span class="op">=</span> <span class="fl">1</span>, idx <span class="op">=</span> <span class="va">idx</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">27</span>, <span class="fl">48</span>, <span class="fl">31</span><span class="op">)</span>, f <span class="op">=</span> <span class="va">mean</span><span class="op">)</span></span></code></pre></div>
 <p><code>at</code> can also be a single time-interval string, which
 generates a regular sequence over the <code>idx</code> range. For

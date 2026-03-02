@@ -124,8 +124,14 @@ ignored. The default window is cumulative (equivalent to
 restricts it to a fixed size.</p>
 <p>The diagram below shows <code>min_run</code> at i=8 with three
 configurations:</p>
-<p><img src="images/running_minimum.png"></p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<pre><code>              running minimum at i=8
+                                  |
+x:       1  -5   1  -3  NA  NA  NA   1  -1  NA  -2   3
+                                  v
+default: [--------window---------]-5  (cumulative, all elements 1..8)
+k=5:              [----window----]-3  (elements 4..8)
+na_rm=F: [--------window---------]NA  (NA present -&gt; result is NA)</code></pre>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">runner</span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">5</span>, <span class="fl">1</span>, <span class="op">-</span><span class="fl">3</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span>, <span class="cn">NA</span>, <span class="op">-</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
@@ -156,8 +162,16 @@ configurations:</p>
 <code>k</code> refers to index distance rather than element count. In
 the example below, a 5-day sum window spans different numbers of
 elements depending on date spacing:</p>
-<p><img src="images/options_idx.png"></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<pre><code>     x        idx         sum_run(k=5)
+ -0.5910   1970-01-03     -0.5910
+  0.0266   1970-01-06     -0.5644
+ -1.5166   1970-01-09     -1.4900
+ -1.3627   1970-01-12     -2.8792
+  1.1785   1970-01-13     -1.7007
+ -0.9342   1970-01-16     -1.1183  &lt;- 5 days [13..17]: rows 5,6,7
+  1.3236   1970-01-17      1.5679  &lt;- 5 days [13..17]: rows 5,6,7
+  0.6249   1970-01-19      1.0144  &lt;- 5 days [15..19]: rows 6,7,8</code></pre>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5910</span>, <span class="fl">0.0266</span>, <span class="op">-</span><span class="fl">1.5166</span>, <span class="op">-</span><span class="fl">1.3627</span>, <span class="fl">1.1785</span>, <span class="op">-</span><span class="fl">0.9342</span>, <span class="fl">1.3236</span>, <span class="fl">0.6249</span><span class="op">)</span></span>
 <span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"1970-01-03"</span>, <span class="st">"1970-01-06"</span>, <span class="st">"1970-01-09"</span>, <span class="st">"1970-01-12"</span>,</span>
@@ -168,7 +182,7 @@ elements depending on date spacing:</p>
 <pre><code><span><span class="co">## [1] -0.5910 -0.5644 -1.4900 -2.8793 -1.7008 -1.1184  1.5679  1.0143</span></span></code></pre>
 <p>The <code>lag</code> argument shifts the window by index distance (or
 by element count if <code>idx</code> is not set):</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sum_run.html">sum_run</a></span><span class="op">(</span><span class="va">x</span>, k <span class="op">=</span> <span class="fl">5</span>, lag <span class="op">=</span> <span class="fl">2</span>, idx <span class="op">=</span> <span class="va">idx</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1]      NA -0.5910 -0.5644 -1.4900 -1.5166 -0.1842 -0.1842  1.5679</span></span></code></pre>
 </div>
@@ -181,8 +195,14 @@ by element count if <code>idx</code> is not set):</p>
 when <code>na_rm = FALSE</code>, <code>NA</code> resets the streak; when
 <code>na_rm = TRUE</code>, <code>NA</code> is skipped and the streak
 continues through it.</p>
-<p><img src="images/running_streaks.png"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<pre><code>              window streaks at i=9
+                                    |
+x:      A   B   A   A   B   B   B  NA   B   B   A   B
+                                    v
+full:   1   1   1   2   1   2   3   3   4  (NA skipped, streak continues)
+k=4:                        1   2       1  (window of 4, na_rm=F: NA resets)
+na_rm=T:                    1   2   2   3  (window of 4, na_rm=T: NA skipped)</code></pre>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="cn">NA</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
@@ -205,7 +225,7 @@ continues through it.</p>
 <span><span class="co">## 12    B  1  1  1</span></span></code></pre>
 <p>Streaks work with <code>idx</code> too — for example, counting
 consecutive wins in a 5-day period:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"W"</span>, <span class="st">"W"</span>, <span class="st">"L"</span>, <span class="st">"L"</span>, <span class="st">"L"</span>, <span class="st">"W"</span>, <span class="st">"L"</span>, <span class="st">"L"</span><span class="op">)</span></span>
 <span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"2019-01-03"</span>, <span class="st">"2019-01-06"</span>, <span class="st">"2019-01-09"</span>, <span class="st">"2019-01-12"</span>,</span>
@@ -239,7 +259,7 @@ consecutive wins in a 5-day period:</p>
 <code>idx</code>. When <code>idx</code> is set, the lag refers to index
 distance — so <code>lag = 3</code> with a date index means “the value 3
 days ago”, not “the value 3 positions ago”:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5910</span>, <span class="fl">0.0266</span>, <span class="op">-</span><span class="fl">1.5166</span>, <span class="op">-</span><span class="fl">1.3627</span>, <span class="fl">1.1785</span>, <span class="op">-</span><span class="fl">0.9342</span>, <span class="fl">1.3236</span>, <span class="fl">0.6249</span><span class="op">)</span></span>
 <span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"1970-01-03"</span>, <span class="st">"1970-01-06"</span>, <span class="st">"1970-01-09"</span>, <span class="st">"1970-01-12"</span>,</span>
@@ -266,8 +286,13 @@ are surrounded by the same value on both sides
 (e.g. <code>"a", NA, "a"</code> becomes <code>"a", "a", "a"</code>, but
 <code>"a", NA, "b"</code> stays unchanged).</li>
 </ul>
-<p><img src="images/fill_run.png"></p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<pre><code>replace NA by preceding value
+
+x:       NA  NA   b   b   a  NA  NA   a   b  NA   a   b
+default: NA  NA   b   b   a   a   a   a   b   b   a   b
+run:      b   b   b   b   a   a   a   a   b   b   a   b
+within:  NA  NA   b   b   a   a   a   a   b  NA   a   b</code></pre>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="st">"b"</span>, <span class="st">"b"</span>, <span class="st">"a"</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="cn">NA</span>, <span class="st">"a"</span>, <span class="st">"b"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">x</span>,</span>
 <span>  f1 <span class="op">=</span> <span class="fu"><a href="../reference/fill_run.html">fill_run</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
@@ -298,8 +323,15 @@ each window, controlled by <code>which = "first"</code> or
 <code>NA</code> in the window before a <code>TRUE</code> makes the
 result <code>NA</code> (because the missing value could have been
 <code>TRUE</code>).</p>
-<p><img src="images/running_which_more.png"></p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<pre><code>              running which at i=9
+                                  |
+index:   1   2   3   4   5   6   7   8   9  10  11  12
+x:       T   T   T   F  NA   T   F  NA   T   F   T   F
+                                  v
+default: 1                              (first T in cumulative window)
+na_rm=F:              6                 9  (first T in k=5; NA before T -&gt; NA)
+na_rm=T:              6                 9  (first T in k=5; NA skipped)</code></pre>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">T</span>, <span class="cn">T</span>, <span class="cn">T</span>, <span class="cn">F</span>, <span class="cn">NA</span>, <span class="cn">T</span>, <span class="cn">F</span>, <span class="cn">NA</span>, <span class="cn">T</span>, <span class="cn">F</span>, <span class="cn">T</span>, <span class="cn">F</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>

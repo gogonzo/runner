@@ -202,8 +202,14 @@ must be non-negative.</p>
 extending beyond the data range) are computed with whatever data is
 available. Set <code>na_pad = TRUE</code> to return <code>NA</code> for
 such windows instead.</p>
-<p><img src="images/runner_at_date_na_pad.png"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<pre><code>k = 5, lag = 1, at = c(4, 18, 48, 51), na_pad = TRUE
+idx:  4   6   7  13  17  18  18  21  27  31  37  42  44  47  48
+
+at= 4:  [-2,  3]  NA   window extends before data -&gt; NA (na_pad)
+at=18:  [13, 17]  ==   {13, 17}
+at=48:  [43, 47]  ===  {44, 47}
+at=51:  [46, 50]  NA   window extends beyond data -&gt; NA (na_pad)</code></pre>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/runner.html">runner</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, k <span class="op">=</span> <span class="fl">5</span>, lag <span class="op">=</span> <span class="fl">1</span>, idx <span class="op">=</span> <span class="va">idx</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">18</span>, <span class="fl">48</span>, <span class="fl">51</span><span class="op">)</span>,</span>
 <span>       na_pad <span class="op">=</span> <span class="cn">TRUE</span>, f <span class="op">=</span> <span class="va">mean</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -213,7 +219,7 @@ such windows instead.</p>
 <p>Pass a <code>data.frame</code> or <code>matrix</code> as
 <code>x</code> to apply functions involving multiple columns. Each
 window is a row-subset of the original data.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">40</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fl">3</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">40</span><span class="op">)</span></span>
 <span><span class="va">date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">40</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
@@ -229,7 +235,7 @@ window is a row-subset of the original data.</p>
 <p><code>runner</code> works inside <code>dplyr::mutate</code>,
 including with <code>group_by</code>. Column names can be passed as
 strings for <code>idx</code>, which is convenient in pipelines.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">df</span> <span class="op">%&gt;%</span></span>
@@ -240,7 +246,7 @@ strings for <code>idx</code>, which is convenient in pipelines.</p>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p>When making multiple <code>runner</code> calls with the same window
 parameters, use <code>run_by</code> to set shared arguments once:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">group</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="../reference/run_by.html">run_by</a></span><span class="op">(</span>idx <span class="op">=</span> <span class="st">"date"</span>, k <span class="op">=</span> <span class="st">"20 days"</span>, na_pad <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
@@ -258,7 +264,7 @@ parallel computation. Objects referenced inside <code>f</code> (beyond
 its arguments) must be exported to the cluster beforehand with
 <code>clusterExport</code>. Note that parallel execution adds overhead
 and is only beneficial for computationally expensive functions.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span></span>
 <span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeForkCluster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/runner.html">runner</a></span><span class="op">(</span><span class="va">df</span>, k <span class="op">=</span> <span class="fl">10</span>, idx <span class="op">=</span> <span class="st">"date"</span>, f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">x</span><span class="op">)</span>, cl <span class="op">=</span> <span class="va">cl</span><span class="op">)</span></span>
