@@ -17,8 +17,9 @@ jobs:
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          allowed_tools: "Bash(gh issue comment *),Bash(gh issue edit *),Read,Glob,Grep"
-          max_turns: 20
+          claude_args: |
+            --allowedTools "Bash(gh issue comment *),Bash(gh issue edit *),Bash(gh issue label *),Read,Glob,Grep"
+            --max-turns 20
           prompt: |
             /design
 
@@ -26,3 +27,6 @@ jobs:
 
             Issue title: ${{ github.event.issue.title }}
             Issue body: ${{ github.event.issue.body }}
+
+            After posting your design analysis, add the `claude-develop` label to the issue:
+            gh issue label ${{ github.event.issue.number }} --add claude-develop

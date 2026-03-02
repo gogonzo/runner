@@ -25,6 +25,11 @@
 - `R/run_by.R` handles grouped operations
 - Package supports data.frame, matrix, xts, and grouped_df inputs
 
+## PR Review Rules
+- PRs authored by `/developer` (Claude Code) MUST include at least one reproducible example that demonstrates the requested feature or fixed bug
+- The example doesn't need to be exhaustive — a simple sanity-check snippet is sufficient
+- If the reproducible example is missing, request changes and ask for one to be added
+
 ## Protected Files
 - NEVER modify `CLAUDE.md`, `.claude/`, or `.github/CODEOWNERS` — these are maintained by the project owner only
 

@@ -58,8 +58,9 @@ jobs:
         if: steps.skip.outputs.skip != 'true'
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          allowed_tools: "Bash(gh pr comment *),Bash(gh pr review *),Read,Glob,Grep"
-          max_turns: 20
+          claude_args: |
+            --allowedTools "Bash(gh pr comment *),Bash(gh pr review *),Read,Glob,Grep"
+            --max-turns 20
           prompt: |
             /review
 

@@ -1,0 +1,88 @@
+name: Claude Develop
+on:
+  issues:
+    types: [labeled]
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  pull_request_review:
+    types: [submitted]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  id-token: write
+
+jobs:
+  develop-issue:
+    if: >
+      github.event_name == 'issues'
+      && contains(github.event.issue.labels.*.name, 'claude-develop')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: "--max-turns 30"
+          prompt: |
+            /develop
+
+            Implement the feature or fix described in issue #${{ github.event.issue.number }}.
+            Read the issue and any design comments carefully before starting.
+
+            Issue title: ${{ github.event.issue.title }}
+            Issue body: ${{ github.event.issue.body }}
+
+            Create a PR when done.
+
+  respond-to-review:
+    if: >
+      github.event_name != 'issues'
+      && !github.event.issue
+      && contains(github.event.pull_request.labels.*.name, 'claude-develop')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: "--max-turns 30"
+          prompt: |
+            /develop
+
+            You are responding to a reviewer comment on PR #${{ github.event.pull_request.number }}.
+            Read the full PR diff and all review comments carefully.
+            Address the reviewer's feedback by making code changes, responding to questions,
+            or explaining your decisions. Push any changes to the PR branch.
+
+  respond-to-pr-comment:
+    if: >
+      github.event_name == 'issue_comment'
+      && github.event.issue.pull_request
+      && contains(github.event.issue.labels.*.name, 'claude-develop')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Checkout PR branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr checkout ${{ github.event.issue.number }}
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: "--max-turns 30"
+          prompt: |
+            /develop
+
+            You are responding to a comment on PR #${{ github.event.issue.number }}.
+            Read the full PR diff and all comments carefully.
+            Address the commenter's feedback by making code changes, responding to questions,
+            or explaining your decisions. Push any changes to the PR branch.
