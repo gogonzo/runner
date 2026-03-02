@@ -24,7 +24,15 @@ size.
 
 The diagram below shows `min_run` at i=8 with three configurations:
 
-![](images/running_minimum.png)
+```
+              running minimum at i=8
+                                  |
+x:       1  -5   1  -3  NA  NA  NA   1  -1  NA  -2   3
+                                  v
+default: [--------window---------]-5  (cumulative, all elements 1..8)
+k=5:              [----window----]-3  (elements 4..8)
+na_rm=F: [--------window---------]NA  (NA present -> result is NA)
+```
 
 ```{r min_run_example, echo=TRUE}
 library(runner)
@@ -44,7 +52,17 @@ When data points are not equally spaced, set `idx` so that `k` refers to
 index distance rather than element count. In the example below, a 5-day sum
 window spans different numbers of elements depending on date spacing:
 
-![](images/options_idx.png)
+```
+     x        idx         sum_run(k=5)
+ -0.5910   1970-01-03     -0.5910
+  0.0266   1970-01-06     -0.5644
+ -1.5166   1970-01-09     -1.4900
+ -1.3627   1970-01-12     -2.8792
+  1.1785   1970-01-13     -1.7007
+ -0.9342   1970-01-16     -1.1183  <- 5 days [13..17]: rows 5,6,7
+  1.3236   1970-01-17      1.5679  <- 5 days [13..17]: rows 5,6,7
+  0.6249   1970-01-19      1.0144  <- 5 days [15..19]: rows 6,7,8
+```
 
 ```{r idx_run_example, echo=TRUE}
 x <- c(-0.5910, 0.0266, -1.5166, -1.3627, 1.1785, -0.9342, 1.3236, 0.6249)
@@ -69,7 +87,15 @@ Counts consecutive identical values within each window. The `na_rm` argument
 controls how `NA` is handled — when `na_rm = FALSE`, `NA` resets the streak;
 when `na_rm = TRUE`, `NA` is skipped and the streak continues through it.
 
-![](images/running_streaks.png)
+```
+              window streaks at i=9
+                                    |
+x:      A   B   A   A   B   B   B  NA   B   B   A   B
+                                    v
+full:   1   1   1   2   1   2   3   3   4  (NA skipped, streak continues)
+k=4:                        1   2       1  (window of 4, na_rm=F: NA resets)
+na_rm=T:                    1   2   2   3  (window of 4, na_rm=T: NA skipped)
+```
 
 ```{r}
 x <- c("A", "B", "A", "A", "B", "B", "B", NA, "B", "B", "A", "B")
@@ -127,7 +153,14 @@ default behavior:
   value on both sides (e.g. `"a", NA, "a"` becomes `"a", "a", "a"`, but
   `"a", NA, "b"` stays unchanged).
 
-![](images/fill_run.png)
+```
+replace NA by preceding value
+
+x:       NA  NA   b   b   a  NA  NA   a   b  NA   a   b
+default: NA  NA   b   b   a   a   a   a   b   b   a   b
+run:      b   b   b   b   a   a   a   a   b   b   a   b
+within:  NA  NA   b   b   a   a   a   a   b  NA   a   b
+```
 
 ```{r}
 x <- c(NA, NA, "b", "b", "a", NA, NA, "a", "b", NA, "a", "b")
@@ -145,7 +178,16 @@ by `which = "first"` or `which = "last"`. When `na_rm = FALSE`, an `NA` in the
 window before a `TRUE` makes the result `NA` (because the missing value could
 have been `TRUE`).
 
-![](images/running_which_more.png)
+```
+              running which at i=9
+                                  |
+index:   1   2   3   4   5   6   7   8   9  10  11  12
+x:       T   T   T   F  NA   T   F  NA   T   F   T   F
+                                  v
+default: 1                              (first T in cumulative window)
+na_rm=F:              6                 9  (first T in k=5; NA before T -> NA)
+na_rm=T:              6                 9  (first T in k=5; NA skipped)
+```
 
 ```{r}
 x <- c(T, T, T, F, NA, T, F, NA, T, F, T, F)

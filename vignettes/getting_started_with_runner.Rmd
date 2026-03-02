@@ -39,7 +39,16 @@ runner(x, lag = "1 months", k = "4 months", idx = x$date,
 the window slides along the data with a fixed size. If `k` is omitted, windows
 are cumulative — each window grows from the first element to the current one.
 
-![](images/constantwindow.png)
+```
+k = 4
+
+ +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ |  |  |  |  |  |  |##|##|##|##|  |  |  |  |  |
+ +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
+                     <-------->
+                     window at i=10
+```
 
 ```{r eval=FALSE}
 # 4-element sliding sum
@@ -58,7 +67,16 @@ position.
 relative to the current element. Default is `lag = 0`. Like `k`, `lag` can be
 a single value or a vector of `length(x)`.
 
-![](images/laggedwindowklag.png)
+```
+k = 4, lag = 2
+
+ +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ |  |  |  |  |##|##|##|##|  |  |  |  |  |  |  |
+ +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
+               <-------->    ^
+               window     i=10 (shifted by lag=2)
+```
 
 ```{r eval=FALSE}
 runner(1:15, k = 4, lag = 2, f = sum)
@@ -74,7 +92,26 @@ count, so the number of elements per window varies with the spacing.
 For example, a 5-day window (`k = 5`) on unevenly-spaced dates will contain
 different numbers of observations at each step:
 
-![](images/running_date_windows.png)
+```
+k = 5, lag = 1
+idx:  4   6   7  13  17  18  18  21  27  31  37  42  44  47  48
+
+ 4:  [-2,  3]  NA            (no data in range)
+ 6:  [ 1,  5]  =             {4}
+ 7:  [ 2,  6]  ==            {4, 6}
+13:  [ 8, 12]  NA            (no data in range)
+17:  [12, 16]  =             {13}
+18:  [13, 17]  ==            {13, 17}
+18:  [13, 17]  ==            {13, 17, 18}
+21:  [16, 20]  ===           {17, 18, 18}
+27:  [22, 26]  NA            (no data in range)
+31:  [26, 30]  =             {27}
+37:  [32, 36]  NA            (no data in range)
+42:  [37, 41]  =             {37}
+44:  [39, 43]  ==            {42, 44}
+47:  [42, 46]  ==            {42, 44}
+48:  [43, 47]  ===           {44, 47}
+```
 
 `k` and `lag` also accept time-interval strings using the same syntax as
 `seq.POSIXt(by = ...)`, e.g. `"5 days"`, `"2 weeks"`, `"month"`.
@@ -94,7 +131,15 @@ restricts evaluation to specific index positions — the output length equals
 `length(at)`. This is useful when you only need results at certain dates or
 milestones, not at every observation.
 
-![](images/runner_at_date.png)
+```
+k = 5, lag = 1, at = c(18, 27, 48, 31)
+idx:  4   6   7  13  17  18  18  21  27  31  37  42  44  47  48
+
+at=18:  [13, 17]  ==          {13, 17}
+at=27:  [22, 26]  NA          (no data in range)
+at=48:  [43, 47]  ===         {44, 47}
+at=31:  [26, 30]  =           {27}
+```
 
 ```{r eval=FALSE}
 runner(1:15, k = 5, lag = 1, idx = idx, at = c(18, 27, 48, 31), f = mean)

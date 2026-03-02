@@ -139,7 +139,15 @@ Applies any R function \code{f} on running (Column/sliding) windows defined by
 constant, the window slides along the data with a fixed size. The first
 \code{k-1} windows are shorter since there aren't enough preceding elements.
 
-\if{html}{\figure{constantwindow.png}{options: alt="Constant sliding window"}}
+\if{html}{\out{<div class="sourceCode">}}\preformatted{k = 4
+
+ +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ |  |  |  |  |  |  |##|##|##|##|  |  |  |  |  |
+ +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
+                     <-------->
+                     window at i=10
+}\if{html}{\out{</div>}}
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{# 4-element sliding sum
 runner(1:15, k = 4, f = sum)
@@ -148,8 +156,15 @@ runner(1:15, k = 4, f = sum)
 If \code{k} is omitted, windows are cumulative — each window grows from the
 first element to the current one, similar to \code{\link[=cumsum]{cumsum()}}.
 
-\if{html}{\figure{cumulativewindows.png}{options: alt="Cumulative windows"}}
-\if{latex}{\figure{cumulativewindows.pdf}{options: width=7cm}}
+\if{html}{\out{<div class="sourceCode">}}\preformatted{k not specified (cumulative)
+
+ i= 1: |#|                    window [1,  1]
+ i= 2: |##|                   window [1,  2]
+ i= 3: |###|                  window [1,  3]
+ i= 4: |####|                 window [1,  4]
+    ...
+ i=15: |###############|      window [1, 15]
+}\if{html}{\out{</div>}}
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{# cumulative sum (k omitted)
 runner(1:15, f = sum)
@@ -165,7 +180,15 @@ at each position.
 values) relative to the current element. Default is \code{lag = 0}. Like \code{k},
 \code{lag} can be a single value or a vector of \code{length(x)}.
 
-\if{html}{\figure{laggedwindowklag.png}{options: alt="Lagged window with k and lag"}}
+\if{html}{\out{<div class="sourceCode">}}\preformatted{k = 4, lag = 2
+
+ +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ |  |  |  |  |##|##|##|##|  |  |  |  |  |  |  |
+ +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
+               <-------->    ^
+               window     i=10 (shifted by lag=2)
+}\if{html}{\out{</div>}}
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{runner(1:15, k = 4, lag = 2, f = sum)
 }\if{html}{\out{</div>}}
@@ -182,8 +205,25 @@ with the spacing.
 For example, a 5-day window (\code{k = 5}) on unevenly-spaced dates will
 contain different numbers of observations at each step:
 
-\if{html}{\figure{runningdatewindows.png}{options: alt="Running date windows"}}
-\if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
+\if{html}{\out{<div class="sourceCode">}}\preformatted{k = 5, lag = 1
+idx:  4   6   7  13  17  18  18  21  27  31  37  42  44  47  48
+
+ 4:  [-2,  3]  NA            (no data in range)
+ 6:  [ 1,  5]  =             \{4\}
+ 7:  [ 2,  6]  ==            \{4, 6\}
+13:  [ 8, 12]  NA            (no data in range)
+17:  [12, 16]  =             \{13\}
+18:  [13, 17]  ==            \{13, 17\}
+18:  [13, 17]  ==            \{13, 17, 18\}
+21:  [16, 20]  ===           \{17, 18, 18\}
+27:  [22, 26]  NA            (no data in range)
+31:  [26, 30]  =             \{27\}
+37:  [32, 36]  NA            (no data in range)
+42:  [37, 41]  =             \{37\}
+44:  [39, 43]  ==            \{42, 44\}
+47:  [42, 46]  ==            \{42, 44\}
+48:  [43, 47]  ===           \{44, 47\}
+}\if{html}{\out{</div>}}
 
 \code{k} and \code{lag} also accept time-interval strings using the same syntax as
 \code{seq.POSIXt(by = ...)}, e.g. \code{"5 days"}, \code{"2 weeks"}, \code{"month"}.
@@ -203,8 +243,14 @@ restricts evaluation to specific index positions — the output length equals
 \code{length(at)}. This is useful when you only need results at certain dates
 or milestones, not at every observation.
 
-\if{html}{\figure{runnerat.png}{options: alt="Runner at specific points"}}
-\if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
+\if{html}{\out{<div class="sourceCode">}}\preformatted{k = 5, lag = 1, at = c(18, 27, 48, 31)
+idx:  4   6   7  13  17  18  18  21  27  31  37  42  44  47  48
+
+at=18:  [13, 17]  ==          \{13, 17\}
+at=27:  [22, 26]  NA          (no data in range)
+at=48:  [43, 47]  ===         \{44, 47\}
+at=31:  [26, 30]  =           \{27\}
+}\if{html}{\out{</div>}}
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{runner(1:15, k = 5, lag = 1, idx = idx, at = c(18, 27, 48, 31), f = mean)
 }\if{html}{\out{</div>}}

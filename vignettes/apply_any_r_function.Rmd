@@ -106,7 +106,15 @@ By default (`na_pad = FALSE`), incomplete windows (those extending beyond the
 data range) are computed with whatever data is available. Set `na_pad = TRUE`
 to return `NA` for such windows instead.
 
-![](images/runner_at_date_na_pad.png)
+```
+k = 5, lag = 1, at = c(4, 18, 48, 51), na_pad = TRUE
+idx:  4   6   7  13  17  18  18  21  27  31  37  42  44  47  48
+
+at= 4:  [-2,  3]  NA   window extends before data -> NA (na_pad)
+at=18:  [13, 17]  ==   {13, 17}
+at=48:  [43, 47]  ===  {44, 47}
+at=51:  [46, 50]  NA   window extends beyond data -> NA (na_pad)
+```
 
 ```{r eval=FALSE}
 runner(1:15, k = 5, lag = 1, idx = idx, at = c(4, 18, 48, 51),
