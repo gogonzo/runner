@@ -133,33 +133,87 @@ Applies any R function \code{f} on running (Column/sliding) windows defined by
 }
 \details{
 \subsection{Window types}{
-\itemize{
-\item \strong{Cumulative} (\code{k} omitted): window grows from the first element to the
-current one, similar to \code{cumsum}. Each step includes all preceding data.
-\cr
-\if{html}{\figure{cumulativewindows.png}{options: alt="Figure: cumulativewindows.png"}}
+\subsection{Sliding window (\code{k})}{
+
+\code{k} sets the number of elements in each window. When \code{k} is a single
+constant, the window slides along the data with a fixed size. The first
+\code{k-1} windows are shorter since there aren't enough preceding elements.
+
+\if{html}{\figure{constantwindow.png}{options: alt="Constant sliding window"}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{# 4-element sliding sum
+runner(1:15, k = 4, f = sum)
+}\if{html}{\out{</div>}}
+
+If \code{k} is omitted, windows are cumulative — each window grows from the
+first element to the current one, similar to \code{\link[=cumsum]{cumsum()}}.
+
+\if{html}{\figure{cumulativewindows.png}{options: alt="Cumulative windows"}}
 \if{latex}{\figure{cumulativewindows.pdf}{options: width=7cm}}
-\item \strong{Sliding} (constant \code{k}): fixed-size window slides along the data. The
-first \code{k-1} windows are shorter since there aren't enough preceding
-elements. \code{lag} shifts the window backward (positive) or forward
-(negative).
-\cr
-\if{html}{\figure{incrementalindex.png}{options: alt="Figure: incrementalindex.png"}}
-\if{latex}{\figure{incrementalindex.pdf}{options: width=7cm}}
-\item \strong{Index-based} (\code{idx} set): window covers a range of index values rather
-than a fixed number of elements. This is important for unevenly-spaced
-data where a 5-day window may contain different numbers of observations
-at each step.
-\cr
-\if{html}{\figure{runningdatewindows.png}{options: alt="Figure: runningdatewindows.png"}}
-\if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
-\item \strong{Evaluation at specific points} (\code{at} set): by default, \code{runner} returns
-one result per element of \code{x}. Setting \code{at} restricts output to specific
-index positions, so output length equals \code{length(at)}.
-\cr
-\if{html}{\figure{runnerat.png}{options: alt="Figure: runnerat.png"}}
-\if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{# cumulative sum (k omitted)
+runner(1:15, f = sum)
+}\if{html}{\out{</div>}}
+
+\code{k} can also be a vector of \code{length(x)} to use a different window size
+at each position.
 }
+
+\subsection{Lag (\code{lag})}{
+
+\code{lag} shifts the window backward (positive values) or forward (negative
+values) relative to the current element. Default is \code{lag = 0}. Like \code{k},
+\code{lag} can be a single value or a vector of \code{length(x)}.
+
+\if{html}{\figure{laggedwindowklag.png}{options: alt="Lagged window with k and lag"}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{runner(1:15, k = 4, lag = 2, f = sum)
+}\if{html}{\out{</div>}}
+}
+
+\subsection{Index-based windows (\code{idx})}{
+
+By default, \code{runner} treats elements as equally spaced (index increments
+by 1). Real data often has gaps — missing weekends, holidays, irregular
+timestamps. Setting \code{idx} makes \code{k} and \code{lag} refer to index distance
+instead of element count, so the number of elements per window varies
+with the spacing.
+
+For example, a 5-day window (\code{k = 5}) on unevenly-spaced dates will
+contain different numbers of observations at each step:
+
+\if{html}{\figure{runningdatewindows.png}{options: alt="Running date windows"}}
+\if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
+
+\code{k} and \code{lag} also accept time-interval strings using the same syntax as
+\code{seq.POSIXt(by = ...)}, e.g. \code{"5 days"}, \code{"2 weeks"}, \code{"month"}.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
+runner(idx, k = 5, lag = 1, idx = idx, f = mean)
+
+# equivalent with Date index
+runner(idx, k = "5 days", lag = "day", idx = Sys.Date() + idx, f = mean)
+}\if{html}{\out{</div>}}
+}
+
+\subsection{Evaluation at specific points (\code{at})}{
+
+By default, \code{runner} returns one result per element of \code{x}. Setting \code{at}
+restricts evaluation to specific index positions — the output length equals
+\code{length(at)}. This is useful when you only need results at certain dates
+or milestones, not at every observation.
+
+\if{html}{\figure{runnerat.png}{options: alt="Runner at specific points"}}
+\if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{runner(1:15, k = 5, lag = 1, idx = idx, at = c(18, 27, 48, 31), f = mean)
+}\if{html}{\out{</div>}}
+
+\code{at} can also be a single time-interval string, which generates a regular
+sequence over the \code{idx} range. For example, \code{at = "4 months"} evaluates
+at every 4-month interval from \code{min(idx)} to \code{max(idx)}.
+}
+
 }
 
 \subsection{Time-interval syntax}{
