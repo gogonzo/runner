@@ -41,34 +41,87 @@
 #' @details
 #' ## Window types
 #'
-#' - **Cumulative** (`k` omitted): window grows from the first element to the
-#'   current one, similar to `cumsum`. Each step includes all preceding data.
-#'   \cr
-#'    \if{html}{\figure{cumulativewindows.png}{options: alt="Figure: cumulativewindows.png"}}
-#'    \if{latex}{\figure{cumulativewindows.pdf}{options: width=7cm}}
+#' ### Sliding window (`k`)
 #'
-#' - **Sliding** (constant `k`): fixed-size window slides along the data. The
-#'   first `k-1` windows are shorter since there aren't enough preceding
-#'   elements. `lag` shifts the window backward (positive) or forward
-#'   (negative).
-#'   \cr
-#'    \if{html}{\figure{incrementalindex.png}{options: alt="Figure: incrementalindex.png"}}
-#'    \if{latex}{\figure{incrementalindex.pdf}{options: width=7cm}}
+#' `k` sets the number of elements in each window. When `k` is a single
+#' constant, the window slides along the data with a fixed size. The first
+#' `k-1` windows are shorter since there aren't enough preceding elements.
 #'
-#' - **Index-based** (`idx` set): window covers a range of index values rather
-#'   than a fixed number of elements. This is important for unevenly-spaced
-#'   data where a 5-day window may contain different numbers of observations
-#'   at each step.
-#'   \cr
-#'    \if{html}{\figure{runningdatewindows.png}{options: alt="Figure: runningdatewindows.png"}}
-#'    \if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
+#' \if{html}{\figure{constantwindow.png}{options: alt="Constant sliding window"}}
 #'
-#' - **Evaluation at specific points** (`at` set): by default, `runner` returns
-#'   one result per element of `x`. Setting `at` restricts output to specific
-#'   index positions, so output length equals `length(at)`.
-#'   \cr
-#'    \if{html}{\figure{runnerat.png}{options: alt="Figure: runnerat.png"}}
-#'    \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
+#' ```
+#' # 4-element sliding sum
+#' runner(1:15, k = 4, f = sum)
+#' ```
+#'
+#' If `k` is omitted, windows are cumulative — each window grows from the
+#' first element to the current one, similar to [cumsum()].
+#'
+#' \if{html}{\figure{cumulativewindows.png}{options: alt="Cumulative windows"}}
+#' \if{latex}{\figure{cumulativewindows.pdf}{options: width=7cm}}
+#'
+#' ```
+#' # cumulative sum (k omitted)
+#' runner(1:15, f = sum)
+#' ```
+#'
+#' `k` can also be a vector of `length(x)` to use a different window size
+#' at each position.
+#'
+#' ### Lag (`lag`)
+#'
+#' `lag` shifts the window backward (positive values) or forward (negative
+#' values) relative to the current element. Default is `lag = 0`. Like `k`,
+#' `lag` can be a single value or a vector of `length(x)`.
+#'
+#' \if{html}{\figure{laggedwindowklag.png}{options: alt="Lagged window with k and lag"}}
+#'
+#' ```
+#' runner(1:15, k = 4, lag = 2, f = sum)
+#' ```
+#'
+#' ### Index-based windows (`idx`)
+#'
+#' By default, `runner` treats elements as equally spaced (index increments
+#' by 1). Real data often has gaps — missing weekends, holidays, irregular
+#' timestamps. Setting `idx` makes `k` and `lag` refer to index distance
+#' instead of element count, so the number of elements per window varies
+#' with the spacing.
+#'
+#' For example, a 5-day window (`k = 5`) on unevenly-spaced dates will
+#' contain different numbers of observations at each step:
+#'
+#' \if{html}{\figure{runningdatewindows.png}{options: alt="Running date windows"}}
+#' \if{latex}{\figure{runningdatewindows.pdf}{options: width=7cm}}
+#'
+#' `k` and `lag` also accept time-interval strings using the same syntax as
+#' `seq.POSIXt(by = ...)`, e.g. `"5 days"`, `"2 weeks"`, `"month"`.
+#'
+#' ```
+#' idx <- c(4, 6, 7, 13, 17, 18, 18, 21, 27, 31, 37, 42, 44, 47, 48)
+#' runner(idx, k = 5, lag = 1, idx = idx, f = mean)
+#'
+#' # equivalent with Date index
+#' runner(idx, k = "5 days", lag = "day", idx = Sys.Date() + idx, f = mean)
+#' ```
+#'
+#' ### Evaluation at specific points (`at`)
+#'
+#' By default, `runner` returns one result per element of `x`. Setting `at`
+#' restricts evaluation to specific index positions — the output length equals
+#' `length(at)`. This is useful when you only need results at certain dates
+#' or milestones, not at every observation.
+#'
+#' \if{html}{\figure{runnerat.png}{options: alt="Runner at specific points"}}
+#' \if{latex}{\figure{runnerat.pdf}{options: width=7cm}}
+#'
+#' ```
+#' runner(1:15, k = 5, lag = 1, idx = idx, at = c(18, 27, 48, 31), f = mean)
+#' ```
+#'
+#' `at` can also be a single time-interval string, which generates a regular
+#' sequence over the `idx` range. For example, `at = "4 months"` evaluates
+#' at every 4-month interval from `min(idx)` to `max(idx)`.
 #'
 #' ## Time-interval syntax
 #'

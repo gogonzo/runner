@@ -14,7 +14,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check if latest commit skips review
+        id: skip
+        run: |
+          msg=$(git log -1 --format='%s')
+          if [[ "$msg" == fix:* ]] || [[ "$msg" == quickfix:* ]] || [[ "$msg" == *"[skip-review]"* ]]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: anthropics/claude-code-action@v1
+        if: steps.skip.outputs.skip != 'true'
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           allowed_tools: "Bash(gh pr comment *),Bash(gh pr review *),Read,Glob,Grep"
