@@ -234,24 +234,74 @@ Parallel cluster from <code><a href="https://rdrr.io/r/parallel/makeCluster.html
 <div class="section">
 <h3 id="window-types">Window types<a class="anchor" aria-label="anchor" href="#window-types"></a></h3>
 
-<ul><li><p><strong>Cumulative</strong> (<code>k</code> omitted): window grows from the first element to the
-current one, similar to <code>cumsum</code>. Each step includes all preceding data.
-<br><img src="figures/cumulativewindows.png" alt="Figure: cumulativewindows.png"></p></li>
-<li><p><strong>Sliding</strong> (constant <code>k</code>): fixed-size window slides along the data. The
-first <code>k-1</code> windows are shorter since there aren't enough preceding
-elements. <code>lag</code> shifts the window backward (positive) or forward
-(negative).
-<br><img src="figures/incrementalindex.png" alt="Figure: incrementalindex.png"></p></li>
-<li><p><strong>Index-based</strong> (<code>idx</code> set): window covers a range of index values rather
-than a fixed number of elements. This is important for unevenly-spaced
-data where a 5-day window may contain different numbers of observations
-at each step.
-<br><img src="figures/runningdatewindows.png" alt="Figure: runningdatewindows.png"></p></li>
-<li><p><strong>Evaluation at specific points</strong> (<code>at</code> set): by default, <code>runner</code> returns
-one result per element of <code>x</code>. Setting <code>at</code> restricts output to specific
-index positions, so output length equals <code>length(at)</code>.
-<br><img src="figures/runnerat.png" alt="Figure: runnerat.png"></p></li>
-</ul></div>
+<div class="section">
+<h4 id="sliding-window-k-">Sliding window (<code>k</code>)<a class="anchor" aria-label="anchor" href="#sliding-window-k-"></a></h4>
+
+
+<p><code>k</code> sets the number of elements in each window. When <code>k</code> is a single
+constant, the window slides along the data with a fixed size. The first
+<code>k-1</code> windows are shorter since there aren't enough preceding elements.</p>
+<p><img src="figures/constantwindow.png" alt="Constant sliding window"></p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># 4-element sliding sum</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">runner</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>, <span class="at">k =</span> <span class="dv">4</span>, <span class="at">f =</span> sum)</span></code></pre><p></p></div>
+<p>If <code>k</code> is omitted, windows are cumulative — each window grows from the
+first element to the current one, similar to <code><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum()</a></code>.</p>
+<p><img src="figures/cumulativewindows.png" alt="Cumulative windows"></p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># cumulative sum (k omitted)</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">runner</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>, <span class="at">f =</span> sum)</span></code></pre><p></p></div>
+<p><code>k</code> can also be a vector of <code>length(x)</code> to use a different window size
+at each position.</p>
+</div>
+
+<div class="section">
+<h4 id="lag-lag-">Lag (<code>lag</code>)<a class="anchor" aria-label="anchor" href="#lag-lag-"></a></h4>
+
+
+<p><code>lag</code> shifts the window backward (positive values) or forward (negative
+values) relative to the current element. Default is <code>lag = 0</code>. Like <code>k</code>,
+<code>lag</code> can be a single value or a vector of <code>length(x)</code>.</p>
+<p><img src="figures/laggedwindowklag.png" alt="Lagged window with k and lag"></p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">runner</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>, <span class="at">k =</span> <span class="dv">4</span>, <span class="at">lag =</span> <span class="dv">2</span>, <span class="at">f =</span> sum)</span></code></pre><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="index-based-windows-idx-">Index-based windows (<code>idx</code>)<a class="anchor" aria-label="anchor" href="#index-based-windows-idx-"></a></h4>
+
+
+<p>By default, <code>runner</code> treats elements as equally spaced (index increments
+by 1). Real data often has gaps — missing weekends, holidays, irregular
+timestamps. Setting <code>idx</code> makes <code>k</code> and <code>lag</code> refer to index distance
+instead of element count, so the number of elements per window varies
+with the spacing.</p>
+<p>For example, a 5-day window (<code>k = 5</code>) on unevenly-spaced dates will
+contain different numbers of observations at each step:</p>
+<p><img src="figures/runningdatewindows.png" alt="Running date windows"></p>
+<p><code>k</code> and <code>lag</code> also accept time-interval strings using the same syntax as
+<code>seq.POSIXt(by = ...)</code>, e.g. <code>"5 days"</code>, <code>"2 weeks"</code>, <code>"month"</code>.</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>idx <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">13</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">18</span>, <span class="dv">21</span>, <span class="dv">27</span>, <span class="dv">31</span>, <span class="dv">37</span>, <span class="dv">42</span>, <span class="dv">44</span>, <span class="dv">47</span>, <span class="dv">48</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">runner</span>(idx, <span class="at">k =</span> <span class="dv">5</span>, <span class="at">lag =</span> <span class="dv">1</span>, <span class="at">idx =</span> idx, <span class="at">f =</span> mean)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># equivalent with Date index</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">runner</span>(idx, <span class="at">k =</span> <span class="st">"5 days"</span>, <span class="at">lag =</span> <span class="st">"day"</span>, <span class="at">idx =</span> <span class="fu">Sys.Date</span>() <span class="sc">+</span> idx, <span class="at">f =</span> mean)</span></code></pre><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="evaluation-at-specific-points-at-">Evaluation at specific points (<code>at</code>)<a class="anchor" aria-label="anchor" href="#evaluation-at-specific-points-at-"></a></h4>
+
+
+<p>By default, <code>runner</code> returns one result per element of <code>x</code>. Setting <code>at</code>
+restricts evaluation to specific index positions — the output length equals
+<code>length(at)</code>. This is useful when you only need results at certain dates
+or milestones, not at every observation.</p>
+<p><img src="figures/runnerat.png" alt="Runner at specific points"></p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">runner</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>, <span class="at">k =</span> <span class="dv">5</span>, <span class="at">lag =</span> <span class="dv">1</span>, <span class="at">idx =</span> idx, <span class="at">at =</span> <span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">27</span>, <span class="dv">48</span>, <span class="dv">31</span>), <span class="at">f =</span> mean)</span></code></pre><p></p></div>
+<p><code>at</code> can also be a single time-interval string, which generates a regular
+sequence over the <code>idx</code> range. For example, <code>at = "4 months"</code> evaluates
+at every 4-month interval from <code>min(idx)</code> to <code>max(idx)</code>.</p>
+</div>
+
+
+</div>
 
 <div class="section">
 <h3 id="time-interval-syntax">Time-interval syntax<a class="anchor" aria-label="anchor" href="#time-interval-syntax"></a></h3>
