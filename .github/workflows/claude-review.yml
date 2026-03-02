@@ -27,6 +27,33 @@ jobs:
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Wait for all other checks to pass
+        if: steps.skip.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          SHA=${{ github.event.pull_request.head.sha }}
+          THIS_JOB="review"
+          for i in $(seq 1 60); do
+            RESULT=$(gh api "repos/${{ github.repository }}/commits/${SHA}/check-runs" \
+              --jq "[.check_runs[] | select(.name != \"${THIS_JOB}\")] | {total: length, completed: [.[] | select(.status == \"completed\")] | length, failed: [.[] | select(.conclusion != null and .conclusion != \"success\" and .conclusion != \"skipped\" and .conclusion != \"neutral\")] | length}")
+            TOTAL=$(echo "$RESULT" | jq .total)
+            COMPLETED=$(echo "$RESULT" | jq .completed)
+            FAILED=$(echo "$RESULT" | jq .failed)
+            echo "Check runs: ${COMPLETED}/${TOTAL} completed, ${FAILED} failed"
+            if [ "$FAILED" -gt 0 ]; then
+              echo "::error::Some checks failed — skipping review."
+              exit 1
+            fi
+            if [ "$TOTAL" -gt 0 ] && [ "$COMPLETED" -eq "$TOTAL" ]; then
+              echo "All checks passed."
+              exit 0
+            fi
+            sleep 30
+          done
+          echo "::error::Timed out waiting for checks (30 min)."
+          exit 1
+
       - uses: anthropics/claude-code-action@v1
         if: steps.skip.outputs.skip != 'true'
         with:
