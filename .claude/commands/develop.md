@@ -13,6 +13,7 @@ Act as a developer working on the runner R package. Follow these guidelines:
 
 ## Tests
 - Add tinytest tests in `inst/tinytest/` for any new or changed behavior
+- Never change tests which relate to the unchanged functionality
 - Cover: typical usage, edge cases (NA, empty, single element), error conditions
 - Use `tinytest::expect_equal()`, `expect_true()`, `expect_error()` etc.
 - Never test private functions directly but cover them via public ones
@@ -25,6 +26,9 @@ Act as a developer working on the runner R package. Follow these guidelines:
 ## Commits
 - Keep commits focused and atomic
 - Do not commit compiled files (.so, .dll, .o)
+
+## Pull requests
+- Every PR must reference a linked issue (e.g. "Closes #123", "Fixes #45", or a GitHub linked issue)
 
 ## Escalation
 If you are blocked, unsure about the approach, or cannot resolve failing checks:

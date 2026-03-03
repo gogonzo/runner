@@ -1,0 +1,15 @@
+name: Branch Protection
+on:
+  workflow_dispatch:
+
+jobs:
+  protect:
+    uses: gogonzo/.github/.github/workflows/apply-branch-protection.yml@main
+    with:
+      branch: main
+      required_approvals: 1
+      dismiss_stale_reviews: true
+      require_codeowner_review: true
+      require_thread_resolution: true
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
