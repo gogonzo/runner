@@ -28,7 +28,7 @@ Act as a developer working on the runner R package. Follow these guidelines:
 - Do not commit compiled files (.so, .dll, .o)
 
 ## Pull requests
-- Every PR must reference a linked issue (e.g. "Closes #123", "Fixes #45", or a GitHub linked issue)
+- Initial PR comment must reference a linked issue (e.g. "Closes #123", "Fixes #45", or a GitHub linked issue)
 
 ## Escalation
 If you are blocked, unsure about the approach, or cannot resolve failing checks:

@@ -27,7 +27,7 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_args: |
             --allowedTools "Bash,Read,Glob,Grep,Write,Edit,Task"
-            --max-turns 30
+            --max-turns 50
           prompt: |
             /develop
 
@@ -59,7 +59,7 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_args: |
             --allowedTools "Bash,Read,Glob,Grep,Write,Edit,Task"
-            --max-turns 30
+            --max-turns 50
           prompt: |
             /develop
 
