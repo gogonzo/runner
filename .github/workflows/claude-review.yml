@@ -59,8 +59,9 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_args: |
+            --model claude-haiku-4-5-20251001
             --allowedTools "Bash(gh pr comment *),Bash(gh pr review *),Read,Glob,Grep"
-            --max-turns 20
+            --max-turns 10
           prompt: |
             /review
 

@@ -52,7 +52,9 @@ jobs:
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          claude_args: "--max-turns 30"
+          claude_args: |
+            --allowedTools "Bash(gh *),Read,Glob,Grep,Task,WebFetch"
+            --max-turns 30
           prompt: |
             /develop
 
