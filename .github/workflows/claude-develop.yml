@@ -1,7 +1,5 @@
 name: Claude Develop
 on:
-  issues:
-    types: [labeled]
   issue_comment:
     types: [created]
   pull_request_review_comment:
@@ -18,15 +16,18 @@ permissions:
 jobs:
   develop-issue:
     if: >
-      github.event_name == 'issues'
-      && contains(github.event.issue.labels.*.name, 'claude-develop')
+      github.event_name == 'issue_comment'
+      && !github.event.issue.pull_request
+      && contains(github.event.comment.body, '@claude')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          claude_args: "--max-turns 30"
+          claude_args: |
+            --allowedTools "Bash,Read,Glob,Grep,Write,Edit,Task"
+            --max-turns 30
           prompt: |
             /develop
 
@@ -40,9 +41,13 @@ jobs:
 
   respond-to-review:
     if: >
-      github.event_name != 'issues'
-      && !github.event.issue
-      && contains(github.event.pull_request.labels.*.name, 'claude-develop')
+      github.event.sender.type != 'Bot'
+      && (
+        (github.event_name == 'pull_request_review_comment'
+          && contains(github.event.comment.body, '@claude'))
+        || (github.event_name == 'pull_request_review'
+          && contains(github.event.review.body, '@claude'))
+      )
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -53,7 +58,7 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_args: |
-            --allowedTools "Bash(gh *),Read,Glob,Grep,Task,WebFetch"
+            --allowedTools "Bash,Read,Glob,Grep,Write,Edit,Task"
             --max-turns 30
           prompt: |
             /develop
@@ -67,7 +72,7 @@ jobs:
     if: >
       github.event_name == 'issue_comment'
       && github.event.issue.pull_request
-      && contains(github.event.issue.labels.*.name, 'claude-develop')
+      && contains(github.event.comment.body, '@claude')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -80,7 +85,9 @@ jobs:
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          claude_args: "--max-turns 30"
+          claude_args: |
+            --allowedTools "Bash,Read,Glob,Grep,Write,Edit,Task"
+            --max-turns 30
           prompt: |
             /develop
 

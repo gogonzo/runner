@@ -27,6 +27,3 @@ jobs:
 
             Issue title: ${{ github.event.issue.title }}
             Issue body: ${{ github.event.issue.body }}
-
-            After posting your design analysis, add the `claude-develop` label to the issue:
-            gh issue label ${{ github.event.issue.number }} --add claude-develop
