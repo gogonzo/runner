@@ -460,6 +460,21 @@ runner.data.frame <- function(
 }
 
 #' @rdname runner
+#' @examples
+#'
+#' # Panel data: rolling mean within groups
+#' # (equivalent to Stata's: bysort firm (year): rolling mean(x), window(3)
+#' library(dplyr)
+#' df <- data.frame(
+#'   firm = rep(c("A", "B"), each = 5),
+#'   year = rep(2010:2014, 2),
+#'   sales = c(100, 110, 125, 130, 145, 200, 215, 230, 250, 270)
+#' )
+#' df %>%
+#'   arrange(firm, year) %>%
+#'   group_by(firm) %>%
+#'   mutate(roll_mean = runner(sales, f = mean, k = 3)) %>%
+#'   ungroup()
 #' @export
 runner.grouped_df <- function(
   x,
