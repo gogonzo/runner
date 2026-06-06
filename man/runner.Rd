@@ -115,7 +115,7 @@ generates a regular sequence over the range of \code{idx}.}
 If \code{TRUE}, return \code{NA} for windows that extend beyond the data range.}
 
 \item{simplify}{(\code{logical} or \code{character})\cr
-Simplify result like \code{\link[base:lapply]{base::sapply()}}. \code{TRUE} returns vector/matrix,
+Simplify result like \code{\link[base:sapply]{base::sapply()}}. \code{TRUE} returns vector/matrix,
 \code{"array"} may return a higher-dimensional array.}
 
 \item{cl}{(\code{cluster}) \emph{experimental}\cr
@@ -276,7 +276,7 @@ and shifts at each position.
 
 Pass a \code{\link[parallel:makeCluster]{parallel::makeCluster()}} object via \code{cl} to run windows in
 parallel. Objects referenced inside \code{f} (other than its arguments) must
-be exported with \code{\link[parallel:clusterApply]{parallel::clusterExport()}} beforehand. Parallel
+be exported with \code{\link[parallel:clusterExport]{parallel::clusterExport()}} beforehand. Parallel
 execution adds overhead and is only beneficial for expensive computations.
 }
 }

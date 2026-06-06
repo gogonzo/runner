@@ -780,7 +780,7 @@ runner_vec(Rcpp::Vector<ITYPE> const &x,
 //'
 //' @param x `numeric` vector which running function is calculated on
 //'
-//' @param k (`integer`` vector or single value)\cr
+//' @param k (`integer` vector or single value)\cr
 //'  Denoting size of the running window. If `k` is a single value then window
 //'  size is constant for all elements, otherwise if `length(k) == length(x)`
 //'  different window size for each element.
