@@ -49,7 +49,7 @@ If \code{TRUE}, return \code{NA} for windows that extend beyond the data range.}
 integer vector of indexes of the same length as \code{x}.
 }
 \description{
-\code{min_run} calculates running which - returns index of element where \code{x == TRUE}.
+\code{which_run} calculates running which - returns index of element where \code{x == TRUE}.
 }
 \examples{
 set.seed(11)

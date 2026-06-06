@@ -42,7 +42,7 @@ if \code{TRUE} sum is calculating excluding \code{NA}.}
 If \code{TRUE}, return \code{NA} for windows that extend beyond the data range.}
 }
 \value{
-sum \code{code} vector of length equals length of \code{x}.
+sum (\code{numeric}) vector of length equals length of \code{x}.
 }
 \description{
 Running sum in specified window of numeric vector.
