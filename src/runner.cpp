@@ -805,7 +805,7 @@ runner_vec(Rcpp::Vector<ITYPE> const &x,
 //'
 //' @inheritParams runner
 //'
-//' @return sum `code` vector of length equals length of `x`.
+//' @return sum (`numeric`) vector of length equals length of `x`.
 //' @examples
 //' set.seed(11)
 //' x1 <- rnorm(15)
@@ -990,7 +990,7 @@ NumericVector mean_run(
 //' Running maximum
 //'
 //'
-//' `min_run` calculates running max on given `x` numeric vector,
+//' `max_run` calculates running max on given `x` numeric vector,
 //' specified `k` window size.
 //' @inheritParams runner
 //' @inheritParams sum_run
@@ -1156,7 +1156,7 @@ IntegerVector streak_run(
 //' Running which
 //'
 //'
-//' `min_run` calculates running which - returns index of element where `x == TRUE`.
+//' `which_run` calculates running which - returns index of element where `x == TRUE`.
 //' @inheritParams runner
 //' @inheritParams sum_run
 //' @param which `character` value "first" or "last" denoting if the first or last `TRUE`

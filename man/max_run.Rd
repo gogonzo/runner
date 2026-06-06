@@ -45,7 +45,7 @@ If \code{TRUE}, return \code{NA} for windows that extend beyond the data range.}
 max (\code{numeric}) vector of length equals length of \code{x}.
 }
 \description{
-\code{min_run} calculates running max on given \code{x} numeric vector,
+\code{max_run} calculates running max on given \code{x} numeric vector,
 specified \code{k} window size.
 }
 \examples{

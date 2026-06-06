@@ -8,15 +8,14 @@ using namespace Rcpp;
 //' @inheritParams runner
 //' @param run_for_first If first elements are filled with `NA`, `run_for_first = TRUE`
 //' allows to fill all initial `NA` with nearest non-NA value. By default
-//' `run_for_first = TRUE`
+//' `run_for_first = FALSE`.
 //' @param only_within `NA` are replaced only if previous and next non-NA
-//' values are the same. By default `only_within = TRUE`
+//' values are the same. By default `only_within = FALSE`.
 //' @return vector - `x` containing all `x` elements with `NA`
 //' replaced with previous non-NA element.
 //' @examples
-//' fill_run(c(NA, NA,1:10, NA, NA), run_for_first = TRUE)
-//' fill_run(c(NA, NA,1:10, NA, NA), run_for_first = TRUE)
-//' fill_run(c(NA, NA,1:10, NA, NA), run_for_first = FALSE)
+//' fill_run(c(NA, NA, 1:10, NA, NA), run_for_first = TRUE)
+//' fill_run(c(NA, NA, 1:10, NA, NA), run_for_first = FALSE)
 //' fill_run(c(NA, NA, 1, 2, NA, NA, 2, 2, NA, NA, 1, NA, NA), run_for_first = TRUE, only_within = TRUE)
 //' @export
 // [[Rcpp::export]]

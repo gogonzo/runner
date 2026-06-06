@@ -7,15 +7,14 @@
 #' @inheritParams runner
 #' @param run_for_first If first elements are filled with `NA`, `run_for_first = TRUE`
 #' allows to fill all initial `NA` with nearest non-NA value. By default
-#' `run_for_first = TRUE`
+#' `run_for_first = FALSE`.
 #' @param only_within `NA` are replaced only if previous and next non-NA
-#' values are the same. By default `only_within = TRUE`
+#' values are the same. By default `only_within = FALSE`.
 #' @return vector - `x` containing all `x` elements with `NA`
 #' replaced with previous non-NA element.
 #' @examples
-#' fill_run(c(NA, NA,1:10, NA, NA), run_for_first = TRUE)
-#' fill_run(c(NA, NA,1:10, NA, NA), run_for_first = TRUE)
-#' fill_run(c(NA, NA,1:10, NA, NA), run_for_first = FALSE)
+#' fill_run(c(NA, NA, 1:10, NA, NA), run_for_first = TRUE)
+#' fill_run(c(NA, NA, 1:10, NA, NA), run_for_first = FALSE)
 #' fill_run(c(NA, NA, 1, 2, NA, NA, 2, 2, NA, NA, 1, NA, NA), run_for_first = TRUE, only_within = TRUE)
 #' @export
 fill_run <- function(x, run_for_first = FALSE, only_within = FALSE) {
@@ -100,7 +99,7 @@ minmax_run <- function(x, metric = "min", na_rm = TRUE) {
 #'
 #' @inheritParams runner
 #'
-#' @return sum `code` vector of length equals length of `x`.
+#' @return sum (`numeric`) vector of length equals length of `x`.
 #' @examples
 #' set.seed(11)
 #' x1 <- rnorm(15)
@@ -138,7 +137,7 @@ mean_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at =
 #' Running maximum
 #'
 #'
-#' `min_run` calculates running max on given `x` numeric vector,
+#' `max_run` calculates running max on given `x` numeric vector,
 #' specified `k` window size.
 #' @inheritParams runner
 #' @inheritParams sum_run
@@ -203,7 +202,7 @@ streak_run <- function(x, k = integer(0), lag = integer(1), idx = integer(0), at
 #' Running which
 #'
 #'
-#' `min_run` calculates running which - returns index of element where `x == TRUE`.
+#' `which_run` calculates running which - returns index of element where `x == TRUE`.
 #' @inheritParams runner
 #' @inheritParams sum_run
 #' @param which `character` value "first" or "last" denoting if the first or last `TRUE`
