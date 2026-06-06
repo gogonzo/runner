@@ -35,6 +35,25 @@ fill_run <- function(x, run_for_first = FALSE, only_within = FALSE) {
 #' lag_run(1:10, lag = 3)
 #' lag_run(letters[1:10], lag = -2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10))
 #' lag_run(letters[1:10], lag = 2, idx = c(1, 1, 1, 2, 3, 4, 6, 7, 8, 10), nearest = TRUE)
+#'
+#' # Panel data: lag within groups (equivalent to Stata's xtset + L.var)
+#' # Data must be sorted by group and time before lagging.
+#' df <- data.frame(
+#'   firm = rep(c("A", "B"), each = 3),
+#'   year = rep(2010:2012, 2),
+#'   sales = c(100, 110, 125, 200, 215, 230)
+#' )
+#' library(dplyr)
+#' df <- df %>%
+#'   arrange(firm, year) %>%
+#'   group_by(firm) %>%
+#'   mutate(lag_sales = lag_run(sales, lag = 1)) %>%
+#'   ungroup()
+#'
+#' # Irregular time index: lag by exact period, not row count
+#' lag_run(1:5, lag = 1, idx = c(1, 2, 2, 4, 5))
+#' # nearest = TRUE returns the latest observation within the lag window
+#' lag_run(1:5, lag = 1, idx = c(1, 2, 2, 4, 5), nearest = TRUE)
 #' @export
 lag_run <- function(x, lag = 1L, idx = integer(0), nearest = FALSE) {
     .Call('_runner_lag_run', PACKAGE = 'runner', x, lag, idx, nearest)
