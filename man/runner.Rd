@@ -115,7 +115,7 @@ generates a regular sequence over the range of \code{idx}.}
 If \code{TRUE}, return \code{NA} for windows that extend beyond the data range.}
 
 \item{simplify}{(\code{logical} or \code{character})\cr
-Simplify result like \code{\link[base:lapply]{base::sapply()}}. \code{TRUE} returns vector/matrix,
+Simplify result like \code{\link[base:sapply]{base::sapply()}}. \code{TRUE} returns vector/matrix,
 \code{"array"} may return a higher-dimensional array.}
 
 \item{cl}{(\code{cluster}) \emph{experimental}\cr
@@ -276,7 +276,7 @@ and shifts at each position.
 
 Pass a \code{\link[parallel:makeCluster]{parallel::makeCluster()}} object via \code{cl} to run windows in
 parallel. Objects referenced inside \code{f} (other than its arguments) must
-be exported with \code{\link[parallel:clusterApply]{parallel::clusterExport()}} beforehand. Parallel
+be exported with \code{\link[parallel:clusterExport]{parallel::clusterExport()}} beforehand. Parallel
 execution adds overhead and is only beneficial for expensive computations.
 }
 }
@@ -380,6 +380,20 @@ runner(
   cl = cl
 )
 stopCluster(cl)
+
+# Panel data: rolling mean within groups
+# (equivalent to Stata's: bysort firm (year): rolling mean(x), window(3)
+library(dplyr)
+df <- data.frame(
+  firm = rep(c("A", "B"), each = 5),
+  year = rep(2010:2014, 2),
+  sales = c(100, 110, 125, 130, 145, 200, 215, 230, 250, 270)
+)
+df \%>\%
+  arrange(firm, year) \%>\%
+  group_by(firm) \%>\%
+  mutate(roll_mean = runner(sales, f = mean, k = 3)) \%>\%
+  ungroup()
 
 # runner with matrix
 data <- matrix(data = runif(100, 0, 1), nrow = 20, ncol = 5)
