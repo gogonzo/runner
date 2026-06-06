@@ -13,7 +13,7 @@ input data.}
 \item{metric}{\code{character} what to return, minimum or maximum}
 
 \item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) -
-if \code{TRUE} sum is calculating excluding \code{NA}.}
+if \code{TRUE}, missing values are removed before calculation.}
 }
 \value{
 list.

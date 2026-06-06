@@ -96,7 +96,7 @@ minmax_run <- function(x, metric = "min", na_rm = TRUE) {
 #'  vector defines the indexes which data is computed at.
 #'
 #' @param na_rm `logical` single value (default `na_rm = TRUE`) -
-#' if `TRUE` sum is calculating excluding `NA`.
+#' if `TRUE`, missing values are removed before calculation.
 #'
 #' @inheritParams runner
 #'

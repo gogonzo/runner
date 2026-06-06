@@ -36,7 +36,7 @@ Vector of any size and any value defining output data points. Values of the
 vector defines the indexes which data is computed at.}
 
 \item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) -
-if \code{TRUE} sum is calculating excluding \code{NA}.}
+if \code{TRUE}, missing values are removed before calculation.}
 
 \item{na_pad}{(\code{logical})\cr
 If \code{TRUE}, return \code{NA} for windows that extend beyond the data range.}

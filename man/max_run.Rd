@@ -36,7 +36,7 @@ instead of \code{length(x)}. A single time-interval string (e.g. \code{"month"})
 generates a regular sequence over the range of \code{idx}.}
 
 \item{na_rm}{\code{logical} single value (default \code{na_rm = TRUE}) -
-if \code{TRUE} sum is calculating excluding \code{NA}.}
+if \code{TRUE}, missing values are removed before calculation.}
 
 \item{na_pad}{(\code{logical})\cr
 If \code{TRUE}, return \code{NA} for windows that extend beyond the data range.}
