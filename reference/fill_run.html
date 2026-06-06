@@ -93,12 +93,12 @@ input data.</p></dd>
 <dt id="arg-run-for-first">run_for_first<a class="anchor" aria-label="anchor" href="#arg-run-for-first"></a></dt>
 <dd><p>If first elements are filled with <code>NA</code>, <code>run_for_first = TRUE</code>
 allows to fill all initial <code>NA</code> with nearest non-NA value. By default
-<code>run_for_first = TRUE</code></p></dd>
+<code>run_for_first = FALSE</code>.</p></dd>
 
 
 <dt id="arg-only-within">only_within<a class="anchor" aria-label="anchor" href="#arg-only-within"></a></dt>
 <dd><p><code>NA</code> are replaced only if previous and next non-NA
-values are the same. By default <code>only_within = TRUE</code></p></dd>
+values are the same. By default <code>only_within = FALSE</code>.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -109,11 +109,9 @@ replaced with previous non-NA element.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">fill_run</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, run_for_first <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">fill_run</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, run_for_first <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1  1  1  2  3  4  5  6  7  8  9 10 10 10</span>
-<span class="r-in"><span><span class="fu">fill_run</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, run_for_first <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1  1  1  2  3  4  5  6  7  8  9 10 10 10</span>
-<span class="r-in"><span><span class="fu">fill_run</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, run_for_first <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">fill_run</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, run_for_first <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] NA NA  1  2  3  4  5  6  7  8  9 10 10 10</span>
 <span class="r-in"><span><span class="fu">fill_run</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">1</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, run_for_first <span class="op">=</span> <span class="cn">TRUE</span>, only_within <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1  1  1  2  2  2  2  2 NA NA  1 NA NA</span>

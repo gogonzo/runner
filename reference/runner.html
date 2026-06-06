@@ -502,7 +502,7 @@ execution adds overhead and is only beneficial for expensive computations.</p>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">a</span>, <span class="va">x</span><span class="op">$</span><span class="va">b</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">}</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]        NA 0.5074821 0.7702177</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]        NA 0.6571997 0.6924993</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># parallel computing</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span></span></span>
@@ -524,23 +524,23 @@ execution adds overhead and is only beneficial for expensive computations.</p>
 <span class="r-in"><span>  idx <span class="op">=</span> <span class="st">"idx"</span>,</span></span>
 <span class="r-in"><span>  cl <span class="op">=</span> <span class="va">cl</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [1]          NA          NA -1.00000000 -0.99710574 -0.98260307  0.65135545</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [7]  0.87152732 -1.00000000 -0.99975803  1.00000000 -1.00000000 -1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [13] -0.84347254 -0.94118564  1.00000000          NA -1.00000000 -0.35038491</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [19] -0.26049435  0.15981220 -0.89962234 -1.00000000  1.00000000 -1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [25]  1.00000000 -0.68940828 -0.85882044 -1.00000000 -1.00000000  0.58074906</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [31] -0.86775397 -0.23251508 -0.45610506 -0.49504396 -0.96422538  1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [37] -1.00000000 -1.00000000  1.00000000  0.67045942  0.32281471 -0.26072010</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [43]  0.39816756  0.72549665  0.69994795 -1.00000000 -1.00000000  0.48611613</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [49]  0.13342545  0.97622976  1.00000000  1.00000000  1.00000000 -1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [55]  1.00000000 -1.00000000 -1.00000000 -0.29664241  1.00000000 -1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [61] -1.00000000 -0.97031468  1.00000000  1.00000000  1.00000000  1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [67]  0.02923985 -0.74401064 -0.62841711 -0.95499769 -0.03458451  1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [73] -1.00000000 -1.00000000 -0.99239039 -0.80128888 -0.80450459 -0.81546248</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [79] -0.03780289  1.00000000 -1.00000000 -0.41500526  0.32888136 -1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [85]  1.00000000  1.00000000 -0.43995518 -1.00000000 -1.00000000  1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [91]  1.00000000  1.00000000  1.00000000  1.00000000  0.68398151  1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [97] -1.00000000  1.00000000  1.00000000          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1]          NA  1.00000000  1.00000000  0.01724492 -0.09315799 -0.99327925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [7] -0.94382033 -0.99710574 -0.98260307  0.65135545  0.87152732 -1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [13] -1.00000000  1.00000000 -0.52128291 -0.05780382 -0.84347254 -1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [19]  1.00000000 -0.76077380 -0.74453011  1.00000000          NA -1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [25] -0.89962234 -0.89611962 -0.97093250 -1.00000000  1.00000000 -1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [31]  1.00000000 -0.86400080          NA  1.00000000 -0.86775397  1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [37] -1.00000000 -1.00000000 -1.00000000 -0.28843542 -0.67221825 -0.19909563</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [43]  0.11264234  1.00000000 -0.19349216  1.00000000  0.98477621  0.72549665</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [49]  1.00000000 -1.00000000 -1.00000000  0.48611613  0.13342545  0.16255224</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [55]  1.00000000  1.00000000  1.00000000 -0.37969457 -0.22479115 -1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [61] -1.00000000 -0.29664241  1.00000000  0.52830307 -0.98104983 -0.97031468</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [67] -0.66148555  1.00000000  0.99504392  0.11134679  0.07975996 -0.74401064</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [73] -0.62841711 -1.00000000  1.00000000  0.34947453 -1.00000000 -0.77948953</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [79] -0.99239039 -0.80128888  1.00000000 -1.00000000          NA  1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [85] -1.00000000  1.00000000 -1.00000000 -1.00000000  1.00000000 -0.42008586</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [91] -1.00000000 -1.00000000 -1.00000000  1.00000000  1.00000000 -0.35597197</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [97]  0.64812183  1.00000000  1.00000000  1.00000000</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># runner with matrix</span></span></span>
