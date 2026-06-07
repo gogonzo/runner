@@ -382,7 +382,7 @@ runner(
 stopCluster(cl)
 
 # Panel data: rolling mean within groups
-# (equivalent to Stata's: bysort firm (year): rolling mean(x), window(3)
+# (equivalent to Stata's: bysort firm (year): rolling mean(x), window(3))
 library(dplyr)
 df <- data.frame(
   firm = rep(c("A", "B"), each = 5),
