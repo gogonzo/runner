@@ -11,7 +11,7 @@ fill_run(x, run_for_first = FALSE, only_within = FALSE)
 input data.}
 
 \item{run_for_first}{If first elements are filled with \code{NA}, \code{run_for_first = TRUE}
-allows to fill all initial \code{NA} with nearest non-NA value. By default
+allows filling all initial \code{NA} with nearest non-NA value. By default
 \code{run_for_first = FALSE}.}
 
 \item{only_within}{\code{NA} are replaced only if previous and next non-NA

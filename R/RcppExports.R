@@ -6,7 +6,7 @@
 #' Fill `NA` with last non-NA element.
 #' @inheritParams runner
 #' @param run_for_first If first elements are filled with `NA`, `run_for_first = TRUE`
-#' allows to fill all initial `NA` with nearest non-NA value. By default
+#' allows filling all initial `NA` with nearest non-NA value. By default
 #' `run_for_first = FALSE`.
 #' @param only_within `NA` are replaced only if previous and next non-NA
 #' values are the same. By default `only_within = FALSE`.
