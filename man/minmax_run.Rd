@@ -19,6 +19,5 @@ if \code{TRUE} sum is calculating excluding \code{NA}.}
 list.
 }
 \description{
-\code{min_run} calculates running minimum-maximum on given \code{x} numeric
-vector, specified \code{k} window size.
+\code{minmax_run} calculates running minimum or maximum on given \code{x} numeric vector.
 }

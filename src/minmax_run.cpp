@@ -3,8 +3,7 @@
 //' Running min/max
 //'
 //'
-//' `min_run` calculates running minimum-maximum on given `x` numeric
-//'  vector, specified `k` window size.
+//' `minmax_run` calculates running minimum or maximum on given `x` numeric vector.
 //' @inheritParams runner
 //' @inheritParams sum_run
 //' @param metric `character` what to return, minimum or maximum
